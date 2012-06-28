@@ -1,0 +1,12 @@
+name: Bending
+main: main.Bending
+version: 1.0.3
+commands:
+    bending:
+        description: Chooses the many features of Bending.
+        usage: |
+             /<command> choose [element]
+             /<command> display [element]
+             /<command> bind [ability]
+             /<command> display
+             /<command> clear
