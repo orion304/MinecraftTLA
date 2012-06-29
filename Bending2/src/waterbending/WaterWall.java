@@ -334,7 +334,7 @@ public class WaterWall {
 		}
 	}
 
-	private void finalRemoveWater(Block block) {
+	private static void finalRemoveWater(Block block) {
 		if (affectedblocks.containsKey(block)) {
 			// block.setType(Material.WATER);
 			// block.setData(half);
@@ -346,7 +346,11 @@ public class WaterWall {
 
 		if (wallblocks.containsKey(block)) {
 			wallblocks.remove(block);
-			block.setType(Material.AIR);
+			if (block.getType() == Material.ICE
+					|| block.getType() == Material.WATER
+					|| block.getType() == Material.STATIONARY_WATER) {
+				block.setType(Material.AIR);
+			}
 			// block.setType(Material.WATER);
 			// block.setData(half);
 		}
@@ -376,10 +380,24 @@ public class WaterWall {
 
 	public static void removeAll() {
 		for (Block block : affectedblocks.keySet()) {
-			block.setType(Material.AIR);
+			if (block.getType() == Material.ICE
+					|| block.getType() == Material.WATER
+					|| block.getType() == Material.STATIONARY_WATER) {
+				block.setType(Material.AIR);
+			}
 			affectedblocks.remove(block);
 			wallblocks.remove(block);
 		}
+	}
+
+	public static boolean canThaw(Block block) {
+		if (wallblocks.keySet().contains(block))
+			return false;
+		return true;
+	}
+
+	public static void thaw(Block block) {
+		finalRemoveWater(block);
 	}
 
 }

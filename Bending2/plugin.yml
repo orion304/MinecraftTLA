@@ -1,6 +1,6 @@
 name: Bending
 main: main.Bending
-version: 1.0.3
+version: 1.0.4
 commands:
     bending:
         description: Chooses the many features of Bending.

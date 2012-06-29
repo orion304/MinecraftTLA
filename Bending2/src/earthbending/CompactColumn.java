@@ -18,7 +18,7 @@ public class CompactColumn {
 	private static int ID = Integer.MIN_VALUE;
 
 	private static double range = 20;
-	private static int height = 6;
+	private static int height = EarthColumn.standardheight;
 	private static double speed = 8;
 	private static final Vector direction = new Vector(0, -1, 0);
 
@@ -130,9 +130,9 @@ public class CompactColumn {
 			time = System.currentTimeMillis();
 			if (!moveEarth()) {
 				instances.remove(id);
-				for (Block block : affectedblocks.keySet()) {
-					alreadydoneblocks.put(block, block);
-				}
+				// for (Block block : affectedblocks.keySet()) {
+				// alreadydoneblocks.put(block, block);
+				// }
 				return false;
 			}
 		}

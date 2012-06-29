@@ -88,6 +88,12 @@ public class BendingPlayers {
 		} else if (type == BendingType.Fire) {
 			bending = "f";
 			bendingstring = "firebending.html";
+		} else {
+			bending = "s";
+			player.setDisplayName(player.getName());
+			bendingPlayers.set(player.getName(), bending);
+			save();
+			return;
 		}
 		bendingPlayers.set(player.getName(), bending);
 		player.sendMessage("Use '/bending display <element>' to see your available abilities.");
@@ -188,7 +194,9 @@ public class BendingPlayers {
 					|| bendingPlayers.getString(player.getName(), "").contains(
 							"w")
 					|| bendingPlayers.getString(player.getName(), "").contains(
-							"f")) {
+							"f")
+					|| bendingPlayers.getString(player.getName(), "").contains(
+							"s")) {
 				return true;
 			}
 		}
@@ -288,6 +296,13 @@ public class BendingPlayers {
 			Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE,
 					"Could not save config to " + bendingPlayersFile, ex);
 		}
+	}
+
+	public void permaRemoveBending(Player player) {
+		removeBending(player);
+		BendingType type = null;
+		setBending(player, type);
+
 	}
 
 }

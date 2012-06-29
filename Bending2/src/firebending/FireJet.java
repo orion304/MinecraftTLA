@@ -23,7 +23,7 @@ public class FireJet {
 	}
 
 	public static boolean checkTemporaryImmunity(Player player) {
-		if (instances.contains(player)) {
+		if (instances.containsKey(player)) {
 			return true;
 		}
 		return false;

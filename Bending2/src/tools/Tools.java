@@ -43,7 +43,7 @@ public class Tools {
 	private static BendingPlayers config;
 
 	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
-			31, 32, 37, 38, 39, 40, 50, 51, 59, 83 };
+			31, 32, 37, 38, 39, 40, 50, 51, 59, 83, 106 };
 
 	private static Integer[] plantIds = { 6, 18, 31, 32, 37, 38, 39, 40, 59,
 			81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
@@ -142,9 +142,49 @@ public class Tools {
 	public static void moveEarth(Location location, Vector direction,
 			int chainlength) {
 		Block block = location.getBlock();
+		moveEarth(block, direction, chainlength);
+		// if (isEarthbendable(block)) {
+		// Vector norm = direction.clone().normalize();
+		// Vector negnorm = norm.clone().multiply(-1);
+		//
+		// Block affectedblock = location.clone().add(norm).getBlock();
+		// // verbose(isTransparentToEarthbending(affectedblock));
+		// if (isTransparentToEarthbending(affectedblock)) {
+		// for (Entity entity : getEntitiesAroundPoint(
+		// affectedblock.getLocation(), 2)) {
+		// entity.setVelocity(norm.clone().multiply(.75));
+		// }
+		// affectedblock.setType(block.getType());
+		//
+		// for (double i = 1; i < chainlength; i++) {
+		// affectedblock = location
+		// .clone()
+		// .add(negnorm.getX() * i, negnorm.getY() * i,
+		// negnorm.getZ() * i).getBlock();
+		// if (!isEarthbendable(affectedblock)) {
+		// block.setType(Material.AIR);
+		// break;
+		// }
+		// block.setType(affectedblock.getType());
+		// block = affectedblock;
+		// }
+		// block.setType(Material.AIR);
+		// } else {
+		// // block.setType(Material.COBBLESTONE);
+		// // affectedblock.setType(Material.GLASS);
+		// }
+		// }
+	}
+
+	public static void moveEarth(Block block, Vector direction, int chainlength) {
+		// verbose("Moving earth");
+		// verbose(direction);
+		// verbose(isEarthbendable(block));
 		if (isEarthbendable(block)) {
 			Vector norm = direction.clone().normalize();
 			Vector negnorm = norm.clone().multiply(-1);
+
+			Location location = block.getLocation();
 
 			Block affectedblock = location.clone().add(norm).getBlock();
 			// verbose(isTransparentToEarthbending(affectedblock));
@@ -161,53 +201,25 @@ public class Tools {
 							.add(negnorm.getX() * i, negnorm.getY() * i,
 									negnorm.getZ() * i).getBlock();
 					if (!isEarthbendable(affectedblock)) {
-						block.setType(Material.AIR);
+						if (!Tools.adjacentToThreeOrMoreSources(block)) {
+							block.setType(Material.AIR);
+						} else {
+							byte full = 0x0;
+							block.setType(Material.WATER);
+							block.setData(full);
+						}
 						break;
 					}
 					block.setType(affectedblock.getType());
 					block = affectedblock;
 				}
-				block.setType(Material.AIR);
-			} else {
-				// block.setType(Material.COBBLESTONE);
-				// affectedblock.setType(Material.GLASS);
-			}
-		}
-	}
-
-	public static void moveEarth(Block block, Vector direction, int chainlength) {
-		// verbose("Moving earth");
-		// verbose(direction);
-		// verbose(isEarthbendable(block));
-		if (isEarthbendable(block)) {
-			Vector norm = direction.clone().normalize();
-			Vector negnorm = norm.clone().multiply(-1);
-
-			Location location = block.getLocation();
-
-			Block affectedblock = location.clone().add(norm).getBlock();
-			// verbose(isTransparentToEarthbending(affectedblock));
-			if (isTransparentToEarthbending(affectedblock)
-					|| affectedblock.getType() == Material.GLASS) {
-				for (Entity entity : getEntitiesAroundPoint(
-						affectedblock.getLocation(), 2)) {
-					entity.setVelocity(norm.clone().multiply(.75));
+				if (!Tools.adjacentToThreeOrMoreSources(block)) {
+					block.setType(Material.AIR);
+				} else {
+					byte full = 0x0;
+					block.setType(Material.WATER);
+					block.setData(full);
 				}
-				affectedblock.setType(block.getType());
-
-				for (double i = 1; i < chainlength; i++) {
-					affectedblock = location
-							.clone()
-							.add(negnorm.getX() * i, negnorm.getY() * i,
-									negnorm.getZ() * i).getBlock();
-					if (!isEarthbendable(affectedblock)) {
-						block.setType(Material.AIR);
-						break;
-					}
-					block.setType(affectedblock.getType());
-					block = affectedblock;
-				}
-				block.setType(Material.AIR);
 			} else {
 				// block.setType(Material.COBBLESTONE);
 				// affectedblock.setType(Material.GLASS);

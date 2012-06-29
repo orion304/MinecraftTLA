@@ -55,18 +55,27 @@ public class WalkOnWater {
 		for (Block block : affectedblocks.keySet()) {
 			boolean thaw = true;
 			for (Player player : players) {
-				if (player.getLocation().distance(block.getLocation()) <= radius
+				if (block.getWorld() != player.getWorld()) {
+					thaw = true;
+				} else if (player.getLocation().distance(block.getLocation()) <= radius
 						&& Tools.canBend(player, Abilities.WalkOnWater)) {
 					thaw = false;
 				}
 			}
 			if (thaw) {
-				byte data = affectedblocks.get(block);
-				affectedblocks.remove(block);
-				block.setType(Material.WATER);
-				block.setData(data);
+				thaw(block);
 			}
 		}
+	}
+
+	public static void thaw(Block block) {
+		if (affectedblocks.containsKey(block)) {
+			byte data = affectedblocks.get(block);
+			affectedblocks.remove(block);
+			block.setType(Material.WATER);
+			block.setData(data);
+		}
+
 	}
 
 	public static boolean canThaw(Block block) {

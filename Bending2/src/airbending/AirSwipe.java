@@ -38,7 +38,7 @@ public class AirSwipe {
 	private double speedfactor;
 
 	private static Integer[] breakables = { 6, 31, 32, 37, 38, 39, 40, 50, 59,
-			81, 83 };
+			81, 83, 106 };
 
 	private Location origin;
 	private Player player;

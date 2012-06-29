@@ -89,29 +89,32 @@ public class WaterManipulation {
 
 	public void moveWater() {
 		if (sourceblock != null) {
-			Entity target = Tools.getTargettedEntity(player, range);
-			if (target == null) {
-				targetdestination = player.getTargetBlock(
-						Tools.getTransparentEarthbending(), (int) range)
-						.getLocation();
-			} else {
-				targetdestination = ((LivingEntity) target).getEyeLocation();
-				targetdestination.setY(targetdestination.getY() - 1);
-			}
-			if (targetdestination.distance(location) <= 1) {
-				progressing = false;
-				targetdestination = null;
-			} else {
-				progressing = true;
-				settingup = true;
-				firstdestination = getToEyeLevel();
-				firstdirection = getDirection(sourceblock.getLocation(),
-						firstdestination).normalize();
-				targetdirection = getDirection(firstdestination,
-						targetdestination).normalize();
-				targetdestination = Tools.getPointOnLine(firstdestination,
-						targetdestination, range);
-				addWater(sourceblock);
+			if (sourceblock.getWorld() == player.getWorld()) {
+				Entity target = Tools.getTargettedEntity(player, range);
+				if (target == null) {
+					targetdestination = player.getTargetBlock(
+							Tools.getTransparentEarthbending(), (int) range)
+							.getLocation();
+				} else {
+					targetdestination = ((LivingEntity) target)
+							.getEyeLocation();
+					targetdestination.setY(targetdestination.getY() - 1);
+				}
+				if (targetdestination.distance(location) <= 1) {
+					progressing = false;
+					targetdestination = null;
+				} else {
+					progressing = true;
+					settingup = true;
+					firstdestination = getToEyeLevel();
+					firstdirection = getDirection(sourceblock.getLocation(),
+							firstdestination).normalize();
+					targetdirection = getDirection(firstdestination,
+							targetdestination).normalize();
+					targetdestination = Tools.getPointOnLine(firstdestination,
+							targetdestination, range);
+					addWater(sourceblock);
+				}
 			}
 
 		}

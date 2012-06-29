@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -354,6 +355,18 @@ public class BendingListener implements Listener {
 		Block block = event.getBlock();
 		event.setCancelled(!WaterManipulation.canPhysicsChange(block));
 
+	}
+
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent event) {
+		Block block = event.getBlock();
+		if (!Freeze.canThaw(block)) {
+			Freeze.thaw(block);
+		} else if (!WalkOnWater.canThaw(block)) {
+			WalkOnWater.thaw(block);
+		} else if (!WaterWall.canThaw(block)) {
+			WaterWall.thaw(block);
+		}
 	}
 
 }

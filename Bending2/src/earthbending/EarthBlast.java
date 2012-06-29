@@ -95,25 +95,27 @@ public class EarthBlast {
 
 	public void throwEarth() {
 		if (sourceblock != null) {
-			Entity target = Tools.getTargettedEntity(player, range);
-			if (target == null) {
-				destination = player.getTargetBlock(
-						Tools.getTransparentEarthbending(), (int) range)
-						.getLocation();
-			} else {
-				destination = ((LivingEntity) target).getEyeLocation();
-				destination = Tools.getPointOnLine(sourceblock.getLocation(),
-						destination, range);
-			}
-			if (destination.distance(location) <= 1) {
-				progressing = false;
-				destination = null;
-			} else {
-				progressing = true;
-				direction = getDirection().normalize();
-				if (sourcetype != Material.SAND
-						&& sourcetype != Material.GRAVEL) {
-					sourceblock.setType(sourcetype);
+			if (sourceblock.getWorld() == player.getWorld()) {
+				Entity target = Tools.getTargettedEntity(player, range);
+				if (target == null) {
+					destination = player.getTargetBlock(
+							Tools.getTransparentEarthbending(), (int) range)
+							.getLocation();
+				} else {
+					destination = ((LivingEntity) target).getEyeLocation();
+					destination = Tools.getPointOnLine(
+							sourceblock.getLocation(), destination, range);
+				}
+				if (destination.distance(location) <= 1) {
+					progressing = false;
+					destination = null;
+				} else {
+					progressing = true;
+					direction = getDirection().normalize();
+					if (sourcetype != Material.SAND
+							&& sourcetype != Material.GRAVEL) {
+						sourceblock.setType(sourcetype);
+					}
 				}
 			}
 

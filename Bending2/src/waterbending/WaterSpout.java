@@ -25,7 +25,8 @@ public class WaterSpout {
 			boolean remove = true;
 			for (Player player : server.getOnlinePlayers()) {
 				if (Tools.getBendingAbility(player) == Abilities.WaterSpout
-						&& Tools.canBend(player, Abilities.WaterSpout)) {
+						&& Tools.canBend(player, Abilities.WaterSpout)
+						&& player.getWorld() == block.getWorld()) {
 					Location loc1 = player.getLocation().clone();
 					loc1.setY(0);
 					Location loc2 = block.getLocation().clone();

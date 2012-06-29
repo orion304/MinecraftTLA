@@ -47,10 +47,12 @@ public class Freeze {
 	}
 
 	public static void thaw(Block block) {
-		byte data = frozenblocks.get(block);
-		frozenblocks.remove(block);
-		block.setType(Material.WATER);
-		block.setData(data);
+		if (frozenblocks.containsKey(block)) {
+			byte data = frozenblocks.get(block);
+			frozenblocks.remove(block);
+			block.setType(Material.WATER);
+			block.setData(data);
+		}
 	}
 
 	public static void handleFrozenBlocks() {

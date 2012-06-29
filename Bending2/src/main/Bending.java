@@ -100,6 +100,24 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 
+			if (args[0].equalsIgnoreCase("permaremove") && args.length >= 2
+					&& sender.isOp()) {
+				String playerlist = "";
+				for (String playername : Arrays.asList(args)) {
+					Player targetplayer = this.getServer()
+							.getPlayer(playername);
+					if (targetplayer != null) {
+						config.permaRemoveBending(targetplayer);
+						targetplayer.sendMessage(player.getName()
+								+ " has removed your bending permanently.");
+						playerlist = playerlist + targetplayer.getName() + " ";
+					}
+				}
+				sender.sendMessage("You have permanently removed the bending of: "
+						+ playerlist);
+				return true;
+			}
+
 			if (args[0].equalsIgnoreCase("choose")) {
 				if (args.length == 1)
 					return false;
