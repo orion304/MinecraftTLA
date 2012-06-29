@@ -442,9 +442,18 @@ public class Tools {
 		return true;
 		// if (ability == null)
 		// return false;
-		// if (hasPermission(player, ability))
+		// if (hasPermission(player, ability) && !isRegionProtected(player,
+		// ability))
 		// return true;
 		// return false;
+
+	}
+
+	public static boolean isRegionProtected(Player player, Abilities ability) {
+		// Here would go the code to check regions around the player.
+		// The above method, canBend, will call this.
+
+		return false;
 	}
 
 	public static boolean canBendPassive(Player player, BendingType type) {
