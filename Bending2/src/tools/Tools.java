@@ -486,35 +486,33 @@ public class Tools {
 	public static boolean canBendPassive(Player player, BendingType type) {
 		if (isRegionProtected(player, null))
 			return false;
-		return true;
-		// if (player.hasPermission("bending." + type + ".passive")) {
-		// return true;
-		// }
-		// return false;
+		 if (player.hasPermission("bending." + type + ".passive")) {
+		 return true;
+		 }
+		 return false;
 	}
 
 	public static boolean hasPermission(Player player, Abilities ability) {
-		return true;
-		// if (ability == Abilities.AvatarState
-		// && player.hasPermission("bending.avatarstate")) {
-		// return true;
-		// }
-		// if (Abilities.isAirbending(ability)
-		// && player.hasPermission("bending.air." + ability)) {
-		// return true;
-		// }
-		// if (Abilities.isWaterbending(ability)
-		// && player.hasPermission("bending.water." + ability)) {
-		// return true;
-		// }
-		// if (Abilities.isEarthbending(ability)
-		// && player.hasPermission("bending.earth." + ability)) {
-		// return true;
-		// }
-		// if (Abilities.isFirebending(ability)
-		// && player.hasPermission("bending.fire." + ability)) {
-		// return true;
-		// }
-		// return false;
+		 if (ability == Abilities.AvatarState
+		 && player.hasPermission("bending.avatarstate")) {
+		 return true;
+		 }
+		 if (Abilities.isAirbending(ability)
+		 && player.hasPermission("bending.air." + ability)) {
+		 return true;
+		 }
+		 if (Abilities.isWaterbending(ability)
+		 && player.hasPermission("bending.water." + ability)) {
+		 return true;
+		 }
+		 if (Abilities.isEarthbending(ability)
+		 && player.hasPermission("bending.earth." + ability)) {
+		 return true;
+		 }
+		 if (Abilities.isFirebending(ability)
+		 && player.hasPermission("bending.fire." + ability)) {
+		 return true;
+		 }
+		 return false;
 	}
 }
