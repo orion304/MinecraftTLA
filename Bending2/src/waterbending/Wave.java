@@ -246,7 +246,7 @@ public class Wave {
 		if (wave.containsKey(block)) {
 			// block.setType(Material.WATER);
 			// block.setData(half);
-			if (!Tools.adjacentToThreeOrMoreSources(block) || radius > .5) {
+			if (!Tools.adjacentToThreeOrMoreSources(block) || radius > 1) {
 				block.setType(Material.AIR);
 			}
 			wave.remove(block);

@@ -8,6 +8,7 @@ import java.util.List;
 import main.Bending;
 import main.BendingPlayers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,6 +27,10 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+
 import earthbending.Catapult;
 import earthbending.CompactColumn;
 import earthbending.EarthBlast;
@@ -439,24 +444,34 @@ public class Tools {
 	}
 
 	public static boolean canBend(Player player, Abilities ability) {
-		return true;
-		// if (ability == null)
-		// return false;
-		// if (hasPermission(player, ability) && !isRegionProtected(player,
-		// ability))
-		// return true;
-		// return false;
+		if (ability == null)
+			return false;
+		if (hasPermission(player, ability)
+				&& !isRegionProtected(player, ability))
+			return true;
+		return false;
 
 	}
 
 	public static boolean isRegionProtected(Player player, Abilities ability) {
-		// Here would go the code to check regions around the player.
-		// The above method, canBend, will call this.
-
+		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
+				.getPlugin("WorldGuard");
+		if (wg == null)
+			return false;
+		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
+		// for (Block b: lb){
+		Block b = player.getLocation().getBlock();
+		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
+				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
+			return true;
+		}
+		// }
 		return false;
 	}
 
 	public static boolean canBendPassive(Player player, BendingType type) {
+		if (isRegionProtected(player, null))
+			return false;
 		return true;
 		// if (player.hasPermission("bending." + type + ".passive")) {
 		// return true;
@@ -465,26 +480,27 @@ public class Tools {
 	}
 
 	public static boolean hasPermission(Player player, Abilities ability) {
-		if (ability == Abilities.AvatarState
-				&& player.hasPermission("bending.avatarstate")) {
-			return true;
-		}
-		if (Abilities.isAirbending(ability)
-				&& player.hasPermission("bending.air." + ability)) {
-			return true;
-		}
-		if (Abilities.isWaterbending(ability)
-				&& player.hasPermission("bending.water." + ability)) {
-			return true;
-		}
-		if (Abilities.isEarthbending(ability)
-				&& player.hasPermission("bending.earth." + ability)) {
-			return true;
-		}
-		if (Abilities.isFirebending(ability)
-				&& player.hasPermission("bending.fire." + ability)) {
-			return true;
-		}
-		return false;
+		return true;
+		// if (ability == Abilities.AvatarState
+		// && player.hasPermission("bending.avatarstate")) {
+		// return true;
+		// }
+		// if (Abilities.isAirbending(ability)
+		// && player.hasPermission("bending.air." + ability)) {
+		// return true;
+		// }
+		// if (Abilities.isWaterbending(ability)
+		// && player.hasPermission("bending.water." + ability)) {
+		// return true;
+		// }
+		// if (Abilities.isEarthbending(ability)
+		// && player.hasPermission("bending.earth." + ability)) {
+		// return true;
+		// }
+		// if (Abilities.isFirebending(ability)
+		// && player.hasPermission("bending.fire." + ability)) {
+		// return true;
+		// }
+		// return false;
 	}
 }
