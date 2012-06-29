@@ -8,6 +8,7 @@ import java.util.List;
 import main.Bending;
 import main.BendingPlayers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,6 +20,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import waterbending.Freeze;
 import waterbending.WalkOnWater;
 import waterbending.WaterSpout;
@@ -439,20 +442,25 @@ public class Tools {
 	}
 
 	public static boolean canBend(Player player, Abilities ability) {
+		if (ability == null)
+		return false;
+		if (hasPermission(player, ability) && !isRegionProtected(player,
+		ability))
 		return true;
-		// if (ability == null)
-		// return false;
-		// if (hasPermission(player, ability) && !isRegionProtected(player,
-		// ability))
-		// return true;
-		// return false;
+		return false;
 
 	}
 
 	public static boolean isRegionProtected(Player player, Abilities ability) {
-		// Here would go the code to check regions around the player.
-		// The above method, canBend, will call this.
-
+		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
+		if (wg == null)
+			return false;
+		List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
+		for (Block b: lb){
+			if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld()).getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))){
+				return true;
+			}
+		    }
 		return false;
 	}
 
