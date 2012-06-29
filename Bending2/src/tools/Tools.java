@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 
 import waterbending.Freeze;
 import waterbending.WalkOnWater;
+import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import waterbending.Wave;
@@ -420,7 +421,8 @@ public class Tools {
 				BlockFace.SOUTH };
 		for (BlockFace face : faces) {
 			Block blocki = block.getRelative(face);
-			if (blocki.getType() == Material.WATER && blocki.getData() == full)
+			if (blocki.getType() == Material.WATER && blocki.getData() == full
+					&& WaterManipulation.canPhysicsChange(blocki))
 				sources++;
 		}
 		if (sources >= 3)
