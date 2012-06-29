@@ -51,8 +51,10 @@ public class AirBubble {
 			if (block.getLocation().distance(location) > radius) {
 				byte data = waterorigins.get(block);
 				block = block.getLocation().getBlock();
-				block.setType(Material.WATER);
-				block.setData(data);
+				if (block.getType() == Material.AIR) {
+					block.setType(Material.WATER);
+					block.setData(data);
+				}
 				waterorigins.remove(block);
 			}
 		}
@@ -97,8 +99,10 @@ public class AirBubble {
 		for (Block block : waterorigins.keySet()) {
 			byte data = waterorigins.get(block);
 			block = block.getLocation().getBlock();
-			block.setType(Material.WATER);
-			block.setData(data);
+			if (block.getType() == Material.AIR) {
+				block.setType(Material.WATER);
+				block.setData(data);
+			}
 		}
 		instances.remove(player.getEntityId());
 	}

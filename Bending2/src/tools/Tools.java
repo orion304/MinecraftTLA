@@ -408,17 +408,17 @@ public class Tools {
 		return false;
 	}
 
-	public static boolean adjacentToTwoOrMoreSources(Block block) {
+	public static boolean adjacentToThreeOrMoreSources(Block block) {
 		int sources = 0;
 		byte full = 0x0;
-		BlockFace[] faces = { BlockFace.UP, BlockFace.DOWN, BlockFace.EAST,
-				BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH };
+		BlockFace[] faces = { BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH,
+				BlockFace.SOUTH };
 		for (BlockFace face : faces) {
 			Block blocki = block.getRelative(face);
 			if (blocki.getType() == Material.WATER && blocki.getData() == full)
 				sources++;
 		}
-		if (sources >= 2)
+		if (sources >= 3)
 			return true;
 		return false;
 	}

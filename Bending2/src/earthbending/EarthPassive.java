@@ -55,7 +55,9 @@ public class EarthPassive {
 				Material type = sandidentities.get(block);
 				sandidentities.remove(block);
 				sandblocks.remove(block);
-				block.setType(type);
+				if (block.getType() == Material.SAND) {
+					block.setType(type);
+				}
 			}
 		}
 

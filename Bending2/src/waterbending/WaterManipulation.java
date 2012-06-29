@@ -265,8 +265,10 @@ public class WaterManipulation {
 
 	private void reduceWater(Block block) {
 		if (affectedblocks.contains(block)) {
-			block.setType(Material.WATER);
-			block.setData(half);
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.WATER);
+				block.setData(half);
+			}
 			oldwater = block;
 		}
 	}
@@ -274,7 +276,9 @@ public class WaterManipulation {
 	private void removeWater(Block block) {
 		if (block != null) {
 			if (affectedblocks.contains(block)) {
-				block.setType(Material.AIR);
+				if (!Tools.adjacentToThreeOrMoreSources(block)) {
+					block.setType(Material.AIR);
+				}
 				affectedblocks.remove(block);
 			}
 		}
@@ -282,8 +286,10 @@ public class WaterManipulation {
 
 	private void finalRemoveWater(Block block) {
 		if (affectedblocks.contains(block)) {
-			block.setType(Material.WATER);
-			block.setData(half);
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.WATER);
+				block.setData(half);
+			}
 			affectedblocks.remove(block);
 		}
 	}

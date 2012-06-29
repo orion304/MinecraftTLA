@@ -315,8 +315,10 @@ public class WaterWall {
 
 	private void reduceWater(Block block) {
 		if (affectedblocks.contains(block)) {
-			block.setType(Material.WATER);
-			block.setData(half);
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.WATER);
+				block.setData(half);
+			}
 			oldwater = block;
 		}
 	}
@@ -324,7 +326,9 @@ public class WaterWall {
 	private void removeWater(Block block) {
 		if (block != null) {
 			if (affectedblocks.contains(block)) {
-				block.setType(Material.AIR);
+				if (!Tools.adjacentToThreeOrMoreSources(block)) {
+					block.setType(Material.AIR);
+				}
 				affectedblocks.remove(block);
 			}
 		}
@@ -334,7 +338,9 @@ public class WaterWall {
 		if (affectedblocks.containsKey(block)) {
 			// block.setType(Material.WATER);
 			// block.setData(half);
-			block.setType(Material.AIR);
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.AIR);
+			}
 			affectedblocks.remove(block);
 		}
 
