@@ -10,3 +10,168 @@ commands:
              /<command> bind [ability]
              /<command> display
              /<command> clear
+permissions:
+  bending.air.*:
+    description: Allows all air bending.
+    children:
+      bending.air.AirSwipe: true
+      bending.air.AirBubble: true
+      bending.air.AirPassive: true
+      bending.air.AirShield: true
+      bending.air.AirSuction: true
+      bending.air.Speed: true
+      bending.air.Tornado: true
+      bending.air.AirBlast: true
+  bending.fire.*:
+    description: Allows all fire bending.
+    children:
+      bending.fire.ArcOfFire: true
+      bending.fire.Extinguish: true
+      bending.fire.Fireball: true
+      bending.fire.FireJet: true
+      bending.fire.FireStream: true
+      bending.fire.HeatMelt: true
+      bending.fire.Passive: true
+      bending.fire.RingOfFire: true
+  bending.water.*:
+    description: Allows all water bending.
+    children:
+      bending.water.Freeze: true
+      bending.water.HealingWaters: true
+      bending.water.Melt: true
+      bending.water.Plantbending: true
+      bending.water.WalkOnWater: true
+      bending.water.WaterBubble: true
+      bending.water.WaterManipulation: true
+      bending.water.WaterPassive: true
+      bending.water.WaterSpout: true
+      bending.water.WaterWall: true
+      bending.water.Wave: true
+  bending.earth.*:
+    description: Allows all earth bending.
+    children:
+      bending.earth.Catapult: true
+      bending.earth.CompactColumn: true
+      bending.earth.EarthBlast: true
+      bending.earth.EarthColumn: true
+      bending.earth.EarthGrab: true
+      bending.earth.EarthPassive: true
+      bending.earth.EarthTunnel: true
+      bending.earth.EarthWall: true
+      bending.earth.PatchTheEarth: true
+  bending.*:
+    description: Allows all bending.
+    children:
+      bending.earth.*: true
+      bending.water.*: true
+      bending.fire.*: true
+      bending.air.*: true
+
+  bending.air.AirSwipe:
+    description: Allows the use of AirSwipe.
+    default: true
+  bending.air.AirBubble:
+    description: Allows the use of AirBubble.
+    default: true
+  bending.air.AirPassive:
+    description: Allows the use of AirPassive.
+    default: true
+  bending.air.AirShield:
+    description: Allows the use of AirShield.
+    default: true
+  bending.air.AirSuction:
+    description: Allows the use of AirSuction.
+    default: true
+  bending.air.Speed:
+    description: Allows the use of Speed.
+    default: true
+  bending.air.Tornado:
+    description: Allows the use of Tornado.
+    default: true
+  bending.air.AirBlast:
+    description: Allows the use of AirBlast.
+    default: true
+  bending.fire.ArcOfFire:
+    description: Allows the use of ArcOfFire.
+    default: true
+  bending.fire.Extinguish:
+    description: Allows the use of Extinguish.
+    default: true
+  bending.fire.Fireball:
+    description: Allows the use of Fireball.
+    default: true
+  bending.fire.FireJet:
+    description: Allows the use of FireJet.
+    default: true
+  bending.fire.FireStream:
+    description: Allows the use of FireStream.
+    default: true
+  bending.fire.HeatMelt:
+    description: Allows the use of HeatMelt.
+    default: true
+  bending.fire.Passive:
+    description: Allows the use of Passive.
+    default: true
+  bending.fire.RingOfFire:
+    description: Allows the use of RingOfFire.
+    default: true
+  bending.water.Freeze:
+    description: Allows the use of Freeze.
+    default: true
+  bending.water.HealingWaters:
+    description: Allows the use of HealingWaters.
+    default: true
+  bending.water.Melt:
+    description: Allows the use of Melt.
+    default: true
+  bending.water.Plantbending:
+    description: Allows the use of Plantbending.
+    default: true
+  bending.water.WalkOnWater:
+    description: Allows the use of WalkOnWater.
+    default: true
+  bending.water.WaterBubble:
+    description: Allows the use of WaterBubble.
+    default: true
+  bending.water.WaterManipulation:
+    description: Allows the use of WaterManipulation.
+    default: true
+  bending.water.WaterPassive:
+    description: Allows the use of WaterPassive.
+    default: true
+  bending.water.WaterSpout:
+    description: Allows the use of WaterSpout.
+    default: true
+  bending.water.WaterWall:
+    description: Allows the use of WaterWall.
+    default: true
+  bending.water.Wave:
+    description: Allows the use of Wave.
+    default: true
+  bending.earth.Catapult:
+    description: Allows the use of Catapult.
+    default: true
+  bending.earth.CompactColumn:
+    description: Allows the use of CompactColumn.
+    default: true
+  bending.earth.EarthBlast:
+    description: Allows the use of EarthBlast.
+    default: true
+  bending.earth.EarthColumn:
+    description: Allows the use of EarthColumn.
+    default: true
+  bending.earth.EarthPassive:
+    description: Allows the use of EarthPassive.
+    default: true
+  bending.earth.EarthTunnel:
+    description: Allows the use of EarthTunnel.
+    default: true
+  bending.earth.EarthWall:
+    description: Allows the use of EarthWall.
+    default: true
+  bending.earth.PatchTheEarth:
+    description: Allows the use of PatchTheEarth.
+    default: true
+  bending.AvatarState:
+    description: Allows the use of AvatarState.
+    default: op
