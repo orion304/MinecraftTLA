@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.ConfigHandler;
 import tools.Tools;
 
 public class EarthBlast {
@@ -18,7 +19,7 @@ public class EarthBlast {
 	public static ConcurrentHashMap<Integer, EarthBlast> instances = new ConcurrentHashMap<Integer, EarthBlast>();
 
 	private static double range = 20;
-	private static int damage = 7;
+	private static int damage = ConfigHandler.earthdmg;
 	private static double speed = 35;
 	// private static double speed = 1.5;
 
