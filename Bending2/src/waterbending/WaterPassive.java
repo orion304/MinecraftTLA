@@ -18,9 +18,10 @@ public class WaterPassive {
 			if (Tools.isBender(player, BendingType.Water)
 					&& Tools.canBendPassive(player, BendingType.Water)) {
 				if (player.getLocation().getBlock().isLiquid()) {
-					for (Block block : Tools.getBlocksOnPlane(
+					for (Block block : Tools.getBlocksAroundPoint(
 							player.getLocation(), 2)) {
-						if (Tools.adjacentToThreeOrMoreSources(block)) {
+						if (Tools.adjacentToThreeOrMoreSources(block)
+								&& Tools.isWater(block)) {
 							byte full = 0x0;
 							block.setType(Material.WATER);
 							block.setData(full);

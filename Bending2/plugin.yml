@@ -61,7 +61,7 @@ permissions:
       bending.earth.EarthTunnel: true
       bending.earth.EarthWall: true
       bending.earth.PatchTheEarth: true
-      bending.earthPassive: true
+      bending.earth.Passive: true
   bending.*:
     description: Allows all bending.
     children:

@@ -220,7 +220,8 @@ public class Tools {
 							.add(negnorm.getX() * i, negnorm.getY() * i,
 									negnorm.getZ() * i).getBlock();
 					if (!isEarthbendable(affectedblock)) {
-						if (!Tools.adjacentToThreeOrMoreSources(block)) {
+						if (!Tools.adjacentToThreeOrMoreSources(block)
+								&& Tools.isWater(block)) {
 							block.setType(Material.AIR);
 						} else {
 							byte full = 0x0;
@@ -244,6 +245,13 @@ public class Tools {
 				// affectedblock.setType(Material.GLASS);
 			}
 		}
+	}
+
+	public static boolean isWater(Block block) {
+		if (block.getType() == Material.WATER
+				|| block.getType() == Material.STATIONARY_WATER)
+			return true;
+		return false;
 	}
 
 	public static int getEarthbendableBlocksLength(Block block,
@@ -452,7 +460,8 @@ public class Tools {
 				BlockFace.SOUTH };
 		for (BlockFace face : faces) {
 			Block blocki = block.getRelative(face);
-			if (blocki.getType() == Material.WATER && blocki.getData() == full
+			if ((blocki.getType() == Material.WATER || blocki.getType() == Material.STATIONARY_WATER)
+					&& blocki.getData() == full
 					&& WaterManipulation.canPhysicsChange(blocki))
 				sources++;
 		}

@@ -20,6 +20,7 @@ import tools.AvatarState;
 import tools.Tools;
 
 public class AirBlast {
+	// test
 
 	public static ConcurrentHashMap<Integer, AirBlast> instances = new ConcurrentHashMap<Integer, AirBlast>();
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();

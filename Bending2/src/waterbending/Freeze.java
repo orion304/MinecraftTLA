@@ -23,7 +23,7 @@ public class Freeze {
 		int radius = defaultradius;
 		if (AvatarState.isAvatarState(player)) {
 			range = AvatarState.getValue(range);
-			radius = AvatarState.getValue(radius);
+			// radius = AvatarState.getValue(radius);
 		}
 		Location location = Tools.getTargetedLocation(player, range);
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {

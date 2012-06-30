@@ -22,7 +22,7 @@ public class EarthWall {
 
 	public EarthWall(Player player) {
 		if (AvatarState.isAvatarState(player)) {
-			height = AvatarState.getValue(height);
+			// height = AvatarState.getValue(height);
 			halfwidth = AvatarState.getValue(halfwidth);
 		}
 
