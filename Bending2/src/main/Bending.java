@@ -9,7 +9,6 @@ import net.minecraft.server.EntityFireball;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -113,7 +112,8 @@ public class Bending extends JavaPlugin {
 			}
 			
 			if (args[0].equalsIgnoreCase("reload") && args.length >= 2 && sender.isOp()){
-				reloadConfiguration();
+				configManager.load(new File(this.getDataFolder(), "config.yml"));
+				sender.sendMessage("Config reloaded");
 				return true;
 			}
 

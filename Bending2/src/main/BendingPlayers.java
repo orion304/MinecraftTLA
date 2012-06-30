@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import tools.Abilities;
 import tools.BendingType;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class BendingPlayers {
@@ -100,20 +102,39 @@ public class BendingPlayers {
 		player.sendMessage("'/bending bind <ability>' will bind it to your current slot.");
 		player.sendMessage("Go to the below website to see how to use the abilities and what they do:");
 		player.sendMessage("http://minecraftTLA.us.to/" + bendingstring);
-
+        
+		if (ConfigManager.enabled){
 		String append = "";
 		if (!player.isOp()) {
 			if (Tools.isBender(player, BendingType.Air)) {
-				append = "[Airbender] ";
+				append = ConfigManager.getPrefix("Air");
 			} else if (Tools.isBender(player, BendingType.Earth)) {
-				append = "[Earthbender] ";
+				append = ConfigManager.getPrefix("Earth");
 			} else if (Tools.isBender(player, BendingType.Fire)) {
-				append = "[Firebender] ";
+				append = ConfigManager.getPrefix("Fire");
 			} else if (Tools.isBender(player, BendingType.Water)) {
-				append = "[Waterbender] ";
+				append = ConfigManager.getPrefix("Water");
 			}
+			if (!(ConfigManager.compatibility))
 			player.setDisplayName(append + player.getName());
 		}
+	    if ((ConfigManager.compatibility) && (ConfigManager.enabled)){
+				ChatColor color = ChatColor.WHITE;
+				if (ConfigManager.colors && (!player.isOp())){
+				    if (Tools.isBender(player, BendingType.Air)) {
+					color = Tools.getColor(ConfigManager.getColor("Air"));
+				} else if (Tools.isBender(player, BendingType.Earth)) {
+					color = Tools.getColor(ConfigManager.getColor("Earth"));
+				} else if (Tools.isBender(player, BendingType.Fire)) {
+					color = Tools.getColor(ConfigManager.getColor("Fire"));
+				} else if (Tools.isBender(player, BendingType.Water)) {
+					color = Tools.getColor(ConfigManager.getColor("Water"));
+				}
+				player.setDisplayName("<" + color + append + player.getName() + ChatColor.WHITE + ">");
+			}
+		  }
+		}
+			
 		save();
 	}
 
@@ -140,19 +161,37 @@ public class BendingPlayers {
 		player.sendMessage("Go to the below website to see how to use the abilities and what they do:");
 		player.sendMessage("http://minecraftTLA.us.to/" + bendingstring);
 
-		String append = "";
-		if (!player.isOp()) {
-			if (Tools.isBender(player, BendingType.Air)) {
-				append = "[Airbender] ";
-			} else if (Tools.isBender(player, BendingType.Earth)) {
-				append = "[Earthbender] ";
-			} else if (Tools.isBender(player, BendingType.Fire)) {
-				append = "[Firebender] ";
-			} else if (Tools.isBender(player, BendingType.Water)) {
-				append = "[Waterbender] ";
+		if (ConfigManager.enabled){
+			String append = "";
+			if (!player.isOp()) {
+				if (Tools.isBender(player, BendingType.Air)) {
+					append = ConfigManager.getPrefix("Air");
+				} else if (Tools.isBender(player, BendingType.Earth)) {
+					append = ConfigManager.getPrefix("Earth");
+				} else if (Tools.isBender(player, BendingType.Fire)) {
+					append = ConfigManager.getPrefix("Fire");
+				} else if (Tools.isBender(player, BendingType.Water)) {
+					append = ConfigManager.getPrefix("Water");
+				}
+				if (!(ConfigManager.compatibility))
+				player.setDisplayName(append + player.getName());
 			}
-			player.setDisplayName(append + player.getName());
-		}
+		    if ((ConfigManager.compatibility) && (ConfigManager.enabled)){
+					ChatColor color = ChatColor.WHITE;
+					if (ConfigManager.colors&& (!player.isOp())){
+					    if (Tools.isBender(player, BendingType.Air)) {
+						color = Tools.getColor(ConfigManager.getColor("Air"));
+					} else if (Tools.isBender(player, BendingType.Earth)) {
+						color = Tools.getColor(ConfigManager.getColor("Earth"));
+					} else if (Tools.isBender(player, BendingType.Fire)) {
+						color = Tools.getColor(ConfigManager.getColor("Fire"));
+					} else if (Tools.isBender(player, BendingType.Water)) {
+						color = Tools.getColor(ConfigManager.getColor("Water"));
+					}
+					player.setDisplayName("<" + color + append + player.getName() + ChatColor.WHITE + ">");
+				}
+			  }
+			}
 
 	}
 

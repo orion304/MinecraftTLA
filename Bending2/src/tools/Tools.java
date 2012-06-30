@@ -20,10 +20,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import waterbending.Freeze;
 import waterbending.WalkOnWater;
@@ -33,9 +35,6 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
-
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
@@ -475,25 +474,25 @@ public class Tools {
 	}
 
 	public static boolean isRegionProtected(Player player, Abilities ability) {
-		//WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
-				//.getPlugin("WorldGuard");
-		//if (wg == null)
-			//return false;
+		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
+				.getPlugin("WorldGuard");
+		if (wg == null)
+			return false;
 		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 		// for (Block b: lb){
-		//Block b = player.getLocation().getBlock();
-		//if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
-				//.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
-			//return true;
-            EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
-            Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+		Block b = player.getLocation().getBlock();
+		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
+				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
+			return true;
+          //  EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
+          //  Bukkit.getServer().getPluginManager().callEvent(damageEvent);
 
-            if (damageEvent.isCancelled())
-            {
-              return true;
-            }
+          //  if (damageEvent.isCancelled())
+          //  {
+          //    return true;
+          //  }
 		//}
-		// }
+		  }
 		return false;
 	}
 

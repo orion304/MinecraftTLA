@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.AvatarState;
-import tools.ConfigHandler;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class AirSwipe {
@@ -27,7 +27,7 @@ public class AirSwipe {
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static int damage = ConfigHandler.getAirdmg();
+	private static int damage = ConfigManager.airdmg;
 	private static double affectingradius = AirBlast.affectingradius;
 	private static double pushfactor = AirBlast.pushfactor;
 	private static double range = AirBlast.range * .8;

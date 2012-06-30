@@ -1,0 +1,22 @@
+Chat:
+    enabled: true
+    Colors: true
+    Compatibility: false
+    Prefix:
+        Avatar: "[Avatar] "
+        Air: "[Airbender] "
+        Earth: "[Earthbender] "
+        Fire: "[Firebender] "
+        Water: "[Waterbender] "
+    Color:
+        Avatar: "LIGHT_PURPLE"
+        Air: "GRAY"
+        Earth: "GREEN"
+        Fire: "RED"
+        Water: "BLUE"
+
+Bending:
+    Damage:
+        AirSwipe: 1
+        EarthBlast: 7
+        WaterManipulation: 7
