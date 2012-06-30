@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -14,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import tools.Abilities;
 import tools.BendingType;
+import tools.ConfigManager;
 import tools.Tools;
 import firebending.Fireball;
 
@@ -23,10 +25,11 @@ public class Bending extends JavaPlugin {
 	public static Logger log = Logger.getLogger("Minecraft");
 
 	public final BendingManager manager = new BendingManager(this);
-	public final BendingListener listener = new BendingListener();
+	public final BendingListener listener = new BendingListener(this);
 
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
+	public static ConfigManager configManager = new ConfigManager();
 	public BendingPlayers config = new BendingPlayers(getDataFolder());
 	public Tools tools = new Tools(config);
 
@@ -58,6 +61,14 @@ public class Bending extends JavaPlugin {
 
 		log.info("Bending v" + this.getDescription().getVersion()
 				+ " has been loaded.");
+		
+	    configManager.load(new File(getDataFolder(), "config.yml"));
+
+	}
+	
+	public void reloadConfiguration() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();
 
 	}
 
@@ -97,6 +108,12 @@ public class Bending extends JavaPlugin {
 				}
 				sender.sendMessage("You have removed the bending of: "
 						+ playerlist);
+				return true;
+			}
+			
+			if (args[0].equalsIgnoreCase("reload") && args.length >= 2 && sender.isOp()){
+				configManager.load(new File(this.getDataFolder(), "config.yml"));
+				sender.sendMessage("Config reloaded");
 				return true;
 			}
 

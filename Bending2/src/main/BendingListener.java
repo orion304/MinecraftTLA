@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerVelocityEvent;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
+import tools.ConfigManager;
 import tools.Tools;
 import waterbending.Freeze;
 import waterbending.Melt;
@@ -56,28 +57,49 @@ import firebending.RingOfFire;
 
 public class BendingListener implements Listener {
 
-	public BendingListener() {
-
+	public Bending plugin;
+	
+	public BendingListener(Bending instance) {
+		this.plugin = instance;
 	}
 
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
 		String append = "";
-		if (player.isOp()) {
-			append = "[Avatar] ";
-		} else if (Tools.isBender(player, BendingType.Air)) {
-			append = "[Airbender] ";
-		} else if (Tools.isBender(player, BendingType.Earth)) {
-			append = "[Earthbender] ";
-		} else if (Tools.isBender(player, BendingType.Fire)) {
-			append = "[Firebender] ";
-		} else if (Tools.isBender(player, BendingType.Water)) {
-			append = "[Waterbender] ";
+		if ((player.isOp()) && ConfigManager.enabled) {
+			append = ConfigManager.getPrefix("Avatar");
+		} else if ((Tools.isBender(player, BendingType.Air)) && (ConfigManager.enabled)) {
+			append = ConfigManager.getPrefix("Air");
+		} else if ((Tools.isBender(player, BendingType.Earth)) && (ConfigManager.enabled)) {
+			append = ConfigManager.getPrefix("Earth");
+		} else if ((Tools.isBender(player, BendingType.Fire)) && (ConfigManager.enabled)) {
+			append = ConfigManager.getPrefix("Fire");
+		} else if ((Tools.isBender(player, BendingType.Water)) && (ConfigManager.enabled)) {
+			append = ConfigManager.getPrefix("Water");
 		} else {
 			player.sendMessage("Using '/bending choose <element>' to get started!");
 		}
+		if (!(ConfigManager.compatibility) && (ConfigManager.enabled))
 		player.setDisplayName(append + player.getName());
+		
+		if ((ConfigManager.compatibility) && (ConfigManager.enabled)){
+			ChatColor color = ChatColor.WHITE;
+			if (ConfigManager.colors){
+			if (player.isOp()) {
+				color = Tools.getColor(ConfigManager.getColor("Avatar"));
+			} else if (Tools.isBender(player, BendingType.Air)) {
+				color = Tools.getColor(ConfigManager.getColor("Air"));
+			} else if (Tools.isBender(player, BendingType.Earth)) {
+				color = Tools.getColor(ConfigManager.getColor("Earth"));
+			} else if (Tools.isBender(player, BendingType.Fire)) {
+				color = Tools.getColor(ConfigManager.getColor("Fire"));
+			} else if (Tools.isBender(player, BendingType.Water)) {
+				color = Tools.getColor(ConfigManager.getColor("Water"));
+			}
+			}
+			player.setDisplayName("<" + color + append + player.getName() + ChatColor.WHITE + ">");
+		}
 	}
 
 	@EventHandler
@@ -92,22 +114,29 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onPlayerChat(PlayerChatEvent event) {
+		if(!(ConfigManager.enabled))
+			return;
+		if (!(ConfigManager.compatibility)){
+		
 		Player player = event.getPlayer();
 		ChatColor color = ChatColor.WHITE;
-
+        
+		if (ConfigManager.colors){
 		if (player.isOp()) {
-			color = ChatColor.DARK_PURPLE;
+			color = Tools.getColor(ConfigManager.getColor("Avatar"));
 		} else if (Tools.isBender(player, BendingType.Air)) {
-			color = ChatColor.GRAY;
+			color = Tools.getColor(ConfigManager.getColor("Air"));
 		} else if (Tools.isBender(player, BendingType.Earth)) {
-			color = ChatColor.GREEN;
+			color = Tools.getColor(ConfigManager.getColor("Earth"));
 		} else if (Tools.isBender(player, BendingType.Fire)) {
-			color = ChatColor.RED;
+			color = Tools.getColor(ConfigManager.getColor("Fire"));
 		} else if (Tools.isBender(player, BendingType.Water)) {
-			color = ChatColor.AQUA;
+			color = Tools.getColor(ConfigManager.getColor("Water"));
+		}
 		}
 		event.setFormat("<" + color + player.getDisplayName() + ChatColor.WHITE
 				+ "> " + event.getMessage());
+		}
 	}
 
 	// event.setMessage(append + event.getMessage());
