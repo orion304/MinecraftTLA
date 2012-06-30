@@ -2,13 +2,17 @@ package tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import main.Bending;
 import main.BendingPlayers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,6 +45,8 @@ import earthbending.EarthPassive;
 public class Tools {
 
 	private static BendingPlayers config;
+
+	private static final Map<String, ChatColor> colors;
 
 	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
 			31, 32, 37, 38, 39, 40, 50, 51, 59, 83, 106 };
@@ -137,6 +143,19 @@ public class Tools {
 
 		return blocks;
 
+	}
+
+	public static List<Block> getBlocksOnPlane(Location location, int radius) {
+		List<Block> blocks = new ArrayList<Block>();
+
+		for (int x = -radius; x <= radius; x++) {
+			for (int y = -radius; y <= radius; y++) {
+				blocks.add(location.getBlock().getRelative(BlockFace.NORTH, x)
+						.getRelative(BlockFace.EAST, y));
+			}
+		}
+
+		return blocks;
 	}
 
 	public static void moveEarth(Location location, Vector direction,
@@ -478,43 +497,129 @@ public class Tools {
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
 			return true;
+			// EntityDamageByEntityEvent damageEvent = new
+			// EntityDamageByEntityEvent(player, player,
+			// EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
+			// Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+
+			// if (damageEvent.isCancelled())
+			// {
+			// return true;
+			// }
+			// }
 		}
-		// }
 		return false;
 	}
 
 	public static boolean canBendPassive(Player player, BendingType type) {
 		if (isRegionProtected(player, null))
 			return false;
-		return true;
-		// if (player.hasPermission("bending." + type + ".passive")) {
-		// return true;
-		// }
-		// return false;
+		if (player.hasPermission("bending." + type + ".passive")) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean hasPermission(Player player, Abilities ability) {
-		return true;
-		// if (ability == Abilities.AvatarState
-		// && player.hasPermission("bending.avatarstate")) {
-		// return true;
-		// }
-		// if (Abilities.isAirbending(ability)
-		// && player.hasPermission("bending.air." + ability)) {
-		// return true;
-		// }
-		// if (Abilities.isWaterbending(ability)
-		// && player.hasPermission("bending.water." + ability)) {
-		// return true;
-		// }
-		// if (Abilities.isEarthbending(ability)
-		// && player.hasPermission("bending.earth." + ability)) {
-		// return true;
-		// }
-		// if (Abilities.isFirebending(ability)
-		// && player.hasPermission("bending.fire." + ability)) {
-		// return true;
-		// }
-		// return false;
+		if (ability == Abilities.AvatarState
+				&& player.hasPermission("bending.avatarstate")) {
+			return true;
+		}
+		if (Abilities.isAirbending(ability)
+				&& player.hasPermission("bending.air." + ability)) {
+			return true;
+		}
+		if (Abilities.isWaterbending(ability)
+				&& player.hasPermission("bending.water." + ability)) {
+			return true;
+		}
+		if (Abilities.isEarthbending(ability)
+				&& player.hasPermission("bending.earth." + ability)) {
+			return true;
+		}
+		if (Abilities.isFirebending(ability)
+				&& player.hasPermission("bending.fire." + ability)) {
+			return true;
+		}
+		return false;
 	}
+
+	public static ChatColor getColor(String input) {
+		return (ChatColor) colors.get(input.toLowerCase().replace("&", ""));
+
+	}
+
+	static {
+		Map<String, ChatColor> tmpMap = new HashMap<String, ChatColor>();
+		tmpMap.put("black", ChatColor.BLACK);
+		tmpMap.put("0", ChatColor.BLACK);
+
+		tmpMap.put("dark blue", ChatColor.DARK_BLUE);
+		tmpMap.put("dark_blue", ChatColor.DARK_BLUE);
+		tmpMap.put("1", ChatColor.DARK_BLUE);
+
+		tmpMap.put("dark green", ChatColor.DARK_GREEN);
+		tmpMap.put("dark_green", ChatColor.DARK_GREEN);
+		tmpMap.put("2", ChatColor.DARK_GREEN);
+
+		tmpMap.put("dark aqua", ChatColor.DARK_AQUA);
+		tmpMap.put("dark_aqua", ChatColor.DARK_AQUA);
+		tmpMap.put("teal", ChatColor.DARK_AQUA);
+		tmpMap.put("3", ChatColor.DARK_AQUA);
+
+		tmpMap.put("dark red", ChatColor.DARK_RED);
+		tmpMap.put("dark_red", ChatColor.DARK_RED);
+		tmpMap.put("4", ChatColor.DARK_RED);
+
+		tmpMap.put("dark purple", ChatColor.DARK_PURPLE);
+		tmpMap.put("dark_purple", ChatColor.DARK_PURPLE);
+		tmpMap.put("purple", ChatColor.DARK_PURPLE);
+		tmpMap.put("5", ChatColor.DARK_PURPLE);
+
+		tmpMap.put("gold", ChatColor.GOLD);
+		tmpMap.put("orange", ChatColor.GOLD);
+		tmpMap.put("6", ChatColor.GOLD);
+
+		tmpMap.put("gray", ChatColor.GRAY);
+		tmpMap.put("grey", ChatColor.GRAY);
+		tmpMap.put("7", ChatColor.GRAY);
+
+		tmpMap.put("dark gray", ChatColor.DARK_GRAY);
+		tmpMap.put("dark_gray", ChatColor.DARK_GRAY);
+		tmpMap.put("dark grey", ChatColor.DARK_GRAY);
+		tmpMap.put("dark_grey", ChatColor.DARK_GRAY);
+		tmpMap.put("8", ChatColor.DARK_GRAY);
+
+		tmpMap.put("blue", ChatColor.BLUE);
+		tmpMap.put("9", ChatColor.BLUE);
+
+		tmpMap.put("bright green", ChatColor.GREEN);
+		tmpMap.put("bright_green", ChatColor.GREEN);
+		tmpMap.put("green", ChatColor.GREEN);
+		tmpMap.put("a", ChatColor.GREEN);
+
+		tmpMap.put("aqua", ChatColor.AQUA);
+		tmpMap.put("b", ChatColor.AQUA);
+
+		tmpMap.put("red", ChatColor.RED);
+		tmpMap.put("c", ChatColor.RED);
+
+		tmpMap.put("light purple", ChatColor.LIGHT_PURPLE);
+		tmpMap.put("light_purple", ChatColor.LIGHT_PURPLE);
+		tmpMap.put("pink", ChatColor.LIGHT_PURPLE);
+		tmpMap.put("d", ChatColor.LIGHT_PURPLE);
+
+		tmpMap.put("yellow", ChatColor.YELLOW);
+		tmpMap.put("e", ChatColor.YELLOW);
+
+		tmpMap.put("white", ChatColor.WHITE);
+		tmpMap.put("f", ChatColor.WHITE);
+
+		tmpMap.put("random", ChatColor.MAGIC);
+		tmpMap.put("magic", ChatColor.MAGIC);
+		tmpMap.put("k", ChatColor.MAGIC);
+
+		colors = Collections.unmodifiableMap(tmpMap);
+	}
+
 }

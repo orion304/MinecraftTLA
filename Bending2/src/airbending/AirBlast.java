@@ -1,5 +1,6 @@
 package airbending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
@@ -42,6 +43,8 @@ public class AirBlast {
 	private double speedfactor;
 	private int ticks = 0;
 
+	private ArrayList<Block> affectedlevers = new ArrayList<Block>();
+
 	// private long time;
 
 	public AirBlast(Player player) {
@@ -49,6 +52,9 @@ public class AirBlast {
 			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
 				return;
 			}
+		}
+		if (player.getEyeLocation().getBlock().isLiquid()) {
+			return;
 		}
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
@@ -62,6 +68,7 @@ public class AirBlast {
 			ID = Integer.MIN_VALUE;
 		ID++;
 		// time = System.currentTimeMillis();
+		timers.put(player, System.currentTimeMillis());
 	}
 
 	public boolean progress() {
@@ -85,20 +92,20 @@ public class AirBlast {
 			if (testblock.getType() == Material.FIRE) {
 				testblock.setType(Material.AIR);
 			}
-			if ((block.getType() == Material.LEVER)
-					|| (block.getType() == Material.STONE_BUTTON)) {
+			if (((block.getType() == Material.LEVER) || (block.getType() == Material.STONE_BUTTON))
+					&& !affectedlevers.contains(block)) {
 				EntityHuman eH = ((CraftPlayer) player).getHandle();
 
 				net.minecraft.server.Block.byId[block.getTypeId()].interact(
 						((CraftWorld) block.getWorld()).getHandle(),
 						block.getX(), block.getY(), block.getZ(), eH);
+
+				affectedlevers.add(block);
 			}
 		}
-		if (block.getType() != Material.AIR) {
-			if (block.getType() == Material.STATIONARY_LAVA) {
-				block.setType(Material.OBSIDIAN);
-				instances.remove(id);
-			} else if (block.getType() == Material.LAVA) {
+		if (block.getType() != Material.AIR && !affectedlevers.contains(block)) {
+			if (block.getType() == Material.LAVA
+					|| block.getType() == Material.STATIONARY_LAVA) {
 				if (block.getData() == full) {
 					block.setType(Material.OBSIDIAN);
 				} else {

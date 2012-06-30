@@ -44,6 +44,9 @@ public class AirSuction {
 				return;
 			}
 		}
+		if (player.getEyeLocation().getBlock().isLiquid()) {
+			return;
+		}
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		origin = player.getEyeLocation().clone();
@@ -56,6 +59,7 @@ public class AirSuction {
 			ID = Integer.MIN_VALUE;
 		ID++;
 		// time = System.currentTimeMillis();
+		timers.put(player, System.currentTimeMillis());
 	}
 
 	public boolean progress() {

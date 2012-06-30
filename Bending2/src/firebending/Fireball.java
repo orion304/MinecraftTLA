@@ -17,7 +17,7 @@ public class Fireball {
 	public static final long duration = 5000;
 
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = 1000;
+	public static final long soonesttime = 1000;
 	private static final double speedfactor = 0.3;
 
 	public Fireball(Player player) {

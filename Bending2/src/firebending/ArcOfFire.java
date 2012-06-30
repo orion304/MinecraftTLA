@@ -22,6 +22,7 @@ public class ArcOfFire {
 				return;
 			}
 		}
+		timers.put(player, System.currentTimeMillis());
 		Location location = player.getLocation();
 
 		for (int i = -arc; i <= arc; i += stepsize) {

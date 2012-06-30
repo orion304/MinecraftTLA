@@ -13,6 +13,8 @@ import tools.Tools;
 public class Catapult {
 
 	public static ConcurrentHashMap<Integer, Catapult> instances = new ConcurrentHashMap<Integer, Catapult>();
+	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
+	static final long soonesttime = Tools.timeinterval;
 
 	private static int length = 7;
 	private static double speed = 12;
@@ -31,6 +33,11 @@ public class Catapult {
 	private int ticks = 0;
 
 	public Catapult(Player player) {
+		if (timers.containsKey(player)) {
+			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+				return;
+			}
+		}
 		this.player = player;
 		origin = player.getEyeLocation().clone();
 		direction = origin.getDirection().clone().normalize();
@@ -60,6 +67,7 @@ public class Catapult {
 			time = System.currentTimeMillis() - interval;
 			// time = System.currentTimeMillis();
 			instances.put(player.getEntityId(), this);
+			timers.put(player, System.currentTimeMillis());
 		}
 
 	}

@@ -16,17 +16,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
+import firebending.Fireball;
 
 public class AirSwipe {
 
 	public static ConcurrentHashMap<Integer, AirSwipe> instances = new ConcurrentHashMap<Integer, AirSwipe>();
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = Tools.timeinterval;
+	static final long soonesttime = Fireball.soonesttime;
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static int damage = 1;
+	private static int damage = ConfigManager.airdmg;
 	private static double affectingradius = AirBlast.affectingradius;
 	private static double pushfactor = AirBlast.pushfactor;
 	private static double range = AirBlast.range * .8;
@@ -51,6 +53,9 @@ public class AirSwipe {
 			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
 				return;
 			}
+		}
+		if (player.getEyeLocation().getBlock().isLiquid()) {
+			return;
 		}
 		this.player = player;
 		origin = player.getEyeLocation();
@@ -77,6 +82,7 @@ public class AirSwipe {
 			ID = Integer.MIN_VALUE;
 		}
 		ID++;
+		timers.put(player, System.currentTimeMillis());
 	}
 
 	public boolean progress() {
@@ -114,10 +120,8 @@ public class AirSwipe {
 					}
 
 					if (block.getType() != Material.AIR) {
-						if (block.getType() == Material.STATIONARY_LAVA) {
-							block.setType(Material.OBSIDIAN);
-							elements.remove(direction);
-						} else if (block.getType() == Material.LAVA) {
+						if (block.getType() == Material.LAVA
+								|| block.getType() == Material.STATIONARY_LAVA) {
 							if (block.getData() == full) {
 								block.setType(Material.OBSIDIAN);
 							} else {

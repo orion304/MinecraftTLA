@@ -19,6 +19,7 @@ public class RingOfFire {
 				return;
 			}
 		}
+		timers.put(player, System.currentTimeMillis());
 		Location location = player.getLocation();
 
 		for (double degrees = 0; degrees < 360; degrees += 10) {

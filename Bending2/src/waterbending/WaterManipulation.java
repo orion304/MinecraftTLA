@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class WaterManipulation {
@@ -23,7 +24,7 @@ public class WaterManipulation {
 	private static final byte half = 0x4;
 
 	private static double range = 20;
-	private static int damage = 7;
+	private static int damage = ConfigManager.waterdmg;
 	private static double speed = 35;
 	// private static double speed = 1.5;
 

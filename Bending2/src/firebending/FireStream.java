@@ -58,6 +58,7 @@ public class FireStream {
 		ID++;
 		time = System.currentTimeMillis();
 		instances.put(id, this);
+		timers.put(player, System.currentTimeMillis());
 
 	}
 
