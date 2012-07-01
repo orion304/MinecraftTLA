@@ -6,13 +6,14 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.BendingType;
+import tools.ConfigManager;
 import tools.Tools;
 import airbending.AirBlast;
 
 public class Extinguish {
 
-	private static double range = 20;
-	private static double radius = 3;
+	private static double range = ConfigManager.extinguishRange;
+	private static double radius = ConfigManager.extinguishRadius;
 	private static byte full = AirBlast.full;
 
 	public Extinguish(Player player) {

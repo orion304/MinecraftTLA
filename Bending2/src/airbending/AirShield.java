@@ -12,13 +12,14 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class AirShield {
 
 	public static ConcurrentHashMap<Integer, AirShield> instances = new ConcurrentHashMap<Integer, AirShield>();
 
-	private static double radius = 7;
+	private static double radius = ConfigManager.airShieldRadius;
 	private static int numberOfStreams = (int) (.75*(double)radius);
 	// private static double speed = 500;
 

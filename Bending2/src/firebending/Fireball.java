@@ -11,14 +11,16 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
+
 public class Fireball {
 
 	public static ConcurrentHashMap<EntityFireball, Long> fireballs = new ConcurrentHashMap<EntityFireball, Long>();
 	public static final long duration = 5000;
 
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	public static final long soonesttime = 1000;
-	private static final double speedfactor = 0.3;
+	public static final long soonesttime = ConfigManager.fireballCooldown;
+	private static final double speedfactor = ConfigManager.fireballSpeed;
 
 	public Fireball(Player player) {
 		if (player.getEyeLocation().getBlock().isLiquid())

@@ -7,18 +7,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthTunnel {
 
 	public static ConcurrentHashMap<Player, EarthTunnel> instances = new ConcurrentHashMap<Player, EarthTunnel>();
 
-	private static final double maxradius = 1;
-	private static final double range = 10;
-	private static final double radiusinc = 0.25;
+	private static final double maxradius = ConfigManager.earthTunnelMaxRadius;
+	private static final double range = ConfigManager.earthTunnelRange;
+	private static final double radiusinc = ConfigManager.earthTunnelRadius;
 	// private static final double speed = 10;
 
-	private static final long interval = 30;
+	private static final long interval = ConfigManager.earthTunnelInterval;
 
 	private Player player;
 	private Block block;

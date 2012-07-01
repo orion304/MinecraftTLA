@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 import waterbending.WaterManipulation;
 
@@ -17,7 +18,7 @@ public class AirBubble {
 
 	public static ConcurrentHashMap<Integer, AirBubble> instances = new ConcurrentHashMap<Integer, AirBubble>();
 
-	private static double radius = 5;
+	private static double radius = ConfigManager.airBubbleRadius;
 	private static byte full = AirBlast.full;
 
 	private Player player;

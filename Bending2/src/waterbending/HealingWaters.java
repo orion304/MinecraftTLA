@@ -8,12 +8,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class HealingWaters {
 
-	private static final double range = 5;
-	private static final long interval = 750;
+	private static final double range = ConfigManager.healingWatersRadius;
+	private static final long interval = ConfigManager.healingWatersInterval;
 
 	private static long time = 0;
 

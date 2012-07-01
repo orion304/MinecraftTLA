@@ -9,13 +9,14 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class WaterSpout {
 
 	public static ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
 
-	private static final int height = 8;
+	private static final int height = ConfigManager.waterSpoutHeight;
 	// private static final byte half = 0x4;
 	private static final byte full = 0x0;
 
