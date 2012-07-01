@@ -2,7 +2,9 @@ package tools;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -20,6 +22,10 @@ public class ConfigManager {
 	public static int waterdmg = 7;
 	public static Map<String, String> prefixes = new HashMap<String, String>();
 	public static Map<String, String> color = new HashMap<String, String>();
+	public static List<String> earthbendable = new ArrayList<String>();
+	public static Map<String, Boolean> useWeapon = new HashMap<String, Boolean>();
+
+	private static List<String> defaultearthbendable = new ArrayList<String>();
 
 	public void load(File file) {
 		FileConfiguration config = new YamlConfiguration();
@@ -56,6 +62,28 @@ public class ConfigManager {
 		color.put("Fire", config.getString("Chat.Color.Fire"));
 		color.put("Water", config.getString("Chat.Color.Water"));
 		color.put("Earth", config.getString("Chat.Color.Earth"));
+
+		earthbendable = config.getStringList("Bending.Option.EarthBendable");
+
+		useWeapon.put("Air",
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Air"));
+		useWeapon.put("Earth",
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Earth"));
+		useWeapon.put("Fire",
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire"));
+		useWeapon.put("Water",
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
+
+		config.set("Bending.Option.EarthBendable", defaultearthbendable);
+
+		config.set("Bending.Option.Bend-With-Weapon.Air", false);
+
+		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
+
+		config.set("Bending.Option.Bend-With-Weapon.Water", true);
+
+		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
+
 		try {
 			config.options().copyDefaults(true);
 			config.save(file);
@@ -91,5 +119,36 @@ public class ConfigManager {
 
 	public static String getPrefix(String element) {
 		return prefixes.get(element);
+	}
+
+	static {
+		defaultearthbendable.add("STONE");
+
+		defaultearthbendable.add("CLAY");
+
+		defaultearthbendable.add("COAL_ORE");
+
+		defaultearthbendable.add("DIAMOND_ORE");
+
+		defaultearthbendable.add("DIRT");
+
+		defaultearthbendable.add("GOLD_ORE");
+
+		defaultearthbendable.add("GRASS");
+
+		defaultearthbendable.add("GRAVEL");
+
+		defaultearthbendable.add("IRON_ORE");
+
+		defaultearthbendable.add("LAPIS_ORE");
+
+		defaultearthbendable.add("NETHERRACK");
+
+		defaultearthbendable.add("REDSTONE_ORE");
+
+		defaultearthbendable.add("SAND");
+
+		defaultearthbendable.add("SANDSTONE");
+
 	}
 }

@@ -133,7 +133,7 @@ public class BendingManager implements Runnable {
 			}
 		}
 
-		FireJet.checkBlocks();
+		FireJet.progressAll();
 
 	}
 

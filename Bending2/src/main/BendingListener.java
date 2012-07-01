@@ -154,101 +154,126 @@ public class BendingListener implements Listener {
 
 		if (Tools.canBend(player, Tools.getBendingAbility(player))) {
 
-			if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
-				new AirBlast(player);
+			if ((!(ConfigManager.useWeapon.get("Air")) && (Tools
+					.isWeapon(player.getItemInHand().getType())))
+					|| ConfigManager.useWeapon.get("Air")) {
+
+				if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
+					new AirBlast(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
+					new AirSuction(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.AirSwipe) {
+					new AirSwipe(player);
+				}
+
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
-				new AirSuction(player);
+			if ((!(ConfigManager.useWeapon.get("Earth")) && (Tools
+					.isWeapon(player.getItemInHand().getType())))
+					|| ConfigManager.useWeapon.get("Earth")) {
+
+				if (Tools.getBendingAbility(player) == Abilities.Catapult) {
+					new Catapult(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.PatchTheEarth) {
+					new PatchTheEarth(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.EarthColumn) {
+					new EarthColumn(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.CompactColumn) {
+					new CompactColumn(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.EarthGrab) {
+					new EarthGrab(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.EarthWall) {
+					new EarthWall(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
+					EarthBlast.throwEarth(player);
+				}
+
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.AirSwipe) {
-				new AirSwipe(player);
+			if ((!(ConfigManager.useWeapon.get("Fire")) && (Tools
+					.isWeapon(player.getItemInHand().getType())))
+					|| ConfigManager.useWeapon.get("Fire")) {
+
+				if (Tools.getBendingAbility(player) == Abilities.Fireball) {
+					new Fireball(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.Extinguish) {
+					new Extinguish(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.FireStream) {
+					new FireStream(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.ArcOfFire) {
+					new ArcOfFire(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.RingOfFire) {
+					new RingOfFire(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.HeatMelt) {
+					new HeatMelt(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.FireJet) {
+					new FireJet(player);
+				}
+
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Catapult) {
-				new Catapult(player);
-			}
+			if ((!(ConfigManager.useWeapon.get("Water")) && (Tools
+					.isWeapon(player.getItemInHand().getType())))
+					|| ConfigManager.useWeapon.get("Water")) {
 
-			if (Tools.getBendingAbility(player) == Abilities.PatchTheEarth) {
-				new PatchTheEarth(player);
-			}
+				if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
+					WaterManipulation.moveWater(player);
+				}
 
-			if (Tools.getBendingAbility(player) == Abilities.EarthColumn) {
-				new EarthColumn(player);
-			}
+				if (Tools.getBendingAbility(player) == Abilities.Freeze) {
+					new Freeze(player);
+				}
 
-			if (Tools.getBendingAbility(player) == Abilities.CompactColumn) {
-				new CompactColumn(player);
-			}
+				if (Tools.getBendingAbility(player) == Abilities.Melt) {
+					new Melt(player);
+				}
 
-			if (Tools.getBendingAbility(player) == Abilities.EarthGrab) {
-				new EarthGrab(player);
-			}
+				if (Tools.getBendingAbility(player) == Abilities.WaterWall) {
+					new WaterWall(player);
+				}
 
-			if (Tools.getBendingAbility(player) == Abilities.EarthWall) {
-				new EarthWall(player);
-			}
+				if (Tools.getBendingAbility(player) == Abilities.Wave) {
+					Wave.launch(player);
+				}
 
-			if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
-				EarthBlast.throwEarth(player);
-			}
+				if (Tools.getBendingAbility(player) == Abilities.Plantbending) {
+					new Plantbending(player);
+				}
 
-			if (Tools.getBendingAbility(player) == Abilities.Fireball) {
-				new Fireball(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.Extinguish) {
-				new Extinguish(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.FireStream) {
-				new FireStream(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.ArcOfFire) {
-				new ArcOfFire(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.RingOfFire) {
-				new RingOfFire(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.HeatMelt) {
-				new HeatMelt(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
-				WaterManipulation.moveWater(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.Freeze) {
-				new Freeze(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.Melt) {
-				new Melt(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.WaterWall) {
-				new WaterWall(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.Wave) {
-				Wave.launch(player);
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.AvatarState) {
 				new AvatarState(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Plantbending) {
-				new Plantbending(player);
-			}
-
-			if (Tools.getBendingAbility(player) == Abilities.FireJet) {
-				new FireJet(player);
-			}
 		}
 	}
 
@@ -264,12 +289,17 @@ public class BendingListener implements Listener {
 				new AirShield(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
-				new AirBlast(player);
-			}
+			if ((!(ConfigManager.useWeapon.get("Air")) && (Tools
+					.isWeapon(player.getItemInHand().getType())))
+					|| ConfigManager.useWeapon.get("Air")) {
 
-			if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
-				new AirSuction(player);
+				if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
+					new AirBlast(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
+					new AirSuction(player);
+				}
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.Tornado) {

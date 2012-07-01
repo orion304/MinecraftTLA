@@ -271,21 +271,55 @@ public class Tools {
 	public static boolean isEarthbendable(Block block) {
 		Material material = block.getType();
 
-		if ((material == Material.STONE) || (material == Material.CLAY)
-				|| (material == Material.COAL_ORE)
-				|| (material == Material.DIAMOND_ORE)
-				|| (material == Material.DIRT)
-				|| (material == Material.GOLD_ORE)
-				|| (material == Material.GRASS)
-				|| (material == Material.GRAVEL)
-				|| (material == Material.IRON_ORE)
-				|| (material == Material.LAPIS_ORE)
-				|| (material == Material.NETHERRACK)
-				|| (material == Material.REDSTONE_ORE)
-				|| (material == Material.SAND)
-				|| (material == Material.SANDSTONE)) {
-			return true;
+		// if ((material == Material.STONE) || (material == Material.CLAY)
+		// || (material == Material.COAL_ORE)
+		// || (material == Material.DIAMOND_ORE)
+		// || (material == Material.DIRT)
+		// || (material == Material.GOLD_ORE)
+		// || (material == Material.GRASS)
+		// || (material == Material.GRAVEL)
+		// || (material == Material.IRON_ORE)
+		// || (material == Material.LAPIS_ORE)
+		// || (material == Material.NETHERRACK)
+		// || (material == Material.REDSTONE_ORE)
+		// || (material == Material.SAND)
+		// || (material == Material.SANDSTONE)) {
+		// return true;
+		// }
+		for (String s : ConfigManager.earthbendable) {
+
+			if (material == Material.getMaterial(s)) {
+
+				return true;
+
+			}
+
 		}
+		return false;
+
+	}
+
+	public static boolean isWeapon(Material mat) {
+
+		if (mat == Material.WOOD_AXE || mat == Material.WOOD_PICKAXE
+				|| mat == Material.WOOD_SPADE || mat == Material.WOOD_SWORD
+
+				|| mat == Material.STONE_AXE || mat == Material.STONE_PICKAXE
+				|| mat == Material.STONE_SPADE || mat == Material.STONE_SWORD
+
+				|| mat == Material.IRON_AXE || mat == Material.IRON_PICKAXE
+				|| mat == Material.IRON_SPADE || mat == Material.IRON_SWORD
+
+				|| mat == Material.GOLD_AXE || mat == Material.GOLD_PICKAXE
+				|| mat == Material.GOLD_SPADE || mat == Material.GOLD_SWORD
+
+				|| mat == Material.DIAMOND_AXE
+				|| mat == Material.DIAMOND_PICKAXE
+				|| mat == Material.DIAMOND_SPADE
+				|| mat == Material.DIAMOND_SWORD)
+
+			return true;
+
 		return false;
 
 	}
