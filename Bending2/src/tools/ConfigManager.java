@@ -74,16 +74,6 @@ public class ConfigManager {
 		useWeapon.put("Water",
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
 
-		config.set("Bending.Option.EarthBendable", defaultearthbendable);
-
-		config.set("Bending.Option.Bend-With-Weapon.Air", false);
-
-		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
-
-		config.set("Bending.Option.Bend-With-Weapon.Water", true);
-
-		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
-
 		try {
 			config.options().copyDefaults(true);
 			config.save(file);
@@ -110,6 +100,15 @@ public class ConfigManager {
 		config.set("Chat.Color.Fire", "RED");
 		config.set("Chat.Color.Water", "AQUA");
 		config.set("Chat.Color.Earth", "GREEN");
+		config.set("Bending.Option.EarthBendable", defaultearthbendable);
+
+		config.set("Bending.Option.Bend-With-Weapon.Air", false);
+
+		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
+
+		config.set("Bending.Option.Bend-With-Weapon.Water", true);
+
+		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
 		return config;
 	}
 

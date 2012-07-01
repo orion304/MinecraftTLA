@@ -2,6 +2,7 @@ package firebending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -11,8 +12,8 @@ import tools.Tools;
 public class FireJet {
 
 	public static ConcurrentHashMap<Player, FireJet> instances = new ConcurrentHashMap<Player, FireJet>();
-	private static final double factor = 1.6;
-	private static final long duration = 2000;
+	private static final double factor = .7;
+	private static final long duration = 1500;
 	private static final long cooldown = 6000;
 
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
@@ -53,6 +54,8 @@ public class FireJet {
 				|| System.currentTimeMillis() > time + duration) {
 			instances.remove(player);
 		} else {
+			player.getWorld().playEffect(player.getLocation(),
+					Effect.MOBSPAWNER_FLAMES, 1);
 			player.setVelocity(player.getEyeLocation().getDirection().clone()
 					.normalize().multiply(factor));
 			player.setFallDistance(0);

@@ -11,14 +11,14 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.Tools;
 
-public class Freeze {
+public class FreezeMelt {
 
 	public static ConcurrentHashMap<Block, Byte> frozenblocks = new ConcurrentHashMap<Block, Byte>();
 
 	public static final int defaultrange = 20;
 	public static final int defaultradius = 5;
 
-	public Freeze(Player player) {
+	public FreezeMelt(Player player) {
 		int range = defaultrange;
 		int radius = defaultradius;
 		if (AvatarState.isAvatarState(player)) {
@@ -65,8 +65,8 @@ public class Freeze {
 	public static boolean canThaw(Block block) {
 		if (frozenblocks.containsKey(block)) {
 			for (Player player : block.getWorld().getPlayers()) {
-				if (Tools.hasAbility(player, Abilities.Freeze)
-						&& Tools.canBend(player, Abilities.Freeze)) {
+				if (Tools.hasAbility(player, Abilities.FreezeMelt)
+						&& Tools.canBend(player, Abilities.FreezeMelt)) {
 					int range = defaultrange;
 					if (AvatarState.isAvatarState(player)) {
 						range = AvatarState.getValue(range);

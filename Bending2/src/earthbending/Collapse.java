@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import tools.Tools;
 
-public class PatchTheEarth {
+public class Collapse {
 
 	private static final int range = 20;
 	private static final double defaultradius = 7;
@@ -20,7 +20,7 @@ public class PatchTheEarth {
 	private ConcurrentHashMap<Block, Integer> baseblocks = new ConcurrentHashMap<Block, Integer>();
 	private double radius = defaultradius;
 
-	public PatchTheEarth(Player player) {
+	public Collapse(Player player) {
 		// if (AvatarState.isAvatarState(player))
 		// radius = AvatarState.getValue(defaultradius);
 		Location location = player.getTargetBlock(
