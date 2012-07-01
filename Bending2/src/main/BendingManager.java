@@ -32,6 +32,7 @@ import earthbending.EarthTunnel;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
+import firebending.Illumination;
 
 public class BendingManager implements Runnable {
 
@@ -134,6 +135,8 @@ public class BendingManager implements Runnable {
 		}
 
 		FireJet.progressAll();
+
+		Illumination.manage(plugin.getServer());
 
 	}
 

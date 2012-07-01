@@ -6,9 +6,9 @@ public enum Abilities {
 
 	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado,
 
-	Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse,
+	Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse, Tremorsense,
 
-	ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet,
+	ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet, Illumination,
 
 	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave,
 
@@ -19,11 +19,11 @@ public enum Abilities {
 	}
 
 	private enum EarthbendingAbilities {
-		Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse;
+		Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse, Tremorsense;
 	}
 
 	private enum FirebendingAbilities {
-		ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet;
+		ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet, Illumination;
 	}
 
 	private enum WaterbendingAbilities {

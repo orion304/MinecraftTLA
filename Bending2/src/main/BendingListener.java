@@ -54,6 +54,7 @@ import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
 import firebending.HeatMelt;
+import firebending.Illumination;
 import firebending.RingOfFire;
 
 public class BendingListener implements Listener {
@@ -236,6 +237,10 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.FireJet) {
 					new FireJet(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.Illumination) {
+					new Illumination(player);
 				}
 
 			}
@@ -433,8 +438,19 @@ public class BendingListener implements Listener {
 			WalkOnWater.thaw(block);
 		} else if (!WaterWall.canThaw(block)) {
 			WaterWall.thaw(block);
+		} else if (Illumination.blocks.containsKey(block)) {
+			event.setCancelled(true);
 		}
 	}
+
+	// @EventHandler
+	// public void onBlockDamage(BlockDamageEvent event) {
+	// Block block = event.getBlock();
+	// if (Illumination.blocks.containsKey(block)) {
+	// Illumination.revert(block);
+	// event.setCancelled(true);
+	// }
+	// }
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {

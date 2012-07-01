@@ -389,6 +389,15 @@ public class WaterWall {
 			affectedblocks.remove(block);
 			wallblocks.remove(block);
 		}
+		for (Block block : wallblocks.keySet()) {
+			if (block.getType() == Material.ICE
+					|| block.getType() == Material.WATER
+					|| block.getType() == Material.STATIONARY_WATER) {
+				block.setType(Material.AIR);
+			}
+			affectedblocks.remove(block);
+			wallblocks.remove(block);
+		}
 	}
 
 	public static boolean canThaw(Block block) {

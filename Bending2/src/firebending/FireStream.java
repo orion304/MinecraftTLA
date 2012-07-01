@@ -126,7 +126,8 @@ public class FireStream {
 		}
 
 		Block belowblock = block.getRelative(BlockFace.DOWN);
-		if (belowblock.getType() == Material.AIR || belowblock.isLiquid()) {
+		if (belowblock.getType() == Material.AIR || belowblock.isLiquid()
+				|| belowblock.getType() == Material.ICE) {
 			return false;
 		}
 
