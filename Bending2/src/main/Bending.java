@@ -156,6 +156,7 @@ public class Bending extends JavaPlugin {
 						}
 						part = part + args[1].toLowerCase();
 						sender.sendMessage("You are now" + part + "bender!");
+						config.removeBending(player);
 						config.setBending(player, args[1]);
 						return true;
 					}
@@ -171,10 +172,10 @@ public class Bending extends JavaPlugin {
 							|| args[2].equalsIgnoreCase("earth")) {
 						String part = " a ";
 						if (args[2].toLowerCase().startsWith("a")
-								|| args[1].toLowerCase().startsWith("e")) {
+								|| args[2].toLowerCase().startsWith("e")) {
 							part = " an ";
 						}
-						part = part + args[1].toLowerCase();
+						part = part + args[2].toLowerCase();
 						targetplayer.sendMessage(sender.getName()
 								+ " has made you" + part + "bender!");
 						sender.sendMessage("You have changed "
@@ -183,7 +184,92 @@ public class Bending extends JavaPlugin {
 						config.setBending(targetplayer, args[2]);
 						return true;
 					}
-					sender.sendMessage("Usage: /bending choose [player] [element]");
+					sender.sendMessage("Usage: /bending add [player] [element]");
+				} else {
+					return false;
+				}
+			}
+
+			if (args[0].equalsIgnoreCase("add") && sender.isOp()) {
+				if (args.length == 1)
+					return false;
+				if (args.length == 2) {
+					if (args[1].equalsIgnoreCase("water")
+							&& Tools.isBender(player, BendingType.Water)) {
+						sender.sendMessage("You are already a waterbender!");
+						return true;
+					} else if (args[1].equalsIgnoreCase("air")
+							&& Tools.isBender(player, BendingType.Air)) {
+						sender.sendMessage("You are already an airbender!");
+						return true;
+					} else if (args[1].equalsIgnoreCase("earth")
+							&& Tools.isBender(player, BendingType.Earth)) {
+						sender.sendMessage("You are already an earthbender!");
+						return true;
+					} else if (args[1].equalsIgnoreCase("fire")
+							&& Tools.isBender(player, BendingType.Fire)) {
+						sender.sendMessage("You are already a firebender!");
+						return true;
+					}
+					if (args[1].equalsIgnoreCase("water")
+							|| args[1].equalsIgnoreCase("air")
+							|| args[1].equalsIgnoreCase("fire")
+							|| args[1].equalsIgnoreCase("earth")) {
+						String part = " a ";
+						if (args[1].toLowerCase().startsWith("a")
+								|| args[1].toLowerCase().startsWith("e")) {
+							part = " an ";
+						}
+						part = part + args[1].toLowerCase();
+						sender.sendMessage("You are now also" + part
+								+ "bender!");
+						config.addBending(player, args[1]);
+						return true;
+					}
+				} else if (args.length == 3) {
+					String playername = args[1];
+					Player targetplayer = getServer().getPlayer(playername);
+					if (targetplayer == null) {
+						sender.sendMessage("Usage: /bending choose [player] [element]");
+						return true;
+					} else if (args[2].equalsIgnoreCase("water")
+							&& Tools.isBender(targetplayer, BendingType.Water)) {
+						sender.sendMessage(targetplayer.getName()
+								+ " is already a waterbender!");
+						return true;
+					} else if (args[2].equalsIgnoreCase("air")
+							&& Tools.isBender(targetplayer, BendingType.Air)) {
+						sender.sendMessage(targetplayer.getName()
+								+ " is already an airbender!");
+						return true;
+					} else if (args[2].equalsIgnoreCase("earth")
+							&& Tools.isBender(targetplayer, BendingType.Earth)) {
+						sender.sendMessage(targetplayer.getName()
+								+ " is already an earthbender!");
+						return true;
+					} else if (args[2].equalsIgnoreCase("fire")
+							&& Tools.isBender(targetplayer, BendingType.Fire)) {
+						sender.sendMessage(targetplayer.getName()
+								+ " is already a firebender!");
+						return true;
+					} else if (args[2].equalsIgnoreCase("water")
+							|| args[2].equalsIgnoreCase("air")
+							|| args[2].equalsIgnoreCase("fire")
+							|| args[2].equalsIgnoreCase("earth")) {
+						String part = " a ";
+						if (args[2].toLowerCase().startsWith("a")
+								|| args[2].toLowerCase().startsWith("e")) {
+							part = " an ";
+						}
+						part = part + args[2].toLowerCase();
+						targetplayer.sendMessage(sender.getName()
+								+ " has made you also" + part + "bender!");
+						sender.sendMessage("You have added to "
+								+ targetplayer.getName() + "'s bending.");
+						config.addBending(targetplayer, args[2]);
+						return true;
+					}
+					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
 					return false;
 				}
@@ -292,5 +378,4 @@ public class Bending extends JavaPlugin {
 		return false;
 
 	}
-
 }

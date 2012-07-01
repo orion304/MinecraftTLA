@@ -52,6 +52,24 @@ public class WalkOnWater {
 		}
 	}
 
+	public static void freeze(Player player) {
+		players.add(player);
+		for (Block block : Tools.getBlocksAroundPoint(player.getLocation(),
+				radius)) {
+			double dy = player.getLocation().getY() - block.getY();
+			if (dy <= 1 && dy > 0)
+				if (block.getType() == Material.WATER
+						|| block.getType() == Material.STATIONARY_WATER) {
+					byte data = block.getData();
+					if (block.getType() == Material.STATIONARY_WATER)
+						data = 0x0;
+					block.setType(Material.ICE);
+					affectedblocks.put(block, data);
+				}
+		}
+
+	}
+
 	private static void thaw() {
 		for (Block block : affectedblocks.keySet()) {
 			boolean thaw = true;

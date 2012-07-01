@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
@@ -410,6 +411,10 @@ public class BendingListener implements Listener {
 		if (!event.isCancelled()) {
 			event.setCancelled(!WaterManipulation.canPhysicsChange(block));
 		}
+		if (!event.isCancelled()) {
+			event.setCancelled(FreezeMelt.frozenblocks.containsKey(block));
+
+		}
 	}
 
 	@EventHandler
@@ -428,6 +433,15 @@ public class BendingListener implements Listener {
 			WalkOnWater.thaw(block);
 		} else if (!WaterWall.canThaw(block)) {
 			WaterWall.thaw(block);
+		}
+	}
+
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event) {
+		Player player = event.getPlayer();
+		if (Tools.isBender(player, BendingType.Water)
+				&& (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
+			WalkOnWater.freeze(player);
 		}
 	}
 

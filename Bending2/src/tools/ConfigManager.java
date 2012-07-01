@@ -83,7 +83,7 @@ public class ConfigManager {
 	public static double healingWatersRadius = 5;
 	public static long healingWatersInterval = 750;
 	public static int plantbendingRange = 10;
-	public static double walkOnWaterRadius = 3;
+	public static double walkOnWaterRadius = 3.5;
 	public static double waterManipulationRange = 20;
 	public static double waterManipulationSpeed = 35;
 	public static int waterSpoutHeight = 8;
