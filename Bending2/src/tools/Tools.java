@@ -24,7 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
-import waterbending.Freeze;
+import waterbending.FreezeMelt;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
@@ -512,7 +512,7 @@ public class Tools {
 		EarthBlast.removeAll();
 		EarthColumn.removeAll();
 		EarthPassive.removeAll();
-		Freeze.removeAll();
+		FreezeMelt.removeAll();
 		WalkOnWater.removeAll();
 		WaterSpout.removeAll();
 		WaterWall.removeAll();

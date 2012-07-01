@@ -158,6 +158,16 @@ public class ConfigManager {
 		config.set("Properties.Fire.FireStream.Range", 20);
 		config.set("Properties.Fire.HeatMelt.Range", 20);
 		config.set("Properties.Fire.HeatMelt.Radius", 6000);
+
+		config.set("Bending.Option.EarthBendable", defaultearthbendable);
+
+		config.set("Bending.Option.Bend-With-Weapon.Air", false);
+
+		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
+
+		config.set("Bending.Option.Bend-With-Weapon.Water", true);
+
+		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
 		return config;
 	}
 

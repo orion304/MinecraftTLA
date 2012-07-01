@@ -23,7 +23,7 @@ import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Tools;
-import waterbending.Freeze;
+import waterbending.FreezeMelt;
 import waterbending.Melt;
 import waterbending.Plantbending;
 import waterbending.WalkOnWater;
@@ -39,6 +39,7 @@ import airbending.AirSwipe;
 import airbending.Speed;
 import airbending.Tornado;
 import earthbending.Catapult;
+import earthbending.Collapse;
 import earthbending.CompactColumn;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
@@ -46,7 +47,6 @@ import earthbending.EarthGrab;
 import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
 import earthbending.EarthWall;
-import earthbending.PatchTheEarth;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
 import firebending.FireJet;
@@ -180,8 +180,8 @@ public class BendingListener implements Listener {
 					new Catapult(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.PatchTheEarth) {
-					new PatchTheEarth(player);
+				if (Tools.getBendingAbility(player) == Abilities.Collapse) {
+					new Collapse(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.EarthColumn) {
@@ -248,12 +248,8 @@ public class BendingListener implements Listener {
 					WaterManipulation.moveWater(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Freeze) {
-					new Freeze(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.Melt) {
-					new Melt(player);
+				if (Tools.getBendingAbility(player) == Abilities.FreezeMelt) {
+					new FreezeMelt(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.WaterWall) {
@@ -324,6 +320,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.Wave) {
 				new Wave(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.FreezeMelt) {
+				new Melt(player);
 			}
 
 		}
@@ -424,8 +424,8 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
-		if (!Freeze.canThaw(block)) {
-			Freeze.thaw(block);
+		if (!FreezeMelt.canThaw(block)) {
+			FreezeMelt.thaw(block);
 		} else if (!WalkOnWater.canThaw(block)) {
 			WalkOnWater.thaw(block);
 		} else if (!WaterWall.canThaw(block)) {

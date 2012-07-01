@@ -6,11 +6,11 @@ public enum Abilities {
 
 	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado,
 
-	Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, PatchTheEarth,
+	Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse,
 
 	ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet,
 
-	WaterBubble, Freeze, HealingWaters, Melt, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave,
+	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave,
 
 	AvatarState;
 
@@ -19,7 +19,7 @@ public enum Abilities {
 	}
 
 	private enum EarthbendingAbilities {
-		Catapult, DirtToSand, EarthColumn, EarthGlide, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, RockShield, PatchTheEarth;
+		Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse;
 	}
 
 	private enum FirebendingAbilities {
@@ -27,7 +27,7 @@ public enum Abilities {
 	}
 
 	private enum WaterbendingAbilities {
-		WaterBubble, Freeze, FreezeFeet, HealingWaters, Melt, Plantbending, WalkOnWater, WaterManipulation, WaterShield, WaterSpout, WaterWall, Wave;
+		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave;
 	}
 
 	public static Abilities getAbility(String ability) {

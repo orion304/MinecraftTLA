@@ -34,6 +34,7 @@ public class Speed {
 
 	private void applySpeed() {
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70, 1));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70, 1));
 	}
 
 	public static boolean progress(int ID) {

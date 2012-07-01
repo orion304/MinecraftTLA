@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.AvatarState;
-import waterbending.Freeze;
+import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
@@ -140,7 +140,7 @@ public class BendingManager implements Runnable {
 	private void manageWaterbending() {
 		WalkOnWater.handleFreezing(plugin.getServer());
 
-		Freeze.handleFrozenBlocks();
+		FreezeMelt.handleFrozenBlocks();
 
 		WaterSpout.handleSpouts(plugin.getServer());
 
