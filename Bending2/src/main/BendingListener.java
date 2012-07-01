@@ -152,6 +152,8 @@ public class BendingListener implements Listener {
 
 		Player player = event.getPlayer();
 
+		// Tools.verbose(Tools.getBendingAbility(player));
+
 		if (Tools.canBend(player, Tools.getBendingAbility(player))) {
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
@@ -273,6 +275,7 @@ public class BendingListener implements Listener {
 	public void onPlayerSneak(PlayerToggleSneakEvent event) {
 
 		Player player = event.getPlayer();
+		// Tools.verbose(Tools.getBendingAbility(player));
 
 		if (!player.isSneaking()
 				&& Tools.canBend(player, Tools.getBendingAbility(player))) {

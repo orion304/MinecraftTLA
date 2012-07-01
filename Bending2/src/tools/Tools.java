@@ -387,7 +387,9 @@ public class Tools {
 	}
 
 	public static <T> void verbose(T something) {
-		Bending.log.info(something.toString());
+		if (something != null) {
+			Bending.log.info(something.toString());
+		}
 	}
 
 	public static boolean isBlockTouching(Block block1, Block block2) {
