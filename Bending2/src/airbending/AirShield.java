@@ -20,7 +20,7 @@ public class AirShield {
 	public static ConcurrentHashMap<Integer, AirShield> instances = new ConcurrentHashMap<Integer, AirShield>();
 
 	private static double radius = ConfigManager.airShieldRadius;
-	private static int numberOfStreams = (int) (.75*(double)radius);
+	private static int numberOfStreams = (int) (.75 * (double) radius);
 	// private static double speed = 500;
 
 	private double speedfactor;
@@ -29,6 +29,11 @@ public class AirShield {
 	private HashMap<Integer, Integer> angles = new HashMap<Integer, Integer>();
 
 	public AirShield(Player player) {
+		if (AvatarState.isAvatarState(player)
+				&& instances.containsKey(player.getEntityId())) {
+			instances.remove(player.getEntityId());
+			return;
+		}
 		this.player = player;
 		int angle = 0;
 		for (int i = -(int) radius; i <= (int) radius; i += (int) radius * 2

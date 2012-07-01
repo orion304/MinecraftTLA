@@ -77,6 +77,7 @@ public class ConfigManager {
 	public static long fireJetCooldown = 6000;
 	public static double fireStreamSpeed = 20;
 	public static double fireStreamRange = 20;
+	public static int illuminationRange = 5;
 	public static int heatMeltRange = 20;
 	public static int heatMeltRadius = 5;
 	public static int freezeMeltRange = 20;
@@ -240,6 +241,8 @@ public class ConfigManager {
 		// HeatMelt
 		heatMeltRange = config.getInt("Properties.Fire.HeatMelt.Range");
 		heatMeltRadius = config.getInt("Properties.Fire.HeatMelt.Radius");
+		// Illumination
+		illuminationRange = config.getInt("Properties.Fire.Illumination.Range");
 		// WATER
 		// FreezeMelt
 		freezeMeltRange = config.getInt("Properties.Water.FreezeMelt.Range");
@@ -383,6 +386,8 @@ public class ConfigManager {
 
 		config.set("Properties.Fire.HeatMelt.Range", 20);
 		config.set("Properties.Fire.HeatMelt.Radius", 5);
+
+		config.set("Properties.Fire.Illumination.Range", 5);
 
 		config.set("Properties.Water.FreezeMelt.Range", 20);
 		config.set("Properties.Water.FreezeMelt.Radius", 5);

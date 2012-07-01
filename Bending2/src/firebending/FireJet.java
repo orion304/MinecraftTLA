@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -14,13 +15,14 @@ public class FireJet {
 
 	public static ConcurrentHashMap<Player, FireJet> instances = new ConcurrentHashMap<Player, FireJet>();
 	private static final double factor = ConfigManager.fireJetSpeed;
-	private static final long duration = ConfigManager.fireJetDuration;
+	private static final long defaultduration = ConfigManager.fireJetDuration;
 	private static final long cooldown = ConfigManager.fireJetCooldown;
 
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 
 	private Player player;
 	private long time;
+	private long duration = defaultduration;
 
 	public FireJet(Player player) {
 		if (instances.containsKey(player)) {
@@ -53,8 +55,10 @@ public class FireJet {
 	}
 
 	public void progress() {
-		if (Tools.isWater(player.getLocation().getBlock())
-				|| System.currentTimeMillis() > time + duration) {
+		if ((Tools.isWater(player.getLocation().getBlock()) || System
+				.currentTimeMillis() > time + duration)
+				&& !AvatarState.isAvatarState(player)) {
+
 			instances.remove(player);
 		} else {
 			player.getWorld().playEffect(player.getLocation(),
