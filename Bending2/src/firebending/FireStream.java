@@ -11,6 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class FireStream {
@@ -25,8 +26,8 @@ public class FireStream {
 	public static int tickdamage = 2;
 
 	private static int ID = Integer.MIN_VALUE;
-	private static double speed = 20;
-	private static double range = 20;
+	private static double speed = ConfigManager.fireStreamSpeed;
+	private static double range = ConfigManager.fireStreamRange;
 	private static long interval = (long) (1000. / speed);
 
 	private Player player;

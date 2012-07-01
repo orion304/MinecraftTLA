@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/craftbukkit.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/worldguard-5.5.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/WorldEdit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/Bukkit Related/McMyAdmin 2 -- 1.1/Minecraft/plugins/WorldEdit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/Bukkit Related/McMyAdmin 2 -- 1.1/Minecraft/plugins/Worldguard.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/Bukkit Related/McMyAdmin/Minecraft/CraftBukkit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

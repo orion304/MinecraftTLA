@@ -12,6 +12,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class WaterWall {
@@ -26,8 +27,8 @@ public class WaterWall {
 	private static final byte full = 0x0;
 	private static final byte half = 0x4;
 
-	private static double range = 5;
-	private static final double defaultradius = 2;
+	private static double range = ConfigManager.waterWallRange;
+	private static final double defaultradius = ConfigManager.waterWallRadius;
 	// private static double speed = 1.5;
 
 	private Player player;

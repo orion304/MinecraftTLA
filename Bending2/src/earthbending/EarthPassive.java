@@ -7,13 +7,14 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthPassive {
 
 	public static ConcurrentHashMap<Block, Long> sandblocks = new ConcurrentHashMap<Block, Long>();
 	public static ConcurrentHashMap<Block, Material> sandidentities = new ConcurrentHashMap<Block, Material>();
-	private static final long duration = 3000;
+	private static final long duration = ConfigManager.earthPassive;
 
 	public static boolean softenLanding(Player player) {
 		Block block = player.getLocation().getBlock()

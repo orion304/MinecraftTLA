@@ -10,18 +10,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class Tornado {
 
 	public static ConcurrentHashMap<Integer, Tornado> instances = new ConcurrentHashMap<Integer, Tornado>();
 
-	private static double radius = 10;
-	private static double height = 25;
-	private static double range = 25;
-	private static int numberOfStreams = 7;
-	private static double NPCpushfactor = 1;
-	private static double PCpushfactor = 1;
+	private static double radius = ConfigManager.tornadoRadius;
+	private static double height = ConfigManager.tornadoHeight;
+	private static double range = ConfigManager.tornadoRange;
+	private static int numberOfStreams = (int) (.3*(double)height);
+	private static double NPCpushfactor = ConfigManager.tornadoMobPush;
+	private static double PCpushfactor = ConfigManager.tornadoPlayerPush;
 	// private static double speed = .75;
 
 	// private static double speedfactor = 1000 * speed

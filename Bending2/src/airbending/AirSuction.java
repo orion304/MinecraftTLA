@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class AirSuction {
@@ -22,10 +23,10 @@ public class AirSuction {
 	private static int ID = Integer.MIN_VALUE;
 	private static final int maxticks = AirBlast.maxticks;
 
-	private static double speed = AirBlast.speed;
-	private static double range = AirBlast.range;
-	private static double affectingradius = AirBlast.affectingradius;
-	private static double pushfactor = AirBlast.pushfactor;
+	private static double speed = ConfigManager.airSuctionSpeed;
+	private static double range = ConfigManager.airSuctionRange;
+	private static double affectingradius = ConfigManager.airSuctionRadius;
+	private static double pushfactor = ConfigManager.airSuctionPush;
 	// private static long interval = AirBlast.interval;
 
 	private Location location;

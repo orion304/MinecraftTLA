@@ -4,11 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class Plantbending {
 
-	private static final int range = 10;
+	private static final int range = ConfigManager.plantbendingRange;
 
 	public Plantbending(Player player) {
 		Block block = player.getTargetBlock(null, range);

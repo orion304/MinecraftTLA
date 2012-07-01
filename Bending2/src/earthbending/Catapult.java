@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class Catapult {
@@ -16,9 +17,9 @@ public class Catapult {
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 	static final long soonesttime = Tools.timeinterval;
 
-	private static int length = 7;
-	private static double speed = 12;
-	private static double push = 5;
+	private static int length = ConfigManager.catapultLength;
+	private static double speed = ConfigManager.catapultSpeed;
+	private static double push = ConfigManager.catapultPush;
 
 	private static long interval = (long) (1000. / speed);
 	// private static long interval = 1500;

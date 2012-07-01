@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class ArcOfFire {
@@ -13,7 +14,7 @@ public class ArcOfFire {
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 	static final long soonesttime = Tools.timeinterval;
 
-	private static int arc = 20;
+	private static int arc = ConfigManager.arcOfFireArc;
 	private static int stepsize = 2;
 
 	public ArcOfFire(Player player) {
