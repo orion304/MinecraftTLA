@@ -57,8 +57,7 @@ public class AirBubble {
 					block.setData(data);
 				}
 				waterorigins.remove(block);
-			}
-			if (block.getLocation().distance(location) > radius) {
+			} else if (block.getLocation().distance(location) > radius) {
 				byte data = waterorigins.get(block);
 				block = block.getLocation().getBlock();
 				if (block.getType() == Material.AIR) {

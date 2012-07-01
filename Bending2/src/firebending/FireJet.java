@@ -24,6 +24,7 @@ public class FireJet {
 
 	public FireJet(Player player) {
 		if (instances.containsKey(player)) {
+			instances.remove(player);
 			return;
 		}
 		if (timers.containsKey(player)) {
@@ -38,6 +39,7 @@ public class FireJet {
 			block.setType(Material.FIRE);
 			this.player = player;
 			time = System.currentTimeMillis();
+			timers.put(player, time);
 			instances.put(player, this);
 		}
 

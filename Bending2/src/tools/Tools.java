@@ -213,6 +213,7 @@ public class Tools {
 					entity.setVelocity(norm.clone().multiply(.75));
 				}
 				affectedblock.setType(block.getType());
+				affectedblock.setData(block.getData());
 
 				for (double i = 1; i < chainlength; i++) {
 					affectedblock = location
@@ -231,6 +232,7 @@ public class Tools {
 						break;
 					}
 					block.setType(affectedblock.getType());
+					block.setData(affectedblock.getData());
 					block = affectedblock;
 				}
 				if (!Tools.adjacentToThreeOrMoreSources(block)) {
@@ -385,7 +387,9 @@ public class Tools {
 	}
 
 	public static <T> void verbose(T something) {
-		Bending.log.info(something.toString());
+		if (something != null) {
+			Bending.log.info(something.toString());
+		}
 	}
 
 	public static boolean isBlockTouching(Block block1, Block block2) {
