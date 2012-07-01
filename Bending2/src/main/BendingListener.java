@@ -1,6 +1,7 @@
 package main;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,9 +15,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 
 import tools.Abilities;
 import tools.AvatarState;
@@ -102,13 +103,25 @@ public class BendingListener implements Listener {
 		}
 	}
 
+	//@EventHandler
+	//public void onPlayerChangeVelocity(PlayerVelocityEvent event) {
+	//	Player player = event.getPlayer();
+	//	if (Tools.isBender(player, BendingType.Water)
+	//			&& Tools.canBendPassive(player, BendingType.Water)) {
+    //
+	//		event.setVelocity(WaterPassive.handle(player, event.getVelocity()));
+	//	}
+	//}
+	
 	@EventHandler
-	public void onPlayerChangeVelocity(PlayerVelocityEvent event) {
+	public void onPlayerMove(PlayerMoveEvent event){
 		Player player = event.getPlayer();
 		if (Tools.isBender(player, BendingType.Water)
 				&& Tools.canBendPassive(player, BendingType.Water)) {
-
-			event.setVelocity(WaterPassive.handle(player, event.getVelocity()));
+			Material type = player.getLocation().getBlock().getType();
+			if (type == Material.WATER || type == Material.STATIONARY_WATER) {
+			player.setVelocity(WaterPassive.handle(player, player.getVelocity()));
+			}
 		}
 	}
 
@@ -149,6 +162,7 @@ public class BendingListener implements Listener {
 
 		if (Tools.canBend(player, Tools.getBendingAbility(player))) {
 
+		if ((!(ConfigManager.useWeapon.get("Air"))&&(Tools.isWeapon(player.getItemInHand().getType()))) || ConfigManager.useWeapon.get("Air")){
 			if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
 				new AirBlast(player);
 			}
@@ -160,6 +174,9 @@ public class BendingListener implements Listener {
 			if (Tools.getBendingAbility(player) == Abilities.AirSwipe) {
 				new AirSwipe(player);
 			}
+		}
+		
+		if ((!(ConfigManager.useWeapon.get("Earth"))&&(Tools.isWeapon(player.getItemInHand().getType()))) || ConfigManager.useWeapon.get("Earth")){
 
 			if (Tools.getBendingAbility(player) == Abilities.Catapult) {
 				new Catapult(player);
@@ -188,6 +205,9 @@ public class BendingListener implements Listener {
 			if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
 				EarthBlast.throwEarth(player);
 			}
+		}
+		
+		if ((!(ConfigManager.useWeapon.get("Fire"))&&(Tools.isWeapon(player.getItemInHand().getType()))) || ConfigManager.useWeapon.get("Fire")){
 
 			if (Tools.getBendingAbility(player) == Abilities.Fireball) {
 				new Fireball(player);
@@ -212,6 +232,13 @@ public class BendingListener implements Listener {
 			if (Tools.getBendingAbility(player) == Abilities.HeatMelt) {
 				new HeatMelt(player);
 			}
+			
+			if (Tools.getBendingAbility(player) == Abilities.FireJet) {
+				new FireJet(player);
+			}
+		}
+		
+		if ((!(ConfigManager.useWeapon.get("Water"))&&(Tools.isWeapon(player.getItemInHand().getType()))) || ConfigManager.useWeapon.get("Water")){
 
 			if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
 				WaterManipulation.moveWater(player);
@@ -232,17 +259,14 @@ public class BendingListener implements Listener {
 			if (Tools.getBendingAbility(player) == Abilities.Wave) {
 				Wave.launch(player);
 			}
-
-			if (Tools.getBendingAbility(player) == Abilities.AvatarState) {
-				new AvatarState(player);
-			}
-
+			
 			if (Tools.getBendingAbility(player) == Abilities.Plantbending) {
 				new Plantbending(player);
 			}
+		}
 
-			if (Tools.getBendingAbility(player) == Abilities.FireJet) {
-				new FireJet(player);
+			if (Tools.getBendingAbility(player) == Abilities.AvatarState) {
+				new AvatarState(player);
 			}
 		}
 	}
@@ -319,7 +343,12 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Earth)) {
 				event.setCancelled(EarthPassive.softenLanding(player));
+			} else if (FireJet.timers.containsKey(player)){
+				if (System.currentTimeMillis() < FireJet.timers.get(player) + FireJet.duration
+					&& event.getCause() == DamageCause.FALL){
+				event.setCancelled(true);
 			}
+		}
 
 			if (Tools.isBender(player, BendingType.Fire)
 					&& (event.getCause() == DamageCause.FIRE || event

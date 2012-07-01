@@ -32,6 +32,7 @@ import earthbending.EarthTunnel;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
+import firebending.Passive;
 
 public class BendingManager implements Runnable {
 
@@ -132,7 +133,9 @@ public class BendingManager implements Runnable {
 				entity.die();
 			}
 		}
-
+		
+		Passive.handle();
+		FireJet.progress();
 		FireJet.checkBlocks();
 
 	}

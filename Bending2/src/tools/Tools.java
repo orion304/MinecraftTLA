@@ -24,9 +24,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-
 import waterbending.Freeze;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
@@ -35,6 +32,9 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
@@ -45,7 +45,7 @@ import earthbending.EarthPassive;
 public class Tools {
 
 	private static BendingPlayers config;
-	
+
 	private static final Map<String, ChatColor> colors;
 
 	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
@@ -145,6 +145,19 @@ public class Tools {
 
 	}
 
+	public static List<Block> getBlocksOnPlane(Location location, int radius) {
+		List<Block> blocks = new ArrayList<Block>();
+
+		for (int x = -radius; x <= radius; x++) {
+			for (int y = -radius; y <= radius; y++) {
+				blocks.add(location.getBlock().getRelative(BlockFace.NORTH, x)
+						.getRelative(BlockFace.EAST, y));
+			}
+		}
+
+		return blocks;
+	}
+
 	public static void moveEarth(Location location, Vector direction,
 			int chainlength) {
 		Block block = location.getBlock();
@@ -207,7 +220,8 @@ public class Tools {
 							.add(negnorm.getX() * i, negnorm.getY() * i,
 									negnorm.getZ() * i).getBlock();
 					if (!isEarthbendable(affectedblock)) {
-						if (!Tools.adjacentToThreeOrMoreSources(block)) {
+						if (!Tools.adjacentToThreeOrMoreSources(block)
+								&& Tools.isWater(block)) {
 							block.setType(Material.AIR);
 						} else {
 							byte full = 0x0;
@@ -233,6 +247,13 @@ public class Tools {
 		}
 	}
 
+	public static boolean isWater(Block block) {
+		if (block.getType() == Material.WATER
+				|| block.getType() == Material.STATIONARY_WATER)
+			return true;
+		return false;
+	}
+
 	public static int getEarthbendableBlocksLength(Block block,
 			Vector direction, int maxlength) {
 		Location location = block.getLocation();
@@ -249,22 +270,11 @@ public class Tools {
 
 	public static boolean isEarthbendable(Block block) {
 		Material material = block.getType();
-
-		if ((material == Material.STONE) || (material == Material.CLAY)
-				|| (material == Material.COAL_ORE)
-				|| (material == Material.DIAMOND_ORE)
-				|| (material == Material.DIRT)
-				|| (material == Material.GOLD_ORE)
-				|| (material == Material.GRASS)
-				|| (material == Material.GRAVEL)
-				|| (material == Material.IRON_ORE)
-				|| (material == Material.LAPIS_ORE)
-				|| (material == Material.NETHERRACK)
-				|| (material == Material.REDSTONE_ORE)
-				|| (material == Material.SAND)
-				|| (material == Material.SANDSTONE)) {
-			return true;
-		}
+		for (String s: ConfigManager.earthbendable){
+        	if (material == Material.getMaterial(s)){
+        		return true;
+        	}
+        }
 		return false;
 
 	}
@@ -280,6 +290,18 @@ public class Tools {
 		if (canPlantbend(player) && isPlant(block))
 			return true;
 		return false;
+	}
+	
+	public static boolean isWeapon(Material mat){
+		if (mat == Material.WOOD_AXE || mat == Material.WOOD_PICKAXE || mat == Material.WOOD_SPADE || mat == Material.WOOD_SWORD
+				|| mat == Material.STONE_AXE || mat == Material.STONE_PICKAXE || mat == Material.STONE_SPADE || mat == Material.STONE_SWORD
+				|| mat == Material.IRON_AXE || mat == Material.IRON_PICKAXE || mat == Material.IRON_SPADE || mat == Material.IRON_SWORD
+				|| mat == Material.GOLD_AXE || mat == Material.GOLD_PICKAXE || mat == Material.GOLD_SPADE || mat == Material.GOLD_SWORD
+				|| mat == Material.DIAMOND_AXE || mat == Material.DIAMOND_PICKAXE || mat == Material.DIAMOND_SPADE || mat == Material.DIAMOND_SWORD)
+			return true;
+
+		return false;
+		
 	}
 
 	public static boolean canPlantbend(Player player) {
@@ -439,7 +461,8 @@ public class Tools {
 				BlockFace.SOUTH };
 		for (BlockFace face : faces) {
 			Block blocki = block.getRelative(face);
-			if (blocki.getType() == Material.WATER && blocki.getData() == full
+			if ((blocki.getType() == Material.WATER || blocki.getType() == Material.STATIONARY_WATER)
+					&& blocki.getData() == full
 					&& WaterManipulation.canPhysicsChange(blocki))
 				sources++;
 		}
@@ -484,127 +507,129 @@ public class Tools {
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
 			return true;
-          //  EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
-          //  Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+			// EntityDamageByEntityEvent damageEvent = new
+			// EntityDamageByEntityEvent(player, player,
+			// EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
+			// Bukkit.getServer().getPluginManager().callEvent(damageEvent);
 
-          //  if (damageEvent.isCancelled())
-          //  {
-          //    return true;
-          //  }
-		//}
-		  }
+			// if (damageEvent.isCancelled())
+			// {
+			// return true;
+			// }
+			// }
+		}
 		return false;
 	}
 
 	public static boolean canBendPassive(Player player, BendingType type) {
 		if (isRegionProtected(player, null))
 			return false;
-		 if (player.hasPermission("bending." + type + ".passive")) {
-		 return true;
-		 }
-		 return false;
+		if (player.hasPermission("bending." + type + ".passive")) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean hasPermission(Player player, Abilities ability) {
-		 if (ability == Abilities.AvatarState
-		 && player.hasPermission("bending.avatarstate")) {
-		 return true;
-		 }
-		 if (Abilities.isAirbending(ability)
-		 && player.hasPermission("bending.air." + ability)) {
-		 return true;
-		 }
-		 if (Abilities.isWaterbending(ability)
-		 && player.hasPermission("bending.water." + ability)) {
-		 return true;
-		 }
-		 if (Abilities.isEarthbending(ability)
-		 && player.hasPermission("bending.earth." + ability)) {
-		 return true;
-		 }
-		 if (Abilities.isFirebending(ability)
-		 && player.hasPermission("bending.fire." + ability)) {
-		 return true;
-		 }
-		 return false;
+		if (ability == Abilities.AvatarState
+				&& player.hasPermission("bending.avatarstate")) {
+			return true;
+		}
+		if (Abilities.isAirbending(ability)
+				&& player.hasPermission("bending.air." + ability)) {
+			return true;
+		}
+		if (Abilities.isWaterbending(ability)
+				&& player.hasPermission("bending.water." + ability)) {
+			return true;
+		}
+		if (Abilities.isEarthbending(ability)
+				&& player.hasPermission("bending.earth." + ability)) {
+			return true;
+		}
+		if (Abilities.isFirebending(ability)
+				&& player.hasPermission("bending.fire." + ability)) {
+			return true;
+		}
+		return false;
 	}
-	
-	public static ChatColor getColor(String input){
-		return (ChatColor)colors.get(input.toLowerCase().replace("&", ""));
-		
+
+	public static ChatColor getColor(String input) {
+		return (ChatColor) colors.get(input.toLowerCase().replace("&", ""));
+
 	}
-	  static
-	  {
-	    Map<String, ChatColor> tmpMap = new HashMap<String, ChatColor>();
-	    tmpMap.put("black", ChatColor.BLACK);
-	    tmpMap.put("0", ChatColor.BLACK);
 
-	    tmpMap.put("dark blue", ChatColor.DARK_BLUE);
-	    tmpMap.put("dark_blue", ChatColor.DARK_BLUE);
-	    tmpMap.put("1", ChatColor.DARK_BLUE);
+	static {
+		Map<String, ChatColor> tmpMap = new HashMap<String, ChatColor>();
+		tmpMap.put("black", ChatColor.BLACK);
+		tmpMap.put("0", ChatColor.BLACK);
 
-	    tmpMap.put("dark green", ChatColor.DARK_GREEN);
-	    tmpMap.put("dark_green", ChatColor.DARK_GREEN);
-	    tmpMap.put("2", ChatColor.DARK_GREEN);
+		tmpMap.put("dark blue", ChatColor.DARK_BLUE);
+		tmpMap.put("dark_blue", ChatColor.DARK_BLUE);
+		tmpMap.put("1", ChatColor.DARK_BLUE);
 
-	    tmpMap.put("dark aqua", ChatColor.DARK_AQUA);
-	    tmpMap.put("dark_aqua", ChatColor.DARK_AQUA);
-	    tmpMap.put("teal", ChatColor.DARK_AQUA);
-	    tmpMap.put("3", ChatColor.DARK_AQUA);
+		tmpMap.put("dark green", ChatColor.DARK_GREEN);
+		tmpMap.put("dark_green", ChatColor.DARK_GREEN);
+		tmpMap.put("2", ChatColor.DARK_GREEN);
 
-	    tmpMap.put("dark red", ChatColor.DARK_RED);
-	    tmpMap.put("dark_red", ChatColor.DARK_RED);
-	    tmpMap.put("4", ChatColor.DARK_RED);
+		tmpMap.put("dark aqua", ChatColor.DARK_AQUA);
+		tmpMap.put("dark_aqua", ChatColor.DARK_AQUA);
+		tmpMap.put("teal", ChatColor.DARK_AQUA);
+		tmpMap.put("3", ChatColor.DARK_AQUA);
 
-	    tmpMap.put("dark purple", ChatColor.DARK_PURPLE);
-	    tmpMap.put("dark_purple", ChatColor.DARK_PURPLE);
-	    tmpMap.put("purple", ChatColor.DARK_PURPLE);
-	    tmpMap.put("5", ChatColor.DARK_PURPLE);
+		tmpMap.put("dark red", ChatColor.DARK_RED);
+		tmpMap.put("dark_red", ChatColor.DARK_RED);
+		tmpMap.put("4", ChatColor.DARK_RED);
 
-	    tmpMap.put("gold", ChatColor.GOLD);
-	    tmpMap.put("orange", ChatColor.GOLD);
-	    tmpMap.put("6", ChatColor.GOLD);
+		tmpMap.put("dark purple", ChatColor.DARK_PURPLE);
+		tmpMap.put("dark_purple", ChatColor.DARK_PURPLE);
+		tmpMap.put("purple", ChatColor.DARK_PURPLE);
+		tmpMap.put("5", ChatColor.DARK_PURPLE);
 
-	    tmpMap.put("gray", ChatColor.GRAY);
-	    tmpMap.put("grey", ChatColor.GRAY);
-	    tmpMap.put("7", ChatColor.GRAY);
+		tmpMap.put("gold", ChatColor.GOLD);
+		tmpMap.put("orange", ChatColor.GOLD);
+		tmpMap.put("6", ChatColor.GOLD);
 
-	    tmpMap.put("dark gray", ChatColor.DARK_GRAY);
-	    tmpMap.put("dark_gray", ChatColor.DARK_GRAY);
-	    tmpMap.put("dark grey", ChatColor.DARK_GRAY);
-	    tmpMap.put("dark_grey", ChatColor.DARK_GRAY);
-	    tmpMap.put("8", ChatColor.DARK_GRAY);
+		tmpMap.put("gray", ChatColor.GRAY);
+		tmpMap.put("grey", ChatColor.GRAY);
+		tmpMap.put("7", ChatColor.GRAY);
 
-	    tmpMap.put("blue", ChatColor.BLUE);
-	    tmpMap.put("9", ChatColor.BLUE);
+		tmpMap.put("dark gray", ChatColor.DARK_GRAY);
+		tmpMap.put("dark_gray", ChatColor.DARK_GRAY);
+		tmpMap.put("dark grey", ChatColor.DARK_GRAY);
+		tmpMap.put("dark_grey", ChatColor.DARK_GRAY);
+		tmpMap.put("8", ChatColor.DARK_GRAY);
 
-	    tmpMap.put("bright green", ChatColor.GREEN);
-	    tmpMap.put("bright_green", ChatColor.GREEN);
-	    tmpMap.put("green", ChatColor.GREEN);
-	    tmpMap.put("a", ChatColor.GREEN);
+		tmpMap.put("blue", ChatColor.BLUE);
+		tmpMap.put("9", ChatColor.BLUE);
 
-	    tmpMap.put("aqua", ChatColor.AQUA);
-	    tmpMap.put("b", ChatColor.AQUA);
+		tmpMap.put("bright green", ChatColor.GREEN);
+		tmpMap.put("bright_green", ChatColor.GREEN);
+		tmpMap.put("green", ChatColor.GREEN);
+		tmpMap.put("a", ChatColor.GREEN);
 
-	    tmpMap.put("red", ChatColor.RED);
-	    tmpMap.put("c", ChatColor.RED);
+		tmpMap.put("aqua", ChatColor.AQUA);
+		tmpMap.put("b", ChatColor.AQUA);
 
-	    tmpMap.put("light purple", ChatColor.LIGHT_PURPLE);
-	    tmpMap.put("light_purple", ChatColor.LIGHT_PURPLE);
-	    tmpMap.put("pink", ChatColor.LIGHT_PURPLE);
-	    tmpMap.put("d", ChatColor.LIGHT_PURPLE);
+		tmpMap.put("red", ChatColor.RED);
+		tmpMap.put("c", ChatColor.RED);
 
-	    tmpMap.put("yellow", ChatColor.YELLOW);
-	    tmpMap.put("e", ChatColor.YELLOW);
+		tmpMap.put("light purple", ChatColor.LIGHT_PURPLE);
+		tmpMap.put("light_purple", ChatColor.LIGHT_PURPLE);
+		tmpMap.put("pink", ChatColor.LIGHT_PURPLE);
+		tmpMap.put("d", ChatColor.LIGHT_PURPLE);
 
-	    tmpMap.put("white", ChatColor.WHITE);
-	    tmpMap.put("f", ChatColor.WHITE);
+		tmpMap.put("yellow", ChatColor.YELLOW);
+		tmpMap.put("e", ChatColor.YELLOW);
 
-	    tmpMap.put("random", ChatColor.MAGIC);
-	    tmpMap.put("magic", ChatColor.MAGIC);
-	    tmpMap.put("k", ChatColor.MAGIC);
+		tmpMap.put("white", ChatColor.WHITE);
+		tmpMap.put("f", ChatColor.WHITE);
 
-	    colors = Collections.unmodifiableMap(tmpMap);
-	  }
+		tmpMap.put("random", ChatColor.MAGIC);
+		tmpMap.put("magic", ChatColor.MAGIC);
+		tmpMap.put("k", ChatColor.MAGIC);
+
+		colors = Collections.unmodifiableMap(tmpMap);
+	}
 
 }

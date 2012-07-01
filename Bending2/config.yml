@@ -20,3 +20,5 @@ Bending:
         AirSwipe: 1
         EarthBlast: 7
         WaterManipulation: 7
+    Option:
+        EarthBendable: [STONE, CLAY, COAL_ORE, DIAMOND_ORE, DIRT, GOLD_ORE, GRASS, GRAVEL, IRON_ORE, LAPIS_ORE, NETHERRACK, REDSTONE_ORE, SAND, SANDSTONE]
