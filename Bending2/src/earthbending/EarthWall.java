@@ -9,13 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthWall {
 
-	private static final int range = 15;
-	private static final int defaultheight = 8;
-	private static final int defaulthalfwidth = 3;
+	private static final int range = ConfigManager.earthWallRange;
+	private static final int defaultheight = ConfigManager.earthWallHeight;
+	private static final int defaulthalfwidth = ConfigManager.earthWallWidth / 2;
 
 	private int height = defaultheight;
 	private int halfwidth = defaulthalfwidth;

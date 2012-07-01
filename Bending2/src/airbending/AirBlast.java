@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class AirBlast {
@@ -29,10 +30,10 @@ public class AirBlast {
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
 
-	public static double speed = 25;
-	public static double range = 20;
-	public static double affectingradius = 2;
-	public static double pushfactor = 1;
+	public static double speed = ConfigManager.airBlastSpeed;
+	public static double range = ConfigManager.airBlastRange;
+	public static double affectingradius = ConfigManager.airBlastRadius;
+	public static double pushfactor = ConfigManager.airBlastPush;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
 

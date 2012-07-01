@@ -7,12 +7,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthColumn {
 
 	public static ConcurrentHashMap<Integer, EarthColumn> instances = new ConcurrentHashMap<Integer, EarthColumn>();
-	public static final int standardheight = 6;
+	public static final int standardheight = ConfigManager.earthColumnHeight;
 
 	private static ConcurrentHashMap<Block, Block> alreadydoneblocks = new ConcurrentHashMap<Block, Block>();
 	private static ConcurrentHashMap<Block, Integer> baseblocks = new ConcurrentHashMap<Block, Integer>();

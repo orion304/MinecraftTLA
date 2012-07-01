@@ -9,14 +9,15 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class FreezeMelt {
 
 	public static ConcurrentHashMap<Block, Byte> frozenblocks = new ConcurrentHashMap<Block, Byte>();
 
-	public static final int defaultrange = 20;
-	public static final int defaultradius = 5;
+	public static final int defaultrange = ConfigManager.freezeMeltRange;
+	public static final int defaultradius = ConfigManager.freezeMeltRadius;
 
 	public FreezeMelt(Player player) {
 		int range = defaultrange;

@@ -8,12 +8,13 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class Collapse {
 
-	private static final int range = 20;
-	private static final double defaultradius = 7;
+	private static final int range = ConfigManager.collapseRange;
+	private static final double defaultradius = ConfigManager.collapseRadius;
 	private static final int height = EarthColumn.standardheight;
 
 	private ConcurrentHashMap<Block, Block> blocks = new ConcurrentHashMap<Block, Block>();

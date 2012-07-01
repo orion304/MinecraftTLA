@@ -5,13 +5,14 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import tools.ConfigManager;
 import tools.Tools;
 import waterbending.Melt;
 
 public class HeatMelt {
 
-	private static final int range = 20;
-	private static final int radius = 3;
+	private static final int range = ConfigManager.heatMeltRange;
+	private static final int radius = ConfigManager.heatMeltRadius;
 
 	public HeatMelt(Player player) {
 		Location location = Tools.getTargetedLocation(player, range);

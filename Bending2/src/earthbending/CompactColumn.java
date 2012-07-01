@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class CompactColumn {
@@ -17,9 +18,9 @@ public class CompactColumn {
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static double range = 20;
+	private static double range = ConfigManager.compactColumnRange;
 	private static int height = EarthColumn.standardheight;
-	private static double speed = 8;
+	private static double speed = ConfigManager.compactColumnSpeed;
 	private static final Vector direction = new Vector(0, -1, 0);
 
 	private static long interval = (long) (1000. / speed);

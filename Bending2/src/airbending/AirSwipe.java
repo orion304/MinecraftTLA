@@ -29,12 +29,12 @@ public class AirSwipe {
 	private static int ID = Integer.MIN_VALUE;
 
 	private static int damage = ConfigManager.airdmg;
-	private static double affectingradius = AirBlast.affectingradius;
-	private static double pushfactor = AirBlast.pushfactor;
-	private static double range = AirBlast.range * .8;
-	private static int arc = 20;
+	private static double affectingradius = ConfigManager.airSwipeRadius;
+	private static double pushfactor = ConfigManager.airSwipePush;
+	private static double range = ConfigManager.airSwipeRange;
+	private static int arc = ConfigManager.airSwipeArc;
 	private static int stepsize = 4;
-	private static double speed = AirBlast.speed;
+	private static double speed = ConfigManager.airSwipeSpeed;
 	private static byte full = AirBlast.full;
 
 	private double speedfactor;
