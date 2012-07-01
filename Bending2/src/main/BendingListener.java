@@ -284,8 +284,7 @@ public class BendingListener implements Listener {
 				new AirShield(player);
 			}
 
-			if ((!(ConfigManager.useWeapon.get("Air")) && (Tools
-					.isWeapon(player.getItemInHand().getType())))
+			if (!(Tools.isWeapon(player.getItemInHand().getType()))
 					|| ConfigManager.useWeapon.get("Air")) {
 
 				if (Tools.getBendingAbility(player) == Abilities.AirBlast) {

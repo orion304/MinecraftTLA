@@ -143,7 +143,7 @@ public class ConfigManager {
 		useWeapon.put("Water",
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
 		// PROPERTIES
-		globalCooldown = config.getLong("Properties.GolbalCooldown");
+		globalCooldown = config.getLong("Properties.GlobalCooldown");
 		// AIR
 		// AirBlast
 		airBlastSpeed = config.getDouble("Properties.Air.AirBlast.Speed");
@@ -302,7 +302,7 @@ public class ConfigManager {
 		config.set("Bending.Option.Bend-With-Weapon.Water", true);
 		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
 
-		config.set("Properties.GolbalCooldown", 500);
+		config.set("Properties.GlobalCooldown", 500);
 
 		config.set("Properties.Air.AirBlast.Speed", 25);
 		config.set("Properties.Air.AirBlast.Range", 20);
