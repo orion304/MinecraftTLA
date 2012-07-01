@@ -19,7 +19,7 @@ public class Tornado {
 	private static double radius = 10;
 	private static double height = 25;
 	private static double range = 25;
-	private static int numberOfStreams = 7;
+	private static int numberOfStreams = (int) (.3*(double)height);
 	private static double NPCpushfactor = 1;
 	private static double PCpushfactor = 1;
 	// private static double speed = .75;

@@ -19,7 +19,7 @@ public class AirShield {
 	public static ConcurrentHashMap<Integer, AirShield> instances = new ConcurrentHashMap<Integer, AirShield>();
 
 	private static double radius = 7;
-	private static int numberOfStreams = 5;
+	private static int numberOfStreams = (int) (.75*(double)radius);
 	// private static double speed = 500;
 
 	private double speedfactor;
