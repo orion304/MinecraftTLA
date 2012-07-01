@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class Wave {
@@ -27,9 +28,9 @@ public class Wave {
 
 	private static final byte full = 0x0;
 	// private static final byte half = 0x4;
-	private static final double defaultmaxradius = 3;
-	private static final double factor = 1;
-	private static final double upfactor = .2;
+	private static final double defaultmaxradius = ConfigManager.waveRadius;
+	private static final double factor = ConfigManager.waveHorizontalPush;
+	private static final double upfactor = ConfigManager.waveVerticalPush;
 
 	private static double range = 20;
 	// private static int damage = 5;

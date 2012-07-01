@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class WalkOnWater {
@@ -17,7 +18,7 @@ public class WalkOnWater {
 	private static ConcurrentHashMap<Block, Byte> affectedblocks = new ConcurrentHashMap<Block, Byte>();
 	private static ArrayList<Player> players = new ArrayList<Player>();
 
-	private static double radius = 3;
+	private static double radius = ConfigManager.walkOnWaterRadius;
 
 	public static void handleFreezing(Server server) {
 		players.clear();

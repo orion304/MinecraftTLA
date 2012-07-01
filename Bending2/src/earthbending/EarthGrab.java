@@ -9,11 +9,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthGrab {
 
-	private static double range = 15;
+	private static double range = ConfigManager.earthGrabRange;
 
 	public EarthGrab(Player player) {
 		// Tools.verbose("initiating");

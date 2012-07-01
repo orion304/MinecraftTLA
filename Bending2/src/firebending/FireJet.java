@@ -7,14 +7,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class FireJet {
 
 	public static ConcurrentHashMap<Player, FireJet> instances = new ConcurrentHashMap<Player, FireJet>();
-	private static final double factor = .7;
-	private static final long duration = 1500;
-	private static final long cooldown = 6000;
+	private static final double factor = ConfigManager.fireJetSpeed;
+	private static final long duration = ConfigManager.fireJetDuration;
+	private static final long cooldown = ConfigManager.fireJetCooldown;
 
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 
@@ -23,6 +24,7 @@ public class FireJet {
 
 	public FireJet(Player player) {
 		if (instances.containsKey(player)) {
+			instances.remove(player);
 			return;
 		}
 		if (timers.containsKey(player)) {
@@ -37,6 +39,7 @@ public class FireJet {
 			block.setType(Material.FIRE);
 			this.player = player;
 			time = System.currentTimeMillis();
+			timers.put(player, time);
 			instances.put(player, this);
 		}
 

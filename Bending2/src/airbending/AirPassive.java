@@ -7,12 +7,13 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import tools.BendingType;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class AirPassive {
 
 	private static ConcurrentHashMap<Player, Float> foodlevels = new ConcurrentHashMap<Player, Float>();
-	private static float factor = 0.3F;
+	private static float factor = ConfigManager.airPassiveFactor;
 
 	private static float getFoodExhaustionLevel(Player player, float level) {
 		if (!foodlevels.keySet().contains(player)) {

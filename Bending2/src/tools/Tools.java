@@ -54,7 +54,7 @@ public class Tools {
 	private static Integer[] plantIds = { 6, 18, 31, 32, 37, 38, 39, 40, 59,
 			81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
 
-	public static final long timeinterval = 500;
+	public static final long timeinterval = ConfigManager.globalCooldown;
 
 	public Tools(BendingPlayers instance) {
 		config = instance;
@@ -213,6 +213,7 @@ public class Tools {
 					entity.setVelocity(norm.clone().multiply(.75));
 				}
 				affectedblock.setType(block.getType());
+				affectedblock.setData(block.getData());
 
 				for (double i = 1; i < chainlength; i++) {
 					affectedblock = location
@@ -231,6 +232,7 @@ public class Tools {
 						break;
 					}
 					block.setType(affectedblock.getType());
+					block.setData(affectedblock.getData());
 					block = affectedblock;
 				}
 				if (!Tools.adjacentToThreeOrMoreSources(block)) {

@@ -23,9 +23,9 @@ public class WaterManipulation {
 	private static final byte full = 0x0;
 	private static final byte half = 0x4;
 
-	private static double range = 20;
+	private static double range = ConfigManager.waterManipulationRange;
 	private static int damage = ConfigManager.waterdmg;
-	private static double speed = 35;
+	private static double speed = ConfigManager.waterManipulationSpeed;
 	// private static double speed = 1.5;
 
 	private static long interval = (long) (1000. / speed);

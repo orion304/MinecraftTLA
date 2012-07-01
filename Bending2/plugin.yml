@@ -16,13 +16,14 @@ permissions:
     children:
       bending.air.AirSwipe: true
       bending.air.AirBubble: true
-      bending.air.AirPassive: true
       bending.air.AirShield: true
       bending.air.AirSuction: true
       bending.air.Speed: true
       bending.air.Tornado: true
       bending.air.AirBlast: true
       bending.air.Passive: true
+      bending.air.AirSpout: true
+      bending.air.AirScooter: true
   bending.fire.*:
     description: Allows all fire bending.
     children:
@@ -34,17 +35,17 @@ permissions:
       bending.fire.HeatMelt: true
       bending.fire.Passive: true
       bending.fire.RingOfFire: true
+      bending.fire.Illumination: true
+      bending.fire.WallOfFire: true
   bending.water.*:
     description: Allows all water bending.
     children:
-      bending.water.Freeze: true
+      bending.water.FreezeMelt: true
       bending.water.HealingWaters: true
-      bending.water.Melt: true
       bending.water.Plantbending: true
       bending.water.WalkOnWater: true
       bending.water.WaterBubble: true
       bending.water.WaterManipulation: true
-      bending.water.WaterPassive: true
       bending.water.WaterSpout: true
       bending.water.WaterWall: true
       bending.water.Wave: true
@@ -57,11 +58,12 @@ permissions:
       bending.earth.EarthBlast: true
       bending.earth.EarthColumn: true
       bending.earth.EarthGrab: true
-      bending.earth.EarthPassive: true
       bending.earth.EarthTunnel: true
       bending.earth.EarthWall: true
-      bending.earth.PatchTheEarth: true
+      bending.earth.Collapse: true
       bending.earth.Passive: true
+      bending.earth.Tremorsense: true
+      bending.earth.Shockwave: true
   bending.*:
     description: Allows all bending.
     children:
@@ -76,7 +78,7 @@ permissions:
   bending.air.AirBubble:
     description: Allows the use of AirBubble.
     default: true
-  bending.air.AirPassive:
+  bending.air.Passive:
     description: Allows the use of AirPassive.
     default: true
   bending.air.AirShield:
@@ -84,6 +86,12 @@ permissions:
     default: true
   bending.air.AirSuction:
     description: Allows the use of AirSuction.
+    default: true
+  bending.air.AirSpout:
+    description: Allows the use of AirSpout.
+    default: true
+  bending.air.AirScooter:
+    description: Allows the use of AirScooter.
     default: true
   bending.air.Speed:
     description: Allows the use of Speed.
@@ -93,6 +101,9 @@ permissions:
     default: true
   bending.air.AirBlast:
     description: Allows the use of AirBlast.
+    default: true
+  bending.air.Passive:
+    description: Allows the use of Passive.
     default: true
   bending.fire.ArcOfFire:
     description: Allows the use of ArcOfFire.
@@ -118,6 +129,12 @@ permissions:
   bending.fire.RingOfFire:
     description: Allows the use of RingOfFire.
     default: true
+  bending.fire.Illumination:
+    description: Allows the use of Illumination.
+    default: true
+  bending.fire.WallOfFire:
+    description: Allows the use of WallOfFire.
+    default: true
   bending.water.Freeze:
     description: Allows the use of Freeze.
     default: true
@@ -139,7 +156,7 @@ permissions:
   bending.water.WaterManipulation:
     description: Allows the use of WaterManipulation.
     default: true
-  bending.water.WaterPassive:
+  bending.water.Passive:
     description: Allows the use of WaterPassive.
     default: true
   bending.water.WaterSpout:
@@ -163,7 +180,7 @@ permissions:
   bending.earth.EarthColumn:
     description: Allows the use of EarthColumn.
     default: true
-  bending.earth.EarthPassive:
+  bending.earth.Passive:
     description: Allows the use of EarthPassive.
     default: true
   bending.earth.EarthTunnel:

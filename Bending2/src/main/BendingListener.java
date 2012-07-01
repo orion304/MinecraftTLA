@@ -154,8 +154,7 @@ public class BendingListener implements Listener {
 
 		if (Tools.canBend(player, Tools.getBendingAbility(player))) {
 
-			if ((!(ConfigManager.useWeapon.get("Air")) && (Tools
-					.isWeapon(player.getItemInHand().getType())))
+			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Air")) {
 
 				if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
@@ -172,8 +171,7 @@ public class BendingListener implements Listener {
 
 			}
 
-			if ((!(ConfigManager.useWeapon.get("Earth")) && (Tools
-					.isWeapon(player.getItemInHand().getType())))
+			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Earth")) {
 
 				if (Tools.getBendingAbility(player) == Abilities.Catapult) {
@@ -206,8 +204,7 @@ public class BendingListener implements Listener {
 
 			}
 
-			if ((!(ConfigManager.useWeapon.get("Fire")) && (Tools
-					.isWeapon(player.getItemInHand().getType())))
+			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Fire")) {
 
 				if (Tools.getBendingAbility(player) == Abilities.Fireball) {
@@ -240,8 +237,7 @@ public class BendingListener implements Listener {
 
 			}
 
-			if ((!(ConfigManager.useWeapon.get("Water")) && (Tools
-					.isWeapon(player.getItemInHand().getType())))
+			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Water")) {
 
 				if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {

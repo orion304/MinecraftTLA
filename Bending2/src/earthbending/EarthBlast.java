@@ -18,9 +18,9 @@ public class EarthBlast {
 
 	public static ConcurrentHashMap<Integer, EarthBlast> instances = new ConcurrentHashMap<Integer, EarthBlast>();
 
-	private static double range = 20;
+	private static double range = ConfigManager.earthBlastRange;
 	private static int damage = ConfigManager.earthdmg;
-	private static double speed = 35;
+	private static double speed = ConfigManager.earthBlastSpeed;
 	// private static double speed = 1.5;
 
 	private static long interval = (long) (1000. / speed);
