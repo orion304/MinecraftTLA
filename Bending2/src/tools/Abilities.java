@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public enum Abilities {
 
-	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado,
+	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter,
 
 	Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse, Tremorsense,
 
@@ -15,7 +15,7 @@ public enum Abilities {
 	AvatarState;
 
 	private enum AirbendingAbilities {
-		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Speed, Tornado;
+		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Speed, Tornado, AirScooter;
 	}
 
 	private enum EarthbendingAbilities {

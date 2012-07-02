@@ -41,7 +41,7 @@ public class FreezeMelt {
 		return false;
 	}
 
-	private static void freeze(Block block) {
+	static void freeze(Block block) {
 		byte data = block.getData();
 		block.setType(Material.ICE);
 		frozenblocks.put(block, data);

@@ -43,12 +43,23 @@ public class Wave {
 	private Location targetdestination = null;
 	private Vector targetdirection = null;
 	private ConcurrentHashMap<Block, Block> wave = new ConcurrentHashMap<Block, Block>();
+	private ConcurrentHashMap<Block, Block> frozenblocks = new ConcurrentHashMap<Block, Block>();
 	private double radius = 1;
 	private long time;
 	private double maxradius = defaultmaxradius;
+	private boolean freeze = false;
+	private boolean activatefreeze = false;
+	private Location frozenlocation;
 
 	public Wave(Player player) {
 		this.player = player;
+		if (instances.containsKey(player.getEntityId())) {
+			if (instances.get(player.getEntityId()).progressing
+					&& !instances.get(player.getEntityId()).freeze) {
+				instances.get(player.getEntityId()).freeze = true;
+				return;
+			}
+		}
 		if (AvatarState.isAvatarState(player)) {
 			maxradius = AvatarState.getValue(radius);
 		}
@@ -78,6 +89,7 @@ public class Wave {
 			Wave old = instances.get(player.getEntityId());
 			if (old.progressing) {
 				old.breakBlock();
+				old.thaw();
 			} else {
 				old.cancel();
 			}
@@ -152,84 +164,108 @@ public class Wave {
 				return false;
 			}
 
-			Vector direction = targetdirection;
+			if (activatefreeze) {
+				if (location.distance(player.getLocation()) > range) {
+					progressing = false;
+					thaw();
+					return false;
+				}
+				if (!Tools.hasAbility(player, Abilities.FreezeMelt)
+						&& Tools.getBendingAbility(player) != Abilities.Wave) {
+					progressing = false;
+					thaw();
+					return false;
+				}
 
-			location = location.clone().add(direction);
-			Block blockl = location.getBlock();
+			} else {
 
-			ArrayList<Block> blocks = new ArrayList<Block>();
+				Vector direction = targetdirection;
 
-			if ((blockl.getType() == Material.AIR
-					|| blockl.getType() == Material.FIRE
-					|| Tools.isPlant(blockl) || Tools.isWaterbendable(blockl,
-					player)) && blockl.getType() != Material.LEAVES) {
+				location = location.clone().add(direction);
+				Block blockl = location.getBlock();
 
-				for (double i = 0; i <= radius; i += .5) {
-					for (double angle = 0; angle < 360; angle += 10) {
-						Vector vec = Tools.getOrthogonalVector(targetdirection,
-								angle, i);
-						Block block = location.clone().add(vec).getBlock();
-						if (!blocks.contains(block)
-								&& (block.getType() == Material.AIR || block
-										.getType() == Material.FIRE)) {
-							blocks.add(block);
-						}
-						if (!blocks.contains(block)
-								&& (Tools.isPlant(block) && block.getType() != Material.LEAVES)) {
-							blocks.add(block);
-							block.breakNaturally();
+				ArrayList<Block> blocks = new ArrayList<Block>();
+
+				if ((blockl.getType() == Material.AIR
+						|| blockl.getType() == Material.FIRE
+						|| Tools.isPlant(blockl) || Tools.isWaterbendable(
+						blockl, player)) && blockl.getType() != Material.LEAVES) {
+
+					for (double i = 0; i <= radius; i += .5) {
+						for (double angle = 0; angle < 360; angle += 10) {
+							Vector vec = Tools.getOrthogonalVector(
+									targetdirection, angle, i);
+							Block block = location.clone().add(vec).getBlock();
+							if (!blocks.contains(block)
+									&& (block.getType() == Material.AIR || block
+											.getType() == Material.FIRE)) {
+								blocks.add(block);
+							}
+							if (!blocks.contains(block)
+									&& (Tools.isPlant(block) && block.getType() != Material.LEAVES)) {
+								blocks.add(block);
+								block.breakNaturally();
+							}
 						}
 					}
 				}
-			}
 
-			for (Block block : wave.keySet()) {
-				if (!blocks.contains(block))
-					finalRemoveWater(block);
-			}
-
-			for (Block block : blocks) {
-				if (!wave.containsKey(block))
-					addWater(block);
-			}
-
-			if (wave.isEmpty()) {
-				breakBlock();
-				progressing = false;
-				return false;
-			}
-
-			for (Entity entity : Tools.getEntitiesAroundPoint(location,
-					2 * radius)) {
-				boolean knockback = false;
 				for (Block block : wave.keySet()) {
-					if (entity.getLocation().distance(block.getLocation()) <= 2)
-						knockback = true;
-				}
-				if (knockback) {
-					Vector dir = direction.clone();
-					dir.setY(dir.getY() * upfactor);
-					entity.setVelocity(entity.getVelocity().clone()
-							.add(dir.clone().multiply(factor)));
-					entity.setFallDistance(0);
+					if (!blocks.contains(block))
+						finalRemoveWater(block);
 				}
 
+				for (Block block : blocks) {
+					if (!wave.containsKey(block))
+						addWater(block);
+				}
+
+				if (wave.isEmpty()) {
+					breakBlock();
+					progressing = false;
+					return false;
+				}
+
+				for (Entity entity : Tools.getEntitiesAroundPoint(location,
+						2 * radius)) {
+
+					boolean knockback = false;
+					for (Block block : wave.keySet()) {
+						if (entity.getLocation().distance(block.getLocation()) <= 2) {
+							if (entity instanceof LivingEntity && freeze) {
+								activatefreeze = true;
+								frozenlocation = entity.getLocation();
+								freeze();
+								break;
+							}
+							knockback = true;
+						}
+					}
+					if (knockback) {
+						Vector dir = direction.clone();
+						dir.setY(dir.getY() * upfactor);
+						entity.setVelocity(entity.getVelocity().clone()
+								.add(dir.clone().multiply(factor)));
+						entity.setFallDistance(0);
+					}
+
+				}
+
+				if (!progressing) {
+					breakBlock();
+					return false;
+				}
+
+				if (location.distance(targetdestination) < 1) {
+					progressing = false;
+					breakBlock();
+				}
+
+				if (radius < maxradius)
+					radius += .5;
+
+				return true;
 			}
-
-			if (!progressing) {
-				breakBlock();
-				return false;
-			}
-
-			if (location.distance(targetdestination) < 1) {
-				progressing = false;
-				breakBlock();
-			}
-
-			if (radius < maxradius)
-				radius += .5;
-
-			return true;
 		}
 
 		return false;
@@ -288,7 +324,52 @@ public class Wave {
 				block.setType(Material.AIR);
 				instances.get(id).wave.remove(block);
 			}
+			for (Block block : instances.get(id).frozenblocks.keySet()) {
+				block.setType(Material.AIR);
+				instances.get(id).frozenblocks.remove(block);
+			}
 		}
+	}
+
+	private void freeze() {
+		for (Block block : wave.keySet()) {
+			block.setType(Material.AIR);
+		}
+		wave.clear();
+
+		for (Block block : Tools.getBlocksAroundPoint(frozenlocation, radius)) {
+			if (block.getType() == Material.AIR) {
+				block.setType(Material.ICE);
+				frozenblocks.put(block, block);
+			}
+			if (Tools.isWater(block)) {
+				FreezeMelt.freeze(block);
+			}
+			if (Tools.isPlant(block) && block.getType() != Material.LEAVES) {
+				block.breakNaturally();
+				block.setType(Material.ICE);
+				frozenblocks.put(block, block);
+			}
+		}
+	}
+
+	private void thaw() {
+		for (Block block : frozenblocks.keySet()) {
+			if (block.getType() == Material.ICE) {
+				block.setType(Material.WATER);
+				block.setData((byte) 0x7);
+			}
+			frozenblocks.remove(block);
+		}
+	}
+
+	public static boolean canThaw(Block block) {
+		for (int id : instances.keySet()) {
+			if (instances.get(id).frozenblocks.contains(block)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
