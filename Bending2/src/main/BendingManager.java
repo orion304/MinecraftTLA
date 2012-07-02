@@ -29,6 +29,7 @@ import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
+import earthbending.Tremorsense;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
@@ -112,6 +113,8 @@ public class BendingManager implements Runnable {
 		}
 
 		EarthPassive.revertSands();
+
+		Tremorsense.manage(plugin.getServer());
 
 	}
 

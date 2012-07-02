@@ -35,7 +35,7 @@ public class FireJet {
 			}
 		}
 		Block block = player.getLocation().getBlock();
-		if (FireStream.isIgnitable(block)) {
+		if (FireStream.isIgnitable(block) || AvatarState.isAvatarState(player)) {
 			player.setVelocity(player.getEyeLocation().getDirection().clone()
 					.normalize().multiply(factor));
 			block.setType(Material.FIRE);

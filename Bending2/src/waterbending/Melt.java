@@ -26,8 +26,7 @@ public class Melt {
 		boolean evaporate = false;
 		Location location = Tools.getTargetedLocation(player, range);
 		if (Tools.isWater(player.getTargetBlock(null, range))
-				&& !(player.getLocation().getBlock().isLiquid() && player
-						.getLocation().getBlockY() <= 62)) {
+				&& !(player.getLocation().getBlockY() <= 62)) {
 			evaporate = true;
 			radius = defaultevaporateradius;
 		}

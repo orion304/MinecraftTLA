@@ -1,6 +1,7 @@
 package main;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,6 +35,7 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSuction;
 import airbending.AirSwipe;
@@ -48,6 +50,7 @@ import earthbending.EarthGrab;
 import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
 import earthbending.EarthWall;
+import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
 import firebending.FireJet;
@@ -173,6 +176,11 @@ public class BendingListener implements Listener {
 					new AirSwipe(player);
 				}
 
+				if (Tools.getBendingAbility(player) == Abilities.AirScooter
+						&& player.isSprinting()) {
+					new AirScooter(player);
+				}
+
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
@@ -204,6 +212,10 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
 					EarthBlast.throwEarth(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.Tremorsense) {
+					new Tremorsense(player);
 				}
 
 			}
@@ -418,7 +430,9 @@ public class BendingListener implements Listener {
 		}
 		if (!event.isCancelled()) {
 			event.setCancelled(FreezeMelt.frozenblocks.containsKey(block));
-
+		}
+		if (!event.isCancelled()) {
+			event.setCancelled(Wave.canThaw(block));
 		}
 	}
 
@@ -439,6 +453,9 @@ public class BendingListener implements Listener {
 		} else if (!WaterWall.canThaw(block)) {
 			WaterWall.thaw(block);
 		} else if (Illumination.blocks.containsKey(block)) {
+			event.setCancelled(true);
+		} else if (Wave.canThaw(block)) {
+			block.setType(Material.AIR);
 			event.setCancelled(true);
 		}
 	}

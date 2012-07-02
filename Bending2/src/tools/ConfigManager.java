@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class ConfigManager {
 
 	public static boolean enabled = true;
+	public static boolean bendToItem = false;
 	public static boolean colors = true;
 	public static boolean compatibility = true;
 	public static int airdmg = 1;
@@ -66,6 +67,10 @@ public class ConfigManager {
 	public static int earthWallWidth = 6;
 	public static int collapseRange = 20;
 	public static double collapseRadius = 7;
+	public static long tremorsenseCooldown = 3000;
+	public static int tremorsenseMaxDepth;
+	public static int tremorsenseRadius;
+	public static byte tremorsenseLightThreshold;
 	public static int arcOfFireArc = 20;
 	public static double extinguishRange = 20;
 	public static double extinguishRadius = 20;
@@ -110,6 +115,8 @@ public class ConfigManager {
 		config.setDefaults(getDefaults());
 
 		colors = config.getBoolean("Chat.Colors");
+		
+		bendToItem = config.getBoolean("Bending.Option.Bend-To-Item", true);
 
 		airdmg = config.getInt("Bending.Damage.AirSwipe");
 
@@ -143,6 +150,7 @@ public class ConfigManager {
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire"));
 		useWeapon.put("Water",
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
+
 		// PROPERTIES
 		globalCooldown = config.getLong("Properties.GlobalCooldown");
 		// AIR
@@ -219,6 +227,15 @@ public class ConfigManager {
 		// Collapse
 		collapseRange = config.getInt("Properties.Earth.Collapse.Range");
 		collapseRadius = config.getDouble("Properties.Earth.Collapse.Radius");
+		// Tremorsense
+		tremorsenseCooldown = config
+				.getLong("Properties.Earth.Tremorsense.Cooldown");
+		tremorsenseMaxDepth = config
+				.getInt("Properties.Earth.Tremorsense.Max-Depth");
+		tremorsenseRadius = config
+				.getInt("Properties.Earth.Tremorsense.Radius");
+		tremorsenseLightThreshold = (byte) config
+				.getInt("Properties.Earth.Tremorsense.Light-Threshold");
 		// FIRE
 		// ArcOfFire
 		arcOfFireArc = config.getInt("Properties.Fire.ArcOfFire.Arc");
@@ -299,11 +316,13 @@ public class ConfigManager {
 		config.set("Chat.Color.Fire", "RED");
 		config.set("Chat.Color.Water", "AQUA");
 		config.set("Chat.Color.Earth", "GREEN");
+
 		config.set("Bending.Option.EarthBendable", defaultearthbendable);
 		config.set("Bending.Option.Bend-With-Weapon.Air", false);
 		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
 		config.set("Bending.Option.Bend-With-Weapon.Water", true);
 		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
+		config.set("Bending.Option.Bend-To-Item", false);
 
 		config.set("Properties.GlobalCooldown", 500);
 
@@ -365,6 +384,11 @@ public class ConfigManager {
 
 		config.set("Properties.Earth.Collapse.Range", 20);
 		config.set("Properties.Earth.Collapse.Radius", 7);
+
+		config.set("Properties.Earth.Tremorsense.Cooldown", 3000);
+		config.set("Properties.Earth.Tremorsense.Max-Depth", 10);
+		config.set("Properties.Earth.Tremorsense.Radius", 5);
+		config.set("Properties.Earth.Tremorsense.Light-Threshold", 7);
 
 		config.set("Properties.Fire.ArcOfFire.Arc", 20);
 
