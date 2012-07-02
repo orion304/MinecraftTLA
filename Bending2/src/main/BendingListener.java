@@ -454,7 +454,7 @@ public class BendingListener implements Listener {
 			WaterWall.thaw(block);
 		} else if (Illumination.blocks.containsKey(block)) {
 			event.setCancelled(true);
-		} else if (Wave.canThaw(block)) {
+		} else if (!Wave.canThaw(block)) {
 			block.setType(Material.AIR);
 			event.setCancelled(true);
 		}
