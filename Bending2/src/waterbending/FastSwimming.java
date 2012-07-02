@@ -26,7 +26,6 @@ public class FastSwimming {
 					&& p.getLocation().getBlock().isLiquid()
 					&& !timers.containsKey(p)){
 			    timers.put(p, System.currentTimeMillis());
-			    locations.put(p, p.getLocation().getBlock().getLocation());
 			}
 			if (timers.containsKey(p)){
 				if (timers.get(p) + (interval - 21) >= System.currentTimeMillis()){
@@ -38,33 +37,20 @@ public class FastSwimming {
 					&& locations.containsKey(p)
 					&& ((int)locations.get(p).getX() != (int)p.getLocation().getBlock().getLocation().getX()
 					|| (int)locations.get(p).getZ() != (int)p.getLocation().getBlock().getLocation().getZ())
-					&& p.getLocation().getBlock().isLiquid()
-					&& !p.getEyeLocation().getBlock().isLiquid()){
-				//Location l = p.getTargetBlock(null, 2).getLocation();
-			    //Location pL = p.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation();
-			    //Vector vc = new Vector(l.getX() - pL.getX(), 0.5D, l.getZ() - pL.getZ());
-			    //vc.multiply(0.2D);
-			    //p.setVelocity(vc);
-			    timers.put(p, System.currentTimeMillis());
-				Vector v = p.getLocation().getDirection().setY(0);
-				p.setVelocity(v.normalize().multiply(factor));
-			}
-			if (!(timers.get(p) + interval >= System.currentTimeMillis())
-					&& locations.containsKey(p)
-					&& ((int)locations.get(p).getX() != (int)p.getLocation().getBlock().getLocation().getX()
-					|| (int)locations.get(p).getZ() != (int)p.getLocation().getBlock().getLocation().getZ())
-					&& p.getLocation().getBlock().isLiquid()
-					&& p.getEyeLocation().getBlock().isLiquid()){
-				timers.put(p, System.currentTimeMillis());
-				Vector v  = p.getLocation().getDirection().normalize().multiply(factor);
-				p.setVelocity(v);
-			}
-			}
-			if (!p.getLocation().getBlock().isLiquid()){
-				locations.remove(p);
-				timers.remove(p);
-			}
+					&& p.getLocation().getBlock().isLiquid()){
+					
+					if (!p.getEyeLocation().getBlock().isLiquid()){
+						timers.put(p, System.currentTimeMillis());
+						Vector v = p.getLocation().getDirection().setY(0);
+						p.setVelocity(v.normalize().multiply(factor));
+					} else {
+						timers.put(p, System.currentTimeMillis());
+						Vector v  = p.getLocation().getDirection().normalize().multiply(factor);
+						p.setVelocity(v);
+					}
+				}
 			}
 		}
 	}
+}
 
