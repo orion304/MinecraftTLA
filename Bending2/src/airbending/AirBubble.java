@@ -19,7 +19,7 @@ public class AirBubble {
 	public static ConcurrentHashMap<Integer, AirBubble> instances = new ConcurrentHashMap<Integer, AirBubble>();
 
 	private static double radius = ConfigManager.airBubbleRadius;
-	private static byte full = AirBlast.full;
+	// private static byte full = AirBlast.full;
 
 	private Player player;
 	private ConcurrentHashMap<Block, Byte> waterorigins;
@@ -37,11 +37,9 @@ public class AirBubble {
 			if (block.getType() == Material.STATIONARY_WATER
 					|| block.getType() == Material.WATER) {
 				if (WaterManipulation.canBubbleWater(block)) {
-					if (block.getType() == Material.STATIONARY_WATER) {
-						waterorigins.put(block, full);
-					} else {
-						waterorigins.put(block, block.getData());
-					}
+
+					waterorigins.put(block, block.getData());
+
 					block.setType(Material.AIR);
 				}
 			}

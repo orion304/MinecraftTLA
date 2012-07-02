@@ -356,8 +356,7 @@ public class Wave {
 	private void thaw() {
 		for (Block block : frozenblocks.keySet()) {
 			if (block.getType() == Material.ICE) {
-				block.setType(Material.WATER);
-				block.setData((byte) 0x7);
+				block.setType(Material.AIR);
 			}
 			frozenblocks.remove(block);
 		}

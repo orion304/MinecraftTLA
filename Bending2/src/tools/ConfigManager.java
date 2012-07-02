@@ -100,7 +100,7 @@ public class ConfigManager {
 	public static double waveHorizontalPush = 1;
 	public static double waveVerticalPush = 0.2;
 	public static long globalCooldown = 500;
-	public static long fastSwimmingInterval = 500;
+	public static long fastSwimmingInterval = 300;
 	public static double fastSwimmingFactor = 0.4D;
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
@@ -118,7 +118,7 @@ public class ConfigManager {
 		config.setDefaults(getDefaults());
 
 		colors = config.getBoolean("Chat.Colors");
-		
+
 		bendToItem = config.getBoolean("Bending.Option.Bend-To-Item", true);
 
 		airdmg = config.getInt("Bending.Damage.AirSwipe");
@@ -292,7 +292,7 @@ public class ConfigManager {
 				.getDouble("Properties.Water.Wave.Horizontal-Push-Force");
 		waveVerticalPush = config
 				.getDouble("Properties.Water.Wave.Vertical-Push-Force");
-		
+
 		fastSwimmingInterval = config
 				.getLong("Properties.Water.FastSwimming.Interval");
 		fastSwimmingFactor = config
@@ -439,8 +439,8 @@ public class ConfigManager {
 		config.set("Properties.Water.Wave.Radius", 3);
 		config.set("Properties.Water.Wave.Horizontal-Push-Force", 1);
 		config.set("Properties.Water.Wave.Vertical-Push-Force", 0.2);
-		
-		config.set("Properties.Water.FastSwimming.Interval", 500);
+
+		config.set("Properties.Water.FastSwimming.Interval", 300);
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
 
 		return config;
