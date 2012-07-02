@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class ConfigManager {
 
 	public static boolean enabled = true;
+	public static boolean bendToItem = false;
 	public static boolean colors = true;
 	public static boolean compatibility = true;
 	public static int airdmg = 1;
@@ -111,6 +112,8 @@ public class ConfigManager {
 		config.setDefaults(getDefaults());
 
 		colors = config.getBoolean("Chat.Colors");
+		
+		bendToItem = config.getBoolean("Bending.Option.Bend-To-Item", true);
 
 		airdmg = config.getInt("Bending.Damage.AirSwipe");
 
@@ -307,6 +310,7 @@ public class ConfigManager {
 		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
 		config.set("Bending.Option.Bend-With-Weapon.Water", true);
 		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
+		config.set("Bending.Option.Bend-To-Item", true);
 
 		config.set("Properties.GlobalCooldown", 500);
 

@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import net.minecraft.server.EntityFireball;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -111,10 +112,11 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 
-			if (args[0].equalsIgnoreCase("reload") && args.length >= 2
+			if (args[0].equalsIgnoreCase("reload") && args.length == 1
 					&& sender.isOp()) {
 				configManager
 						.load(new File(this.getDataFolder(), "config.yml"));
+				config.reload();
 				sender.sendMessage("Config reloaded");
 				return true;
 			}
@@ -303,27 +305,53 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-				} else if (args[0].equalsIgnoreCase("clear")
-						&& Integer.parseInt(args[1]) > 0
-						&& Integer.parseInt(args[1]) < 10) {
-					config.removeAbility(player, Integer.parseInt(args[1]) - 1);
-					return true;
+				} else if (args[0].equalsIgnoreCase("clear")) {
+					if (!ConfigManager.bendToItem){
+						if (Integer.parseInt(args[1]) > 0
+								&& Integer.parseInt(args[1]) < 10){
+							config.removeAbility(player, Integer.parseInt(args[1]) - 1);
+							return true;
+						}
+					} else { 
+						if (Material.matchMaterial(args[1]) != null) {
+							config.removeAbility(player, Material.matchMaterial(args[1]));
+							return true;
+						}
+					}
 				}
 			}
 
 			else if (args[0].equalsIgnoreCase("display")) {
-				for (int i = 0; i <= 8; i++) {
-					Abilities a = config.getAbility(player, i);
-					if (a != null) {
-						String ability = config.getAbility(player, i).name();
-						sender.sendMessage("Slot " + (i + 1) + ": " + ability);
+				if (!ConfigManager.bendToItem){
+					for (int i = 0; i <= 8; i++) {
+						Abilities a = config.getAbility(player, i);
+						if (a != null) {
+							String ability = config.getAbility(player, i).name();
+							sender.sendMessage("Slot " + (i + 1) + ": " + ability);
+						}
+					}
+				} else {
+				
+					for (Material mat: Material.values()){
+						int i = mat.getId();
+						Abilities a = config.getAbility(player, i);
+						if (a != null) {
+							String ability = config.getAbility(player, i).name();
+							sender.sendMessage(mat.name().replaceAll("_", " ") + ": " + ability);
+						}
 					}
 				}
 				return true;
 			} else if (args[0].equalsIgnoreCase("clear")) {
-				for (int i = 0; i <= 8; i++) {
-					config.removeAbility(player, i);
+				if (!ConfigManager.bendToItem){
+					for (int i = 0; i <= 8; i++) {
+						config.removeAbility(player, i);
 
+					}
+				} else {
+					for (Material mat: Material.values()){
+						config.removeAbility(player, mat.getId());
+					}
 				}
 				return true;
 			}
@@ -336,39 +364,70 @@ public class Bending extends JavaPlugin {
 				if (ability != null) {
 
 					int slot = (player).getInventory().getHeldItemSlot();
+					Material mat = player.getInventory().getItemInHand().getType();
 
 					if (config.isBender(player, BendingType.Water)
 							&& Abilities.isWaterbending(ability)) {
-						config.setAbility(player, ability, slot);
-						sender.sendMessage(ability.name() + " bound to slot "
-								+ (slot + 1));
+						if (!ConfigManager.bendToItem) {
+							config.setAbility(player, ability, slot);
+							sender.sendMessage(ability.name() + " bound to slot "
+									+ (slot + 1));
+						} else {
+							config.setAbility(player, ability, mat);
+							sender.sendMessage(ability.name() + " bound to "
+									+ mat.name().replaceAll("_", " "));
+						}
 						return true;
 					}
 					if (config.isBender(player, BendingType.Air)
 							&& Abilities.isAirbending(ability)) {
-						config.setAbility(player, ability, slot);
-						sender.sendMessage(ability.name() + " bound to slot "
-								+ (slot + 1));
+						if (!ConfigManager.bendToItem) {
+							config.setAbility(player, ability, slot);
+							sender.sendMessage(ability.name() + " bound to slot "
+									+ (slot + 1));
+						} else {
+							config.setAbility(player, ability, mat);
+							sender.sendMessage(ability.name() + " bound to "
+									+ mat.name().replaceAll("_", " "));
+						}
 						return true;
 					}
 					if (config.isBender(player, BendingType.Earth)
 							&& Abilities.isEarthbending(ability)) {
-						config.setAbility(player, ability, slot);
-						sender.sendMessage(ability.name() + " bound to slot "
-								+ (slot + 1));
+						if (!ConfigManager.bendToItem) {
+							config.setAbility(player, ability, slot);
+							sender.sendMessage(ability.name() + " bound to slot "
+									+ (slot + 1));
+						} else {
+							config.setAbility(player, ability, mat);
+							sender.sendMessage(ability.name() + " bound to "
+									+ mat.name().replaceAll("_", " "));
+						}
 						return true;
 					}
 					if (config.isBender(player, BendingType.Fire)
 							&& Abilities.isFirebending(ability)) {
-						config.setAbility(player, ability, slot);
-						sender.sendMessage(ability.name() + " bound to slot "
-								+ (slot + 1));
+						if (!ConfigManager.bendToItem) {
+							config.setAbility(player, ability, slot);
+							sender.sendMessage(ability.name() + " bound to slot "
+									+ (slot + 1));
+						} else {
+							config.setAbility(player, ability, mat);
+							sender.sendMessage(ability.name() + " bound to "
+									+ mat.name().replaceAll("_", " "));
+						}
 						return true;
 					}
 					if (sender.isOp() && ability == Abilities.AvatarState) {
-						config.setAbility(player, ability, slot);
-						sender.sendMessage(ability.name() + " bound to slot "
-								+ (slot + 1));
+						if (!ConfigManager.bendToItem) {
+							config.setAbility(player, ability, slot);
+							sender.sendMessage(ability.name() + " bound to slot "
+									+ (slot + 1));
+						} else {
+							config.setAbility(player, ability, mat);
+							sender.sendMessage(ability.name() + " bound to "
+									+ mat.name().replaceAll("_", " "));
+						}
 						return true;
 					}
 				}
