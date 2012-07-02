@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -265,13 +266,41 @@ public class BendingPlayers {
 		bendingPlayers.set(setter, ability.name());
 		save();
 	}
+	// Bind to item
+	public void setAbility(Player player, String ability, Material mat) {
+		for (Abilities a : Abilities.values()) {
+			if (ability.equalsIgnoreCase(a.name())) {
+				setAbility(player, a, mat);
+			}
+		}
+	}
+
+	public void setAbility(Player player, Abilities ability, Material mat) {
+		String setter = player.getName() + "<Bind" + mat.getId() + ">";
+		bendingPlayers.set(setter, ability.name());
+		save();
+	}
 
 	public Abilities getAbility(Player player) {
-		return getAbility(player, player.getInventory().getHeldItemSlot());
+		if (ConfigManager.bendToItem == false)
+			return getAbility(player, player.getInventory().getHeldItemSlot());
+		return getAbility(player, player.getItemInHand().getType());
 	}
 
 	public Abilities getAbility(Player player, int slot) {
 		String setter = player.getName() + "<Bind" + slot + ">";
+		String ability = bendingPlayers.getString(setter, "");
+
+		for (Abilities a : Abilities.values()) {
+			if (ability.equalsIgnoreCase(a.name()))
+				return a;
+		}
+		return null;
+	}
+	// Bind to item
+
+	public Abilities getAbility(Player player, Material mat) {
+		String setter = player.getName() + "<Bind" + mat.getId() + ">";
 		String ability = bendingPlayers.getString(setter, "");
 
 		for (Abilities a : Abilities.values()) {
@@ -289,6 +318,8 @@ public class BendingPlayers {
 		}
 		return false;
 	}
+	
+	
 
 	public List<BendingType> getBendingTypes(Player player) {
 		List<BendingType> list = Arrays.asList();
@@ -306,8 +337,14 @@ public class BendingPlayers {
 		bendingPlayers.set(setter, null);
 		save();
 	}
+	
+	public void removeAbility(Player player, Material mat) {
+		String setter = player.getName() + "<Bind" + mat.getId() + ">";
+		bendingPlayers.set(setter, null);
+		save();
+	}
 
-	private void reload() {
+	public void reload() {
 		if (bendingPlayersFile == null) {
 			bendingPlayersFile = new File(dataFolder, "bendingPlayers.yml");
 		}

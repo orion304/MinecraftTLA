@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class ConfigManager {
 
 	public static boolean enabled = true;
+	public static boolean bendToItem = false;
 	public static boolean colors = true;
 	public static boolean compatibility = true;
 	public static int airdmg = 1;
@@ -24,7 +25,8 @@ public class ConfigManager {
 	public static Map<String, String> color = new HashMap<String, String>();
 	public static List<String> earthbendable = new ArrayList<String>();
 	public static Map<String, Boolean> useWeapon = new HashMap<String, Boolean>();
-
+	
+	
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;
@@ -110,6 +112,8 @@ public class ConfigManager {
 		config.setDefaults(getDefaults());
 
 		colors = config.getBoolean("Chat.Colors");
+		
+		bendToItem = config.getBoolean("Bending.Option.Bend-To-Item", true);
 
 		airdmg = config.getInt("Bending.Damage.AirSwipe");
 
@@ -143,6 +147,7 @@ public class ConfigManager {
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire"));
 		useWeapon.put("Water",
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
+
 		// PROPERTIES
 		globalCooldown = config.getLong("Properties.GlobalCooldown");
 		// AIR
@@ -299,11 +304,13 @@ public class ConfigManager {
 		config.set("Chat.Color.Fire", "RED");
 		config.set("Chat.Color.Water", "AQUA");
 		config.set("Chat.Color.Earth", "GREEN");
+
 		config.set("Bending.Option.EarthBendable", defaultearthbendable);
 		config.set("Bending.Option.Bend-With-Weapon.Air", false);
 		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
 		config.set("Bending.Option.Bend-With-Weapon.Water", true);
 		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
+		config.set("Bending.Option.Bend-To-Item", true);
 
 		config.set("Properties.GlobalCooldown", 500);
 
