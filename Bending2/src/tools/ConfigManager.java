@@ -25,7 +25,8 @@ public class ConfigManager {
 	public static Map<String, String> color = new HashMap<String, String>();
 	public static List<String> earthbendable = new ArrayList<String>();
 	public static Map<String, Boolean> useWeapon = new HashMap<String, Boolean>();
-
+	
+	
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;

@@ -41,8 +41,27 @@ public class FastSwimming {
 					
 					if (!p.getEyeLocation().getBlock().isLiquid()){
 						timers.put(p, System.currentTimeMillis());
+						if ((p.getLocation().getYaw() > -45
+								&& p.getLocation().getYaw() <= 45)
+								&& locations.get(p).getZ() < p.getLocation().getZ()){
 						Vector v = p.getLocation().getDirection().setY(0);
 						p.setVelocity(v.normalize().multiply(factor));
+						} else if ((p.getLocation().getYaw() > 45
+								&& p.getLocation().getYaw() <= 135)
+								&& locations.get(p).getX() > p.getLocation().getX()){
+						Vector v = p.getLocation().getDirection().setY(0);
+						p.setVelocity(v.normalize().multiply(factor));
+						}else if ((p.getLocation().getYaw() > 135
+								&& p.getLocation().getYaw() <= 225)
+								&& locations.get(p).getZ() > p.getLocation().getZ()){
+						Vector v = p.getLocation().getDirection().setY(0);
+						p.setVelocity(v.normalize().multiply(factor));
+						}else if ((p.getLocation().getYaw() > 225
+								&& p.getLocation().getYaw() <= 315)
+								&& locations.get(p).getX() < p.getLocation().getX()){
+						Vector v = p.getLocation().getDirection().setY(0);
+						p.setVelocity(v.normalize().multiply(factor));
+						}
 					} else {
 						timers.put(p, System.currentTimeMillis());
 						Vector v  = p.getLocation().getDirection().normalize().multiply(factor);

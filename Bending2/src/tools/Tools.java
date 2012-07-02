@@ -41,7 +41,6 @@ import earthbending.CompactColumn;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
-import firebending.Illumination;
 
 public class Tools {
 
@@ -504,8 +503,7 @@ public class Tools {
 					&& WaterManipulation.canPhysicsChange(blocki))
 				sources++;
 		}
-		// if (sources >= 3)
-		if (sources >= 2)
+		if (sources >= 3)
 			return true;
 		return false;
 	}
@@ -523,7 +521,6 @@ public class Tools {
 		WaterSpout.removeAll();
 		WaterWall.removeAll();
 		Wave.removeAll();
-		Illumination.removeAll();
 	}
 
 	public static boolean canBend(Player player, Abilities ability) {

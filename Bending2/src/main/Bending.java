@@ -333,10 +333,9 @@ public class Bending extends JavaPlugin {
 				} else {
 				
 					for (Material mat: Material.values()){
-						int i = mat.getId();
-						Abilities a = config.getAbility(player, i);
+						Abilities a = config.getAbility(player, mat);
 						if (a != null) {
-							String ability = config.getAbility(player, i).name();
+							String ability = config.getAbility(player, mat).name();
 							sender.sendMessage(mat.name().replaceAll("_", " ") + ": " + ability);
 						}
 					}
