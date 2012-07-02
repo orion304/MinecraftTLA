@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.AvatarState;
+import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.WalkOnWater;
@@ -165,6 +166,7 @@ public class BendingManager implements Runnable {
 		HealingWaters.heal(plugin.getServer());
 
 		WaterPassive.handlePassive(plugin.getServer());
+		FastSwimming.HandleSwim(plugin.getServer());
 
 	}
 
