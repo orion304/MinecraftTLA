@@ -8,7 +8,7 @@ public enum Abilities {
 
 	Catapult, EarthColumn, EarthGrab, EarthTunnel, EarthWall, CompactColumn, EarthBlast, Collapse, Tremorsense,
 
-	ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet, Illumination,
+	ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet, Illumination, Walloffire,
 
 	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave,
 
@@ -23,7 +23,7 @@ public enum Abilities {
 	}
 
 	private enum FirebendingAbilities {
-		ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet, Illumination;
+		ArcOfFire, Extinguish, Fireball, FireStream, HeatMelt, RingOfFire, FireJet, Illumination, Walloffire;
 	}
 
 	private enum WaterbendingAbilities {

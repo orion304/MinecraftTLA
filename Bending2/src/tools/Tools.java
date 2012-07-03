@@ -22,6 +22,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import waterbending.FreezeMelt;
@@ -534,12 +535,13 @@ public class Tools {
 	}
 
 	public static boolean isRegionProtected(Player player, Abilities ability) {
-		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
+		Plugin p = Bukkit.getPluginManager()
 				.getPlugin("WorldGuard");
-		if (wg == null)
+		if (p == null)
 			return false;
 		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 		// for (Block b: lb){
+		WorldGuardPlugin wg = (WorldGuardPlugin)p;
 		Block b = player.getLocation().getBlock();
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {

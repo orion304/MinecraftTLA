@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import net.minecraft.server.EntityFireball;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -27,6 +28,7 @@ public class Bending extends JavaPlugin {
 
 	public final BendingManager manager = new BendingManager(this);
 	public final BendingListener listener = new BendingListener(this);
+	
 
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
@@ -95,7 +97,7 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("remove") && args.length >= 2
-					&& sender.isOp()) {
+					&& sender.hasPermission("bending.admin.remove")) {
 				String playerlist = "";
 				for (String playername : Arrays.asList(args)) {
 					Player targetplayer = this.getServer()
@@ -113,7 +115,7 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("reload") && args.length == 1
-					&& sender.isOp()) {
+					&& sender.hasPermission("bending.admin.reload")) {
 				configManager
 						.load(new File(this.getDataFolder(), "config.yml"));
 				config.reload();
@@ -122,7 +124,7 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("permaremove") && args.length >= 2
-					&& sender.isOp()) {
+					&& sender.hasPermission("bending.admin.permaremove")) {
 				String playerlist = "";
 				for (String playername : Arrays.asList(args)) {
 					Player targetplayer = this.getServer()
@@ -139,11 +141,12 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 
-			if (args[0].equalsIgnoreCase("choose")) {
+			if (args[0].equalsIgnoreCase("choose")
+					&& sender.hasPermission("bending.command.choose")) {
 				if (args.length == 1)
 					return false;
 				if (args.length == 2) {
-					if (config.isBender(player) && !sender.isOp()) {
+					if (config.isBender(player) && !sender.hasPermission("bending.admin.rechoose")) {
 						sender.sendMessage("You've already chosen your bending abilities. Only ops can change this now.");
 						return true;
 					}
@@ -162,7 +165,7 @@ public class Bending extends JavaPlugin {
 						config.setBending(player, args[1]);
 						return true;
 					}
-				} else if (sender.isOp()) {
+				} else if (sender.hasPermission("bending.admin.choose")) {
 					String playername = args[1];
 					Player targetplayer = getServer().getPlayer(playername);
 					if (targetplayer == null) {
@@ -192,7 +195,7 @@ public class Bending extends JavaPlugin {
 				}
 			}
 
-			if (args[0].equalsIgnoreCase("add") && sender.isOp()) {
+			if (args[0].equalsIgnoreCase("add") && sender.hasPermission("bending.admin.add")) {
 				if (args.length == 1)
 					return false;
 				if (args.length == 2) {
@@ -278,7 +281,8 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args.length > 1) {
-				if (args[0].equalsIgnoreCase("display")) {
+				if (args[0].equalsIgnoreCase("display")
+						&& sender.hasPermission("bending.command.displayelement")) {
 					String[] abilitylist = null;
 					if (args[1].equalsIgnoreCase("air")) {
 						abilitylist = airbendingabilities;
@@ -305,7 +309,8 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-				} else if (args[0].equalsIgnoreCase("clear")) {
+				} else if (args[0].equalsIgnoreCase("clear")
+						&& sender.hasPermission("bending.commnd.clear")) {
 					if (!ConfigManager.bendToItem){
 						if (Integer.parseInt(args[1]) > 0
 								&& Integer.parseInt(args[1]) < 10){
@@ -321,7 +326,8 @@ public class Bending extends JavaPlugin {
 				}
 			}
 
-			else if (args[0].equalsIgnoreCase("display")) {
+			else if (args[0].equalsIgnoreCase("display")
+					&& sender.hasPermission("bending.command.display")) {
 				if (!ConfigManager.bendToItem){
 					for (int i = 0; i <= 8; i++) {
 						Abilities a = config.getAbility(player, i);
@@ -355,7 +361,8 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 
-			if (args[0].equalsIgnoreCase("bind") && args.length == 2) {
+			if (args[0].equalsIgnoreCase("bind") && args.length == 2
+					&& sender.hasPermission("bending.command.bind")) {
 
 				String a = args[1];
 				Abilities ability = Abilities.getAbility(a);
@@ -417,7 +424,7 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-					if (sender.isOp() && ability == Abilities.AvatarState) {
+					if (sender.hasPermission("bending.admin.avatarstate") && ability == Abilities.AvatarState) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
 							sender.sendMessage(ability.name() + " bound to slot "
@@ -430,6 +437,81 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 				}
+			}
+			if (args[0].equalsIgnoreCase("help")
+					&& sender.hasPermission("bending.command.help")){
+				int page = 1;
+				if (args.length > 1){
+				      try {
+				          page = Integer.parseInt(args[1]);
+				        }
+				        catch (NumberFormatException e) {
+				        }
+				}
+				int i = 1;
+				sender.sendMessage(ChatColor.AQUA + "======================Commands======================");
+				if (sender.hasPermission("bending.command.remove") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending remove");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.admin.reload") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending reload");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.admin.permaremove") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending permaremove <player>");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.command.choose") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending choose <element>");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.admin.choose") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending choose <player> <element>");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.admin.add") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending add <element>");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.command.displayelement") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending display <element>");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission(" bending.commnd.clear") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending clear");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.command.display") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending display");
+					i++;
+				} else {
+					i++;
+				}
+				if (sender.hasPermission("bending.command.bind") && i < page * 8 && i > (page * 8) - 8){
+					sender.sendMessage("/bending bind <ability>");
+					i++;
+				} else {
+					i++;
+				}
+				sender.sendMessage(ChatColor.AQUA + "=======================Page " + page + "========================");
+				return true;
 			}
 		}
 

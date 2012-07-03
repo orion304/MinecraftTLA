@@ -35,6 +35,7 @@ import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
 import firebending.Illumination;
+import firebending.WallOfFire;
 
 public class BendingManager implements Runnable {
 
@@ -136,6 +137,9 @@ public class BendingManager implements Runnable {
 					+ Fireball.duration) {
 				entity.die();
 			}
+		}
+		for (Player ID : WallOfFire.instances.keySet()) {
+			WallOfFire.manageWallOfFire(ID);
 		}
 
 		FireJet.progressAll();
