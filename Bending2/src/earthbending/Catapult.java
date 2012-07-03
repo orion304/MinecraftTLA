@@ -74,6 +74,10 @@ public class Catapult {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (System.currentTimeMillis() - time >= interval) {
 			// Tools.verbose("Catapult progressing");
 			time = System.currentTimeMillis();

@@ -15,7 +15,7 @@ import tools.Tools;
 
 public class WalkOnWater {
 
-	private static ConcurrentHashMap<Block, Byte> affectedblocks = new ConcurrentHashMap<Block, Byte>();
+	public static ConcurrentHashMap<Block, Byte> affectedblocks = new ConcurrentHashMap<Block, Byte>();
 	private static ArrayList<Player> players = new ArrayList<Player>();
 
 	private static double radius = ConfigManager.walkOnWaterRadius;

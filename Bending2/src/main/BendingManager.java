@@ -1,7 +1,10 @@
 package main;
 
+import java.util.ArrayList;
+
 import net.minecraft.server.EntityFireball;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -40,6 +43,8 @@ public class BendingManager implements Runnable {
 
 	public Bending plugin;
 
+	static ArrayList<Player> newplayers = new ArrayList<Player>();
+
 	long time;
 	long interval;
 
@@ -58,6 +63,7 @@ public class BendingManager implements Runnable {
 		manageEarthbending();
 		manageFirebending();
 		manageWaterbending();
+		manageMessages();
 		AvatarState.manageAvatarStates();
 
 	}
@@ -168,6 +174,14 @@ public class BendingManager implements Runnable {
 		WaterPassive.handlePassive(plugin.getServer());
 		FastSwimming.HandleSwim(plugin.getServer());
 
+	}
+
+	private void manageMessages() {
+		for (Player player : newplayers) {
+			player.sendMessage(ChatColor.GOLD
+					+ "Use '/bending choose <element>' to get started!");
+		}
+		newplayers.clear();
 	}
 
 }

@@ -68,6 +68,10 @@ public class AirBubble {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (((Tools.getBendingAbility(player) == Abilities.AirBubble) && Tools
 				.canBend(player, Abilities.AirBubble))
 				|| ((Tools.getBendingAbility(player) == Abilities.WaterBubble) && Tools

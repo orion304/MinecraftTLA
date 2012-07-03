@@ -48,6 +48,10 @@ public class EarthTunnel {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player);
+			return false;
+		}
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
 			// Tools.verbose("progressing");

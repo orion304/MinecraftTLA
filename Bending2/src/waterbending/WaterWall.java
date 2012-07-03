@@ -186,6 +186,10 @@ public class WaterWall {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (!Tools.canBend(player, Abilities.WaterWall)) {
 			if (!forming)
 				removeWater(oldwater);
@@ -224,7 +228,8 @@ public class WaterWall {
 				Vector dir = player.getEyeLocation().getDirection();
 				Vector vec;
 				Block block;
-				for (double i = 0; i <= radius; i += 0.5) {
+				for (double i = 0; i <= Tools.waterbendingNightAugment(radius,
+						player.getWorld()); i += 0.5) {
 					for (double angle = 0; angle < 360; angle += 10) {
 						// loc.getBlock().setType(Material.GLOWSTONE);
 						vec = Tools.getOrthogonalVector(dir.clone(), angle, i);

@@ -20,8 +20,10 @@ public class FreezeMelt {
 	public static final int defaultradius = ConfigManager.freezeMeltRadius;
 
 	public FreezeMelt(Player player) {
-		int range = defaultrange;
-		int radius = defaultradius;
+		int range = (int) Tools.waterbendingNightAugment(defaultrange,
+				player.getWorld());
+		int radius = (int) Tools.waterbendingNightAugment(defaultradius,
+				player.getWorld());
 		if (AvatarState.isAvatarState(player)) {
 			range = AvatarState.getValue(range);
 			// radius = AvatarState.getValue(radius);
@@ -68,11 +70,12 @@ public class FreezeMelt {
 			for (Player player : block.getWorld().getPlayers()) {
 				if (Tools.hasAbility(player, Abilities.FreezeMelt)
 						&& Tools.canBend(player, Abilities.FreezeMelt)) {
-					int range = defaultrange;
+					double range = Tools.waterbendingNightAugment(defaultrange,
+							player.getWorld());
 					if (AvatarState.isAvatarState(player)) {
 						range = AvatarState.getValue(range);
 					}
-					if (block.getLocation().distance(player.getLocation()) <= (double) range)
+					if (block.getLocation().distance(player.getLocation()) <= range)
 						return false;
 				}
 			}

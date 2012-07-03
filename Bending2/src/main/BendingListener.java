@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
@@ -12,6 +13,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -71,7 +73,6 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
-		player.sendMessage("Test message!");
 		String append = "";
 		if ((player.isOp()) && ConfigManager.enabled) {
 			append = ConfigManager.getPrefix("Avatar");
@@ -88,7 +89,7 @@ public class BendingListener implements Listener {
 				&& (ConfigManager.enabled)) {
 			append = ConfigManager.getPrefix("Water");
 		} else {
-			player.sendMessage("Using '/bending choose <element>' to get started!");
+			BendingManager.newplayers.add(player);
 		}
 		if (!(ConfigManager.compatibility) && (ConfigManager.enabled))
 			player.setDisplayName(append + player.getName());
@@ -482,4 +483,19 @@ public class BendingListener implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onEntityExplode(EntityExplodeEvent event) {
+		for (Block block : event.blockList()) {
+			if (FreezeMelt.frozenblocks.containsKey(block)) {
+				FreezeMelt.thaw(block);
+			}
+			if (WalkOnWater.affectedblocks.containsKey(block)) {
+				WalkOnWater.thaw(block);
+			}
+			if (WaterWall.wallblocks.containsKey(block)) {
+				block.setType(Material.AIR);
+			}
+		}
+
+	}
 }

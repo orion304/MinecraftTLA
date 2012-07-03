@@ -98,6 +98,10 @@ public class AirShield {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		speedfactor = 1;
 		if (!Tools.canBend(player, Abilities.AirShield)
 				|| player.getEyeLocation().getBlock().isLiquid()) {

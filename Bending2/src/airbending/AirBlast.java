@@ -74,6 +74,11 @@ public class AirBlast {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(id);
+			return false;
+		}
+
 		speedfactor = speed * (Bending.time_step / 1000.);
 
 		ticks++;

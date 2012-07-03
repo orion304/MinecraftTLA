@@ -20,7 +20,7 @@ public class Tornado {
 	private static double radius = ConfigManager.tornadoRadius;
 	private static double height = ConfigManager.tornadoHeight;
 	private static double range = ConfigManager.tornadoRange;
-	private static int numberOfStreams = (int) (.3*(double)height);
+	private static int numberOfStreams = (int) (.3 * (double) height);
 	private static double NPCpushfactor = ConfigManager.tornadoMobPush;
 	private static double PCpushfactor = ConfigManager.tornadoPlayerPush;
 	// private static double speed = .75;
@@ -51,6 +51,10 @@ public class Tornado {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (!Tools.canBend(player, Abilities.Tornado)
 				|| player.getEyeLocation().getBlock().isLiquid()) {
 			instances.remove(player.getEntityId());
