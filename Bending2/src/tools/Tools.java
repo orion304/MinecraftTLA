@@ -15,6 +15,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -22,6 +24,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import waterbending.FreezeMelt;
@@ -41,7 +44,6 @@ import earthbending.CompactColumn;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
-import firebending.Illumination;
 
 public class Tools {
 
@@ -504,8 +506,7 @@ public class Tools {
 					&& WaterManipulation.canPhysicsChange(blocki))
 				sources++;
 		}
-		// if (sources >= 3)
-		if (sources >= 2)
+		if (sources >= 3)
 			return true;
 		return false;
 	}
@@ -523,7 +524,6 @@ public class Tools {
 		WaterSpout.removeAll();
 		WaterWall.removeAll();
 		Wave.removeAll();
-		Illumination.removeAll();
 	}
 
 	public static boolean canBend(Player player, Abilities ability) {
@@ -537,10 +537,11 @@ public class Tools {
 	}
 
 	public static boolean isRegionProtected(Player player, Abilities ability) {
+		Plugin p = Bukkit.getPluginManager().getPlugin("WorldGuard");
+		if (p == null)
+			return false;
 		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
 				.getPlugin("WorldGuard");
-		if (wg == null)
-			return false;
 		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 		// for (Block b: lb){
 		Block b = player.getLocation().getBlock();
@@ -597,6 +598,52 @@ public class Tools {
 	public static ChatColor getColor(String input) {
 		return (ChatColor) colors.get(input.toLowerCase().replace("&", ""));
 
+	}
+
+	public static boolean isDay(World world) {
+		long time = world.getTime();
+		if (time >= 23500 || time <= 12500) {
+			return true;
+		}
+		return false;
+	}
+
+	public static double firebendingDayAugment(double value, World world) {
+		if (isDay(world)) {
+			return ConfigManager.dayFactor * value;
+		}
+		return value;
+	}
+
+	public static double getFirebendingDayAugment(World world) {
+		if (isDay(world))
+			return ConfigManager.dayFactor;
+		return 1;
+	}
+
+	public static double waterbendingNightAugment(double value, World world) {
+		if (isNight(world)) {
+			return ConfigManager.nightFactor * value;
+		}
+		return value;
+	}
+
+	public static double getWaterbendingNightAugment(World world) {
+		if (isNight(world))
+			return ConfigManager.nightFactor;
+		return 1;
+	}
+
+	public static boolean isNight(World world) {
+		if (world.getEnvironment() == Environment.NETHER
+				|| world.getEnvironment() == Environment.THE_END) {
+			return false;
+		}
+		long time = world.getTime();
+		if (time >= 12950 && time <= 23050) {
+			return true;
+		}
+		return false;
 	}
 
 	static {

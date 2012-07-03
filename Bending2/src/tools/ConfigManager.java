@@ -81,6 +81,7 @@ public class ConfigManager {
 	public static long fireJetCooldown = 6000;
 	public static double fireStreamSpeed = 20;
 	public static double fireStreamRange = 20;
+	public static double dayFactor = 1.3;
 	public static int illuminationRange = 5;
 	public static int heatMeltRange = 20;
 	public static int heatMeltRadius = 5;
@@ -99,8 +100,9 @@ public class ConfigManager {
 	public static double waveHorizontalPush = 1;
 	public static double waveVerticalPush = 0.2;
 	public static long globalCooldown = 500;
-	public static long fastSwimmingInterval = 300;
+	public static long fastSwimmingInterval = 450;
 	public static double fastSwimmingFactor = 0.4D;
+	public static double nightFactor = 1.5;
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
 
@@ -260,6 +262,8 @@ public class ConfigManager {
 		heatMeltRadius = config.getInt("Properties.Fire.HeatMelt.Radius");
 		// Illumination
 		illuminationRange = config.getInt("Properties.Fire.Illumination.Range");
+		// Day
+		dayFactor = config.getDouble("Properties.Fire.Day-Power-Factor");
 		// WATER
 		// FreezeMelt
 		freezeMeltRange = config.getInt("Properties.Water.FreezeMelt.Range");
@@ -292,10 +296,14 @@ public class ConfigManager {
 		waveVerticalPush = config
 				.getDouble("Properties.Water.Wave.Vertical-Push-Force");
 
+		// Fast Swimming
 		fastSwimmingInterval = config
 				.getLong("Properties.Water.FastSwimming.Interval");
 		fastSwimmingFactor = config
 				.getDouble("Properties.Water.FastSwimming.Factor");
+
+		// Night
+		nightFactor = config.getDouble("Properties.Water.Night-Power-Factor");
 
 		try {
 			config.options().copyDefaults(true);
@@ -417,6 +425,8 @@ public class ConfigManager {
 
 		config.set("Properties.Fire.Illumination.Range", 5);
 
+		config.set("Properties.Fire.Day-Power-Factor", 1.3);
+
 		config.set("Properties.Water.FreezeMelt.Range", 20);
 		config.set("Properties.Water.FreezeMelt.Radius", 5);
 
@@ -441,6 +451,8 @@ public class ConfigManager {
 
 		config.set("Properties.Water.FastSwimming.Interval", 300);
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
+
+		config.set("Properties.Water.Night-Power-Factor", 1.5);
 
 		return config;
 	}
@@ -473,8 +485,6 @@ public class ConfigManager {
 		defaultearthbendable.add("IRON_ORE");
 
 		defaultearthbendable.add("LAPIS_ORE");
-
-		defaultearthbendable.add("NETHERRACK");
 
 		defaultearthbendable.add("REDSTONE_ORE");
 

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.ConfigManager;
+import tools.Tools;
 
 public class Fireball {
 
@@ -26,14 +27,22 @@ public class Fireball {
 		if (player.getEyeLocation().getBlock().isLiquid())
 			return;
 		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+			if (System.currentTimeMillis() < timers.get(player)
+					+ (long) ((double) soonesttime / Tools
+							.getFirebendingDayAugment(player.getWorld()))) {
 				return;
 			}
 		}
 
 		Location playerLoc = player.getEyeLocation();
-		Vector direction = player.getEyeLocation().getDirection().clone()
-				.normalize().multiply(speedfactor);
+		Vector direction = player
+				.getEyeLocation()
+				.getDirection()
+				.clone()
+				.normalize()
+				.multiply(
+						Tools.firebendingDayAugment(speedfactor,
+								player.getWorld()));
 		double dx = direction.getX();
 		double dy = direction.getY();
 		double dz = direction.getZ();

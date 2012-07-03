@@ -306,15 +306,17 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 				} else if (args[0].equalsIgnoreCase("clear")) {
-					if (!ConfigManager.bendToItem){
+					if (!ConfigManager.bendToItem) {
 						if (Integer.parseInt(args[1]) > 0
-								&& Integer.parseInt(args[1]) < 10){
-							config.removeAbility(player, Integer.parseInt(args[1]) - 1);
+								&& Integer.parseInt(args[1]) < 10) {
+							config.removeAbility(player,
+									Integer.parseInt(args[1]) - 1);
 							return true;
 						}
-					} else { 
+					} else {
 						if (Material.matchMaterial(args[1]) != null) {
-							config.removeAbility(player, Material.matchMaterial(args[1]));
+							config.removeAbility(player,
+									Material.matchMaterial(args[1]));
 							return true;
 						}
 					}
@@ -322,34 +324,37 @@ public class Bending extends JavaPlugin {
 			}
 
 			else if (args[0].equalsIgnoreCase("display")) {
-				if (!ConfigManager.bendToItem){
+				if (!ConfigManager.bendToItem) {
 					for (int i = 0; i <= 8; i++) {
 						Abilities a = config.getAbility(player, i);
 						if (a != null) {
-							String ability = config.getAbility(player, i).name();
-							sender.sendMessage("Slot " + (i + 1) + ": " + ability);
+							String ability = config.getAbility(player, i)
+									.name();
+							sender.sendMessage("Slot " + (i + 1) + ": "
+									+ ability);
 						}
 					}
 				} else {
-				
-					for (Material mat: Material.values()){
-						int i = mat.getId();
-						Abilities a = config.getAbility(player, i);
+
+					for (Material mat : Material.values()) {
+						Abilities a = config.getAbility(player, mat);
 						if (a != null) {
-							String ability = config.getAbility(player, i).name();
-							sender.sendMessage(mat.name().replaceAll("_", " ") + ": " + ability);
+							String ability = config.getAbility(player, mat)
+									.name();
+							sender.sendMessage(mat.name().replaceAll("_", " ")
+									+ ": " + ability);
 						}
 					}
 				}
 				return true;
 			} else if (args[0].equalsIgnoreCase("clear")) {
-				if (!ConfigManager.bendToItem){
+				if (!ConfigManager.bendToItem) {
 					for (int i = 0; i <= 8; i++) {
 						config.removeAbility(player, i);
 
 					}
 				} else {
-					for (Material mat: Material.values()){
+					for (Material mat : Material.values()) {
 						config.removeAbility(player, mat.getId());
 					}
 				}
@@ -364,14 +369,15 @@ public class Bending extends JavaPlugin {
 				if (ability != null) {
 
 					int slot = (player).getInventory().getHeldItemSlot();
-					Material mat = player.getInventory().getItemInHand().getType();
+					Material mat = player.getInventory().getItemInHand()
+							.getType();
 
 					if (config.isBender(player, BendingType.Water)
 							&& Abilities.isWaterbending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -383,8 +389,8 @@ public class Bending extends JavaPlugin {
 							&& Abilities.isAirbending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -396,8 +402,8 @@ public class Bending extends JavaPlugin {
 							&& Abilities.isEarthbending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -409,8 +415,8 @@ public class Bending extends JavaPlugin {
 							&& Abilities.isFirebending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -421,8 +427,8 @@ public class Bending extends JavaPlugin {
 					if (sender.isOp() && ability == Abilities.AvatarState) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "

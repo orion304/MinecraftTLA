@@ -232,7 +232,10 @@ public class Wave {
 					boolean knockback = false;
 					for (Block block : wave.keySet()) {
 						if (entity.getLocation().distance(block.getLocation()) <= 2) {
-							if (entity instanceof LivingEntity && freeze) {
+							if (entity instanceof LivingEntity
+									&& freeze
+									&& entity.getEntityId() != player
+											.getEntityId()) {
 								activatefreeze = true;
 								frozenlocation = entity.getLocation();
 								freeze();

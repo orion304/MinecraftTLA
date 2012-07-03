@@ -24,6 +24,7 @@ permissions:
       bending.air.Passive: true
       bending.air.AirSpout: true
       bending.air.AirScooter: true
+      bending.air.AirBurst: true
   bending.fire.*:
     description: Allows all fire bending.
     children:
@@ -56,10 +57,9 @@ permissions:
       bending.earth.Catapult: true
       bending.earth.CompactColumn: true
       bending.earth.EarthBlast: true
-      bending.earth.EarthColumn: true
+      bending.earth.RaiseEarth: true
       bending.earth.EarthGrab: true
       bending.earth.EarthTunnel: true
-      bending.earth.EarthWall: true
       bending.earth.Collapse: true
       bending.earth.Passive: true
       bending.earth.Tremorsense: true
@@ -102,8 +102,8 @@ permissions:
   bending.air.AirBlast:
     description: Allows the use of AirBlast.
     default: true
-  bending.air.Passive:
-    description: Allows the use of Passive.
+  bending.air.AirBurst:
+    description: Allows the use of AirBurst.
     default: true
   bending.fire.ArcOfFire:
     description: Allows the use of ArcOfFire.
@@ -135,14 +135,11 @@ permissions:
   bending.fire.WallOfFire:
     description: Allows the use of WallOfFire.
     default: true
-  bending.water.Freeze:
+  bending.water.FreezeMelt:
     description: Allows the use of Freeze.
     default: true
   bending.water.HealingWaters:
     description: Allows the use of HealingWaters.
-    default: true
-  bending.water.Melt:
-    description: Allows the use of Melt.
     default: true
   bending.water.Plantbending:
     description: Allows the use of Plantbending.
@@ -177,8 +174,8 @@ permissions:
   bending.earth.EarthBlast:
     description: Allows the use of EarthBlast.
     default: true
-  bending.earth.EarthColumn:
-    description: Allows the use of EarthColumn.
+  bending.earth.RaiseEarth:
+    description: Allows the use of RaiseEarth.
     default: true
   bending.earth.Passive:
     description: Allows the use of EarthPassive.
@@ -186,12 +183,18 @@ permissions:
   bending.earth.EarthTunnel:
     description: Allows the use of EarthTunnel.
     default: true
-  bending.earth.EarthWall:
-    description: Allows the use of EarthWall.
-    default: true
-  bending.earth.PatchTheEarth:
+  bending.earth.Collapse:
     description: Allows the use of PatchTheEarth.
     default: true
+  bending.earth.EarthGrab:
+    description: Allows the use of EarthGrab.
+    default: true
+  bending.earth.Tremorsense:
+    description: Allows the use of Tremorsense.
+    default: true 
+  bending.earth.Shockwave:
+    description: Allows the use of Shockwave.
+    default: true 
   bending.AvatarState:
     description: Allows the use of AvatarState.
     default: op

@@ -71,6 +71,7 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
+		player.sendMessage("Test message!");
 		String append = "";
 		if ((player.isOp()) && ConfigManager.enabled) {
 			append = ConfigManager.getPrefix("Avatar");
@@ -194,7 +195,7 @@ public class BendingListener implements Listener {
 					new Collapse(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.EarthColumn) {
+				if (Tools.getBendingAbility(player) == Abilities.RaiseEarth) {
 					new EarthColumn(player);
 				}
 
@@ -204,10 +205,6 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.EarthGrab) {
 					new EarthGrab(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.EarthWall) {
-					new EarthWall(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
@@ -330,6 +327,10 @@ public class BendingListener implements Listener {
 				new EarthTunnel(player);
 			}
 
+			if (Tools.getBendingAbility(player) == Abilities.RaiseEarth) {
+				new EarthWall(player);
+			}
+
 			if (Tools.getBendingAbility(player) == Abilities.WaterWall) {
 				WaterWall.form(player);
 			}
@@ -424,6 +425,9 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onBlockMeltEvent(BlockFadeEvent event) {
 		Block block = event.getBlock();
+		if (block.getType() == Material.FIRE) {
+			return;
+		}
 		event.setCancelled(!WalkOnWater.canThaw(block));
 		if (!event.isCancelled()) {
 			event.setCancelled(!WaterManipulation.canPhysicsChange(block));
@@ -432,7 +436,7 @@ public class BendingListener implements Listener {
 			event.setCancelled(FreezeMelt.frozenblocks.containsKey(block));
 		}
 		if (!event.isCancelled()) {
-			event.setCancelled(Wave.canThaw(block));
+			event.setCancelled(!Wave.canThaw(block));
 		}
 	}
 

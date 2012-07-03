@@ -276,7 +276,7 @@ public class BendingPlayers {
 	}
 
 	public void setAbility(Player player, Abilities ability, Material mat) {
-		String setter = player.getName() + "<Bind" + mat.getId() + ">";
+		String setter = player.getName() + "<Bind" + mat.name() + ">";
 		bendingPlayers.set(setter, ability.name());
 		save();
 	}
@@ -300,7 +300,7 @@ public class BendingPlayers {
 	// Bind to item
 
 	public Abilities getAbility(Player player, Material mat) {
-		String setter = player.getName() + "<Bind" + mat.getId() + ">";
+		String setter = player.getName() + "<Bind" + mat.name() + ">";
 		String ability = bendingPlayers.getString(setter, "");
 
 		for (Abilities a : Abilities.values()) {
@@ -339,7 +339,7 @@ public class BendingPlayers {
 	}
 	
 	public void removeAbility(Player player, Material mat) {
-		String setter = player.getName() + "<Bind" + mat.getId() + ">";
+		String setter = player.getName() + "<Bind" + mat.name() + ">";
 		bendingPlayers.set(setter, null);
 		save();
 	}

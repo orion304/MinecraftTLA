@@ -15,8 +15,10 @@ public class HeatMelt {
 	private static final int radius = ConfigManager.heatMeltRadius;
 
 	public HeatMelt(Player player) {
-		Location location = Tools.getTargetedLocation(player, range);
-		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
+		Location location = Tools.getTargetedLocation(player,
+				(int) Tools.firebendingDayAugment(range, player.getWorld()));
+		for (Block block : Tools.getBlocksAroundPoint(location,
+				(int) Tools.firebendingDayAugment(radius, player.getWorld()))) {
 			if (Tools.isMeltable(block)) {
 				Melt.melt(block);
 			} else if (isHeatable(block)) {

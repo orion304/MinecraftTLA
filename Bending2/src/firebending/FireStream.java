@@ -27,7 +27,7 @@ public class FireStream {
 
 	private static int ID = Integer.MIN_VALUE;
 	private static double speed = ConfigManager.fireStreamSpeed;
-	private static double range = ConfigManager.fireStreamRange;
+	private static double defaultrange = ConfigManager.fireStreamRange;
 	private static long interval = (long) (1000. / speed);
 
 	private Player player;
@@ -36,6 +36,7 @@ public class FireStream {
 	private Vector direction;
 	private int id;
 	private long time;
+	private double range = defaultrange;
 
 	public FireStream(Player player) {
 		if (timers.containsKey(player)) {
@@ -43,6 +44,7 @@ public class FireStream {
 				return;
 			}
 		}
+		range = Tools.firebendingDayAugment(defaultrange, player.getWorld());
 		this.player = player;
 		location = player.getLocation();
 		direction = player.getEyeLocation().getDirection();
@@ -64,6 +66,7 @@ public class FireStream {
 	}
 
 	public FireStream(Location location, Vector direction, Player player) {
+		range = Tools.firebendingDayAugment(defaultrange, player.getWorld());
 		this.player = player;
 		origin = location.clone();
 		this.location = origin.clone();
