@@ -76,4 +76,8 @@ public class EarthGrab {
 			}
 		}
 	}
+	
+	public static String getDescription(){
+		return "To use, simply left-click while targeting a creature within range. This ability will erect a circle of earth to trap the creature in.";
+	}
 }

@@ -113,5 +113,9 @@ public class AirSuction {
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
 	}
+	
+	public static String getDescription(){
+		return "To use, simply left-click in a direction. A gust of wind will originate as far as it can in that direction and flow towards you, sucking anything in its path harmlessly with it. Skilled benders can use this technique to pull items from precarious locations.";
+	}
 
 }

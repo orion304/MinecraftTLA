@@ -46,5 +46,9 @@ public class ArcOfFire {
 			new FireStream(location, direction, player);
 		}
 	}
+	
+	public static String getDescription(){
+		return "To use, simply left-click in any direction. An entire arc of fire will flow from your location, igniting anything in its path.";
+	}
 
 }
