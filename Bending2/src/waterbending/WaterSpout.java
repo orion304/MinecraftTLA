@@ -77,9 +77,7 @@ public class WaterSpout {
 				if (blocki.getType() == Material.WATER
 						|| blocki.getType() == Material.STATIONARY_WATER)
 					return i;
-				if (blocki.getType() == Material.ICE
-						|| blocki.getType() == Material.SNOW
-						|| blocki.getType() == Material.SNOW_BLOCK) {
+				if (blocki.getType() == Material.ICE) {
 					blocki.setType(Material.WATER);
 					blocki.setData(full);
 					return i;

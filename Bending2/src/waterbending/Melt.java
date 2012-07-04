@@ -15,6 +15,8 @@ public class Melt {
 	private static final int defaultradius = FreezeMelt.defaultradius;
 	private static final int defaultevaporateradius = 3;
 
+	private static final byte full = 0x0;
+
 	public Melt(Player player) {
 		int range = (int) Tools.waterbendingNightAugment(defaultrange,
 				player.getWorld());
@@ -47,9 +49,11 @@ public class Melt {
 		if (Tools.isMeltable(block)) {
 			if (FreezeMelt.frozenblocks.containsKey(block)) {
 				FreezeMelt.thaw(block);
+			} else if (!Wave.canThaw(block)) {
+				Wave.thaw(block);
 			} else {
 				block.setType(Material.WATER);
-				block.setData((byte) 0x7);
+				block.setData(full);
 			}
 		}
 		if (block.getType() == Material.SNOW) {

@@ -43,6 +43,7 @@ public class ConfigManager {
 	public static double airSwipeRadius = 2;
 	public static double airSwipePush = 1;
 	public static long airSwipeCooldown = 1000;
+	public static double airScooterSpeed = 1;
 	public static double tornadoRadius = 10;
 	public static double tornadoHeight = 25;
 	public static double tornadoRange = 25;
@@ -100,8 +101,7 @@ public class ConfigManager {
 	public static double waveHorizontalPush = 1;
 	public static double waveVerticalPush = 0.2;
 	public static long globalCooldown = 500;
-	public static long fastSwimmingInterval = 450;
-	public static double fastSwimmingFactor = 0.4D;
+	public static double fastSwimmingFactor = 0.7;
 	public static double nightFactor = 1.5;
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
@@ -194,6 +194,8 @@ public class ConfigManager {
 				.getDouble("Properties.Air.Tornado.Mob-Push-Factor");
 		tornadoPlayerPush = config
 				.getDouble("Properties.Air.Tornado.Player-Push-Factor");
+		// Air Scooter
+		airScooterSpeed = config.getDouble("Properties.Air.AirScooter.Speed");
 		// EARTH
 		// Catapult
 		catapultLength = config.getInt("Properties.Earth.Catapult.Length");
@@ -297,8 +299,6 @@ public class ConfigManager {
 				.getDouble("Properties.Water.Wave.Vertical-Push-Force");
 
 		// Fast Swimming
-		fastSwimmingInterval = config
-				.getLong("Properties.Water.FastSwimming.Interval");
 		fastSwimmingFactor = config
 				.getDouble("Properties.Water.FastSwimming.Factor");
 
@@ -369,6 +369,8 @@ public class ConfigManager {
 		config.set("Properties.Air.Tornado.Range", 25);
 		config.set("Properties.Air.Tornado.Mob-Push-Factor", 1);
 		config.set("Properties.Air.Tornado.Player-Push-Factor", 1);
+
+		config.set("Properties.Air.AirScooter.Speed", 1);
 
 		config.set("Properties.Earth.Catapult.Length", 7);
 		config.set("Properties.Earth.Catapult.Speed", 12);
@@ -449,7 +451,6 @@ public class ConfigManager {
 		config.set("Properties.Water.Wave.Horizontal-Push-Force", 1);
 		config.set("Properties.Water.Wave.Vertical-Push-Force", 0.2);
 
-		config.set("Properties.Water.FastSwimming.Interval", 300);
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);

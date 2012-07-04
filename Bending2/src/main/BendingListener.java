@@ -179,7 +179,7 @@ public class BendingListener implements Listener {
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.AirScooter
-						&& player.isSprinting()) {
+						&& player.isOp()) {
 					new AirScooter(player);
 				}
 
