@@ -549,6 +549,8 @@ public class Tools {
 		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 		// for (Block b: lb){
 		Block b = player.getLocation().getBlock();
+		if (!player.isOnline())
+			return false;
 		Block c = player.getTargetBlock(null, 20);
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {

@@ -6,9 +6,11 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -42,6 +44,7 @@ public class WaterManipulation {
 	private Vector targetdirection = null;
 	private boolean falling = false;
 	private boolean settingup = false;
+	private boolean targetting = false;
 	private long time;
 	private int damage = defaultdamage;
 
@@ -99,6 +102,7 @@ public class WaterManipulation {
 							Tools.getTransparentEarthbending(), (int) range)
 							.getLocation();
 				} else {
+					targetting = true;
 					targetdestination = ((LivingEntity) target)
 							.getEyeLocation();
 					targetdestination.setY(targetdestination.getY() - 1);
@@ -193,8 +197,11 @@ public class WaterManipulation {
 				// sourceblock.setType(Material.AIR);
 				//
 				// sourceblock = location.getBlock();
+				if (!Tools.isSolid(sourceblock.getRelative(BlockFace.DOWN))
+						|| targetting) {
+					finalRemoveWater(sourceblock);
+				}
 
-				finalRemoveWater(sourceblock);
 				instances.remove(player.getEntityId());
 				return false;
 
@@ -225,7 +232,10 @@ public class WaterManipulation {
 					location = location.clone().add(direction);
 					block = location.getBlock();
 				}
-				if (block.getType() != Material.AIR) {
+				if (Tools.isTransparentToEarthbending(block)
+						&& !block.isLiquid()) {
+					block.breakNaturally(new ItemStack(Material.AIR));
+				} else if (block.getType() != Material.AIR) {
 					breakBlock();
 					return false;
 				}

@@ -46,7 +46,8 @@ public class Illumination {
 			block.setType(Material.GLOWSTONE);
 			blocks.put(block, player);
 		} else if (FireStream.isIgnitable(standingblock)
-				&& !block.equals(standblock) && !blocks.contains(standblock)) {
+				&& !block.equals(standblock) && !blocks.contains(standblock)
+				&& Tools.isSolid(standblock)) {
 			revert();
 			block = standblock;
 			normaltype = block.getType();
