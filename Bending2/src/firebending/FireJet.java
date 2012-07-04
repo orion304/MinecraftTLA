@@ -14,7 +14,7 @@ import tools.Tools;
 public class FireJet {
 
 	public static ConcurrentHashMap<Player, FireJet> instances = new ConcurrentHashMap<Player, FireJet>();
-	private static final double factor = ConfigManager.fireJetSpeed;
+	private static final double defaultfactor = ConfigManager.fireJetSpeed;
 	private static final long defaultduration = ConfigManager.fireJetDuration;
 	private static final long cooldown = ConfigManager.fireJetCooldown;
 
@@ -23,6 +23,7 @@ public class FireJet {
 	private Player player;
 	private long time;
 	private long duration = defaultduration;
+	private double factor = defaultfactor;
 
 	public FireJet(Player player) {
 		if (instances.containsKey(player)) {
@@ -30,10 +31,13 @@ public class FireJet {
 			return;
 		}
 		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + cooldown) {
+			if (System.currentTimeMillis() < timers.get(player)
+					+ (long) ((double) cooldown / Tools
+							.getFirebendingDayAugment(player.getWorld()))) {
 				return;
 			}
 		}
+		factor = Tools.firebendingDayAugment(defaultfactor, player.getWorld());
 		Block block = player.getLocation().getBlock();
 		if (FireStream.isIgnitable(block) || AvatarState.isAvatarState(player)) {
 			player.setVelocity(player.getEyeLocation().getDirection().clone()
@@ -55,6 +59,10 @@ public class FireJet {
 	}
 
 	public void progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player);
+			return;
+		}
 		if ((Tools.isWater(player.getLocation().getBlock()) || System
 				.currentTimeMillis() > time + duration)
 				&& !AvatarState.isAvatarState(player)) {

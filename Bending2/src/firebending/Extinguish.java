@@ -12,11 +12,15 @@ import airbending.AirBlast;
 
 public class Extinguish {
 
-	private static double range = ConfigManager.extinguishRange;
-	private static double radius = ConfigManager.extinguishRadius;
+	private static double defaultrange = ConfigManager.extinguishRange;
+	private static double defaultradius = ConfigManager.extinguishRadius;
 	private static byte full = AirBlast.full;
 
 	public Extinguish(Player player) {
+		double range = Tools.firebendingDayAugment(defaultrange,
+				player.getWorld());
+		double radius = Tools.firebendingDayAugment(defaultradius,
+				player.getWorld());
 		for (Block block : Tools.getBlocksAroundPoint(
 				player.getTargetBlock(null, (int) range).getLocation(), radius)) {
 			if (block.getType() == Material.FIRE) {
@@ -48,5 +52,9 @@ public class Extinguish {
 		// Tools.verbose(player.getFireTicks());
 
 		return true;
+	}
+
+	public static String getDescription() {
+		return "While this ability is selected, the firebender becomes impervious to fire damage and cannot be ignited. If the user left-clicks with this ability, the targeted area will be extinguished, although it will leave any creature burning engulfed in flames.";
 	}
 }

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
@@ -12,6 +13,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -88,7 +90,7 @@ public class BendingListener implements Listener {
 				&& (ConfigManager.enabled)) {
 			append = ConfigManager.getPrefix("Water");
 		} else {
-			player.sendMessage("Using '/bending choose <element>' to get started!");
+			BendingManager.newplayers.add(player);
 		}
 		if (!(ConfigManager.compatibility) && (ConfigManager.enabled))
 			player.setDisplayName(append + player.getName());
@@ -195,7 +197,7 @@ public class BendingListener implements Listener {
 					new Collapse(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.EarthColumn) {
+				if (Tools.getBendingAbility(player) == Abilities.RaiseEarth) {
 					new EarthColumn(player);
 				}
 
@@ -205,10 +207,6 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.EarthGrab) {
 					new EarthGrab(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.EarthWall) {
-					new EarthWall(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
@@ -335,6 +333,10 @@ public class BendingListener implements Listener {
 				new EarthTunnel(player);
 			}
 
+			if (Tools.getBendingAbility(player) == Abilities.RaiseEarth) {
+				new EarthWall(player);
+			}
+
 			if (Tools.getBendingAbility(player) == Abilities.WaterWall) {
 				WaterWall.form(player);
 			}
@@ -429,6 +431,9 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onBlockMeltEvent(BlockFadeEvent event) {
 		Block block = event.getBlock();
+		if (block.getType() == Material.FIRE) {
+			return;
+		}
 		event.setCancelled(!WalkOnWater.canThaw(block));
 		if (!event.isCancelled()) {
 			event.setCancelled(!WaterManipulation.canPhysicsChange(block));
@@ -437,7 +442,7 @@ public class BendingListener implements Listener {
 			event.setCancelled(FreezeMelt.frozenblocks.containsKey(block));
 		}
 		if (!event.isCancelled()) {
-			event.setCancelled(Wave.canThaw(block));
+			event.setCancelled(!Wave.canThaw(block));
 		}
 	}
 
@@ -483,4 +488,19 @@ public class BendingListener implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onEntityExplode(EntityExplodeEvent event) {
+		for (Block block : event.blockList()) {
+			if (FreezeMelt.frozenblocks.containsKey(block)) {
+				FreezeMelt.thaw(block);
+			}
+			if (WalkOnWater.affectedblocks.containsKey(block)) {
+				WalkOnWater.thaw(block);
+			}
+			if (WaterWall.wallblocks.containsKey(block)) {
+				block.setType(Material.AIR);
+			}
+		}
+
+	}
 }

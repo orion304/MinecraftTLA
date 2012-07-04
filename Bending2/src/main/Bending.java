@@ -1,7 +1,11 @@
 package main;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.minecraft.server.EntityFireball;
@@ -15,11 +19,38 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import airbending.AirBlast;
+import airbending.AirBubble;
+import airbending.AirScooter;
+import airbending.AirShield;
+import airbending.AirSuction;
+import airbending.AirSwipe;
+import airbending.Tornado;
+
 import tools.Abilities;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Tools;
+import waterbending.FreezeMelt;
+import waterbending.HealingWaters;
+import waterbending.Plantbending;
+import waterbending.WalkOnWater;
+import waterbending.WaterManipulation;
+import waterbending.WaterSpout;
+import waterbending.WaterWall;
+import waterbending.Wave;
+import earthbending.Catapult;
+import earthbending.CompactColumn;
+import earthbending.EarthBlast;
+import earthbending.EarthColumn;
+import earthbending.EarthGrab;
+import earthbending.EarthTunnel;
+import firebending.ArcOfFire;
+import firebending.Extinguish;
+import firebending.FireStream;
 import firebending.Fireball;
+import firebending.HeatMelt;
+import firebending.RingOfFire;
 
 public class Bending extends JavaPlugin {
 
@@ -29,6 +60,7 @@ public class Bending extends JavaPlugin {
 	public final BendingManager manager = new BendingManager(this);
 	public final BendingListener listener = new BendingListener(this);
 	
+	private static Map<String, String> commands = new HashMap<String, String>();
 
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
@@ -66,6 +98,8 @@ public class Bending extends JavaPlugin {
 				+ " has been loaded.");
 
 		configManager.load(new File(getDataFolder(), "config.yml"));
+		
+		registerCommands();
 
 	}
 
@@ -73,6 +107,19 @@ public class Bending extends JavaPlugin {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
+	}
+	
+	private void registerCommands(){
+		commands.put("command.admin", "remove <player>");
+		commands.put("admin.reload", "reload");
+		commands.put("admin.permaremove", "permaremove <player>");
+		commands.put("command.choose", "choose <element>");
+		commands.put("admin.choose", "choose <player> <element>");
+		commands.put("admin.add", "add <element>");
+		commands.put("command.displayelement", "display <element>");
+		commands.put("command.clear", "clear");
+		commands.put("command.display", "display");
+		commands.put("command.bind", "bind <ability>");
 	}
 
 	private void removeFireballs() {
@@ -313,13 +360,15 @@ public class Bending extends JavaPlugin {
 						&& sender.hasPermission("bending.commnd.clear")) {
 					if (!ConfigManager.bendToItem){
 						if (Integer.parseInt(args[1]) > 0
-								&& Integer.parseInt(args[1]) < 10){
-							config.removeAbility(player, Integer.parseInt(args[1]) - 1);
+								&& Integer.parseInt(args[1]) < 10) {
+							config.removeAbility(player,
+									Integer.parseInt(args[1]) - 1);
 							return true;
 						}
-					} else { 
+					} else {
 						if (Material.matchMaterial(args[1]) != null) {
-							config.removeAbility(player, Material.matchMaterial(args[1]));
+							config.removeAbility(player,
+									Material.matchMaterial(args[1]));
 							return true;
 						}
 					}
@@ -332,29 +381,34 @@ public class Bending extends JavaPlugin {
 					for (int i = 0; i <= 8; i++) {
 						Abilities a = config.getAbility(player, i);
 						if (a != null) {
-							String ability = config.getAbility(player, i).name();
-							sender.sendMessage("Slot " + (i + 1) + ": " + ability);
+							String ability = config.getAbility(player, i)
+									.name();
+							sender.sendMessage("Slot " + (i + 1) + ": "
+									+ ability);
 						}
 					}
 				} else {
-				
-					for (Material mat: Material.values()){
+
+
+					for (Material mat : Material.values()) {
 						Abilities a = config.getAbility(player, mat);
 						if (a != null) {
-							String ability = config.getAbility(player, mat).name();
-							sender.sendMessage(mat.name().replaceAll("_", " ") + ": " + ability);
+							String ability = config.getAbility(player, mat)
+									.name();
+							sender.sendMessage(mat.name().replaceAll("_", " ")
+									+ ": " + ability);
 						}
 					}
 				}
 				return true;
 			} else if (args[0].equalsIgnoreCase("clear")) {
-				if (!ConfigManager.bendToItem){
+				if (!ConfigManager.bendToItem) {
 					for (int i = 0; i <= 8; i++) {
 						config.removeAbility(player, i);
 
 					}
 				} else {
-					for (Material mat: Material.values()){
+					for (Material mat : Material.values()) {
 						config.removeAbility(player, mat.getId());
 					}
 				}
@@ -370,14 +424,15 @@ public class Bending extends JavaPlugin {
 				if (ability != null) {
 
 					int slot = (player).getInventory().getHeldItemSlot();
-					Material mat = player.getInventory().getItemInHand().getType();
+					Material mat = player.getInventory().getItemInHand()
+							.getType();
 
 					if (config.isBender(player, BendingType.Water)
 							&& Abilities.isWaterbending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -389,8 +444,8 @@ public class Bending extends JavaPlugin {
 							&& Abilities.isAirbending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -402,8 +457,8 @@ public class Bending extends JavaPlugin {
 							&& Abilities.isEarthbending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -415,8 +470,8 @@ public class Bending extends JavaPlugin {
 							&& Abilities.isFirebending(ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -427,8 +482,8 @@ public class Bending extends JavaPlugin {
 					if (sender.hasPermission("bending.admin.avatarstate") && ability == Abilities.AvatarState) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
-							sender.sendMessage(ability.name() + " bound to slot "
-									+ (slot + 1));
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
 							sender.sendMessage(ability.name() + " bound to "
@@ -438,84 +493,172 @@ public class Bending extends JavaPlugin {
 					}
 				}
 			}
-			if (args[0].equalsIgnoreCase("help")
-					&& sender.hasPermission("bending.command.help")){
+			if (args[0].equalsIgnoreCase("help") && sender.hasPermission("bending.command.help")){
+				int pages = 0;
 				int page = 1;
-				if (args.length > 1){
-				      try {
-				          page = Integer.parseInt(args[1]);
-				        }
-				        catch (NumberFormatException e) {
-				        }
-				}
-				int i = 1;
-				sender.sendMessage(ChatColor.AQUA + "======================Commands======================");
-				if (sender.hasPermission("bending.command.remove") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending remove");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.admin.reload") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending reload");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.admin.permaremove") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending permaremove <player>");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.command.choose") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending choose <element>");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.admin.choose") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending choose <player> <element>");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.admin.add") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending add <element>");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.command.displayelement") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending display <element>");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission(" bending.commnd.clear") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending clear");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.command.display") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending display");
-					i++;
-				} else {
-					i++;
-				}
-				if (sender.hasPermission("bending.command.bind") && i < page * 8 && i > (page * 8) - 8){
-					sender.sendMessage("/bending bind <ability>");
-					i++;
-				} else {
-					i++;
-				}
-				sender.sendMessage(ChatColor.AQUA + "=======================Page " + page + "========================");
-				return true;
+				List<String> command = new ArrayList<String>();
+					for (String s: commands.keySet()){
+						if (sender.hasPermission("bending." + s)){
+							command.add(commands.get(s));
+						}
+					}
+					if (args.length > 1){
+						if (Abilities.getAbility(args[1]) != null){
+							ChatColor cc = null;
+							if (Abilities.isAirbending(Abilities.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color.get("Air"));
+							if (Abilities.isFirebending(Abilities.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color.get("Fire"));
+							if (Abilities.isEarthbending(Abilities.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color.get("Earth"));
+							if (Abilities.isWaterbending(Abilities.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color.get("Water"));
+							sender.sendMessage(("                                                " + cc + Abilities.getAbility(args[1]).name()));
+							switch(Abilities.getAbility(args[1])){
+								case AirBlast: sender.sendMessage(cc + AirBlast.getDescription());
+								break;
+								case AirBubble: sender.sendMessage(cc + AirBubble.getDescription());
+								break;
+								case AirShield: sender.sendMessage(cc + AirShield.getDescription());
+								break;
+								case AirSuction: sender.sendMessage(cc + AirSuction.getDescription());
+								break;
+								case AirSwipe: sender.sendMessage(cc + AirSwipe.getDescription());
+								break;
+								case Tornado: sender.sendMessage(cc + Tornado.getDescription());
+								break;
+								case AirScooter: sender.sendMessage(cc + AirScooter.getDescription());
+								break;
+								case Catapult: sender.sendMessage(cc + Catapult.getDescription());
+								break;
+								case RaiseEarth: sender.sendMessage(cc + EarthColumn.getDescription());
+								break;
+								case EarthGrab: sender.sendMessage(cc + EarthGrab.getDescription());
+								break;
+								case EarthTunnel: sender.sendMessage(cc + EarthTunnel.getDescription());
+								break;
+								case CompactColumn: sender.sendMessage(cc + CompactColumn.getDescription());
+								break;
+								case EarthBlast: sender.sendMessage(cc + EarthBlast.getDescription());
+								break;
+								//case Collapse: sender.sendMessage(cc + Collapse.getDescription());
+								//case Tremorsense: sender.sendMessage(cc + Tremorsense.getDescription());
+								case ArcOfFire: sender.sendMessage(cc + ArcOfFire.getDescription());
+								break;
+								case Extinguish: sender.sendMessage(cc + Extinguish.getDescription());
+								break;
+								case Fireball: sender.sendMessage(cc + Fireball.getDescription());
+								break;
+								case FireStream: sender.sendMessage(cc + FireStream.getDescription());
+								break;
+								case HeatMelt: sender.sendMessage(cc + HeatMelt.getDescription());
+								break;
+								case RingOfFire: sender.sendMessage(cc + RingOfFire.getDescription());
+								break;
+								//case FireJet: sender.sendMessage(cc + FireJet.getDescription());
+								//case Illumination: sender.sendMessage(cc + Illumination.getDescription());
+								case WaterBubble: sender.sendMessage(cc + AirBubble.getDescription());
+								break;
+								case FreezeMelt: sender.sendMessage(cc + FreezeMelt.getDescription());
+								break;
+								case HealingWaters: sender.sendMessage(cc + HealingWaters.getDescription());
+								break;
+								case Plantbending: sender.sendMessage(cc + Plantbending.getDescription());
+								break;
+								case WalkOnWater: sender.sendMessage(cc + WalkOnWater.getDescription());
+								break;
+								case WaterManipulation: sender.sendMessage(cc + WaterManipulation.getDescription());
+								break;
+								case WaterSpout: sender.sendMessage(cc + WaterSpout.getDescription());
+								break;
+								case WaterWall: sender.sendMessage(cc + WaterWall.getDescription());
+								break;
+								case Wave: sender.sendMessage(cc + Wave.getDescription());
+								break;
+								//case AvatarState: sender.sendMessage(cc + AvatarState.getDescription());
+							}
+							return true;
+						}
+						for (String s: command){
+							if (args[1].equalsIgnoreCase(s.split(" ")[0])){
+								sender.sendMessage("                                /bending " + (s.split(" ")[0]));
+								String msg = null;
+								if ((s.split(" ")[0]) == "choose "
+								&& sender.hasPermission("bending.command.choose")){
+									msg = "The command /bending choose <element> let you choose one of the four elements (air, fire, water, air) each having different abilities";
+									if (sender.hasPermission("bending.admin.choose"))
+										msg = msg + "The command can also be used to set other people bending element like so /bending choose <player> <element>";
+									sender.sendMessage(msg);
+								}else if ((s.split(" ")[0]) == "bind"
+									&& sender.hasPermission("bending.command.bind")){
+									String append = "a slot";
+									if (ConfigManager.bendToItem){
+										append = "an item";
+									}
+									msg = "The command /bending <bind> <ability> is used to bind an ability to " + append +".";
+								}else if ((s.split(" ")[0]) == "help"){
+									
+								}else if ((s.split(" ")[0]) == "remove"
+								&& sender.hasPermission("bending.admin.remove")){
+									sender.sendMessage("The command /bending remove <player> will remove the player bending. It can also be used to lift the permaremove of a player.");
+								}else if ((s.split(" ")[0]) == "reload"
+								&& sender.hasPermission("bending.admin.reload")){
+									player.sendMessage("The command /bending reload will allow you to reload the configuration, so you can make change while the server is running and don't have to restart/reload it.");
+								}else if ((s.split(" ")[0]) == "permaremove"
+									&& sender.hasPermission("bending.admin.permaremove")){
+									sender.sendMessage("The command /bending permaremove <player> will permanantly remove someone's bending and won't allow him to choose once again until you do /bending remove <player> or manually set his bending");
+								}else if ((s.split(" ")[0]) == "add"
+								&& sender.hasPermission("bending.admin.add")){
+									sender.sendMessage("The command /bending add <element> allow you to add elements to the one you aleredy have. It can be used to stack all for eleents at once.");
+								}else if ((s.split(" ")[0]) == "display"
+								&& sender.hasPermission("bending.command.display")){
+									msg = ("The command /bending display allows you to see a list of your binding so you can remember where you binded what.");
+									if (sender.hasPermission("bending.command.displayelement")){
+										msg = msg + " The command /bending display <element> can allow you to see a list of abilities an bending element has.";
+									}
+									sender.sendMessage(msg);
+								}
+									
+								return true;
+							}
+						}
+						
+						
+					try {
+						page = Integer.parseInt(args[1]);
+					} catch (NumberFormatException e) {
+						page = -1;
+					}
+					}
+					if (page != -1){
+					pages = command.size() / 8;
+					if (command.size() % 8 != 0)
+						pages++;
+					
+					if (page > pages){
+						if (pages > 1){
+						sender.sendMessage(ChatColor.RED + "There's only "+ pages +" pages of help");
+						}else{
+							sender.sendMessage(ChatColor.RED + "There's only "+ pages +" page of help");	
+						}
+						return true;
+					}
+					sender.sendMessage("=======================Help===========================");
+					for (int i = 1; i<= 8; i++){
+						if (command.size() > (i + (8 * page) - 9)){
+						   String comname = "/bending " + command.get((i + (8 * page) - 9));
+						sender.sendMessage(comname);
+						}
+					}
+					sender.sendMessage("=====================Page " + page+ "/" + pages + "========================");
+					return true;
+					}
 			}
 		}
-
-		return false;
+		sender.sendMessage("Use /bending help <page> if you want to see a list of permissions.");
+		sender.sendMessage("Use /bending help <ability> if you want to see how to use it.");
+		sender.sendMessage("Use /bending help <command> if you need help with a command.");
+		return true;
 
 	}
 }

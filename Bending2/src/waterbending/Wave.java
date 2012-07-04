@@ -32,7 +32,7 @@ public class Wave {
 	private static final double factor = ConfigManager.waveHorizontalPush;
 	private static final double upfactor = ConfigManager.waveVerticalPush;
 
-	private static double range = 20;
+	private static double defaultrange = 20;
 	// private static int damage = 5;
 	// private static double speed = 1.5;
 
@@ -50,6 +50,7 @@ public class Wave {
 	private boolean freeze = false;
 	private boolean activatefreeze = false;
 	private Location frozenlocation;
+	private double range = defaultrange;
 
 	public Wave(Player player) {
 		this.player = player;
@@ -61,8 +62,10 @@ public class Wave {
 			}
 		}
 		if (AvatarState.isAvatarState(player)) {
-			maxradius = AvatarState.getValue(radius);
+			maxradius = AvatarState.getValue(maxradius);
 		}
+		maxradius = Tools
+				.waterbendingNightAugment(maxradius, player.getWorld());
 		if (prepare()) {
 			if (instances.containsKey(player.getEntityId())) {
 				instances.get(player.getEntityId()).cancel();
@@ -110,6 +113,7 @@ public class Wave {
 
 	public void moveWater() {
 		if (sourceblock != null) {
+			range = Tools.waterbendingNightAugment(range, player.getWorld());
 			Entity target = Tools.getTargettedEntity(player, range);
 			if (target == null) {
 				targetdestination = player.getTargetBlock(
@@ -150,6 +154,10 @@ public class Wave {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
 
@@ -232,7 +240,10 @@ public class Wave {
 					boolean knockback = false;
 					for (Block block : wave.keySet()) {
 						if (entity.getLocation().distance(block.getLocation()) <= 2) {
-							if (entity instanceof LivingEntity && freeze) {
+							if (entity instanceof LivingEntity
+									&& freeze
+									&& entity.getEntityId() != player
+											.getEntityId()) {
 								activatefreeze = true;
 								frozenlocation = entity.getLocation();
 								freeze();
@@ -369,6 +380,10 @@ public class Wave {
 			}
 		}
 		return true;
+	}
+	
+	public static String getDescription(){
+		return "To use, place your cursor over a waterbendable object (water, ice, plants if you have plantbending) and tap sneak (default: shift). Smoke will appear where you've selected, indicating the origin of your ability. After you have selected an origin, simply left-click in any direction and you will see your water spout off in that direction and form a large wave, knocking back all within its path. If you look towards a creature when you use this ability, it will target that creature.";
 	}
 
 }

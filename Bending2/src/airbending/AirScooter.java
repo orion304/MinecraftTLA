@@ -8,4 +8,8 @@ public class AirScooter {
 
 	}
 
+	
+	public static String getDescription(){
+		return "Bind this ability to a slot and on left click.... to be continued";
+	}
 }

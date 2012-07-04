@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -24,7 +25,7 @@ public class WaterManipulation {
 	private static final byte half = 0x4;
 
 	private static double range = ConfigManager.waterManipulationRange;
-	private static int damage = ConfigManager.waterdmg;
+	private static int defaultdamage = ConfigManager.waterdmg;
 	private static double speed = ConfigManager.waterManipulationSpeed;
 	// private static double speed = 1.5;
 
@@ -42,6 +43,7 @@ public class WaterManipulation {
 	private boolean falling = false;
 	private boolean settingup = false;
 	private long time;
+	private int damage = defaultdamage;
 
 	public WaterManipulation(Player player) {
 		this.player = player;
@@ -149,6 +151,10 @@ public class WaterManipulation {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
 
@@ -229,7 +235,11 @@ public class WaterManipulation {
 							&& entity.getEntityId() != player.getEntityId()) {
 						entity.setVelocity(entity.getVelocity().clone()
 								.add(direction));
-						Tools.damageEntity(player, entity, damage);
+						if (AvatarState.isAvatarState(player))
+							damage = AvatarState.getValue(damage);
+						Tools.damageEntity(player, entity, (int) Tools
+								.waterbendingNightAugment(damage,
+										player.getWorld()));
 						progressing = false;
 					}
 				}
@@ -349,6 +359,11 @@ public class WaterManipulation {
 
 	public static boolean canBubbleWater(Block block) {
 		return canPhysicsChange(block);
+	}
+
+	public static String getDescription() {
+		// TODO Auto-generated method stub
+		return "To use, place your cursor over a waterbendable object and tap sneak (default: shift). Smoke will appear where you've selected, indicating the origin of your ability. After you have selected an origin, simply left-click in any direction and you will see your water spout off in that direction, slicing any creature in its path. If you look towards a creature when you use this ability, it will target that creature. A collision from Water Manipulation both knocks the target back and deals some damage. You cannot have multiple of these abilities flying at the same time.";
 	}
 
 }

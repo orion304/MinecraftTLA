@@ -20,7 +20,7 @@ public class Tornado {
 	private static double radius = ConfigManager.tornadoRadius;
 	private static double height = ConfigManager.tornadoHeight;
 	private static double range = ConfigManager.tornadoRange;
-	private static int numberOfStreams = (int) (.3*(double)height);
+	private static int numberOfStreams = (int) (.3 * (double) height);
 	private static double NPCpushfactor = ConfigManager.tornadoMobPush;
 	private static double PCpushfactor = ConfigManager.tornadoPlayerPush;
 	// private static double speed = .75;
@@ -51,6 +51,10 @@ public class Tornado {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (!Tools.canBend(player, Abilities.Tornado)
 				|| player.getEyeLocation().getBlock().isLiquid()) {
 			instances.remove(player.getEntityId());
@@ -137,6 +141,11 @@ public class Tornado {
 
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
+	}
+	
+	public static String getDescription(){
+		return "To use, simply sneak (default: shift). This will create a swirling vortex at the targeted location. Any creature or object caught in the vortex will be launched up and out in some random direction. If another player gets caught in the vortex, the launching effect is minimal. Tornado can also be used to transport the user. If the user gets caught in his/her own tornado, his movements are much more manageable. Provided the user doesn't fall out of the vortex, it will take him to a maximum height and move him in the general direction he's looking. Skilled airbenders can scale anything with this ability.";
+
 	}
 
 }

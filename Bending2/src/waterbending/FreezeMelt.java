@@ -20,8 +20,10 @@ public class FreezeMelt {
 	public static final int defaultradius = ConfigManager.freezeMeltRadius;
 
 	public FreezeMelt(Player player) {
-		int range = defaultrange;
-		int radius = defaultradius;
+		int range = (int) Tools.waterbendingNightAugment(defaultrange,
+				player.getWorld());
+		int radius = (int) Tools.waterbendingNightAugment(defaultradius,
+				player.getWorld());
 		if (AvatarState.isAvatarState(player)) {
 			range = AvatarState.getValue(range);
 			// radius = AvatarState.getValue(radius);
@@ -68,11 +70,12 @@ public class FreezeMelt {
 			for (Player player : block.getWorld().getPlayers()) {
 				if (Tools.hasAbility(player, Abilities.FreezeMelt)
 						&& Tools.canBend(player, Abilities.FreezeMelt)) {
-					int range = defaultrange;
+					double range = Tools.waterbendingNightAugment(defaultrange,
+							player.getWorld());
 					if (AvatarState.isAvatarState(player)) {
 						range = AvatarState.getValue(range);
 					}
-					if (block.getLocation().distance(player.getLocation()) <= (double) range)
+					if (block.getLocation().distance(player.getLocation()) <= range)
 						return false;
 				}
 			}
@@ -95,6 +98,10 @@ public class FreezeMelt {
 
 	public static void removeAll() {
 		thawAll();
+	}
+	
+	public static String getDescription(){
+		return "To use, simply left-click. Any water you are looking at within range will instantly freeze over into solid ice. Provided you stay within range of the ice and do not unbind Freeze, that ice will not thaw. If, however, you do either of those the ice will instantly thaw. If you sneak (default: shift), anything around where you are looking at will instantly melt. Since this is a more favorable state for these things, they will never re-freeze unless they would otherwise by nature or some other bending ability. Additionally, if you target water with FreezeMelt, it will evaporate water around that block that is above sea level. ";
 	}
 
 }

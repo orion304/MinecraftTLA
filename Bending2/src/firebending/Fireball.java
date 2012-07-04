@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.ConfigManager;
+import tools.Tools;
 
 public class Fireball {
 
@@ -26,14 +27,22 @@ public class Fireball {
 		if (player.getEyeLocation().getBlock().isLiquid())
 			return;
 		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+			if (System.currentTimeMillis() < timers.get(player)
+					+ (long) ((double) soonesttime / Tools
+							.getFirebendingDayAugment(player.getWorld()))) {
 				return;
 			}
 		}
 
 		Location playerLoc = player.getEyeLocation();
-		Vector direction = player.getEyeLocation().getDirection().clone()
-				.normalize().multiply(speedfactor);
+		Vector direction = player
+				.getEyeLocation()
+				.getDirection()
+				.clone()
+				.normalize()
+				.multiply(
+						Tools.firebendingDayAugment(speedfactor,
+								player.getWorld()));
 		double dx = direction.getX();
 		double dy = direction.getY();
 		double dz = direction.getZ();
@@ -66,5 +75,9 @@ public class Fireball {
 		for (EntityFireball fireball : fireballs.keySet()) {
 			fireball.die();
 		}
+	}
+
+	public static String getDescription() {
+		return "To use, simply left-click in a direction. A large ball of fire will launch from your fist, exploding on contact and occasionally catching nearby things on fire, as well as destroying parts of the environment.";
 	}
 }

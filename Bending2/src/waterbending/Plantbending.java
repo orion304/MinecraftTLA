@@ -21,5 +21,8 @@ public class Plantbending {
 			block.setType(Material.WATER);
 		}
 	}
-
+	
+	public static String getDescription(){
+		return " Instead, provided you have Plantbending bound to any of your slots, it augments the rest of your abilities. Instead of being limited to water, snow and ice for sources of water, you can instead use any plant as a water source. So instead of focusing your ability on water, you could, for example, focus it on a block of leaves and it would suck the water out of the leaves for your other technique.";
+	}
 }

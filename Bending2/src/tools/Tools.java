@@ -15,6 +15,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -535,13 +537,13 @@ public class Tools {
 	}
 
 	public static boolean isRegionProtected(Player player, Abilities ability) {
-		Plugin p = Bukkit.getPluginManager()
-				.getPlugin("WorldGuard");
+		Plugin p = Bukkit.getPluginManager().getPlugin("WorldGuard");
 		if (p == null)
 			return false;
+		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
+				.getPlugin("WorldGuard");
 		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 		// for (Block b: lb){
-		WorldGuardPlugin wg = (WorldGuardPlugin)p;
 		Block b = player.getLocation().getBlock();
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
@@ -596,6 +598,52 @@ public class Tools {
 	public static ChatColor getColor(String input) {
 		return (ChatColor) colors.get(input.toLowerCase().replace("&", ""));
 
+	}
+
+	public static boolean isDay(World world) {
+		long time = world.getTime();
+		if (time >= 23500 || time <= 12500) {
+			return true;
+		}
+		return false;
+	}
+
+	public static double firebendingDayAugment(double value, World world) {
+		if (isDay(world)) {
+			return ConfigManager.dayFactor * value;
+		}
+		return value;
+	}
+
+	public static double getFirebendingDayAugment(World world) {
+		if (isDay(world))
+			return ConfigManager.dayFactor;
+		return 1;
+	}
+
+	public static double waterbendingNightAugment(double value, World world) {
+		if (isNight(world)) {
+			return ConfigManager.nightFactor * value;
+		}
+		return value;
+	}
+
+	public static double getWaterbendingNightAugment(World world) {
+		if (isNight(world))
+			return ConfigManager.nightFactor;
+		return 1;
+	}
+
+	public static boolean isNight(World world) {
+		if (world.getEnvironment() == Environment.NETHER
+				|| world.getEnvironment() == Environment.THE_END) {
+			return false;
+		}
+		long time = world.getTime();
+		if (time >= 12950 && time <= 23050) {
+			return true;
+		}
+		return false;
 	}
 
 	static {

@@ -186,6 +186,10 @@ public class WaterWall {
 	}
 
 	public boolean progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		if (!Tools.canBend(player, Abilities.WaterWall)) {
 			if (!forming)
 				removeWater(oldwater);
@@ -224,7 +228,8 @@ public class WaterWall {
 				Vector dir = player.getEyeLocation().getDirection();
 				Vector vec;
 				Block block;
-				for (double i = 0; i <= radius; i += 0.5) {
+				for (double i = 0; i <= Tools.waterbendingNightAugment(radius,
+						player.getWorld()); i += 0.5) {
 					for (double angle = 0; angle < 360; angle += 10) {
 						// loc.getBlock().setType(Material.GLOWSTONE);
 						vec = Tools.getOrthogonalVector(dir.clone(), angle, i);
@@ -408,6 +413,10 @@ public class WaterWall {
 
 	public static void thaw(Block block) {
 		finalRemoveWater(block);
+	}
+
+	public static String getDescription() {
+		return " To use, place your cursor over a waterbendable object and left-click. Smoke will appear where you've selected, indicating the origin of your ability. After you have selected an origin, simply sneak (default: shift) in any direction and you will see your water spout off in that direction, forming a small shield of water wherever you are looking, so long as you are still sneaking. Additionally, left-clicking while the shield is formed will turn the shield from water to ice and back again, as a toggle. To stop concentration on the shield, simply stop sneaking or change to a slot that does not have Water Wall bound to it.";
 	}
 
 }

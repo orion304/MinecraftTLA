@@ -16,8 +16,10 @@ public class Melt {
 	private static final int defaultevaporateradius = 3;
 
 	public Melt(Player player) {
-		int range = defaultrange;
-		int radius = defaultradius;
+		int range = (int) Tools.waterbendingNightAugment(defaultrange,
+				player.getWorld());
+		int radius = (int) Tools.waterbendingNightAugment(defaultradius,
+				player.getWorld());
 
 		if (AvatarState.isAvatarState(player)) {
 			range = AvatarState.getValue(range);
@@ -28,7 +30,8 @@ public class Melt {
 		if (Tools.isWater(player.getTargetBlock(null, range))
 				&& !(player.getLocation().getBlockY() <= 62)) {
 			evaporate = true;
-			radius = defaultevaporateradius;
+			radius = (int) Tools.waterbendingNightAugment(
+					defaultevaporateradius, player.getWorld());
 		}
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
 			if (evaporate) {
