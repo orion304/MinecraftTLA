@@ -120,7 +120,8 @@ public class FireStream {
 	public static boolean isIgnitable(Block block) {
 		Material[] overwriteable = { Material.SAPLING, Material.LONG_GRASS,
 				Material.DEAD_BUSH, Material.YELLOW_FLOWER, Material.RED_ROSE,
-				Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.FIRE };
+				Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.FIRE,
+				Material.SNOW };
 
 		if (Arrays.asList(overwriteable).contains(block.getType())) {
 			return true;

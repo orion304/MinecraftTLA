@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -189,7 +190,10 @@ public class EarthBlast {
 					location = location.clone().add(direction);
 					block = location.getBlock();
 				}
-				if (block.getType() != Material.AIR) {
+				if (Tools.isTransparentToEarthbending(block)
+						&& !block.isLiquid()) {
+					block.breakNaturally(new ItemStack(Material.AIR));
+				} else if (block.getType() != Material.AIR) {
 					breakBlock();
 					return false;
 				}
@@ -255,7 +259,7 @@ public class EarthBlast {
 
 	public static void removeAll() {
 		for (int id : instances.keySet()) {
-			instances.remove(id);
+			instances.get(id).breakBlock();
 		}
 	}
 	

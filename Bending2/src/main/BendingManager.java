@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import net.minecraft.server.EntityFireball;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -22,6 +21,7 @@ import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirPassive;
+import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSuction;
 import airbending.AirSwipe;
@@ -64,7 +64,7 @@ public class BendingManager implements Runnable {
 		manageEarthbending();
 		manageFirebending();
 		manageWaterbending();
-		manageMessages();
+		// manageMessages();
 		AvatarState.manageAvatarStates();
 
 	}
@@ -96,6 +96,8 @@ public class BendingManager implements Runnable {
 		for (int ID : Tornado.instances.keySet()) {
 			Tornado.progress(ID);
 		}
+
+		AirScooter.progressAll();
 	}
 
 	private void manageEarthbending() {
@@ -180,12 +182,12 @@ public class BendingManager implements Runnable {
 
 	}
 
-	private void manageMessages() {
-		for (Player player : newplayers) {
-			player.sendMessage(ChatColor.GOLD
-					+ "Use '/bending choose <element>' to get started!");
-		}
-		newplayers.clear();
-	}
+	// private void manageMessages() {
+	// for (Player player : newplayers) {
+	// player.sendMessage(ChatColor.GOLD
+	// + "Use '/bending choose <element>' to get started!");
+	// }
+	// newplayers.clear();
+	// }
 
 }

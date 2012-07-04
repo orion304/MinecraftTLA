@@ -52,7 +52,11 @@ public class Tools {
 	private static final Map<String, ChatColor> colors;
 
 	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
-			31, 32, 37, 38, 39, 40, 50, 51, 59, 83, 106 };
+			30, 31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
+
+	private static Integer[] nonOpaque = { 0, 6, 8, 9, 10, 11, 27, 28, 30, 31,
+			32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
+			78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
 
 	private static Integer[] plantIds = { 6, 18, 31, 32, 37, 38, 39, 40, 59,
 			81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
@@ -545,8 +549,13 @@ public class Tools {
 		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 		// for (Block b: lb){
 		Block b = player.getLocation().getBlock();
+		Block c = player.getTargetBlock(null, 20);
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
+			return true;
+		}
+		if (!(wg.getGlobalRegionManager().get(c.getLocation().getWorld())
+				.getApplicableRegions(c.getLocation()).allows(DefaultFlag.PVP))) {
 			return true;
 			// EntityDamageByEntityEvent damageEvent = new
 			// EntityDamageByEntityEvent(player, player,
@@ -644,6 +653,12 @@ public class Tools {
 			return true;
 		}
 		return false;
+	}
+
+	public static boolean isSolid(Block block) {
+		if (Arrays.asList(nonOpaque).contains(block.getTypeId()))
+			return false;
+		return true;
 	}
 
 	static {

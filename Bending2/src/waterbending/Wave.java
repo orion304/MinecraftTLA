@@ -367,9 +367,22 @@ public class Wave {
 	private void thaw() {
 		for (Block block : frozenblocks.keySet()) {
 			if (block.getType() == Material.ICE) {
-				block.setType(Material.AIR);
+				block.setType(Material.WATER);
+				block.setData((byte) 0x7);
 			}
 			frozenblocks.remove(block);
+		}
+	}
+
+	public static void thaw(Block block) {
+		for (int id : instances.keySet()) {
+			if (instances.get(id).frozenblocks.containsKey(block)) {
+				if (block.getType() == Material.ICE) {
+					block.setType(Material.WATER);
+					block.setData((byte) 0x7);
+				}
+				instances.get(id).frozenblocks.remove(block);
+			}
 		}
 	}
 
