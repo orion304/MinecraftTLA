@@ -140,7 +140,10 @@ public class Bending extends JavaPlugin {
 
 		if (cmd.getName().equalsIgnoreCase("bending")) {
 			if (Arrays.asList(args).isEmpty()) {
-				return false;
+				sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <page> if you want to see a list of permissions.");
+				sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <ability> if you want to see how to use it.");
+				sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <command> if you need help with a command.");
+				return true;
 			}
 
 			if (args[0].equalsIgnoreCase("remove") && args.length >= 2
@@ -238,13 +241,20 @@ public class Bending extends JavaPlugin {
 					}
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
-					return false;
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <page> if you want to see a list of permissions.");
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <ability> if you want to see how to use it.");
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <command> if you need help with a command.");
+					return true;
 				}
 			}
 
 			if (args[0].equalsIgnoreCase("add") && sender.hasPermission("bending.admin.add")) {
-				if (args.length == 1)
-					return false;
+				if (args.length == 1){
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <page> if you want to see a list of permissions.");
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <ability> if you want to see how to use it.");
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <command> if you need help with a command.");
+					return true;
+				}
 				if (args.length == 2) {
 					if (args[1].equalsIgnoreCase("water")
 							&& Tools.isBender(player, BendingType.Water)) {
@@ -323,7 +333,10 @@ public class Bending extends JavaPlugin {
 					}
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
-					return false;
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <page> if you want to see a list of permissions.");
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <ability> if you want to see how to use it.");
+					sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <command> if you need help with a command.");
+					return true;
 				}
 			}
 
@@ -581,36 +594,37 @@ public class Bending extends JavaPlugin {
 						}
 						for (String s: command){
 							if (args[1].equalsIgnoreCase(s.split(" ")[0])){
-								sender.sendMessage("                                /bending " + (s.split(" ")[0]));
-								String msg = null;
-								if ((s.split(" ")[0]) == "choose "
+								sender.sendMessage(ChatColor.AQUA + "                                        /bending " + (s.split(" ")[0]));
+								String msg = "";
+								if ((s.split(" ")[0]).equalsIgnoreCase("choose")
 								&& sender.hasPermission("bending.command.choose")){
-									msg = "The command /bending choose <element> let you choose one of the four elements (air, fire, water, air) each having different abilities";
+									msg = "The command /bending choose <element> let you choose one of the four elements (air, fire, water, air) each having different abilities. ";
 									if (sender.hasPermission("bending.admin.choose"))
 										msg = msg + "The command can also be used to set other people bending element like so /bending choose <player> <element>";
 									sender.sendMessage(msg);
-								}else if ((s.split(" ")[0]) == "bind"
+								}else if ((s.split(" ")[0]).equalsIgnoreCase("bind")
 									&& sender.hasPermission("bending.command.bind")){
 									String append = "a slot";
 									if (ConfigManager.bendToItem){
 										append = "an item";
 									}
 									msg = "The command /bending <bind> <ability> is used to bind an ability to " + append +".";
-								}else if ((s.split(" ")[0]) == "help"){
+									sender.sendMessage(msg);
+								}else if ((s.split(" ")[0].toLowerCase()).equalsIgnoreCase("help")){
 									
-								}else if ((s.split(" ")[0]) == "remove"
+								}else if ((s.split(" ")[0].toLowerCase()).equalsIgnoreCase("remove")
 								&& sender.hasPermission("bending.admin.remove")){
 									sender.sendMessage("The command /bending remove <player> will remove the player bending. It can also be used to lift the permaremove of a player.");
-								}else if ((s.split(" ")[0]) == "reload"
+								}else if ((s.split(" ")[0]).equalsIgnoreCase("reload")
 								&& sender.hasPermission("bending.admin.reload")){
 									player.sendMessage("The command /bending reload will allow you to reload the configuration, so you can make change while the server is running and don't have to restart/reload it.");
-								}else if ((s.split(" ")[0]) == "permaremove"
+								}else if ((s.split(" ")[0]).equalsIgnoreCase("permaremove")
 									&& sender.hasPermission("bending.admin.permaremove")){
 									sender.sendMessage("The command /bending permaremove <player> will permanantly remove someone's bending and won't allow him to choose once again until you do /bending remove <player> or manually set his bending");
-								}else if ((s.split(" ")[0]) == "add"
+								}else if ((s.split(" ")[0]).equalsIgnoreCase("add")
 								&& sender.hasPermission("bending.admin.add")){
 									sender.sendMessage("The command /bending add <element> allow you to add elements to the one you aleredy have. It can be used to stack all for eleents at once.");
-								}else if ((s.split(" ")[0]) == "display"
+								}else if ((s.split(" ")[0]).equalsIgnoreCase("display")
 								&& sender.hasPermission("bending.command.display")){
 									msg = ("The command /bending display allows you to see a list of your binding so you can remember where you binded what.");
 									if (sender.hasPermission("bending.command.displayelement")){
@@ -643,21 +657,21 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-					sender.sendMessage("=======================Help===========================");
+					sender.sendMessage(ChatColor.AQUA + "=======================Help===========================");
 					for (int i = 1; i<= 8; i++){
 						if (command.size() > (i + (8 * page) - 9)){
 						   String comname = "/bending " + command.get((i + (8 * page) - 9));
 						sender.sendMessage(comname);
 						}
 					}
-					sender.sendMessage("=====================Page " + page+ "/" + pages + "========================");
+					sender.sendMessage(ChatColor.AQUA + "=====================Page " + page+ "/" + pages + "========================");
 					return true;
 					}
 			}
 		}
-		sender.sendMessage("Use /bending help <page> if you want to see a list of permissions.");
-		sender.sendMessage("Use /bending help <ability> if you want to see how to use it.");
-		sender.sendMessage("Use /bending help <command> if you need help with a command.");
+		sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <page> if you want to see a list of permissions.");
+		sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <ability> if you want to see how to use it.");
+		sender.sendMessage(ChatColor.DARK_RED + "Use /bending help <command> if you need help with a command.");
 		return true;
 
 	}

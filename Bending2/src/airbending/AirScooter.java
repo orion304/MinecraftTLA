@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Tools;
@@ -94,8 +95,9 @@ public class AirScooter {
 		loc.setY((double) floorblock.getY() + 1.5);
 		// player.setFlying(true);
 		// player.teleport(loc.add(velocity));
+		player.setSprinting(false);
+		player.removePotionEffect(PotionEffectType.SPEED);
 		player.setVelocity(velocity);
-
 		if (System.currentTimeMillis() > time + interval) {
 			time = System.currentTimeMillis();
 			spinScooter();
