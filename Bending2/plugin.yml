@@ -71,6 +71,32 @@ permissions:
       bending.water.*: true
       bending.fire.*: true
       bending.air.*: true
+      
+  bending.admin:
+    description: Allows all commands.
+    children:
+      bending.admin.avatarstate: true
+      bending.admin.remove: true
+      bending.admin.reload: true
+      bending.admin.permaremove: true
+      bending.command.choose: true
+      bending.admin.rechoose: true
+      bending.admin.choose: true
+      bending.admin.add: true
+      bending.command.displayelement: true
+      bending.commnd.clear: true
+      bending.command.display: true
+      bending.command.bind: true
+      
+  bending.command:
+    description: Allows all user commands.
+    children:
+      bending.command.choose: true
+      bending.command.displayelement: true
+      bending.commnd.clear: true
+      bending.command.display: true
+      bending.command.bind: true
+      bending.command.help: true
 
   bending.air.AirSwipe:
     description: Allows the use of AirSwipe.
@@ -198,3 +224,42 @@ permissions:
   bending.AvatarState:
     description: Allows the use of AvatarState.
     default: op
+  bending.admin.avatarstate: 
+    description: Allows the use of AvatarState.
+    default: op 
+  bending.admin.remove: 
+    description: Allows the use of /bending remove <player>
+    default: op
+  bending.admin.reload:
+    description: Allows the use of /bending reload
+    default: op
+  bending.admin.permaremove:
+    description: Allows the use of /bending  permaremove <player>
+    default: op
+  bending.command.choose:
+    description: Allows the use of /bending choose <element>
+    default: true
+  bending.admin.rechoose:
+    description: Allows the use of /bending choose <element> after choosing one.
+    default: op
+  bending.admin.choose:
+    description: Allows the use of /bending choose <player> <element>
+    default: op
+  bending.admin.add: 
+    description: Allows the use of /bending add <element>
+    default: op
+  bending.command.displayelement: 
+    description: Allows the use of /bending display <element>
+    default: true
+  bending.commnd.clear: 
+    description: Allows the use of /bending clear 
+    default: true
+  bending.command.display:
+    description: Allows the use of /bending display
+    default: true
+  bending.command.bind:
+    description: Allows the use of /bending bind <ability>
+    default: true
+  bending.command.help:
+    description: Allows the use of /bending help
+    default: true

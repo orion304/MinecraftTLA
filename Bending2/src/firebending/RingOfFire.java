@@ -40,4 +40,8 @@ public class RingOfFire {
 		}
 	}
 
+	public static String getDescription() {
+		return "To use, simply left-click. A circle of fire will emanate from you, engulfing everything around you. Use with extreme caution.";
+	}
+
 }

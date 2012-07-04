@@ -61,6 +61,7 @@ import firebending.Fireball;
 import firebending.HeatMelt;
 import firebending.Illumination;
 import firebending.RingOfFire;
+import firebending.WallOfFire;
 
 public class BendingListener implements Listener {
 
@@ -251,6 +252,10 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.Illumination) {
 					new Illumination(player);
+				}
+				
+				if (Tools.getBendingAbility(player) == Abilities.Walloffire){
+					new WallOfFire(player);
 				}
 
 			}

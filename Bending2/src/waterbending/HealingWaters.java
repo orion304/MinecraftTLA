@@ -65,4 +65,8 @@ public class HealingWaters {
 		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
 				70, 1));
 	}
+	
+	public static String getDescription(){
+		return "To use, the bender must be at least partially submerged in water. If the user is not sneaking, this ability will automatically begin working provided the user has it selected. If the user is sneaking, he/she is channeling the healing to their target in front of them. In order for this channel to be successful, the user and the target must be at least partially submerged in water. Again, provided the user is sneaking, this ability will automatically begin working.";
+	}
 }
