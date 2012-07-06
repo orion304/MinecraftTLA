@@ -408,7 +408,18 @@ public class Bending extends JavaPlugin {
 						if (a != null) {
 							String ability = config.getAbility(player, mat)
 									.name();
-							sender.sendMessage(mat.name().replaceAll("_", " ")
+							char[] tocap = mat.name().replaceAll("_", " ").toCharArray();
+							boolean cap = true;
+							for (int i = 0; i < tocap.length; i++){
+								if (cap){
+									tocap[i] = Character.toUpperCase(tocap[i]);
+									cap = false;
+								}
+								if (Character.isWhitespace(tocap[i]))
+									cap = true;
+								
+							}
+							sender.sendMessage(tocap.toString()
 									+ ": " + ability);
 						}
 					}
@@ -448,8 +459,19 @@ public class Bending extends JavaPlugin {
 									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
+							char[] tocap = mat.name().replaceAll("_", " ").toCharArray();
+							boolean cap = true;
+							for (int i = 0; i < tocap.length; i++){
+								if (cap){
+									tocap[i] = Character.toUpperCase(tocap[i]);
+									cap = false;
+								}
+								if (Character.isWhitespace(tocap[i]))
+									cap = true;
+								
+							}
 							sender.sendMessage(ability.name() + " bound to "
-									+ mat.name().replaceAll("_", " "));
+									+ tocap.toString());
 						}
 						return true;
 					}
