@@ -145,5 +145,9 @@ public class FireStream {
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
 	}
+	
+	public static String getDescription(){
+		return "To use, simply left-click in any direction. A line of fire will flow from your location, igniting anything in its path.";
+	}
 
 }

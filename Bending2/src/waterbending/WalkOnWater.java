@@ -128,4 +128,7 @@ public class WalkOnWater {
 		thawAll();
 	}
 
+	public static String getDescription(){
+		return "To use, the bender must merely have the ability selected. Anytime the user walks over water, it is instead turned into a patch of ice. The patch will only remain as long as the user is within a short range or has the ability selected.";
+	}
 }

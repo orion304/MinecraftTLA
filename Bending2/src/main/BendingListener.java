@@ -61,6 +61,7 @@ import firebending.Fireball;
 import firebending.HeatMelt;
 import firebending.Illumination;
 import firebending.RingOfFire;
+import firebending.WallOfFire;
 
 public class BendingListener implements Listener {
 
@@ -161,6 +162,8 @@ public class BendingListener implements Listener {
 
 		// Tools.verbose(Tools.getBendingAbility(player));
 
+		AirScooter.check(player);
+
 		if (Tools.canBend(player, Tools.getBendingAbility(player))) {
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
@@ -178,8 +181,7 @@ public class BendingListener implements Listener {
 					new AirSwipe(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirScooter
-						&& player.isOp()) {
+				if (Tools.getBendingAbility(player) == Abilities.AirScooter) {
 					new AirScooter(player);
 				}
 
@@ -253,6 +255,11 @@ public class BendingListener implements Listener {
 					new Illumination(player);
 				}
 
+				if (Tools.getBendingAbility(player) == Abilities.Walloffire
+						&& player.isOp()) {
+					new WallOfFire(player);
+				}
+
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
@@ -292,6 +299,8 @@ public class BendingListener implements Listener {
 
 		Player player = event.getPlayer();
 		// Tools.verbose(Tools.getBendingAbility(player));
+
+		AirScooter.check(player);
 
 		if (!player.isSneaking()
 				&& Tools.canBend(player, Tools.getBendingAbility(player))) {
@@ -462,6 +471,8 @@ public class BendingListener implements Listener {
 		} else if (!Wave.canThaw(block)) {
 			block.setType(Material.AIR);
 			event.setCancelled(true);
+		} else if (Tools.tempearthblocks.containsKey(block)) {
+			Tools.removeEarthbendedBlockIndex(block);
 		}
 	}
 
@@ -494,6 +505,12 @@ public class BendingListener implements Listener {
 			}
 			if (WaterWall.wallblocks.containsKey(block)) {
 				block.setType(Material.AIR);
+			}
+			if (!Wave.canThaw(block)) {
+				Wave.thaw(block);
+			}
+			if (Tools.tempearthblocks.contains(block)) {
+				Tools.removeEarthbendedBlockIndex(block);
 			}
 		}
 

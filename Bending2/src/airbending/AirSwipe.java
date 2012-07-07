@@ -187,5 +187,9 @@ public class AirSwipe {
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
 	}
+	
+	public static String getDescription(){
+		return "To use, simply left-click in a direction. An arc of air will flow from you towards that direction, cutting and pushing back anything in its path. Its damage is minimal, but it still sends the message. This ability will extinguish fires, cool lava, and cut things like grass, mushrooms and flowers.";
+	}
 
 }

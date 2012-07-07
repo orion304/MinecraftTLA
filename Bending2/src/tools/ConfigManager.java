@@ -104,6 +104,9 @@ public class ConfigManager {
 	public static double fastSwimmingFactor = 0.7;
 	public static double nightFactor = 1.5;
 
+	public static boolean reverseearthbending = true;
+	public static long revertchecktime = 300000;
+
 	private static List<String> defaultearthbendable = new ArrayList<String>();
 
 	public void load(File file) {

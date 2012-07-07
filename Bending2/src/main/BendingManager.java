@@ -9,6 +9,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.AvatarState;
+import tools.ConfigManager;
+import tools.Information;
+import tools.Tools;
 import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
@@ -38,6 +41,7 @@ import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
 import firebending.Illumination;
+import firebending.WallOfFire;
 
 public class BendingManager implements Runnable {
 
@@ -47,10 +51,12 @@ public class BendingManager implements Runnable {
 
 	long time;
 	long interval;
+	long reverttime;
 
 	public BendingManager(Bending instance) {
 		plugin = instance;
 		time = System.currentTimeMillis();
+		reverttime = time;
 	}
 
 	public void run() {
@@ -125,6 +131,42 @@ public class BendingManager implements Runnable {
 
 		Tremorsense.manage(plugin.getServer());
 
+		if (ConfigManager.reverseearthbending
+				&& time > reverttime + ConfigManager.revertchecktime) {
+			Tools.verbose("Removing up to " + Tools.tempearthblocks.size()
+					+ " blocks...");
+			reverttime = time;
+			for (Block block : Tools.tempearthblocks.keySet()) {
+				boolean remove = true;
+
+				Block index = Tools.tempearthblocks.get(block);
+				if (Tools.movedearth.containsKey(index)) {
+					Information info = Tools.movedearth.get(index);
+					if (time < info.getTime() + ConfigManager.revertchecktime) {
+						remove = false;
+					}
+				}
+
+				// for (Player player : block.getWorld().getPlayers()) {
+				//
+				// if ((Tools.isBender(player, BendingType.Earth) && player
+				// .getLocation().distance(block.getLocation()) < 25)
+				// || player.getLocation().distance(
+				// block.getLocation()) < 3) {
+				// remove = false;
+				// break;
+				// }
+				// }
+
+				if (remove)
+					Tools.removeEarthbendedBlock(block);
+
+			}
+
+			Tools.verbose("Still " + Tools.tempearthblocks.size()
+					+ " remaining.");
+		}
+
 	}
 
 	private void manageFirebending() {
@@ -144,6 +186,9 @@ public class BendingManager implements Runnable {
 					+ Fireball.duration) {
 				entity.die();
 			}
+		}
+		for (Player ID : WallOfFire.instances.keySet()) {
+			WallOfFire.manageWallOfFire(ID);
 		}
 
 		FireJet.progressAll();

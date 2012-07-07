@@ -70,6 +70,9 @@ public class CompactColumn {
 
 		if (distance != 0) {
 			if (canInstantiate()) {
+				for (Block blocki : affectedblocks.keySet()) {
+					EarthColumn.resetBlock(blocki);
+				}
 				id = ID;
 				instances.put(id, this);
 				if (ID >= Integer.MAX_VALUE) {
@@ -130,6 +133,9 @@ public class CompactColumn {
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
 			if (!moveEarth()) {
+				for (Block blocki : affectedblocks.keySet()) {
+					EarthColumn.resetBlock(blocki);
+				}
 				instances.remove(id);
 				// for (Block block : affectedblocks.keySet()) {
 				// alreadydoneblocks.put(block, block);
@@ -143,6 +149,9 @@ public class CompactColumn {
 	private boolean moveEarth() {
 		Block block = location.getBlock();
 		location = location.add(direction);
+		if (block == null || location == null || distance == 0) {
+			return false;
+		}
 		Tools.moveEarth(block, direction, distance);
 		loadAffectedBlocks();
 
@@ -163,4 +172,7 @@ public class CompactColumn {
 		}
 	}
 
+	public static String getDescription() {
+		return " To use, simply left-click on an earthbendable block. That block and the earthbendable blocks above it will be shoved back into the earth below them, if they can. This ability does have the capacity to trap something inside of it, although it is incredibly difficult to do so. ";
+	}
 }
