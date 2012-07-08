@@ -38,7 +38,7 @@ public class BendingPlayers {
 		load();
 		dataFolder = file;
 	}
-
+	
 	public void removeBending(Player player) {
 		if (bendingPlayers == null) {
 			return;
@@ -69,6 +69,30 @@ public class BendingPlayers {
 				return true;
 			}
 			if (bendingPlayers.getString(player.getName(), "").contains("f")
+					&& type == BendingType.Fire) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isBender(String player, BendingType type) {
+		if (bendingPlayers == null) {
+			return false;
+		} else if (bendingPlayers.getKeys(false).contains(player)) {
+			if (bendingPlayers.getString(player, "").contains("a")
+					&& type == BendingType.Air) {
+				return true;
+			}
+			if (bendingPlayers.getString(player, "").contains("e")
+					&& type == BendingType.Earth) {
+				return true;
+			}
+			if (bendingPlayers.getString(player, "").contains("w")
+					&& type == BendingType.Water) {
+				return true;
+			}
+			if (bendingPlayers.getString(player, "").contains("f")
 					&& type == BendingType.Fire) {
 				return true;
 			}
