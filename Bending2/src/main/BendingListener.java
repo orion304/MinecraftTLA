@@ -254,10 +254,6 @@ public class BendingListener implements Listener {
 				if (Tools.getBendingAbility(player) == Abilities.Illumination) {
 					new Illumination(player);
 				}
-				
-				if (Tools.getBendingAbility(player) == Abilities.Walloffire){
-					new WallOfFire(player);
-				}
 
 				if (Tools.getBendingAbility(player) == Abilities.Walloffire
 						&& player.isOp()) {
