@@ -146,10 +146,6 @@ public class AirBubble {
 			instances.get(id).removeBubble();
 		}
 	}
-	
-	public static String getDescription(){
-		return "To use, the bender must merely have the ability selected. All water around the user in a small bubble will vanish, replacing itself once the user either gets too far away or selects a different ability.";
-	}
 
 	public static String getDescription() {
 		return "To use, the bender must merely have the ability selected. All water around the user in a small bubble will vanish, replacing itself once the user either gets too far away or selects a different ability.";
