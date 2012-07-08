@@ -69,7 +69,7 @@ public class AirBubble {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			instances.remove(player.getEntityId());
+			removeBubble();
 			return false;
 		}
 		if (((Tools.getBendingAbility(player) == Abilities.AirBubble) && Tools
@@ -148,6 +148,10 @@ public class AirBubble {
 	}
 	
 	public static String getDescription(){
+		return "To use, the bender must merely have the ability selected. All water around the user in a small bubble will vanish, replacing itself once the user either gets too far away or selects a different ability.";
+	}
+
+	public static String getDescription() {
 		return "To use, the bender must merely have the ability selected. All water around the user in a small bubble will vanish, replacing itself once the user either gets too far away or selects a different ability.";
 	}
 

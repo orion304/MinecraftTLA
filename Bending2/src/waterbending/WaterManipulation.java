@@ -197,12 +197,16 @@ public class WaterManipulation {
 				// sourceblock.setType(Material.AIR);
 				//
 				// sourceblock = location.getBlock();
-				if (!Tools.isSolid(sourceblock.getRelative(BlockFace.DOWN))
-						|| targetting) {
-					finalRemoveWater(sourceblock);
-				}
-
-				instances.remove(player.getEntityId());
+				// if (!Tools.isSolid(sourceblock.getRelative(BlockFace.DOWN))
+				// || targetting) {
+				// finalRemoveWater(sourceblock);
+				// } else {
+				// sourceblock.setData(full);
+				// affectedblocks.remove(sourceblock);
+				// }
+				//
+				// instances.remove(player.getEntityId());
+				breakBlock();
 				return false;
 
 			} else {
@@ -268,7 +272,7 @@ public class WaterManipulation {
 				// }
 				sourceblock = block;
 
-				if (location.distance(targetdestination) < 1) {
+				if (location.distance(targetdestination) <= 1) {
 
 					falling = true;
 					progressing = false;
@@ -283,13 +287,23 @@ public class WaterManipulation {
 	}
 
 	private void breakBlock() {
+
+		if (!Tools.isSolid(sourceblock.getRelative(BlockFace.DOWN))
+				|| targetting) {
+			finalRemoveWater(sourceblock);
+		} else {
+			sourceblock.setData(full);
+			affectedblocks.remove(sourceblock);
+		}
+
 		finalRemoveWater(sourceblock);
 		instances.remove(player.getEntityId());
 	}
 
 	private void reduceWater(Block block) {
 		if (affectedblocks.contains(block)) {
-			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+			if (!Tools.adjacentToThreeOrMoreSources(block)
+					&& !Tools.adjacentToAnyWater(block)) {
 				block.setType(Material.WATER);
 				block.setData(half);
 			}
@@ -310,9 +324,11 @@ public class WaterManipulation {
 
 	private void finalRemoveWater(Block block) {
 		if (affectedblocks.contains(block)) {
-			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+			if (!Tools.adjacentToThreeOrMoreSources(block)
+					&& !Tools.adjacentToAnyWater(block)) {
 				block.setType(Material.WATER);
 				block.setData(half);
+				// block.setType(Material.AIR);
 			}
 			affectedblocks.remove(block);
 		}

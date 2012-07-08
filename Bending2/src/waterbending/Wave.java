@@ -29,8 +29,9 @@ public class Wave {
 	private static final byte full = 0x0;
 	// private static final byte half = 0x4;
 	private static final double defaultmaxradius = ConfigManager.waveRadius;
-	private static final double factor = ConfigManager.waveHorizontalPush;
+	private static final double defaultfactor = ConfigManager.waveHorizontalPush;
 	private static final double upfactor = ConfigManager.waveVerticalPush;
+	private static final double maxfreezeradius = 7;
 
 	private static double defaultrange = 20;
 	// private static int damage = 5;
@@ -51,6 +52,7 @@ public class Wave {
 	private boolean activatefreeze = false;
 	private Location frozenlocation;
 	private double range = defaultrange;
+	private double factor = defaultfactor;
 
 	public Wave(Player player) {
 		this.player = player;
@@ -114,6 +116,8 @@ public class Wave {
 	public void moveWater() {
 		if (sourceblock != null) {
 			range = Tools.waterbendingNightAugment(range, player.getWorld());
+			if (AvatarState.isAvatarState(player))
+				factor = AvatarState.getValue(factor);
 			Entity target = Tools.getTargettedEntity(player, range);
 			if (target == null) {
 				targetdestination = player.getTargetBlock(
@@ -155,7 +159,8 @@ public class Wave {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			instances.remove(player.getEntityId());
+			breakBlock();
+			// instances.remove(player.getEntityId());
 			return false;
 		}
 		if (System.currentTimeMillis() - time >= interval) {
@@ -206,7 +211,8 @@ public class Wave {
 							Block block = location.clone().add(vec).getBlock();
 							if (!blocks.contains(block)
 									&& (block.getType() == Material.AIR || block
-											.getType() == Material.FIRE)) {
+											.getType() == Material.FIRE)
+									|| block.getType() == Material.SNOW) {
 								blocks.add(block);
 							}
 							if (!blocks.contains(block)
@@ -255,8 +261,12 @@ public class Wave {
 					if (knockback) {
 						Vector dir = direction.clone();
 						dir.setY(dir.getY() * upfactor);
-						entity.setVelocity(entity.getVelocity().clone()
-								.add(dir.clone().multiply(factor)));
+						entity.setVelocity(entity
+								.getVelocity()
+								.clone()
+								.add(dir.clone().multiply(
+										Tools.waterbendingNightAugment(factor,
+												player.getWorld()))));
 						entity.setFallDistance(0);
 					}
 
@@ -348,8 +358,15 @@ public class Wave {
 		}
 		wave.clear();
 
-		for (Block block : Tools.getBlocksAroundPoint(frozenlocation, radius)) {
-			if (block.getType() == Material.AIR) {
+		double freezeradius = radius;
+		if (freezeradius > maxfreezeradius) {
+			freezeradius = maxfreezeradius;
+		}
+
+		for (Block block : Tools.getBlocksAroundPoint(frozenlocation,
+				freezeradius)) {
+			if (block.getType() == Material.AIR
+					|| block.getType() == Material.SNOW) {
 				block.setType(Material.ICE);
 				frozenblocks.put(block, block);
 			}
@@ -398,6 +415,10 @@ public class Wave {
 	}
 	
 	public static String getDescription(){
+		return "To use, place your cursor over a waterbendable object (water, ice, plants if you have plantbending) and tap sneak (default: shift). Smoke will appear where you've selected, indicating the origin of your ability. After you have selected an origin, simply left-click in any direction and you will see your water spout off in that direction and form a large wave, knocking back all within its path. If you look towards a creature when you use this ability, it will target that creature.";
+	}
+
+	public static String getDescription() {
 		return "To use, place your cursor over a waterbendable object (water, ice, plants if you have plantbending) and tap sneak (default: shift). Smoke will appear where you've selected, indicating the origin of your ability. After you have selected an origin, simply left-click in any direction and you will see your water spout off in that direction and form a large wave, knocking back all within its path. If you look towards a creature when you use this ability, it will target that creature.";
 	}
 

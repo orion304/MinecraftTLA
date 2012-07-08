@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
 import main.BendingPlayers;
@@ -35,6 +36,7 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+import airbending.AirScooter;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
@@ -62,6 +64,9 @@ public class Tools {
 			81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
 
 	public static final long timeinterval = ConfigManager.globalCooldown;
+
+	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
+	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
 
 	public Tools(BendingPlayers instance) {
 		config = instance;
@@ -216,11 +221,30 @@ public class Tools {
 			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(affectedblock)) {
 				for (Entity entity : getEntitiesAroundPoint(
-						affectedblock.getLocation(), 2)) {
+						affectedblock.getLocation(), 1.75)) {
 					entity.setVelocity(norm.clone().multiply(.75));
 				}
+
 				affectedblock.setType(block.getType());
 				affectedblock.setData(block.getData());
+
+				if (tempearthblocks.containsKey(block)) {
+					Block index = tempearthblocks.get(block);
+					tempearthblocks.remove(block);
+					tempearthblocks.put(affectedblock, index);
+					Information info = movedearth.get(index);
+					info.setBlock(affectedblock);
+					info.setTime(System.currentTimeMillis());
+					movedearth.replace(index, info);
+				} else {
+					tempearthblocks.put(affectedblock, block);
+					Information info = new Information();
+					info.setBlock(affectedblock);
+					info.setType(block.getType());
+					info.setData(block.getData());
+					info.setTime(System.currentTimeMillis());
+					movedearth.put(block, info);
+				}
 
 				for (double i = 1; i < chainlength; i++) {
 					affectedblock = location
@@ -240,6 +264,23 @@ public class Tools {
 					}
 					block.setType(affectedblock.getType());
 					block.setData(affectedblock.getData());
+					if (tempearthblocks.containsKey(affectedblock)) {
+						Block index = tempearthblocks.get(affectedblock);
+						tempearthblocks.remove(affectedblock);
+						tempearthblocks.put(block, index);
+						Information info = movedearth.get(index);
+						info.setBlock(block);
+						info.setTime(System.currentTimeMillis());
+						movedearth.replace(index, info);
+					} else {
+						tempearthblocks.put(block, affectedblock);
+						Information info = new Information();
+						info.setBlock(block);
+						info.setType(affectedblock.getType());
+						info.setData(affectedblock.getData());
+						info.setTime(System.currentTimeMillis());
+						movedearth.put(affectedblock, info);
+					}
 					block = affectedblock;
 				}
 				if (!Tools.adjacentToThreeOrMoreSources(block)) {
@@ -515,6 +556,17 @@ public class Tools {
 		return false;
 	}
 
+	public static boolean adjacentToAnyWater(Block block) {
+		BlockFace[] faces = { BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH,
+				BlockFace.SOUTH };
+		for (BlockFace face : faces) {
+			Block blocki = block.getRelative(face);
+			if (isWater(blocki))
+				return true;
+		}
+		return false;
+	}
+
 	public static void stopAllBending() {
 		AirBlast.removeAll();
 		AirBubble.removeAll();
@@ -528,19 +580,24 @@ public class Tools {
 		WaterSpout.removeAll();
 		WaterWall.removeAll();
 		Wave.removeAll();
+		AirScooter.removeAll();
+		for (Block block : tempearthblocks.keySet()) {
+			removeEarthbendedBlock(block);
+		}
 	}
 
 	public static boolean canBend(Player player, Abilities ability) {
 		if (ability == null)
 			return false;
 		if (hasPermission(player, ability)
-				&& !isRegionProtected(player, ability))
+				&& !isRegionProtected(player, ability, true))
 			return true;
 		return false;
 
 	}
 
-	public static boolean isRegionProtected(Player player, Abilities ability) {
+	public static boolean isRegionProtected(Player player, Abilities ability,
+			boolean look) {
 		Plugin p = Bukkit.getPluginManager().getPlugin("WorldGuard");
 		if (p == null)
 			return false;
@@ -551,30 +608,40 @@ public class Tools {
 		Block b = player.getLocation().getBlock();
 		if (!player.isOnline())
 			return false;
-		Block c = player.getTargetBlock(null, 20);
+		if (look) {
+			try {
+				Block c = player.getTargetBlock(null, 20);
+				if (!(wg.getGlobalRegionManager()
+						.get(c.getLocation().getWorld())
+						.getApplicableRegions(c.getLocation())
+						.allows(DefaultFlag.PVP))) {
+					return true;
+				}
+			} catch (IllegalStateException e) {
+				return false;
+			}
+		}
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
 			return true;
 		}
-		if (!(wg.getGlobalRegionManager().get(c.getLocation().getWorld())
-				.getApplicableRegions(c.getLocation()).allows(DefaultFlag.PVP))) {
-			return true;
-			// EntityDamageByEntityEvent damageEvent = new
-			// EntityDamageByEntityEvent(player, player,
-			// EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
-			// Bukkit.getServer().getPluginManager().callEvent(damageEvent);
 
-			// if (damageEvent.isCancelled())
-			// {
-			// return true;
-			// }
-			// }
-		}
+		// EntityDamageByEntityEvent damageEvent = new
+		// EntityDamageByEntityEvent(player, player,
+		// EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
+		// Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+
+		// if (damageEvent.isCancelled())
+		// {
+		// return true;
+		// }
+		// }
+
 		return false;
 	}
 
 	public static boolean canBendPassive(Player player, BendingType type) {
-		if (isRegionProtected(player, null))
+		if (isRegionProtected(player, null, false))
 			return false;
 		if (player.hasPermission("bending." + type + ".passive")) {
 			return true;
@@ -661,6 +728,42 @@ public class Tools {
 		if (Arrays.asList(nonOpaque).contains(block.getTypeId()))
 			return false;
 		return true;
+	}
+
+	public static void removeEarthbendedBlock(Block block) {
+		if (tempearthblocks.containsKey(block)) {
+			Block index = Tools.tempearthblocks.get(block);
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.AIR);
+			} else {
+				byte full = 0x0;
+				block.setType(Material.WATER);
+				block.setData(full);
+			}
+			if (movedearth.containsKey(index)) {
+				Information info = Tools.movedearth.get(index);
+				index.setType(info.getType());
+				index.setData(info.getData());
+				Tools.movedearth.remove(index);
+			}
+			Tools.tempearthblocks.remove(block);
+			if (EarthColumn.blockInAllAffectedBlocks(block)) {
+				EarthColumn.revertBlock(block);
+			}
+			if (EarthColumn.blockInAllAffectedBlocks(index)) {
+				EarthColumn.revertBlock(index);
+			}
+			EarthColumn.resetBlock(block);
+			EarthColumn.resetBlock(index);
+		}
+	}
+
+	public static void removeEarthbendedBlockIndex(Block block) {
+		if (tempearthblocks.containsKey(block)) {
+			Block index = tempearthblocks.get(block);
+			tempearthblocks.remove(block);
+			movedearth.remove(index);
+		}
 	}
 
 	static {

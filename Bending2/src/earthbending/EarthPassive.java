@@ -24,10 +24,12 @@ public class EarthPassive {
 
 			if (!Tools.isTransparentToEarthbending(block)) {
 				Material type = block.getType();
-				block.setType(Material.SAND);
-				if (!sandblocks.containsKey(block)) {
-					sandidentities.put(block, type);
-					sandblocks.put(block, System.currentTimeMillis());
+				if (Tools.isSolid(block.getRelative(BlockFace.DOWN))) {
+					block.setType(Material.SAND);
+					if (!sandblocks.containsKey(block)) {
+						sandidentities.put(block, type);
+						sandblocks.put(block, System.currentTimeMillis());
+					}
 				}
 
 			}
@@ -35,12 +37,15 @@ public class EarthPassive {
 			for (Block affectedblock : Tools.getBlocksAroundPoint(
 					block.getLocation(), 2)) {
 				if (Tools.isEarthbendable(affectedblock)) {
-					Material type = affectedblock.getType();
-					affectedblock.setType(Material.SAND);
-					if (!sandblocks.containsKey(affectedblock)) {
-						sandidentities.put(affectedblock, type);
-						sandblocks.put(affectedblock,
-								System.currentTimeMillis());
+					if (Tools
+							.isSolid(affectedblock.getRelative(BlockFace.DOWN))) {
+						Material type = affectedblock.getType();
+						affectedblock.setType(Material.SAND);
+						if (!sandblocks.containsKey(affectedblock)) {
+							sandidentities.put(affectedblock, type);
+							sandblocks.put(affectedblock,
+									System.currentTimeMillis());
+						}
 					}
 
 				}

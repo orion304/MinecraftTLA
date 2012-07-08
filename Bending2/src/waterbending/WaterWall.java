@@ -187,7 +187,8 @@ public class WaterWall {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			instances.remove(player.getEntityId());
+			breakBlock();
+			// instances.remove(player.getEntityId());
 			return false;
 		}
 		if (!Tools.canBend(player, Abilities.WaterWall)) {
@@ -239,6 +240,7 @@ public class WaterWall {
 						} else if (!blocks.contains(block)
 								&& (block.getType() == Material.AIR || block
 										.getType() == Material.FIRE)) {
+							wallblocks.put(block, player);
 							if (frozen) {
 								block.setType(Material.ICE);
 							} else {
@@ -247,7 +249,6 @@ public class WaterWall {
 							}
 							// block.setType(Material.GLASS);
 							blocks.add(block);
-							wallblocks.put(block, player);
 							// Tools.verbose(wallblocks.size());
 						}
 					}
@@ -351,12 +352,12 @@ public class WaterWall {
 		}
 
 		if (wallblocks.containsKey(block)) {
-			wallblocks.remove(block);
 			if (block.getType() == Material.ICE
 					|| block.getType() == Material.WATER
 					|| block.getType() == Material.STATIONARY_WATER) {
 				block.setType(Material.AIR);
 			}
+			wallblocks.remove(block);
 			// block.setType(Material.WATER);
 			// block.setData(half);
 		}
