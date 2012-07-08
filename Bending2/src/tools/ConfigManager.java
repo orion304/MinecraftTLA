@@ -43,7 +43,7 @@ public class ConfigManager {
 	public static double airSwipeRadius = 2;
 	public static double airSwipePush = 1;
 	public static long airSwipeCooldown = 1000;
-	public static double airScooterSpeed = 1;
+	public static double airScooterSpeed = .675;
 	public static double tornadoRadius = 10;
 	public static double tornadoHeight = 25;
 	public static double tornadoRange = 25;
@@ -157,6 +157,12 @@ public class ConfigManager {
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire"));
 		useWeapon.put("Water",
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
+
+		// Earthbending revert
+		reverseearthbending = config
+				.getBoolean("Bending.Option.Reverse-Earthbending");
+		revertchecktime = config
+				.getLong("Bending.Option.Reverse-Earthbending-Check-Time");
 
 		// PROPERTIES
 		globalCooldown = config.getLong("Properties.GlobalCooldown");
@@ -342,6 +348,9 @@ public class ConfigManager {
 		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
 		config.set("Bending.Option.Bend-To-Item", false);
 
+		config.set("Bending.Option.Reverse-Earthbending", false);
+		config.set("Bending.Option.Reverse-Earthbending-Check-Time", 500000);
+
 		config.set("Properties.GlobalCooldown", 500);
 
 		config.set("Properties.Air.AirBlast.Speed", 25);
@@ -373,7 +382,7 @@ public class ConfigManager {
 		config.set("Properties.Air.Tornado.Mob-Push-Factor", 1);
 		config.set("Properties.Air.Tornado.Player-Push-Factor", 1);
 
-		config.set("Properties.Air.AirScooter.Speed", 1);
+		config.set("Properties.Air.AirScooter.Speed", .675);
 
 		config.set("Properties.Earth.Catapult.Length", 7);
 		config.set("Properties.Earth.Catapult.Speed", 12);

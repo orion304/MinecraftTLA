@@ -12,14 +12,15 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class AirScooter {
 
 	public static ConcurrentHashMap<Player, AirScooter> instances = new ConcurrentHashMap<Player, AirScooter>();
 
-	// private static final double speed = ConfigManager.airScooterSpeed;
-	private static final double speed = .675;
+	private static final double speed = ConfigManager.airScooterSpeed;
+	// private static final double speed = Confi;
 	private static final long interval = 100;
 	private static final double scooterradius = 1;
 
