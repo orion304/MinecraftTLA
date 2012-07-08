@@ -69,15 +69,15 @@ public class AirScooter {
 			remove();
 			return;
 		}
-		if (Tools
-				.isSolid(player
-						.getEyeLocation()
-						.clone()
-						.add(player.getEyeLocation().getDirection().clone()
-								.normalize()).getBlock())) {
-			remove();
-			return;
-		}
+		// if (Tools
+		// .isSolid(player
+		// .getEyeLocation()
+		// .clone()
+		// .add(player.getEyeLocation().getDirection().clone()
+		// .normalize()).getBlock())) {
+		// remove();
+		// return;
+		// }
 		// player.sendBlockChange(floorblock.getLocation(), 89, (byte) 1);
 		// player.getLocation().setY((double) floorblock.getY() + 2.5);
 
@@ -96,9 +96,9 @@ public class AirScooter {
 				- (double) floorblock.getY();
 		double dx = Math.abs(distance - 2.4);
 		if (distance > 2.75) {
-			velocity.setY(-.25 * dx);
+			velocity.setY(-.25 * dx * dx);
 		} else if (distance < 2) {
-			velocity.setY(.25 * dx);
+			velocity.setY(.25 * dx * dx);
 		} else {
 			velocity.setY(0);
 		}

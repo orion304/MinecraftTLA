@@ -218,6 +218,9 @@ public class Tools {
 			Location location = block.getLocation();
 
 			Block affectedblock = location.clone().add(norm).getBlock();
+			if (EarthPassive.isPassiveSand(affectedblock)) {
+				EarthPassive.revertSand(affectedblock);
+			}
 			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(affectedblock)) {
 				for (Entity entity : getEntitiesAroundPoint(
@@ -261,6 +264,9 @@ public class Tools {
 							block.setData(full);
 						}
 						break;
+					}
+					if (EarthPassive.isPassiveSand(block)) {
+						EarthPassive.revertSand(block);
 					}
 					block.setType(affectedblock.getType());
 					block.setData(affectedblock.getData());

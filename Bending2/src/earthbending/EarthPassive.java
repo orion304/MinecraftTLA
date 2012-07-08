@@ -55,15 +55,23 @@ public class EarthPassive {
 		return false;
 	}
 
+	public static boolean isPassiveSand(Block block) {
+		return (sandblocks.contains(block));
+	}
+
+	public static void revertSand(Block block) {
+		Material type = sandidentities.get(block);
+		sandidentities.remove(block);
+		sandblocks.remove(block);
+		if (block.getType() == Material.SAND) {
+			block.setType(type);
+		}
+	}
+
 	public static void revertSands() {
 		for (Block block : sandblocks.keySet()) {
 			if (System.currentTimeMillis() >= sandblocks.get(block) + duration) {
-				Material type = sandidentities.get(block);
-				sandidentities.remove(block);
-				sandblocks.remove(block);
-				if (block.getType() == Material.SAND) {
-					block.setType(type);
-				}
+				revertSand(block);
 			}
 		}
 
@@ -71,11 +79,7 @@ public class EarthPassive {
 
 	public static void revertAllSand() {
 		for (Block block : sandblocks.keySet()) {
-			Material type = sandidentities.get(block);
-			sandidentities.remove(block);
-			sandblocks.remove(block);
-			block.setType(type);
-
+			revertSand(block);
 		}
 	}
 

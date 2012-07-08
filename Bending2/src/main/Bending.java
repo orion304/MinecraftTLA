@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import main.Metrics.Graph;
 import net.minecraft.server.EntityFireball;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -99,6 +102,65 @@ public class Bending extends JavaPlugin {
 
 		try {
 			Metrics metrics = new Metrics(this);
+			
+			Graph bending = metrics.createGraph("Bending");
+			
+			bending.addPlotter(new Metrics.Plotter("Air"){
+
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+						if (config.isBender(p.getName(), BendingType.Air))
+						i++;
+					}
+					return i;
+				}
+				
+			});
+			
+			bending.addPlotter(new Metrics.Plotter("Fire"){
+
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+						if (config.isBender(p.getName(), BendingType.Fire))
+						i++;
+					}
+					return i;
+				}
+				
+			});
+			
+			bending.addPlotter(new Metrics.Plotter("Water"){
+
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+						if (config.isBender(p.getName(), BendingType.Water))
+						i++;
+					}
+					return i;
+				}
+				
+			});
+			
+			bending.addPlotter(new Metrics.Plotter("Earth"){
+
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+						if (config.isBender(p.getName(), BendingType.Earth))
+						i++;
+					}
+					return i;
+				}
+				
+			});
+			
 			metrics.start();
 			log.info("Bending is sending data for Plugin Metrics.");
 		} catch (IOException e) {
@@ -470,8 +532,19 @@ public class Bending extends JavaPlugin {
 									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
+							char[] tocap = mat.name().replaceAll("_", " ").toCharArray();
+							boolean cap = true;
+							for (int i = 0; i < tocap.length; i++){
+								if (cap){
+									tocap[i] = Character.toUpperCase(tocap[i]);
+									cap = false;
+								}
+								if (Character.isWhitespace(tocap[i]))
+									cap = true;
+								
+							}
 							sender.sendMessage(ability.name() + " bound to "
-									+ mat.name().replaceAll("_", " "));
+									+ tocap.toString());
 						}
 						return true;
 					}
