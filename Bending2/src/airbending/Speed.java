@@ -28,13 +28,25 @@ public class Speed {
 			applySpeed();
 			return true;
 		}
+		if (player.isSprinting()
+				&& Tools.isBender(player, BendingType.ChiBlocker)) {
+			applySpeed();
+			return true;
+		}
 		instances.remove(id);
 		return false;
 	}
 
 	private void applySpeed() {
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70, 1));
-		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70, 1));
+		int factor = 0;
+		if (Tools.isBender(player, BendingType.Air)
+				&& Tools.canBendPassive(player, BendingType.Air)) {
+			factor = 1;
+		}
+		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70,
+				factor));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70,
+				factor));
 	}
 
 	public static boolean progress(int ID) {

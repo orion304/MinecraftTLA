@@ -16,6 +16,7 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
+import tools.TempBlock;
 import tools.Tools;
 
 public class WaterManipulation {
@@ -366,6 +367,8 @@ public class WaterManipulation {
 			return false;
 		if (Wave.isBlockWave(to) || Wave.isBlockWave(from))
 			return false;
+		if (TempBlock.isTempBlock(to) || TempBlock.isTempBlock(from))
+			return false;
 		return true;
 	}
 
@@ -379,6 +382,8 @@ public class WaterManipulation {
 		if (WaterWall.wallblocks.containsKey(block))
 			return false;
 		if (Wave.isBlockWave(block))
+			return false;
+		if (TempBlock.isTempBlock(block))
 			return false;
 		return true;
 	}

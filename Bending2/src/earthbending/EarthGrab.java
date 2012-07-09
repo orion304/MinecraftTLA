@@ -24,7 +24,7 @@ public class EarthGrab {
 		Entity closestentity = null;
 		for (Entity entity : Tools.getEntitiesAroundPoint(origin, range)) {
 			if (Tools.getDistanceFromLine(direction, origin,
-					entity.getLocation()) <= 1
+					entity.getLocation()) <= 3
 					&& (entity instanceof LivingEntity)
 					&& (entity.getEntityId() != player.getEntityId())) {
 				double distance = origin.distance(entity.getLocation());
@@ -76,8 +76,8 @@ public class EarthGrab {
 			}
 		}
 	}
-	
-	public static String getDescription(){
+
+	public static String getDescription() {
 		return "To use, simply left-click while targeting a creature within range. This ability will erect a circle of earth to trap the creature in.";
 	}
 }

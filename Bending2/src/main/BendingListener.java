@@ -1,6 +1,7 @@
 package main;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -33,6 +35,7 @@ import waterbending.Plantbending;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
+import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
@@ -89,6 +92,9 @@ public class BendingListener implements Listener {
 		} else if ((Tools.isBender(player, BendingType.Water))
 				&& (ConfigManager.enabled)) {
 			append = ConfigManager.getPrefix("Water");
+		} else if ((Tools.isBender(player, BendingType.ChiBlocker))
+				&& (ConfigManager.enabled)) {
+			append = ConfigManager.getPrefix("ChiBlocker");
 		} else {
 			BendingManager.newplayers.add(player);
 		}
@@ -108,6 +114,9 @@ public class BendingListener implements Listener {
 					color = Tools.getColor(ConfigManager.getColor("Fire"));
 				} else if (Tools.isBender(player, BendingType.Water)) {
 					color = Tools.getColor(ConfigManager.getColor("Water"));
+				} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
+					color = Tools
+							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
 			}
 			player.setDisplayName("<" + color + append + player.getName()
@@ -145,6 +154,9 @@ public class BendingListener implements Listener {
 					color = Tools.getColor(ConfigManager.getColor("Fire"));
 				} else if (Tools.isBender(player, BendingType.Water)) {
 					color = Tools.getColor(ConfigManager.getColor("Water"));
+				} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
+					color = Tools
+							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
 			}
 			event.setFormat("<" + color + player.getDisplayName()
@@ -285,6 +297,11 @@ public class BendingListener implements Listener {
 					new Plantbending(player);
 				}
 
+				if (Tools.getBendingAbility(player) == Abilities.WaterSpout
+						&& player.isOp()) {
+					new WaterSpout(player);
+				}
+
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.AvatarState) {
@@ -365,6 +382,11 @@ public class BendingListener implements Listener {
 				&& Tools.canBendPassive(player, BendingType.Air)) {
 			new Speed(player);
 		}
+
+		if (!player.isSprinting()
+				&& Tools.isBender(player, BendingType.ChiBlocker)) {
+			new Speed(player);
+		}
 	}
 
 	@EventHandler
@@ -381,6 +403,9 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Earth)) {
 				event.setCancelled(EarthPassive.softenLanding(player));
+			} else if (Tools.isBender(player, BendingType.ChiBlocker)
+					&& event.getCause() == DamageCause.FALL) {
+				event.setDamage((int) ((double) event.getDamage() * (ConfigManager.falldamagereduction / 100.)));
 			}
 
 			if (Tools.isBender(player, BendingType.Fire)
@@ -389,6 +414,48 @@ public class BendingListener implements Listener {
 				event.setCancelled(!Extinguish.canBurn(player));
 			}
 		}
+	}
+
+	@EventHandler
+	public void onEntityDamage(EntityDamageByEntityEvent event) {
+		if (event.getDamager() instanceof Player
+				&& event.getEntity() instanceof Player) {
+			Player sourceplayer = (Player) event.getDamager();
+			Player targetplayer = (Player) event.getEntity();
+			if (Tools.isBender(sourceplayer, BendingType.ChiBlocker)
+					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigManager.useWeapon
+							.get("ChiBlocker"))) {
+				Tools.blockChi(targetplayer, System.currentTimeMillis());
+			}
+		}
+		if (event.getEntity() instanceof Player) {
+			if ((event.getCause() == DamageCause.ENTITY_ATTACK
+					|| event.getCause() == DamageCause.ENTITY_EXPLOSION || event
+					.getCause() == DamageCause.PROJECTILE)
+					&& Tools.isBender((Player) event.getEntity(),
+							BendingType.ChiBlocker)) {
+				double rand = Math.random();
+				// Tools.verbose(rand + " " + (ConfigManager.dodgechance) /
+				// 100.);
+				if (rand <= ConfigManager.dodgechance / 100.) {
+					event.getEntity()
+							.getWorld()
+							.playEffect(event.getEntity().getLocation(),
+									Effect.SMOKE, 1);
+					event.setCancelled(true);
+				}
+			}
+		}
+		if (event.getDamager() instanceof Player) {
+			if (Tools.isBender((Player) event.getDamager(),
+					BendingType.ChiBlocker)
+					&& event.getCause() == DamageCause.ENTITY_ATTACK
+					&& !Tools.isWeapon(((Player) event.getDamager())
+							.getItemInHand().getType())) {
+				event.setDamage((int) ((double) event.getDamage() * ConfigManager.punchmultiplier));
+			}
+		}
+
 	}
 
 	// @EventHandler

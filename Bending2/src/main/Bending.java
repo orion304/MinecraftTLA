@@ -102,65 +102,69 @@ public class Bending extends JavaPlugin {
 
 		try {
 			Metrics metrics = new Metrics(this);
-			
+
 			Graph bending = metrics.createGraph("Bending");
-			
-			bending.addPlotter(new Metrics.Plotter("Air"){
+
+			bending.addPlotter(new Metrics.Plotter("Air") {
 
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+					for (OfflinePlayer p : Bukkit.getServer()
+							.getOfflinePlayers()) {
 						if (config.isBender(p.getName(), BendingType.Air))
-						i++;
+							i++;
 					}
 					return i;
 				}
-				
+
 			});
-			
-			bending.addPlotter(new Metrics.Plotter("Fire"){
+
+			bending.addPlotter(new Metrics.Plotter("Fire") {
 
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+					for (OfflinePlayer p : Bukkit.getServer()
+							.getOfflinePlayers()) {
 						if (config.isBender(p.getName(), BendingType.Fire))
-						i++;
+							i++;
 					}
 					return i;
 				}
-				
+
 			});
-			
-			bending.addPlotter(new Metrics.Plotter("Water"){
+
+			bending.addPlotter(new Metrics.Plotter("Water") {
 
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+					for (OfflinePlayer p : Bukkit.getServer()
+							.getOfflinePlayers()) {
 						if (config.isBender(p.getName(), BendingType.Water))
-						i++;
+							i++;
 					}
 					return i;
 				}
-				
+
 			});
-			
-			bending.addPlotter(new Metrics.Plotter("Earth"){
+
+			bending.addPlotter(new Metrics.Plotter("Earth") {
 
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (OfflinePlayer p: Bukkit.getServer().getOfflinePlayers()){
+					for (OfflinePlayer p : Bukkit.getServer()
+							.getOfflinePlayers()) {
 						if (config.isBender(p.getName(), BendingType.Earth))
-						i++;
+							i++;
 					}
 					return i;
 				}
-				
+
 			});
-			
+
 			metrics.start();
 			log.info("Bending is sending data for Plugin Metrics.");
 		} catch (IOException e) {
@@ -277,14 +281,19 @@ public class Bending extends JavaPlugin {
 					if (args[1].equalsIgnoreCase("water")
 							|| args[1].equalsIgnoreCase("air")
 							|| args[1].equalsIgnoreCase("fire")
-							|| args[1].equalsIgnoreCase("earth")) {
+							|| args[1].equalsIgnoreCase("earth")
+							|| args[1].equalsIgnoreCase("chiblocker")) {
 						String part = " a ";
 						if (args[1].toLowerCase().startsWith("a")
 								|| args[1].toLowerCase().startsWith("e")) {
 							part = " an ";
 						}
-						part = part + args[1].toLowerCase();
-						sender.sendMessage("You are now" + part + "bender!");
+						if (args[1].equalsIgnoreCase("chiblocker")) {
+							sender.sendMessage("You are now a chiblocker!");
+						} else {
+							part = part + args[1].toLowerCase();
+							sender.sendMessage("You are now" + part + "bender!");
+						}
 						config.removeBending(player);
 						config.setBending(player, args[1]);
 						return true;
@@ -298,15 +307,21 @@ public class Bending extends JavaPlugin {
 					} else if (args[2].equalsIgnoreCase("water")
 							|| args[2].equalsIgnoreCase("air")
 							|| args[2].equalsIgnoreCase("fire")
-							|| args[2].equalsIgnoreCase("earth")) {
+							|| args[2].equalsIgnoreCase("earth")
+							|| args[2].equalsIgnoreCase("chiblocker")) {
 						String part = " a ";
 						if (args[2].toLowerCase().startsWith("a")
 								|| args[2].toLowerCase().startsWith("e")) {
 							part = " an ";
 						}
 						part = part + args[2].toLowerCase();
-						targetplayer.sendMessage(sender.getName()
-								+ " has made you" + part + "bender!");
+						if (args[2].equalsIgnoreCase("chiblocker")) {
+							targetplayer.sendMessage(sender.getName()
+									+ " has made you a chiblocker!");
+						} else {
+							targetplayer.sendMessage(sender.getName()
+									+ " has made you" + part + "bender!");
+						}
 						sender.sendMessage("You have changed "
 								+ targetplayer.getName() + "'s bending.");
 						config.removeBending(targetplayer);
@@ -353,19 +368,28 @@ public class Bending extends JavaPlugin {
 							&& Tools.isBender(player, BendingType.Fire)) {
 						sender.sendMessage("You are already a firebender!");
 						return true;
+					} else if (args[1].equalsIgnoreCase("chiblocker")
+							&& Tools.isBender(player, BendingType.ChiBlocker)) {
+						sender.sendMessage("You are already a chiblocker!");
+						return true;
 					}
 					if (args[1].equalsIgnoreCase("water")
 							|| args[1].equalsIgnoreCase("air")
 							|| args[1].equalsIgnoreCase("fire")
-							|| args[1].equalsIgnoreCase("earth")) {
+							|| args[1].equalsIgnoreCase("earth")
+							|| args[1].equalsIgnoreCase("chiblocker")) {
 						String part = " a ";
 						if (args[1].toLowerCase().startsWith("a")
 								|| args[1].toLowerCase().startsWith("e")) {
 							part = " an ";
 						}
 						part = part + args[1].toLowerCase();
-						sender.sendMessage("You are now also" + part
-								+ "bender!");
+						if (args[1].equalsIgnoreCase("chiblocker")) {
+							sender.sendMessage("You are now also a chiblocker!");
+						} else {
+							sender.sendMessage("You are now also" + part
+									+ "bender!");
+						}
 						config.addBending(player, args[1]);
 						return true;
 					}
@@ -395,18 +419,30 @@ public class Bending extends JavaPlugin {
 						sender.sendMessage(targetplayer.getName()
 								+ " is already a firebender!");
 						return true;
+					} else if (args[2].equalsIgnoreCase("chiblocker")
+							&& Tools.isBender(targetplayer,
+									BendingType.ChiBlocker)) {
+						sender.sendMessage(targetplayer.getName()
+								+ " is already a chiblocker!");
+						return true;
 					} else if (args[2].equalsIgnoreCase("water")
 							|| args[2].equalsIgnoreCase("air")
 							|| args[2].equalsIgnoreCase("fire")
-							|| args[2].equalsIgnoreCase("earth")) {
+							|| args[2].equalsIgnoreCase("earth")
+							|| args[2].equalsIgnoreCase("chiblocker")) {
 						String part = " a ";
 						if (args[2].toLowerCase().startsWith("a")
 								|| args[2].toLowerCase().startsWith("e")) {
 							part = " an ";
 						}
 						part = part + args[2].toLowerCase();
-						targetplayer.sendMessage(sender.getName()
-								+ " has made you also" + part + "bender!");
+						if (args[2].equalsIgnoreCase("chiblocker")) {
+							targetplayer.sendMessage(sender.getName()
+									+ " has made you also a chiblocker!");
+						} else {
+							targetplayer.sendMessage(sender.getName()
+									+ " has made you also" + part + "bender!");
+						}
 						sender.sendMessage("You have added to "
 								+ targetplayer.getName() + "'s bending.");
 						config.addBending(targetplayer, args[2]);
@@ -441,16 +477,19 @@ public class Bending extends JavaPlugin {
 
 					if (abilitylist != null) {
 						for (String ability : abilitylist) {
-							// if (Permissions != null) {
-							// if (Permissions.has(player,
-							// args[1].toLowerCase() + "bending."
-							// + ability)) {
-							// sender.sendMessage(ability);
-							// }
-							// } else {
-							// sender.sendMessage(ability);
-							// }
-							sender.sendMessage(ability);
+							if (Tools.hasPermission(player,
+									Abilities.getAbility(ability))) {
+								// if (Permissions != null) {
+								// if (Permissions.has(player,
+								// args[1].toLowerCase() + "bending."
+								// + ability)) {
+								// sender.sendMessage(ability);
+								// }
+								// } else {
+								// sender.sendMessage(ability);
+								// }
+								sender.sendMessage(ability);
+							}
 						}
 						return true;
 					}
@@ -525,23 +564,25 @@ public class Bending extends JavaPlugin {
 							.getType();
 
 					if (config.isBender(player, BendingType.Water)
-							&& Abilities.isWaterbending(ability)) {
+							&& Abilities.isWaterbending(ability)
+							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
 							sender.sendMessage(ability.name()
 									+ " bound to slot " + (slot + 1));
 						} else {
 							config.setAbility(player, ability, mat);
-							char[] tocap = mat.name().replaceAll("_", " ").toCharArray();
+							char[] tocap = mat.name().replaceAll("_", " ")
+									.toCharArray();
 							boolean cap = true;
-							for (int i = 0; i < tocap.length; i++){
-								if (cap){
+							for (int i = 0; i < tocap.length; i++) {
+								if (cap) {
 									tocap[i] = Character.toUpperCase(tocap[i]);
 									cap = false;
 								}
 								if (Character.isWhitespace(tocap[i]))
 									cap = true;
-								
+
 							}
 							sender.sendMessage(ability.name() + " bound to "
 									+ tocap.toString());
@@ -549,7 +590,8 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 					if (config.isBender(player, BendingType.Air)
-							&& Abilities.isAirbending(ability)) {
+							&& Abilities.isAirbending(ability)
+							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
 							sender.sendMessage(ability.name()
@@ -562,7 +604,8 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 					if (config.isBender(player, BendingType.Earth)
-							&& Abilities.isEarthbending(ability)) {
+							&& Abilities.isEarthbending(ability)
+							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
 							sender.sendMessage(ability.name()
@@ -575,7 +618,8 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 					if (config.isBender(player, BendingType.Fire)
-							&& Abilities.isFirebending(ability)) {
+							&& Abilities.isFirebending(ability)
+							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
 							sender.sendMessage(ability.name()
@@ -588,7 +632,8 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 					if (sender.hasPermission("bending.admin.avatarstate")
-							&& ability == Abilities.AvatarState) {
+							&& ability == Abilities.AvatarState
+							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
 							sender.sendMessage(ability.name()
