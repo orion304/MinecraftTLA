@@ -263,3 +263,6 @@ permissions:
   bending.command.help:
     description: Allows the use of /bending help
     default: true
+  bending.avatar:
+    description: Give the avatar prefix.
+    default: op

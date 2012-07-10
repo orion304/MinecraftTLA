@@ -25,7 +25,12 @@ public class ConfigManager {
 	public static Map<String, String> color = new HashMap<String, String>();
 	public static List<String> earthbendable = new ArrayList<String>();
 	public static Map<String, Boolean> useWeapon = new HashMap<String, Boolean>();
-	
+	public static boolean useMySQL = false;
+	public static String dbHost = "localhost";
+	public static String dbUser = "root";
+	public static String dbPass = "";
+	public static String dbDB = "minecraft";
+	public static String dbPort = "3306";
 	
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
@@ -158,6 +163,14 @@ public class ConfigManager {
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire"));
 		useWeapon.put("Water",
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
+		//MySQL
+		useMySQL = config.getBoolean("MySQL", false);
+		dbHost = config.getString("MySQL.MySQL-host", "jdbc:mysql://localhost:3306");
+		dbUser = config.getString("MySQL.User", "root");
+		dbPass = config.getString("MySQL.Password", "");
+		dbDB = config.getString("MySQL.Database", "minecraft");
+		Integer dbPortint = (Integer)config.getInt("MySQL.MySQL-portnumber");
+		dbPort = dbPortint.toString();
 
 		// Earthbending revert
 		reverseearthbending = config
@@ -467,6 +480,13 @@ public class ConfigManager {
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
+		
+		config.set("MySQL", false);
+		config.set("MySQL.MySQL-host", "localhost");
+		config.set("MySQL.MySQL-portnumber", 3306);
+		config.set("MySQL.User", "root");
+		config.set("MySQL.Password", "");
+		config.set("MySQL.Database", "minecraft");
 
 		return config;
 	}
