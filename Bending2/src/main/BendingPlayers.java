@@ -72,9 +72,14 @@ public class BendingPlayers {
 					&& type == BendingType.Fire) {
 				return true;
 			}
+			if (bendingPlayers.getString(player.getName(), "").contains("c")
+					&& type == BendingType.ChiBlocker) {
+				return true;
+			}
 		}
 		return false;
 	}
+
 	
 	public boolean isBender(String player, BendingType type) {
 		if (bendingPlayers == null) {
@@ -115,6 +120,9 @@ public class BendingPlayers {
 		} else if (type == BendingType.Fire) {
 			bending = "f";
 			bendingstring = "firebending.html";
+		} else if (type == BendingType.ChiBlocker) {
+			bending = "c";
+			bendingstring = "chiblocking.html";
 		} else {
 			bending = "s";
 			player.setDisplayName(player.getName());
@@ -143,6 +151,8 @@ public class BendingPlayers {
 					append = ConfigManager.getPrefix("Fire");
 				} else if (Tools.isBender(player, BendingType.Water)) {
 					append = ConfigManager.getPrefix("Water");
+				} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
+					append = ConfigManager.getPrefix("ChiBlocker");
 				}
 				if (!(ConfigManager.compatibility))
 					player.setDisplayName(append + player.getName());
@@ -158,6 +168,9 @@ public class BendingPlayers {
 						color = Tools.getColor(ConfigManager.getColor("Fire"));
 					} else if (Tools.isBender(player, BendingType.Water)) {
 						color = Tools.getColor(ConfigManager.getColor("Water"));
+					} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
+						color = Tools.getColor(ConfigManager
+								.getColor("ChiBlocker"));
 					}
 					player.setDisplayName("<" + color + append
 							+ player.getName() + ChatColor.WHITE + ">");
@@ -186,6 +199,10 @@ public class BendingPlayers {
 			setBending(player, BendingType.Fire);
 			bendingstring = "firebending.html";
 		}
+		if (type.equalsIgnoreCase("chiblocker")) {
+			setBending(player, BendingType.ChiBlocker);
+			bendingstring = "chiblocking.html";
+		}
 		player.sendMessage(ChatColor.GOLD
 				+ "Use '/bending display <element>' to see your available abilities.");
 		player.sendMessage(ChatColor.GOLD
@@ -206,6 +223,8 @@ public class BendingPlayers {
 					append = ConfigManager.getPrefix("Fire");
 				} else if (Tools.isBender(player, BendingType.Water)) {
 					append = ConfigManager.getPrefix("Water");
+				} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
+					append = ConfigManager.getPrefix("ChiBlocker");
 				}
 				if (!(ConfigManager.compatibility))
 					player.setDisplayName(append + player.getName());
@@ -221,6 +240,9 @@ public class BendingPlayers {
 						color = Tools.getColor(ConfigManager.getColor("Fire"));
 					} else if (Tools.isBender(player, BendingType.Water)) {
 						color = Tools.getColor(ConfigManager.getColor("Water"));
+					} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
+						color = Tools.getColor(ConfigManager
+								.getColor("ChiBlocker"));
 					}
 					player.setDisplayName("<" + color + append
 							+ player.getName() + ChatColor.WHITE + ">");
@@ -241,6 +263,8 @@ public class BendingPlayers {
 				bending += "w";
 			} else if (type == BendingType.Fire) {
 				bending += "f";
+			} else if (type == BendingType.ChiBlocker) {
+				bending += "c";
 			}
 		}
 		bendingPlayers.set(player.getName(), bending);
@@ -256,6 +280,8 @@ public class BendingPlayers {
 			addBending(player, BendingType.Water);
 		if (type.equalsIgnoreCase("fire"))
 			addBending(player, BendingType.Fire);
+		if (type.equalsIgnoreCase("chiblocker"))
+			addBending(player, BendingType.ChiBlocker);
 	}
 
 	public boolean isBender(Player player) {
@@ -270,7 +296,9 @@ public class BendingPlayers {
 					|| bendingPlayers.getString(player.getName(), "").contains(
 							"f")
 					|| bendingPlayers.getString(player.getName(), "").contains(
-							"s")) {
+							"s")
+					|| bendingPlayers.getString(player.getName(), "").contains(
+							"c")) {
 				return true;
 			}
 		}
@@ -290,6 +318,7 @@ public class BendingPlayers {
 		bendingPlayers.set(setter, ability.name());
 		save();
 	}
+
 	// Bind to item
 	public void setAbility(Player player, String ability, Material mat) {
 		for (Abilities a : Abilities.values()) {
@@ -321,6 +350,7 @@ public class BendingPlayers {
 		}
 		return null;
 	}
+
 	// Bind to item
 
 	public Abilities getAbility(Player player, Material mat) {
@@ -342,8 +372,6 @@ public class BendingPlayers {
 		}
 		return false;
 	}
-	
-	
 
 	public List<BendingType> getBendingTypes(Player player) {
 		List<BendingType> list = Arrays.asList();
@@ -361,7 +389,7 @@ public class BendingPlayers {
 		bendingPlayers.set(setter, null);
 		save();
 	}
-	
+
 	public void removeAbility(Player player, Material mat) {
 		String setter = player.getName() + "<Bind" + mat.name() + ">";
 		bendingPlayers.set(setter, null);

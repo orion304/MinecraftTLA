@@ -156,6 +156,7 @@ public class AirBlast {
 				entity.setVelocity(direction.clone().multiply(pushfactor));
 			}
 			entity.setFallDistance(0);
+			entity.setFireTicks(0);
 		}
 	}
 
@@ -164,7 +165,8 @@ public class AirBlast {
 			instances.remove(id);
 		}
 	}
-	public static String getDescription(){
+
+	public static String getDescription() {
 		return "AirBlast is the most fundamental bending technique of an airbender. To use, simply left-click in a direction. A gust of wind will be created at your fingertips, launching anything in its path harmlessly back. Additionally, the airbender can create a sustained gust by sneaking (default: shift). A gust of air can extinguish fires and cool lava. ";
 	}
 }

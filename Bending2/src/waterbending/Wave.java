@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
+import tools.TempBlock;
 import tools.Tools;
 
 public class Wave {
@@ -115,6 +116,9 @@ public class Wave {
 
 	public void moveWater() {
 		if (sourceblock != null) {
+			if (sourceblock.getWorld() != player.getWorld()) {
+				return;
+			}
 			range = Tools.waterbendingNightAugment(range, player.getWorld());
 			if (AvatarState.isAvatarState(player))
 				factor = AvatarState.getValue(factor);
@@ -174,6 +178,11 @@ public class Wave {
 
 			if (!progressing) {
 				sourceblock.getWorld().playEffect(location, Effect.SMOKE, 1);
+				return false;
+			}
+
+			if (location.getWorld() != player.getWorld()) {
+				breakBlock();
 				return false;
 			}
 
@@ -304,16 +313,18 @@ public class Wave {
 		if (wave.containsKey(block)) {
 			// block.setType(Material.WATER);
 			// block.setData(half);
-			if (!Tools.adjacentToThreeOrMoreSources(block) || radius > 1) {
-				block.setType(Material.AIR);
-			}
+			// if (!Tools.adjacentToThreeOrMoreSources(block) || radius > 1) {
+			// block.setType(Material.AIR);
+			// }
+			TempBlock.revertBlock(block, Material.AIR);
 			wave.remove(block);
 		}
 	}
 
 	private void addWater(Block block) {
-		block.setType(Material.WATER);
-		block.setData(full);
+		new TempBlock(block, Material.WATER, full);
+		// block.setType(Material.WATER);
+		// block.setData(full);
 		wave.put(block, block);
 	}
 

@@ -100,7 +100,7 @@ public class ConfigManager {
 	public static double walkOnWaterRadius = 3.5;
 	public static double waterManipulationRange = 20;
 	public static double waterManipulationSpeed = 35;
-	public static int waterSpoutHeight = 8;
+	public static int waterSpoutHeight = 15;
 	public static double waterWallRange = 5;
 	public static double waterWallRadius = 2;
 	public static double waveRadius = 3;
@@ -109,6 +109,10 @@ public class ConfigManager {
 	public static long globalCooldown = 500;
 	public static double fastSwimmingFactor = 0.7;
 	public static double nightFactor = 1.5;
+	public static long chiblockduration = 2500;
+	public static double dodgechance = 25;
+	public static double punchmultiplier = 3;
+	public static double falldamagereduction = 50;
 
 	public static boolean reverseearthbending = true;
 	public static long revertchecktime = 300000;
@@ -146,12 +150,14 @@ public class ConfigManager {
 		prefixes.put("Fire", config.getString("Chat.Prefix.Fire"));
 		prefixes.put("Water", config.getString("Chat.Prefix.Water"));
 		prefixes.put("Earth", config.getString("Chat.Prefix.Earth"));
+		prefixes.put("ChiBlocker", config.getString("Chat.Prefix.ChiBlocker"));
 
 		color.put("Avatar", config.getString("Chat.Color.Avatar"));
 		color.put("Air", config.getString("Chat.Color.Air"));
 		color.put("Fire", config.getString("Chat.Color.Fire"));
 		color.put("Water", config.getString("Chat.Color.Water"));
 		color.put("Earth", config.getString("Chat.Color.Earth"));
+		color.put("ChiBlocker", config.getString("Chat.Color.ChiBlocker"));
 
 		earthbendable = config.getStringList("Bending.Option.EarthBendable");
 
@@ -171,12 +177,23 @@ public class ConfigManager {
 		dbDB = config.getString("MySQL.Database", "minecraft");
 		Integer dbPortint = (Integer)config.getInt("MySQL.MySQL-portnumber");
 		dbPort = dbPortint.toString();
+		useWeapon
+				.put("ChiBlocker",
+						config.getBoolean("Bending.Option.Bend-With-Weapon.ChiBlocker"));
 
 		// Earthbending revert
 		reverseearthbending = config
 				.getBoolean("Bending.Option.Reverse-Earthbending");
 		revertchecktime = config
 				.getLong("Bending.Option.Reverse-Earthbending-Check-Time");
+
+		chiblockduration = config
+				.getLong("Properties.ChiBlocker.ChiBlock-Duration");
+		dodgechance = config.getDouble("Properties.ChiBlocker.Dodge-Chance");
+		punchmultiplier = config
+				.getDouble("Properties.ChiBlocker.Punch-Multiplier");
+		falldamagereduction = config
+				.getDouble("Properties.ChiBlocker.Fall-Damage-Reduction");
 
 		// PROPERTIES
 		globalCooldown = config.getLong("Properties.GlobalCooldown");
@@ -346,6 +363,7 @@ public class ConfigManager {
 		config.set("Chat.Prefix.Fire", "[Firebender] ");
 		config.set("Chat.Prefix.Water", "[Waterbender] ");
 		config.set("Chat.Prefix.Earth", "[Earthbender] ");
+		config.set("Chat.Prefix.ChiBlocker", "[ChiBlocker] ");
 		config.set("Bending.Damage.AirSwipe", Integer.valueOf(2));
 		config.set("Bending.Damage.EarthBlast", Integer.valueOf(7));
 		config.set("Bending.Damage.WaterManipulation", Integer.valueOf(5));
@@ -354,16 +372,23 @@ public class ConfigManager {
 		config.set("Chat.Color.Fire", "RED");
 		config.set("Chat.Color.Water", "AQUA");
 		config.set("Chat.Color.Earth", "GREEN");
+		config.set("Chat.Color.ChiBlocker", "GOLD");
 
 		config.set("Bending.Option.EarthBendable", defaultearthbendable);
 		config.set("Bending.Option.Bend-With-Weapon.Air", false);
 		config.set("Bending.Option.Bend-With-Weapon.Fire", true);
 		config.set("Bending.Option.Bend-With-Weapon.Water", true);
 		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
+		config.set("Bending.Option.Bend-With-Weapon.ChiBlocker", false);
 		config.set("Bending.Option.Bend-To-Item", false);
 
 		config.set("Bending.Option.Reverse-Earthbending", false);
 		config.set("Bending.Option.Reverse-Earthbending-Check-Time", 500000);
+
+		config.set("Properties.ChiBlocker.ChiBlock-Duration", 2500);
+		config.set("Properties.ChiBlocker.Dodge-Chance", 25);
+		config.set("Properties.ChiBlocker.Punch-Multiplier", 3);
+		config.set("Properties.ChiBlocker.Fall-Damage-Reduction", 50);
 
 		config.set("Properties.GlobalCooldown", 500);
 
@@ -468,7 +493,7 @@ public class ConfigManager {
 		config.set("Properties.Water.WaterManipulation.Range", 20);
 		config.set("Properties.Water.WaterManipulation.Speed", 35);
 
-		config.set("Properties.Water.WaterSpout.Height", 8);
+		config.set("Properties.Water.WaterSpout.Height", 15);
 
 		config.set("Properties.Water.WaterWall.Range", 5);
 		config.set("Properties.Water.WaterWall.Radius", 2);

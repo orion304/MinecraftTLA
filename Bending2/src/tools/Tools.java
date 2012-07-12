@@ -68,6 +68,7 @@ public class Tools {
 
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
 	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
+	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
 
 	public Tools(BendingPlayers instance) {
 		config = instance;
@@ -219,6 +220,9 @@ public class Tools {
 			Location location = block.getLocation();
 
 			Block affectedblock = location.clone().add(norm).getBlock();
+			if (EarthPassive.isPassiveSand(affectedblock)) {
+				EarthPassive.revertSand(affectedblock);
+			}
 			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(affectedblock)) {
 				for (Entity entity : getEntitiesAroundPoint(
@@ -262,6 +266,9 @@ public class Tools {
 							block.setData(full);
 						}
 						break;
+					}
+					if (EarthPassive.isPassiveSand(block)) {
+						EarthPassive.revertSand(block);
 					}
 					block.setType(affectedblock.getType());
 					block.setData(affectedblock.getData());
@@ -590,6 +597,8 @@ public class Tools {
 	public static boolean canBend(Player player, Abilities ability) {
 		if (ability == null)
 			return false;
+		if (isChiBlocked(player))
+			return false;
 		if (hasPermission(player, ability)
 				&& !isRegionProtected(player, ability, true))
 			return true;
@@ -643,6 +652,8 @@ public class Tools {
 
 	public static boolean canBendPassive(Player player, BendingType type) {
 		if (isRegionProtected(player, null, false))
+			return false;
+		if (isChiBlocked(player))
 			return false;
 		if (player.hasPermission("bending." + type + ".passive")) {
 			return true;
@@ -765,6 +776,27 @@ public class Tools {
 			tempearthblocks.remove(block);
 			movedearth.remove(index);
 		}
+	}
+
+	public static void blockChi(Player player, long time) {
+		if (blockedchis.containsKey(player)) {
+			blockedchis.replace(player, time);
+		} else {
+			blockedchis.put(player, time);
+		}
+	}
+
+	public static boolean isChiBlocked(Player player) {
+		if (blockedchis.containsKey(player)) {
+			long time = System.currentTimeMillis();
+			if (time > blockedchis.get(player) + ConfigManager.chiblockduration
+					|| AvatarState.isAvatarState(player)) {
+				blockedchis.remove(player);
+				return false;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	static {
