@@ -140,6 +140,9 @@ public class Wave {
 				targetdestination = location.clone().add(
 						targetdirection.clone().multiply(range));
 				addWater(sourceblock);
+				if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
+					sourceblock.setType(Material.AIR);
+				}
 			}
 
 		}
@@ -208,10 +211,11 @@ public class Wave {
 
 				ArrayList<Block> blocks = new ArrayList<Block>();
 
-				if ((blockl.getType() == Material.AIR
+				if (((blockl.getType() == Material.AIR
 						|| blockl.getType() == Material.FIRE
-						|| Tools.isPlant(blockl) || Tools.isWaterbendable(
-						blockl, player)) && blockl.getType() != Material.LEAVES) {
+						|| Tools.isPlant(blockl) || Tools.isWater(blockl) || Tools
+							.isWaterbendable(blockl, player)))
+						&& blockl.getType() != Material.LEAVES) {
 
 					for (double i = 0; i <= radius; i += .5) {
 						for (double angle = 0; angle < 360; angle += 10) {
@@ -221,14 +225,15 @@ public class Wave {
 							if (!blocks.contains(block)
 									&& (block.getType() == Material.AIR || block
 											.getType() == Material.FIRE)
-									|| block.getType() == Material.SNOW) {
+									|| Tools.isWaterbendable(block, player)) {
 								blocks.add(block);
 							}
-							if (!blocks.contains(block)
-									&& (Tools.isPlant(block) && block.getType() != Material.LEAVES)) {
-								blocks.add(block);
-								block.breakNaturally();
-							}
+							// if (!blocks.contains(block)
+							// && (Tools.isPlant(block) && block.getType() !=
+							// Material.LEAVES)) {
+							// blocks.add(block);
+							// block.breakNaturally();
+							// }
 						}
 					}
 				}
@@ -244,6 +249,7 @@ public class Wave {
 				}
 
 				if (wave.isEmpty()) {
+					// blockl.setType(Material.GLOWSTONE);
 					breakBlock();
 					progressing = false;
 					return false;
@@ -289,6 +295,7 @@ public class Wave {
 				if (location.distance(targetdestination) < 1) {
 					progressing = false;
 					breakBlock();
+					return false;
 				}
 
 				if (radius < maxradius)
@@ -322,10 +329,14 @@ public class Wave {
 	}
 
 	private void addWater(Block block) {
-		new TempBlock(block, Material.WATER, full);
+		if (!TempBlock.isTempBlock(block)) {
+			new TempBlock(block, Material.WATER, full);
+			// new TempBlock(block, Material.ICE, (byte) 0);
+			wave.put(block, block);
+		}
 		// block.setType(Material.WATER);
 		// block.setData(full);
-		wave.put(block, block);
+		// wave.put(block, block);
 	}
 
 	public static void moveWater(Player player) {

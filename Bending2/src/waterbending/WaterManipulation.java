@@ -10,7 +10,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -23,6 +22,9 @@ public class WaterManipulation {
 
 	public static ConcurrentHashMap<Integer, WaterManipulation> instances = new ConcurrentHashMap<Integer, WaterManipulation>();
 	public static ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
+	public static ConcurrentHashMap<Player, Integer> prepared = new ConcurrentHashMap<Player, Integer>();
+
+	private static int ID = Integer.MIN_VALUE;
 
 	private static final byte full = 0x0;
 	private static final byte half = 0x4;
@@ -35,6 +37,7 @@ public class WaterManipulation {
 	private static long interval = (long) (1000. / speed);
 
 	private Player player;
+	private int id;
 	private Location location = null;
 	private Block sourceblock = null;
 	private Block oldwater = null;
@@ -45,24 +48,32 @@ public class WaterManipulation {
 	private Vector targetdirection = null;
 	private boolean falling = false;
 	private boolean settingup = false;
-	private boolean targetting = false;
+	// private boolean targetting = false;
+	private boolean displacing = false;
 	private long time;
 	private int damage = defaultdamage;
 
 	public WaterManipulation(Player player) {
 		this.player = player;
 		if (prepare()) {
-			if (instances.containsKey(player.getEntityId())) {
-				instances.get(player.getEntityId()).cancel();
-			}
-			instances.put(player.getEntityId(), this);
+			id = ID;
+			instances.put(id, this);
+			prepared.put(player, id);
+			if (ID == Integer.MAX_VALUE)
+				ID = Integer.MIN_VALUE;
+			ID++;
 			time = System.currentTimeMillis();
 		}
 	}
 
 	public boolean prepare() {
-		cancelPrevious();
 		Block block = player.getTargetBlock(null, (int) range);
+		if (prepared.containsKey(player)
+				&& !Tools.isWaterbendable(block, player)) {
+			instances.get(prepared.get(player)).displacing = true;
+			instances.get(prepared.get(player)).moveWater();
+		}
+		cancelPrevious();
 		if (Tools.isWaterbendable(block, player)) {
 			sourceblock = block;
 			focusBlock();
@@ -72,11 +83,9 @@ public class WaterManipulation {
 	}
 
 	private void cancelPrevious() {
-		if (instances.containsKey(player.getEntityId())) {
-			WaterManipulation old = instances.get(player.getEntityId());
-			if (old.progressing) {
-				old.removeWater(old.sourceblock);
-			} else {
+		if (prepared.containsKey(player)) {
+			WaterManipulation old = instances.get(prepared.get(player));
+			if (!old.progressing) {
 				old.cancel();
 			}
 		}
@@ -91,19 +100,19 @@ public class WaterManipulation {
 	}
 
 	private void unfocusBlock() {
-		instances.remove(player.getEntityId());
+		remove(id);
 	}
 
 	public void moveWater() {
 		if (sourceblock != null) {
 			if (sourceblock.getWorld() == player.getWorld()) {
 				Entity target = Tools.getTargettedEntity(player, range);
-				if (target == null) {
+				if (target == null || displacing) {
 					targetdestination = player.getTargetBlock(
 							Tools.getTransparentEarthbending(), (int) range)
 							.getLocation();
 				} else {
-					targetting = true;
+					// targetting = true;
 					targetdestination = ((LivingEntity) target)
 							.getEyeLocation();
 					targetdestination.setY(targetdestination.getY() - 1);
@@ -155,9 +164,18 @@ public class WaterManipulation {
 
 	}
 
+	private static void remove(int id) {
+		Player player = instances.get(id).player;
+		if (prepared.containsKey(player)) {
+			if (prepared.get(player) == id)
+				prepared.remove(player);
+		}
+		instances.remove(id);
+	}
+
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			instances.remove(player.getEntityId());
+			remove(id);
 			return false;
 		}
 		if (System.currentTimeMillis() - time >= interval) {
@@ -223,6 +241,12 @@ public class WaterManipulation {
 					settingup = false;
 				}
 
+				if (!player.isSneaking() && displacing) {
+					displacing = false;
+					breakBlock();
+					return false;
+				}
+
 				Vector direction;
 				if (settingup) {
 					direction = firstdirection;
@@ -239,23 +263,26 @@ public class WaterManipulation {
 				}
 				if (Tools.isTransparentToEarthbending(block)
 						&& !block.isLiquid()) {
-					block.breakNaturally(new ItemStack(Material.AIR));
+					Tools.breakBlock(block);
 				} else if (block.getType() != Material.AIR) {
 					breakBlock();
 					return false;
 				}
 
-				for (Entity entity : Tools.getEntitiesAroundPoint(location, 2)) {
-					if (entity instanceof LivingEntity
-							&& entity.getEntityId() != player.getEntityId()) {
-						entity.setVelocity(entity.getVelocity().clone()
-								.add(direction));
-						if (AvatarState.isAvatarState(player))
-							damage = AvatarState.getValue(damage);
-						Tools.damageEntity(player, entity, (int) Tools
-								.waterbendingNightAugment(damage,
-										player.getWorld()));
-						progressing = false;
+				if (!displacing) {
+					for (Entity entity : Tools.getEntitiesAroundPoint(location,
+							2)) {
+						if (entity instanceof LivingEntity
+								&& entity.getEntityId() != player.getEntityId()) {
+							entity.setVelocity(entity.getVelocity().clone()
+									.add(direction));
+							if (AvatarState.isAvatarState(player))
+								damage = AvatarState.getValue(damage);
+							Tools.damageEntity(player, entity, (int) Tools
+									.waterbendingNightAugment(damage,
+											player.getWorld()));
+							progressing = false;
+						}
 					}
 				}
 
@@ -290,7 +317,7 @@ public class WaterManipulation {
 	private void breakBlock() {
 
 		if (!Tools.isSolid(sourceblock.getRelative(BlockFace.DOWN))
-				|| targetting) {
+				|| !displacing) {
 			finalRemoveWater(sourceblock);
 		} else {
 			sourceblock.setData(full);
@@ -298,7 +325,7 @@ public class WaterManipulation {
 		}
 
 		finalRemoveWater(sourceblock);
-		instances.remove(player.getEntityId());
+		remove(id);
 	}
 
 	private void reduceWater(Block block) {
@@ -344,8 +371,9 @@ public class WaterManipulation {
 	}
 
 	public static void moveWater(Player player) {
-		if (instances.containsKey(player.getEntityId())) {
-			instances.get(player.getEntityId()).moveWater();
+		if (prepared.containsKey(player)) {
+			instances.get(prepared.get(player)).moveWater();
+			prepared.remove(player);
 		}
 	}
 

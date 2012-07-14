@@ -398,10 +398,12 @@ public class BendingListener implements Listener {
 			if (Tools.isBender(player, BendingType.Air)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Air)) {
+				event.setDamage(0);
 				event.setCancelled(true);
 			} else if (Tools.isBender(player, BendingType.Earth)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Earth)) {
+				event.setDamage(0);
 				event.setCancelled(EarthPassive.softenLanding(player));
 			} else if (Tools.isBender(player, BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.FALL) {

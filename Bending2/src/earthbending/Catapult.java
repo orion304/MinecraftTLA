@@ -25,6 +25,7 @@ public class Catapult {
 	// private static long interval = 1500;
 
 	private Player player;
+	private boolean canfly = false;
 	private Location origin;
 	private Location location;
 	private Vector direction;
@@ -67,6 +68,7 @@ public class Catapult {
 			}
 			time = System.currentTimeMillis() - interval;
 			// time = System.currentTimeMillis();
+			canfly = player.getAllowFlight();
 			instances.put(player.getEntityId(), this);
 			timers.put(player, System.currentTimeMillis());
 		}
@@ -75,6 +77,7 @@ public class Catapult {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
+			player.setAllowFlight(canfly);
 			instances.remove(player.getEntityId());
 			return false;
 		}
@@ -82,6 +85,7 @@ public class Catapult {
 			// Tools.verbose("Catapult progressing");
 			time = System.currentTimeMillis();
 			if (!moveEarth()) {
+				player.setAllowFlight(canfly);
 				instances.remove(player.getEntityId());
 				return false;
 			}
@@ -136,10 +140,13 @@ public class Catapult {
 
 	public static void removeAll() {
 		for (int id : instances.keySet()) {
+			Catapult cata = instances.get(id);
+			cata.player.setAllowFlight(cata.canfly);
 			instances.remove(id);
 		}
 	}
-	public static String getDescription(){
+
+	public static String getDescription() {
 		return "To use, left-click while looking in the direction you want to be launched. A pillar of earth will jut up from under you and launch you in that direction - if and only if there is enough earth behind where you're looking to launch you. Skillful use of this ability takes much time and work, and it does result in the death of certain gung-ho earthbenders. If you plan to use this ability, be sure you've read about your passive ability you innately have as an earthbender.";
 	}
 }
