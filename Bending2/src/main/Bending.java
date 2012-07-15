@@ -166,6 +166,46 @@ public class Bending extends JavaPlugin {
 
 			});
 
+			bending.addPlotter(new Metrics.Plotter("Chi Blocker") {
+
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (OfflinePlayer p : Bukkit.getServer()
+							.getOfflinePlayers()) {
+						if (config.isBender(p.getName(), BendingType.ChiBlocker))
+							i++;
+					}
+					return i;
+				}
+
+			});
+
+			bending.addPlotter(new Metrics.Plotter("Non-Bender") {
+
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (OfflinePlayer p : Bukkit.getServer()
+							.getOfflinePlayers()) {
+
+						if (!config.isBender(p.getName(),
+								BendingType.ChiBlocker)
+								&& !config.isBender(p.getName(),
+										BendingType.Air)
+								&& !config.isBender(p.getName(),
+										BendingType.Fire)
+								&& !config.isBender(p.getName(),
+										BendingType.Water)
+								&& !config.isBender(p.getName(),
+										BendingType.Earth))
+							i++;
+					}
+					return i;
+				}
+
+			});
+
 			metrics.start();
 			log.info("Bending is sending data for Plugin Metrics.");
 		} catch (IOException e) {

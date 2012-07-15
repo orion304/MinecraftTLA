@@ -8,6 +8,7 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.ConfigManager;
@@ -22,6 +23,7 @@ public class WaterSpout {
 	public static ConcurrentHashMap<Block, Block> baseblocks = new ConcurrentHashMap<Block, Block>();
 
 	private static final int height = ConfigManager.waterSpoutHeight;
+	private static final double threshold = .4;
 	// private static final byte half = 0x4;
 	private static final byte full = 0x0;
 	private Player player;
@@ -96,8 +98,12 @@ public class WaterSpout {
 
 	private static void spout(Player player) {
 		player.setSprinting(false);
+		if (player.getVelocity().length() > threshold) {
+			player.setVelocity(player.getVelocity().clone().normalize()
+					.multiply(threshold * .8).add(new Vector(0, -.1, 0)));
+		}
 		player.removePotionEffect(PotionEffectType.SPEED);
-		Location location = player.getLocation().clone();
+		Location location = player.getLocation().clone().add(0, .35, 0);
 		Block block;
 		int height = spoutableWaterHeight(location, player);
 		// Tools.verbose(height + " " + WaterSpout.height + " "
@@ -105,7 +111,9 @@ public class WaterSpout {
 		if (height != 0) {
 			for (int i = 0; i <= height - 1; i++) {
 				block = location.clone().add(0, -i, 0).getBlock();
-				new TempBlock(block, Material.WATER, full);
+				if (!TempBlock.isTempBlock(block)) {
+					new TempBlock(block, Material.WATER, full);
+				}
 				// block.setType(Material.WATER);
 				// block.setData(full);
 				if (!affectedblocks.containsKey(block)) {
@@ -125,7 +133,9 @@ public class WaterSpout {
 			if (!affectedblocks.contains(blocki)) {
 				if (blocki.getType() == Material.WATER
 						|| blocki.getType() == Material.STATIONARY_WATER) {
-					revertBaseBlock(player);
+					if (!TempBlock.isTempBlock(blocki)) {
+						revertBaseBlock(player);
+					}
 					return i;
 				}
 				if (blocki.getType() == Material.ICE

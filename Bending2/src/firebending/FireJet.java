@@ -21,12 +21,14 @@ public class FireJet {
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 
 	private Player player;
+	private boolean canfly;
 	private long time;
 	private long duration = defaultduration;
 	private double factor = defaultfactor;
 
 	public FireJet(Player player) {
 		if (instances.containsKey(player)) {
+			player.setAllowFlight(canfly);
 			instances.remove(player);
 			return;
 		}
@@ -44,6 +46,7 @@ public class FireJet {
 					.normalize().multiply(factor));
 			block.setType(Material.FIRE);
 			this.player = player;
+			canfly = player.getAllowFlight();
 			time = System.currentTimeMillis();
 			timers.put(player, time);
 			instances.put(player, this);
@@ -60,13 +63,14 @@ public class FireJet {
 
 	public void progress() {
 		if (player.isDead() || !player.isOnline()) {
+			player.setAllowFlight(canfly);
 			instances.remove(player);
 			return;
 		}
 		if ((Tools.isWater(player.getLocation().getBlock()) || System
 				.currentTimeMillis() > time + duration)
 				&& !AvatarState.isAvatarState(player)) {
-
+			player.setAllowFlight(canfly);
 			instances.remove(player);
 		} else {
 			player.getWorld().playEffect(player.getLocation(),

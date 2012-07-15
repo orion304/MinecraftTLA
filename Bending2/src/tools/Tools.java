@@ -25,6 +25,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
@@ -223,6 +224,8 @@ public class Tools {
 			if (EarthPassive.isPassiveSand(affectedblock)) {
 				EarthPassive.revertSand(affectedblock);
 			}
+			if (affectedblock == null)
+				return;
 			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(affectedblock)) {
 				for (Entity entity : getEntitiesAroundPoint(
@@ -270,6 +273,8 @@ public class Tools {
 					if (EarthPassive.isPassiveSand(block)) {
 						EarthPassive.revertSand(block);
 					}
+					if (block == null)
+						return;
 					block.setType(affectedblock.getType());
 					block.setData(affectedblock.getData());
 					if (tempearthblocks.containsKey(affectedblock)) {
@@ -384,6 +389,8 @@ public class Tools {
 
 	public static boolean isWaterbendable(Block block, Player player) {
 		byte full = 0x0;
+		if (TempBlock.isTempBlock(block))
+			return false;
 		if ((block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
 				&& block.getData() == full)
 			return true;
@@ -620,7 +627,10 @@ public class Tools {
 			return false;
 		if (look) {
 			try {
-				Block c = player.getTargetBlock(null, 20);
+				int range = 20;
+				if (ability == Abilities.Fireball)
+					range = 100;
+				Block c = player.getTargetBlock(null, range);
 				if (!(wg.getGlobalRegionManager()
 						.get(c.getLocation().getWorld())
 						.getApplicableRegions(c.getLocation())
@@ -797,6 +807,10 @@ public class Tools {
 			return true;
 		}
 		return false;
+	}
+
+	public static void breakBlock(Block block) {
+		block.breakNaturally(new ItemStack(Material.AIR));
 	}
 
 	static {

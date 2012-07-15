@@ -15,7 +15,7 @@ public class TempBlock {
 
 	public TempBlock(Block block, Material newtype, byte newdata) {
 		if (instances.containsKey(block)) {
-			revertBlock(block, Material.AIR);
+			instances.get(block).revertBlock();
 		}
 		this.block = block;
 		type = block.getType();
@@ -28,8 +28,10 @@ public class TempBlock {
 	}
 
 	public void revertBlock() {
-		block.setType(type);
-		block.setData(data);
+		if (block.getType() == newtype) {
+			block.setType(type);
+			block.setData(data);
+		}
 		instances.remove(block);
 	}
 
