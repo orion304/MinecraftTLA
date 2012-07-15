@@ -79,8 +79,6 @@ public class BendingPlayers {
 		}
 		return false;
 	}
-
-	
 	public boolean isBender(String player, BendingType type) {
 		if (bendingPlayers == null) {
 			return false;
@@ -101,11 +99,14 @@ public class BendingPlayers {
 					&& type == BendingType.Fire) {
 				return true;
 			}
+			if (bendingPlayers.getString(player, "").contains("f")
+					&& type == BendingType.ChiBlocker) {
+				return true;
+			}
 		}
 		return false;
 	}
-
-	public void setBending(Player player, BendingType type) {
+		public void setBending(Player player, BendingType type) {
 		String bending = "";
 		String bendingstring = "";
 		if (type == BendingType.Air) {

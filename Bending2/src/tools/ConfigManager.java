@@ -170,7 +170,7 @@ public class ConfigManager {
 		useWeapon.put("Water",
 				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
 		//MySQL
-		useMySQL = config.getBoolean("MySQL", false);
+		useMySQL = config.getBoolean("MySQL.Use-MySQL", false);
 		dbHost = config.getString("MySQL.MySQL-host", "jdbc:mysql://localhost:3306");
 		dbUser = config.getString("MySQL.User", "root");
 		dbPass = config.getString("MySQL.Password", "");
@@ -506,7 +506,7 @@ public class ConfigManager {
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
 		
-		config.set("MySQL", false);
+		config.set("MySQL.Use-MySQL", false);
 		config.set("MySQL.MySQL-host", "localhost");
 		config.set("MySQL.MySQL-portnumber", 3306);
 		config.set("MySQL.User", "root");
