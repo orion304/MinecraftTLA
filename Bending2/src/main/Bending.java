@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import lib.PatPeter.SQLibrary.MySQL;
 import main.Metrics.Graph;
 import net.minecraft.server.EntityFireball;
 
@@ -69,7 +68,7 @@ public class Bending extends JavaPlugin {
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
 	public static ConfigManager configManager = new ConfigManager();
-	public BendingPlayers config = null;
+	public BendingPlayers config = new BendingPlayers(getDataFolder());
 	public Tools tools = new Tools(config);
 
 	public String[] waterbendingabilities;
@@ -216,31 +215,31 @@ public class Bending extends JavaPlugin {
 
 		registerCommands();
 		
-		if (ConfigManager.useMySQL)
-			loadMySQL();
-		else
-			config = new BendingPlayers(getDataFolder());
+		//if (ConfigManager.useMySQL)
+		//	loadMySQL();
+		//else
+		//	config = new BendingPlayers(getDataFolder());
 
 	}
 
-	private void loadMySQL() {
-		MySQL mysql = new MySQL(log, "[Bending]", ConfigManager.dbHost, ConfigManager.dbPort, ConfigManager.dbDB, ConfigManager.dbUser, ConfigManager.dbPass);
-		try{
-        mysql.open();
-		}catch(Exception e){
-			Tools.verbose("MySQL connection failed");
-		}
-        if (mysql.checkConnection()) {
-            log.info("[Bending]" + "MySQL connection successful");
-            if (!mysql.checkTable("Bending")) {
-                log.info("[Bending]" + "Creating table bending...");
-                String query = "CREATE TABLE IF NOT EXISTS Bending ('player' TEXT NOT NULL, 'bending' TEXT NOT NULL) ;";
-                mysql.createTable(query);
-            }
-        } else {
-            log.severe("[Bending]" + "MySQL connection failed");
-    }
-	}
+//	private void loadMySQL() {
+//		MySQL mysql = new MySQL(log, "[Bending]", ConfigManager.dbHost, ConfigManager.dbPort, ConfigManager.dbDB, ConfigManager.dbUser, ConfigManager.dbPass);
+//		try{
+//        mysql.open();
+//		}catch(Exception e){
+//			Tools.verbose("MySQL connection failed");
+//		}
+//        if (mysql.checkConnection()) {
+//            log.info("[Bending]" + "MySQL connection successful");
+//            if (!mysql.checkTable("Bending")) {
+//                log.info("[Bending]" + "Creating table bending...");
+//                String query = "CREATE TABLE IF NOT EXISTS Bending ('player' TEXT NOT NULL, 'bending' TEXT NOT NULL) ;";
+//                mysql.createTable(query);
+//            }
+//        } else {
+//            log.severe("[Bending]" + "MySQL connection failed");
+//    }
+//	}
 
 	public void reloadConfiguration() {
 		getConfig().options().copyDefaults(true);

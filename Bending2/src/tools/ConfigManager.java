@@ -162,13 +162,13 @@ public class ConfigManager {
 		earthbendable = config.getStringList("Bending.Option.EarthBendable");
 
 		useWeapon.put("Air",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Air"));
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Air", false));
 		useWeapon.put("Earth",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Earth"));
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Earth", false));
 		useWeapon.put("Fire",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire"));
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire", false));
 		useWeapon.put("Water",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Water"));
+				config.getBoolean("Bending.Option.Bend-With-Weapon.Water", false));
 		//MySQL
 		useMySQL = config.getBoolean("MySQL.Use-MySQL", false);
 		dbHost = config.getString("MySQL.MySQL-host", "jdbc:mysql://localhost:3306");
@@ -177,6 +177,7 @@ public class ConfigManager {
 		dbDB = config.getString("MySQL.Database", "minecraft");
 		Integer dbPortint = (Integer)config.getInt("MySQL.MySQL-portnumber");
 		dbPort = dbPortint.toString();
+		
 		useWeapon
 				.put("ChiBlocker",
 						config.getBoolean("Bending.Option.Bend-With-Weapon.ChiBlocker"));

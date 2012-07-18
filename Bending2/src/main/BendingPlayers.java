@@ -79,6 +79,7 @@ public class BendingPlayers {
 		}
 		return false;
 	}
+	
 	public boolean isBender(String player, BendingType type) {
 		if (bendingPlayers == null) {
 			return false;
