@@ -95,9 +95,8 @@ public class BendingListener implements Listener {
 		} else if ((Tools.isBender(player, BendingType.ChiBlocker))
 				&& (ConfigManager.enabled)) {
 			append = ConfigManager.getPrefix("ChiBlocker");
-		} else {
-			BendingManager.newplayers.add(player);
 		}
+
 		if (!(ConfigManager.compatibility) && (ConfigManager.enabled))
 			player.setDisplayName(append + player.getName());
 
@@ -398,12 +397,14 @@ public class BendingListener implements Listener {
 			if (Tools.isBender(player, BendingType.Air)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Air)) {
-				event.setDamage(0);
 				event.setCancelled(true);
+			} else if (Tools.isBender(player, BendingType.Water)
+					&& event.getCause() == DamageCause.FALL
+					&& Tools.canBendPassive(player, BendingType.Water)) {
+				event.setCancelled(WaterPassive.softenLanding(player));
 			} else if (Tools.isBender(player, BendingType.Earth)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Earth)) {
-				event.setDamage(0);
 				event.setCancelled(EarthPassive.softenLanding(player));
 			} else if (Tools.isBender(player, BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.FALL) {
@@ -538,8 +539,8 @@ public class BendingListener implements Listener {
 		} else if (Illumination.blocks.containsKey(block)) {
 			event.setCancelled(true);
 		} else if (!Wave.canThaw(block)) {
-			block.setType(Material.AIR);
-			event.setCancelled(true);
+			Wave.thaw(block);
+			// event.setCancelled(true);
 		} else if (Tools.tempearthblocks.containsKey(block)) {
 			Tools.removeEarthbendedBlockIndex(block);
 		}

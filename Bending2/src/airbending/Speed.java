@@ -1,5 +1,6 @@
 package airbending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
@@ -16,9 +17,13 @@ public class Speed {
 	private Player player;
 	private int id;
 
+	// private boolean canfly = false;
+
 	public Speed(Player player) {
 		this.player = player;
 		id = player.getEntityId();
+		// canfly = player.getAllowFlight();
+		// player.setAllowFlight(true);
 		instances.put(id, this);
 	}
 
@@ -33,6 +38,7 @@ public class Speed {
 			applySpeed();
 			return true;
 		}
+		// player.setAllowFlight(canfly);
 		instances.remove(id);
 		return false;
 	}
@@ -51,6 +57,14 @@ public class Speed {
 
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
+	}
+
+	public static ArrayList<Player> getPlayers() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (int id : instances.keySet()) {
+			players.add(instances.get(id).player);
+		}
+		return players;
 	}
 
 }

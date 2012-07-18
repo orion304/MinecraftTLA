@@ -1,5 +1,6 @@
 package airbending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
@@ -32,12 +33,13 @@ public class Tornado {
 	private ConcurrentHashMap<Integer, Integer> angles = new ConcurrentHashMap<Integer, Integer>();
 	private Location origin;
 	private Player player;
-	private boolean canfly;
+
+	// private boolean canfly;
 
 	public Tornado(Player player) {
 		this.player = player;
-		canfly = player.getAllowFlight();
-		player.setAllowFlight(true);
+		// canfly = player.getAllowFlight();
+		// player.setAllowFlight(true);
 		origin = player.getTargetBlock(null, (int) range).getLocation();
 		origin.setY(origin.getY() - 1. / 10. * height);
 
@@ -55,19 +57,19 @@ public class Tornado {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			player.setAllowFlight(canfly);
+			// player.setAllowFlight(canfly);
 			instances.remove(player.getEntityId());
 			return false;
 		}
 		if (!Tools.canBend(player, Abilities.Tornado)
 				|| player.getEyeLocation().getBlock().isLiquid()) {
-			player.setAllowFlight(canfly);
+			// player.setAllowFlight(canfly);
 			instances.remove(player.getEntityId());
 			return false;
 		}
 		if ((Tools.getBendingAbility(player) != Abilities.Tornado)
 				|| (!player.isSneaking())) {
-			player.setAllowFlight(canfly);
+			// player.setAllowFlight(canfly);
 			instances.remove(player.getEntityId());
 			return false;
 		}
@@ -152,6 +154,14 @@ public class Tornado {
 	public static String getDescription() {
 		return "To use, simply sneak (default: shift). This will create a swirling vortex at the targeted location. Any creature or object caught in the vortex will be launched up and out in some random direction. If another player gets caught in the vortex, the launching effect is minimal. Tornado can also be used to transport the user. If the user gets caught in his/her own tornado, his movements are much more manageable. Provided the user doesn't fall out of the vortex, it will take him to a maximum height and move him in the general direction he's looking. Skilled airbenders can scale anything with this ability.";
 
+	}
+
+	public static ArrayList<Player> getPlayers() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (int id : instances.keySet()) {
+			players.add(instances.get(id).player);
+		}
+		return players;
 	}
 
 }

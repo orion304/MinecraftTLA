@@ -7,9 +7,7 @@ import org.bukkit.entity.Player;
 
 import tools.ConfigManager;
 import tools.Tools;
-import waterbending.FreezeMelt;
 import waterbending.Melt;
-import waterbending.WaterManipulation;
 
 public class HeatMelt {
 
@@ -22,10 +20,7 @@ public class HeatMelt {
 		for (Block block : Tools.getBlocksAroundPoint(location,
 				(int) Tools.firebendingDayAugment(radius, player.getWorld()))) {
 			if (Tools.isMeltable(block)) {
-				if (WaterManipulation.canPhysicsChange(block)
-						&& FreezeMelt.canThaw(block)) {
-					Melt.melt(block);
-				}
+				Melt.melt(block);
 			} else if (isHeatable(block)) {
 				heat(block);
 			}
@@ -42,9 +37,9 @@ public class HeatMelt {
 	private static boolean isHeatable(Block block) {
 		return false;
 	}
-	
-	public static String getDescription(){
-		return "To use, simply left-click. Any meltable blocks around that target location will immediately melt. Additionally, any obsidian will turn back into lava."; 
+
+	public static String getDescription() {
+		return "To use, simply left-click. Any meltable blocks around that target location will immediately melt. Additionally, any obsidian will turn back into lava.";
 	}
 
 }

@@ -139,10 +139,11 @@ public class Wave {
 						targetdestination).normalize();
 				targetdestination = location.clone().add(
 						targetdirection.clone().multiply(range));
-				addWater(sourceblock);
 				if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
 					sourceblock.setType(Material.AIR);
 				}
+				addWater(sourceblock);
+
 			}
 
 		}
