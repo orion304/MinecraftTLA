@@ -29,6 +29,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+
 import waterbending.FreezeMelt;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
@@ -39,8 +42,6 @@ import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;

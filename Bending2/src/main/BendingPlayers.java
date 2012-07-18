@@ -38,7 +38,7 @@ public class BendingPlayers {
 		load();
 		dataFolder = file;
 	}
-
+	
 	public void removeBending(Player player) {
 		if (bendingPlayers == null) {
 			return;
@@ -79,7 +79,7 @@ public class BendingPlayers {
 		}
 		return false;
 	}
-
+	
 	public boolean isBender(String player, BendingType type) {
 		if (bendingPlayers == null) {
 			return false;
@@ -107,8 +107,7 @@ public class BendingPlayers {
 		}
 		return false;
 	}
-
-	public void setBending(Player player, BendingType type) {
+		public void setBending(Player player, BendingType type) {
 		String bending = "";
 		String bendingstring = "";
 		if (type == BendingType.Air) {
