@@ -554,6 +554,8 @@ public class Tools {
 	}
 
 	public static boolean adjacentToThreeOrMoreSources(Block block) {
+		if (TempBlock.isTempBlock(block))
+			return false;
 		int sources = 0;
 		byte full = 0x0;
 		BlockFace[] faces = { BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH,
@@ -810,6 +812,17 @@ public class Tools {
 
 	public static void breakBlock(Block block) {
 		block.breakNaturally(new ItemStack(Material.AIR));
+	}
+
+	public static boolean adjacentToFrozenBlock(Block block) {
+		BlockFace[] faces = { BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH,
+				BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH };
+		boolean adjacent = false;
+		for (BlockFace face : faces) {
+			if (FreezeMelt.frozenblocks.containsKey((block.getRelative(face))))
+				adjacent = true;
+		}
+		return adjacent;
 	}
 
 	static {

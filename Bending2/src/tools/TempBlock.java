@@ -14,21 +14,42 @@ public class TempBlock {
 	byte data, newdata;
 
 	public TempBlock(Block block, Material newtype, byte newdata) {
-		if (instances.containsKey(block)) {
-			instances.get(block).revertBlock();
-		}
 		this.block = block;
-		type = block.getType();
-		data = block.getData();
 		this.newdata = newdata;
 		this.newtype = newtype;
-		block.setType(newtype);
-		block.setData(newdata);
-		instances.put(block, this);
+		if (instances.containsKey(block)) {
+			TempBlock temp = instances.get(block);
+			if (newtype != temp.newtype) {
+				temp.block.setType(newtype);
+				temp.newtype = newtype;
+			}
+			if (newdata != temp.newdata) {
+				temp.block.setData(newdata);
+				temp.newdata = newdata;
+			}
+			type = temp.type;
+			data = temp.data;
+			instances.replace(block, temp);
+		} else {
+			type = block.getType();
+			data = block.getData();
+			block.setType(newtype);
+			block.setData(newdata);
+			instances.put(block, this);
+		}
 	}
 
 	public void revertBlock() {
-		if (block.getType() == newtype) {
+		// Tools.verbose(block.getType());
+		if (block.getType() == newtype
+				|| (Tools.isWater(block) && (newtype == Material.WATER || newtype == Material.STATIONARY_WATER))) {
+			if (type == Material.WATER || type == Material.STATIONARY_WATER
+					|| type == Material.AIR) {
+				if (Tools.adjacentToThreeOrMoreSources(block)) {
+					type = Material.WATER;
+					data = (byte) 0x0;
+				}
+			}
 			block.setType(type);
 			block.setData(data);
 		}
@@ -39,8 +60,16 @@ public class TempBlock {
 		if (instances.containsKey(block)) {
 			instances.get(block).revertBlock();
 		} else {
-			block.setType(defaulttype);
+			if ((defaulttype == Material.WATER
+					|| defaulttype == Material.STATIONARY_WATER || defaulttype == Material.AIR)
+					&& Tools.adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.WATER);
+				block.setData((byte) 0x0);
+			} else {
+				block.setType(defaulttype);
+			}
 		}
+		// block.setType(defaulttype);
 	}
 
 	public static void removeBlock(Block block) {

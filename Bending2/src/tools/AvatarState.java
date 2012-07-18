@@ -1,5 +1,6 @@
 package tools;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
@@ -13,6 +14,8 @@ public class AvatarState {
 	private static final double factor = 5;
 
 	Player player;
+
+	// boolean canfly = false;
 
 	public AvatarState(Player player) {
 		this.player = player;
@@ -66,6 +69,14 @@ public class AvatarState {
 
 	public static int getValue(int value) {
 		return (int) factor * value;
+	}
+
+	public static ArrayList<Player> getPlayers() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (Player player : instances.keySet()) {
+			players.add(player);
+		}
+		return players;
 	}
 
 }

@@ -397,6 +397,9 @@ public class WaterManipulation {
 			return false;
 		if (TempBlock.isTempBlock(to) || TempBlock.isTempBlock(from))
 			return false;
+		if (Tools.adjacentToFrozenBlock(to)
+				|| Tools.adjacentToFrozenBlock(from))
+			return false;
 		return true;
 	}
 

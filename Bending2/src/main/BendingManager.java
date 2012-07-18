@@ -47,7 +47,7 @@ public class BendingManager implements Runnable {
 
 	public Bending plugin;
 
-	static ArrayList<Player> newplayers = new ArrayList<Player>();
+	static ArrayList<Player> flyingplayers = new ArrayList<Player>();
 
 	long time;
 	long interval;
@@ -71,6 +71,7 @@ public class BendingManager implements Runnable {
 		manageWaterbending();
 		// manageMessages();
 		AvatarState.manageAvatarStates();
+		handleFlying();
 
 	}
 
@@ -220,6 +221,21 @@ public class BendingManager implements Runnable {
 
 		WaterPassive.handlePassive(plugin.getServer());
 		FastSwimming.HandleSwim(plugin.getServer());
+
+	}
+
+	private void handleFlying() {
+
+		ArrayList<Player> players = new ArrayList<Player>();
+
+		players.addAll(Tornado.getPlayers());
+		players.addAll(Speed.getPlayers());
+		players.addAll(FireJet.getPlayers());
+		players.addAll(AvatarState.getPlayers());
+
+		for (Player player : flyingplayers) {
+
+		}
 
 	}
 

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import tools.Abilities;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.TempBlock;
 import tools.Tools;
 
 public class FastSwimming {
@@ -22,6 +23,7 @@ public class FastSwimming {
 					&& Tools.canBendPassive(player, BendingType.Water)
 					&& player.isSneaking()
 					&& Tools.isWater(player.getLocation().getBlock())
+					&& !TempBlock.isTempBlock(player.getLocation().getBlock())
 					&& !(Tools.getBendingAbility(player) == Abilities.WaterManipulation
 							|| Tools.getBendingAbility(player) == Abilities.Wave
 							|| Tools.getBendingAbility(player) == Abilities.WaterWall

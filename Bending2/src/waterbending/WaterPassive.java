@@ -3,6 +3,7 @@ package waterbending;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -46,6 +47,19 @@ public class WaterPassive {
 		// vec = velocity.clone().normalize().multiply(factor);
 		// Tools.verbose("Is this never called or something?");
 		return vec;
+	}
+
+	public static boolean softenLanding(Player player) {
+		Block block = player.getLocation().getBlock();
+		Block fallblock = block.getRelative(BlockFace.DOWN);
+		if (Tools.isWater(block))
+			return true;
+		if (fallblock.getType() == Material.AIR)
+			return true;
+		if (Tools.isWaterbendable(fallblock, player)
+				&& !Tools.isPlant(fallblock))
+			return true;
+		return false;
 	}
 
 }
