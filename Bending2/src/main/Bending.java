@@ -103,7 +103,7 @@ public class Bending extends JavaPlugin {
 		try {
 			Metrics metrics = new Metrics(this);
 
-			Graph bending = metrics.createGraph("Distribution of benders");
+			Graph bending = metrics.createGraph("Bending");
 
 			bending.addPlotter(new Metrics.Plotter("Air") {
 
