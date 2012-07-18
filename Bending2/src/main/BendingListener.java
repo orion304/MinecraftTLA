@@ -78,7 +78,7 @@ public class BendingListener implements Listener {
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
 		String append = "";
-		if ((player.isOp()) && ConfigManager.enabled) {
+		if ((player.hasPermission("bending.avatar")) && ConfigManager.enabled) {
 			append = ConfigManager.getPrefix("Avatar");
 		} else if ((Tools.isBender(player, BendingType.Air))
 				&& (ConfigManager.enabled)) {
@@ -103,7 +103,7 @@ public class BendingListener implements Listener {
 		if ((ConfigManager.compatibility) && (ConfigManager.enabled)) {
 			ChatColor color = ChatColor.WHITE;
 			if (ConfigManager.colors) {
-				if (player.isOp()) {
+				if (player.hasPermission("bending.avatar")) {
 					color = Tools.getColor(ConfigManager.getColor("Avatar"));
 				} else if (Tools.isBender(player, BendingType.Air)) {
 					color = Tools.getColor(ConfigManager.getColor("Air"));
@@ -143,7 +143,7 @@ public class BendingListener implements Listener {
 			ChatColor color = ChatColor.WHITE;
 
 			if (ConfigManager.colors) {
-				if (player.isOp()) {
+				if (player.hasPermission("bending.avatar")) {
 					color = Tools.getColor(ConfigManager.getColor("Avatar"));
 				} else if (Tools.isBender(player, BendingType.Air)) {
 					color = Tools.getColor(ConfigManager.getColor("Air"));

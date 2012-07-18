@@ -98,6 +98,8 @@ public class AirBlast {
 				affectingradius)) {
 			if (testblock.getType() == Material.FIRE) {
 				testblock.setType(Material.AIR);
+				testblock.getWorld().playEffect(testblock.getLocation(),
+						Effect.EXTINGUISH, 0);
 			}
 			if (((block.getType() == Material.LEVER) || (block.getType() == Material.STONE_BUTTON))
 					&& !affectedlevers.contains(block)) {
@@ -139,7 +141,7 @@ public class AirBlast {
 	}
 
 	private void advanceLocation() {
-		location.getWorld().playEffect(location, Effect.SMOKE, 1);
+		location.getWorld().playEffect(location, Effect.SMOKE, 4, (int) range);
 		location = location.add(direction.clone().multiply(speedfactor));
 	}
 
@@ -156,6 +158,9 @@ public class AirBlast {
 				entity.setVelocity(direction.clone().multiply(pushfactor));
 			}
 			entity.setFallDistance(0);
+			if (entity.getFireTicks() > 0)
+				entity.getWorld().playEffect(entity.getLocation(),
+						Effect.EXTINGUISH, 0);
 			entity.setFireTicks(0);
 		}
 	}

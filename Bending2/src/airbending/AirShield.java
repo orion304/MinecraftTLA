@@ -90,7 +90,8 @@ public class AirShield {
 			z = origin.getZ() + radius * Math.sin(angle);
 
 			Location effect = new Location(origin.getWorld(), x, y, z);
-			origin.getWorld().playEffect(effect, Effect.SMOKE, 1);
+			origin.getWorld().playEffect(effect, Effect.SMOKE, 4,
+					(int) AirBlast.range);
 
 			angles.put(i, angles.get(i) + (int) (10 * speedfactor));
 		}
@@ -120,8 +121,8 @@ public class AirShield {
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
 	}
-	
-	public static String getDescription(){
+
+	public static String getDescription() {
 		return "Air Shield is one of the most powerful defensive techniques in existence. To use, simply sneak (default: shift). This will create a whirlwind of air around the user, with a small pocket of safe space in the center. This wind will deflect all projectiles and will prevent any creature from entering it for as long as its maintained. ";
 	}
 }

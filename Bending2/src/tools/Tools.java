@@ -14,6 +14,7 @@ import main.BendingPlayers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -220,6 +221,8 @@ public class Tools {
 			Location location = block.getLocation();
 
 			Block affectedblock = location.clone().add(norm).getBlock();
+			block.getWorld().playEffect(block.getLocation(),
+					Effect.GHAST_SHOOT, 0);
 			if (EarthPassive.isPassiveSand(affectedblock)) {
 				EarthPassive.revertSand(affectedblock);
 			}

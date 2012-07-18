@@ -214,8 +214,32 @@ public class Bending extends JavaPlugin {
 		configManager.load(new File(getDataFolder(), "config.yml"));
 
 		registerCommands();
+		
+		//if (ConfigManager.useMySQL)
+		//	loadMySQL();
+		//else
+		//	config = new BendingPlayers(getDataFolder());
 
 	}
+
+//	private void loadMySQL() {
+//		MySQL mysql = new MySQL(log, "[Bending]", ConfigManager.dbHost, ConfigManager.dbPort, ConfigManager.dbDB, ConfigManager.dbUser, ConfigManager.dbPass);
+//		try{
+//        mysql.open();
+//		}catch(Exception e){
+//			Tools.verbose("MySQL connection failed");
+//		}
+//        if (mysql.checkConnection()) {
+//            log.info("[Bending]" + "MySQL connection successful");
+//            if (!mysql.checkTable("Bending")) {
+//                log.info("[Bending]" + "Creating table bending...");
+//                String query = "CREATE TABLE IF NOT EXISTS Bending ('player' TEXT NOT NULL, 'bending' TEXT NOT NULL) ;";
+//                mysql.createTable(query);
+//            }
+//        } else {
+//            log.severe("[Bending]" + "MySQL connection failed");
+//    }
+//	}
 
 	public void reloadConfiguration() {
 		getConfig().options().copyDefaults(true);
@@ -249,12 +273,13 @@ public class Bending extends JavaPlugin {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
-
-		Player player = (Player) sender;
-
+		Player player = null;
+        if (sender instanceof Player){
+		player = (Player) sender;
+        }
 		if (cmd.getName().equalsIgnoreCase("bending")) {
 			if (Arrays.asList(args).isEmpty()) {
-				sender.sendMessage(ChatColor.DARK_RED
+				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <page> if you want to see a list of permissions.");
 				sender.sendMessage(ChatColor.DARK_RED
 						+ "Use /bending help <ability> if you want to see how to use it.");
@@ -264,7 +289,8 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("remove") && args.length >= 2
-					&& sender.hasPermission("bending.admin.remove")) {
+					&& (sender.hasPermission("bending.admin.remove")
+							|| player == null)) {
 				String playerlist = "";
 				for (String playername : Arrays.asList(args)) {
 					Player targetplayer = this.getServer()
@@ -282,7 +308,8 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("reload") && args.length == 1
-					&& sender.hasPermission("bending.admin.reload")) {
+					&& (sender.hasPermission("bending.admin.reload") 
+					|| (player == null))) {
 				configManager
 						.load(new File(this.getDataFolder(), "config.yml"));
 				config.reload();
@@ -291,7 +318,9 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("permaremove") && args.length >= 2
-					&& sender.hasPermission("bending.admin.permaremove")) {
+					&& (sender.hasPermission("bending.admin.permaremove")
+							|| player == null))
+							{
 				String playerlist = "";
 				for (String playername : Arrays.asList(args)) {
 					Player targetplayer = this.getServer()
@@ -313,6 +342,10 @@ public class Bending extends JavaPlugin {
 				if (args.length == 1)
 					return false;
 				if (args.length == 2) {
+					if (player == null){
+						sender.sendMessage("That command cannot be used from the console");
+						return true;
+					}
 					if (config.isBender(player)
 							&& !sender.hasPermission("bending.admin.rechoose")) {
 						sender.sendMessage("You've already chosen your bending abilities. Only ops can change this now.");
@@ -338,7 +371,8 @@ public class Bending extends JavaPlugin {
 						config.setBending(player, args[1]);
 						return true;
 					}
-				} else if (sender.hasPermission("bending.admin.choose")) {
+				} else if (sender.hasPermission("bending.admin.choose")
+						|| player == null) {
 					String playername = args[1];
 					Player targetplayer = getServer().getPlayer(playername);
 					if (targetplayer == null) {
@@ -381,7 +415,8 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("add")
-					&& sender.hasPermission("bending.admin.add")) {
+					&& (sender.hasPermission("bending.admin.add")
+							|| player == null)) {
 				if (args.length == 1) {
 					sender.sendMessage(ChatColor.DARK_RED
 							+ "Use /bending help <page> if you want to see a list of permissions.");
@@ -392,6 +427,10 @@ public class Bending extends JavaPlugin {
 					return true;
 				}
 				if (args.length == 2) {
+					if (player == null){
+						sender.sendMessage("That command cannot be used from the console");
+						return true;
+					}
 					if (args[1].equalsIgnoreCase("water")
 							&& Tools.isBender(player, BendingType.Water)) {
 						sender.sendMessage("You are already a waterbender!");
@@ -502,6 +541,7 @@ public class Bending extends JavaPlugin {
 
 			if (args.length > 1) {
 				if (args[0].equalsIgnoreCase("display")
+						&& player != null
 						&& sender
 								.hasPermission("bending.command.displayelement")) {
 					String[] abilitylist = null;
@@ -534,6 +574,7 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 				} else if (args[0].equalsIgnoreCase("clear")
+						&& player != null
 						&& sender.hasPermission("bending.commnd.clear")) {
 					if (!ConfigManager.bendToItem) {
 						if (Integer.parseInt(args[1]) > 0
@@ -553,6 +594,7 @@ public class Bending extends JavaPlugin {
 			}
 
 			else if (args[0].equalsIgnoreCase("display")
+					&& player != null
 					&& sender.hasPermission("bending.command.display")) {
 				if (!ConfigManager.bendToItem) {
 					for (int i = 0; i <= 8; i++) {
@@ -577,7 +619,8 @@ public class Bending extends JavaPlugin {
 					}
 				}
 				return true;
-			} else if (args[0].equalsIgnoreCase("clear")) {
+			} else if (args[0].equalsIgnoreCase("clear")
+					&& player != null) {
 				if (!ConfigManager.bendToItem) {
 					for (int i = 0; i <= 8; i++) {
 						config.removeAbility(player, i);
@@ -592,6 +635,7 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("bind") && args.length == 2
+					&& player != null
 					&& sender.hasPermission("bending.command.bind")) {
 
 				String a = args[1];
@@ -688,7 +732,8 @@ public class Bending extends JavaPlugin {
 				}
 			}
 			if (args[0].equalsIgnoreCase("help")
-					&& sender.hasPermission("bending.command.help")) {
+					&& (sender.hasPermission("bending.command.help")
+							|| player == null)) {
 				int pages = 0;
 				int page = 1;
 				List<String> command = new ArrayList<String>();

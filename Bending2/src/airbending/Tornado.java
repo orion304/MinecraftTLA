@@ -139,7 +139,8 @@ public class Tornado {
 				z = origin.getZ() + factor * radius * Math.sin(angle);
 
 				Location effect = new Location(origin.getWorld(), x, y, z);
-				origin.getWorld().playEffect(effect, Effect.SMOKE, 1);
+				origin.getWorld().playEffect(effect, Effect.SMOKE, 4,
+						(int) AirBlast.range);
 
 				angles.put(i, angles.get(i) + 25 * (int) speedfactor);
 			}

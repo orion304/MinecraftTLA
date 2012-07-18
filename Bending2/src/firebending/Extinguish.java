@@ -1,5 +1,6 @@
 package firebending;
 
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -25,14 +26,20 @@ public class Extinguish {
 				player.getTargetBlock(null, (int) range).getLocation(), radius)) {
 			if (block.getType() == Material.FIRE) {
 				block.setType(Material.AIR);
+				block.getWorld().playEffect(block.getLocation(),
+						Effect.EXTINGUISH, 0);
 			} else if (block.getType() == Material.STATIONARY_LAVA) {
 				block.setType(Material.OBSIDIAN);
+				block.getWorld().playEffect(block.getLocation(),
+						Effect.EXTINGUISH, 0);
 			} else if (block.getType() == Material.LAVA) {
 				if (block.getData() == full) {
 					block.setType(Material.OBSIDIAN);
 				} else {
 					block.setType(Material.COBBLESTONE);
 				}
+				block.getWorld().playEffect(block.getLocation(),
+						Effect.EXTINGUISH, 0);
 			}
 		}
 	}
