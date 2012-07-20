@@ -284,9 +284,11 @@ public class Tools {
 						tempearthblocks.remove(affectedblock);
 						tempearthblocks.put(block, index);
 						Information info = movedearth.get(index);
-						info.setBlock(block);
-						info.setTime(System.currentTimeMillis());
-						movedearth.replace(index, info);
+						if (info != null) {
+							info.setBlock(block);
+							info.setTime(System.currentTimeMillis());
+							movedearth.replace(index, info);
+						}
 					} else {
 						tempearthblocks.put(block, affectedblock);
 						Information info = new Information();
