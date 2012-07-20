@@ -602,6 +602,8 @@ public class BendingListener implements Listener {
 	public void onBlockForm(BlockFormEvent event) {
 		if (TempBlock.isTempBlock(event.getBlock()))
 			event.setCancelled(true);
+		if (WaterManipulation.canPhysicsChange(event.getBlock()))
+			event.setCancelled(true);
 	}
 
 }
