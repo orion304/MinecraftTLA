@@ -227,15 +227,39 @@ public class BendingManager implements Runnable {
 	private void handleFlying() {
 
 		ArrayList<Player> players = new ArrayList<Player>();
+		ArrayList<Player> newflyingplayers = new ArrayList<Player>();
+		ArrayList<Player> avatarstateplayers = new ArrayList<Player>();
+		ArrayList<Player> airscooterplayers = new ArrayList<Player>();
 
 		players.addAll(Tornado.getPlayers());
 		players.addAll(Speed.getPlayers());
 		players.addAll(FireJet.getPlayers());
-		players.addAll(AvatarState.getPlayers());
+		avatarstateplayers = AvatarState.getPlayers();
+		airscooterplayers = AirScooter.getPlayers();
+		players.addAll(avatarstateplayers);
 
 		for (Player player : flyingplayers) {
-
+			if (!avatarstateplayers.contains(player)
+					&& !airscooterplayers.contains(player))
+				player.setFlying(false);
+			if (players.contains(player) && !newflyingplayers.contains(player)) {
+				newflyingplayers.add(player);
+			} else if (!players.contains(player)
+					&& !avatarstateplayers.contains(player)
+					&& !airscooterplayers.contains(player)) {
+				player.setAllowFlight(false);
+			}
 		}
+
+		for (Player player : players) {
+			if (!flyingplayers.contains(player)) {
+				newflyingplayers.add(player);
+				player.setAllowFlight(true);
+			}
+		}
+
+		flyingplayers.clear();
+		flyingplayers.addAll(newflyingplayers);
 
 	}
 

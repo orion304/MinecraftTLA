@@ -165,6 +165,13 @@ public class AirScooter {
 		for (Player player : instances.keySet()) {
 			instances.get(player).remove();
 		}
+	}
 
+	public static ArrayList<Player> getPlayers() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (Player player : instances.keySet()) {
+			players.add(player);
+		}
+		return players;
 	}
 }

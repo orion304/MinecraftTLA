@@ -40,19 +40,19 @@ public class Illumination {
 		Block standblock = standingblock.getRelative(BlockFace.DOWN);
 		if (FireStream.isIgnitable(standingblock) && block == null
 				&& !blocks.contains(standblock)) {
-			block = standblock;
+			block = standingblock;
 			normaltype = block.getType();
 			normaldata = block.getData();
-			block.setType(Material.GLOWSTONE);
+			block.setType(Material.TORCH);
 			blocks.put(block, player);
 		} else if (FireStream.isIgnitable(standingblock)
 				&& !block.equals(standblock) && !blocks.contains(standblock)
 				&& Tools.isSolid(standblock)) {
 			revert();
-			block = standblock;
+			block = standingblock;
 			normaltype = block.getType();
 			normaldata = block.getData();
-			block.setType(Material.GLOWSTONE);
+			block.setType(Material.TORCH);
 			blocks.put(block, player);
 		} else if (block == null) {
 			return;

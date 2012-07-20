@@ -17,6 +17,7 @@ import tools.AvatarState;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
+import airbending.AirBlast;
 
 public class WaterManipulation {
 
@@ -230,8 +231,8 @@ public class WaterManipulation {
 
 			} else {
 				if (!progressing) {
-					sourceblock.getWorld()
-							.playEffect(location, Effect.SMOKE, 1);
+					sourceblock.getWorld().playEffect(location, Effect.SMOKE,
+							4, (int) AirBlast.range);
 					return false;
 				}
 

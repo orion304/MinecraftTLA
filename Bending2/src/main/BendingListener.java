@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
+import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -18,6 +19,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -28,6 +30,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.TempBlock;
 import tools.Tools;
 import waterbending.FreezeMelt;
 import waterbending.Melt;
@@ -585,4 +588,20 @@ public class BendingListener implements Listener {
 		}
 
 	}
+
+	@EventHandler
+	public void onPlayerKick(PlayerKickEvent event) {
+		Tools.verbose(event.getReason());
+		if (BendingManager.flyingplayers.contains(event.getPlayer())) {
+			event.setCancelled(true);
+			event.setReason(null);
+		}
+	}
+
+	@EventHandler
+	public void onBlockForm(BlockFormEvent event) {
+		if (TempBlock.isTempBlock(event.getBlock()))
+			event.setCancelled(true);
+	}
+
 }

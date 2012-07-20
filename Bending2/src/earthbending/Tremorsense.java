@@ -72,7 +72,7 @@ public class Tremorsense {
 				if (foundair) {
 					smokeblock.getWorld().playEffect(
 							smokeblock.getRelative(BlockFace.UP).getLocation(),
-							Effect.SMOKE, 1);
+							Effect.SMOKE, 4, radius);
 				}
 			}
 		}

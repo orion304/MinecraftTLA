@@ -221,8 +221,8 @@ public class Tools {
 			Location location = block.getLocation();
 
 			Block affectedblock = location.clone().add(norm).getBlock();
-			block.getWorld().playEffect(block.getLocation(),
-					Effect.GHAST_SHOOT, 0);
+			block.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND,
+					0);
 			if (EarthPassive.isPassiveSand(affectedblock)) {
 				EarthPassive.revertSand(affectedblock);
 			}
