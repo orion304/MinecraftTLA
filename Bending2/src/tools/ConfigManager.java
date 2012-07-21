@@ -200,7 +200,7 @@ public class ConfigManager {
 		falldamagereduction = config
 				.getDouble("Properties.ChiBlocker.Fall-Damage-Reduction");
 		dissipateAfter = config
-				.getLong("Properties.Option.Firebending-Dissipate-Time");
+				.getLong("Bending.Option.Firebending-Dissipate-Time");
 
 		// PROPERTIES
 		globalCooldown = config.getLong("Properties.GlobalCooldown");
