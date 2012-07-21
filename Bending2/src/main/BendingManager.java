@@ -1,17 +1,24 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.server.EntityFireball;
 
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.AvatarState;
+import tools.BendingType;
 import tools.ConfigManager;
 import tools.Information;
 import tools.Tools;
+import waterbending.Bloodbending;
 import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
@@ -23,6 +30,7 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+import airbending.AirBurst;
 import airbending.AirPassive;
 import airbending.AirScooter;
 import airbending.AirShield;
@@ -37,6 +45,7 @@ import earthbending.EarthColumn;
 import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
 import earthbending.Tremorsense;
+import firebending.FireBlast;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
@@ -47,11 +56,14 @@ public class BendingManager implements Runnable {
 
 	public Bending plugin;
 
-	static ArrayList<Player> flyingplayers = new ArrayList<Player>();
+	public static ArrayList<Player> flyingplayers = new ArrayList<Player>();
 
 	long time;
 	long interval;
 	long reverttime;
+	ArrayList<World> worlds = new ArrayList<World>();
+	ConcurrentHashMap<World, Boolean> nights = new ConcurrentHashMap<World, Boolean>();
+	ConcurrentHashMap<World, Boolean> days = new ConcurrentHashMap<World, Boolean>();
 
 	public BendingManager(Bending instance) {
 		plugin = instance;
@@ -72,6 +84,7 @@ public class BendingManager implements Runnable {
 		// manageMessages();
 		AvatarState.manageAvatarStates();
 		handleFlying();
+		handleDayNight();
 
 	}
 
@@ -102,6 +115,8 @@ public class BendingManager implements Runnable {
 		for (int ID : Tornado.instances.keySet()) {
 			Tornado.progress(ID);
 		}
+
+		AirBurst.progressAll();
 
 		AirScooter.progressAll();
 	}
@@ -192,7 +207,11 @@ public class BendingManager implements Runnable {
 			WallOfFire.manageWallOfFire(ID);
 		}
 
+		FireBlast.progressAll();
+
 		FireJet.progressAll();
+
+		FireStream.dissipateAll();
 
 		Illumination.manage(plugin.getServer());
 
@@ -216,6 +235,8 @@ public class BendingManager implements Runnable {
 		for (int ID : Wave.instances.keySet()) {
 			Wave.progress(ID);
 		}
+
+		Bloodbending.progressAll();
 
 		HealingWaters.heal(plugin.getServer());
 
@@ -247,7 +268,7 @@ public class BendingManager implements Runnable {
 			} else if (!players.contains(player)
 					&& !avatarstateplayers.contains(player)
 					&& !airscooterplayers.contains(player)) {
-				player.setAllowFlight(false);
+				player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
 			}
 		}
 
@@ -263,6 +284,63 @@ public class BendingManager implements Runnable {
 
 	}
 
+	public static void removeFlyers() {
+		for (Player player : flyingplayers) {
+			player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+		}
+	}
+
+	private void handleDayNight() {
+
+		if (worlds.isEmpty())
+			for (World world : plugin.getServer().getWorlds())
+				if (world.getWorldType() == WorldType.NORMAL) {
+					worlds.add(world);
+					nights.put(world, false);
+					days.put(world, false);
+				}
+
+		for (World world : worlds) {
+			boolean night = nights.get(world);
+			boolean day = days.get(world);
+			if (Tools.isDay(world) && !day) {
+				for (Player player : world.getPlayers()) {
+					if (Tools.isBender(player, BendingType.Fire))
+						player.sendMessage(ChatColor.RED
+								+ "You feel the strength of the rising sun empowering your firebending.");
+				}
+				days.replace(world, true);
+			}
+
+			if (!Tools.isDay(world) && day) {
+				for (Player player : world.getPlayers()) {
+					if (Tools.isBender(player, BendingType.Fire))
+						player.sendMessage(ChatColor.RED
+								+ "You feel the empowering of your firebending subside as the sun sets.");
+				}
+				days.replace(world, false);
+			}
+
+			if (Tools.isNight(world) && !night) {
+				for (Player player : world.getPlayers()) {
+					if (Tools.isBender(player, BendingType.Water))
+						player.sendMessage(ChatColor.BLUE
+								+ "You feel the strength of the rising moon empowering your waterbending.");
+				}
+				nights.replace(world, true);
+			}
+
+			if (!Tools.isNight(world) && night) {
+				for (Player player : world.getPlayers()) {
+					if (Tools.isBender(player, BendingType.Water))
+						player.sendMessage(ChatColor.BLUE
+								+ "You feel the empowering of your waterbending subside as the moon sets.");
+				}
+				nights.replace(world, false);
+			}
+		}
+
+	}
 	// private void manageMessages() {
 	// for (Player player : newplayers) {
 	// player.sendMessage(ChatColor.GOLD

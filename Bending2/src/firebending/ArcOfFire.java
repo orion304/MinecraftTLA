@@ -15,6 +15,7 @@ public class ArcOfFire {
 	static final long soonesttime = Tools.timeinterval;
 
 	private static int defaultarc = ConfigManager.arcOfFireArc;
+	private static int defaultrange = ConfigManager.arcOfFireRange;
 	private static int stepsize = 2;
 
 	public ArcOfFire(Player player) {
@@ -43,11 +44,11 @@ public class ArcOfFire {
 			direction.setX(vx);
 			direction.setZ(vz);
 
-			new FireStream(location, direction, player);
+			new FireStream(location, direction, player, defaultrange);
 		}
 	}
-	
-	public static String getDescription(){
+
+	public static String getDescription() {
 		return "To use, simply left-click in any direction. An entire arc of fire will flow from your location, igniting anything in its path.";
 	}
 

@@ -38,16 +38,17 @@ public class Illumination {
 	private void set() {
 		Block standingblock = player.getLocation().getBlock();
 		Block standblock = standingblock.getRelative(BlockFace.DOWN);
-		if (FireStream.isIgnitable(standingblock) && block == null
-				&& !blocks.contains(standblock)) {
+		if ((FireStream.isIgnitable(standingblock) && standblock.getType() != Material.LEAVES)
+				&& block == null && !blocks.contains(standblock)) {
 			block = standingblock;
 			normaltype = block.getType();
 			normaldata = block.getData();
 			block.setType(Material.TORCH);
 			blocks.put(block, player);
-		} else if (FireStream.isIgnitable(standingblock)
-				&& !block.equals(standblock) && !blocks.contains(standblock)
-				&& Tools.isSolid(standblock)) {
+		} else if ((FireStream.isIgnitable(standingblock) && standblock
+				.getType() != Material.LEAVES)
+				&& !block.equals(standblock)
+				&& !blocks.contains(standblock) && Tools.isSolid(standblock)) {
 			revert();
 			block = standingblock;
 			normaltype = block.getType();

@@ -31,7 +31,7 @@ public class ConfigManager {
 	public static String dbPass = "";
 	public static String dbDB = "minecraft";
 	public static String dbPort = "3306";
-	
+
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;
@@ -79,6 +79,8 @@ public class ConfigManager {
 	public static int tremorsenseRadius;
 	public static byte tremorsenseLightThreshold;
 	public static int arcOfFireArc = 20;
+	public static int arcOfFireRange = 9;
+	public static int ringOfFireRange = 7;
 	public static double extinguishRange = 20;
 	public static double extinguishRadius = 20;
 	public static long fireballCooldown = 2000;
@@ -87,7 +89,6 @@ public class ConfigManager {
 	public static long fireJetDuration = 1500;
 	public static long fireJetCooldown = 6000;
 	public static double fireStreamSpeed = 15;
-	public static double fireStreamRange = 10;
 	public static double dayFactor = 1.3;
 	public static int illuminationRange = 5;
 	public static int heatMeltRange = 15;
@@ -118,6 +119,7 @@ public class ConfigManager {
 	public static long revertchecktime = 300000;
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
+	public static long dissipateAfter = 400;
 
 	public void load(File file) {
 		FileConfiguration config = new YamlConfiguration();
@@ -133,7 +135,7 @@ public class ConfigManager {
 
 		colors = config.getBoolean("Chat.Colors");
 
-		bendToItem = config.getBoolean("Bending.Option.Bend-To-Item", true);
+		bendToItem = config.getBoolean("Bending.Option.Bend-To-Item");
 
 		airdmg = config.getInt("Bending.Damage.AirSwipe");
 
@@ -161,23 +163,25 @@ public class ConfigManager {
 
 		earthbendable = config.getStringList("Bending.Option.EarthBendable");
 
-		useWeapon.put("Air",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Air", false));
-		useWeapon.put("Earth",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Earth", false));
-		useWeapon.put("Fire",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Fire", false));
-		useWeapon.put("Water",
-				config.getBoolean("Bending.Option.Bend-With-Weapon.Water", false));
-		//MySQL
+		useWeapon
+				.put("Air", config.getBoolean(
+						"Bending.Option.Bend-With-Weapon.Air", false));
+		useWeapon.put("Earth", config.getBoolean(
+				"Bending.Option.Bend-With-Weapon.Earth", false));
+		useWeapon.put("Fire", config.getBoolean(
+				"Bending.Option.Bend-With-Weapon.Fire", false));
+		useWeapon.put("Water", config.getBoolean(
+				"Bending.Option.Bend-With-Weapon.Water", false));
+		// MySQL
 		useMySQL = config.getBoolean("MySQL.Use-MySQL", false);
-		dbHost = config.getString("MySQL.MySQL-host", "jdbc:mysql://localhost:3306");
+		dbHost = config.getString("MySQL.MySQL-host",
+				"jdbc:mysql://localhost:3306");
 		dbUser = config.getString("MySQL.User", "root");
 		dbPass = config.getString("MySQL.Password", "");
 		dbDB = config.getString("MySQL.Database", "minecraft");
-		Integer dbPortint = (Integer)config.getInt("MySQL.MySQL-portnumber");
+		Integer dbPortint = (Integer) config.getInt("MySQL.MySQL-portnumber");
 		dbPort = dbPortint.toString();
-		
+
 		useWeapon
 				.put("ChiBlocker",
 						config.getBoolean("Bending.Option.Bend-With-Weapon.ChiBlocker"));
@@ -195,6 +199,8 @@ public class ConfigManager {
 				.getDouble("Properties.ChiBlocker.Punch-Multiplier");
 		falldamagereduction = config
 				.getDouble("Properties.ChiBlocker.Fall-Damage-Reduction");
+		dissipateAfter = config
+				.getLong("Properties.Option.Firebending-Dissipate-Time");
 
 		// PROPERTIES
 		globalCooldown = config.getLong("Properties.GlobalCooldown");
@@ -286,6 +292,9 @@ public class ConfigManager {
 		// FIRE
 		// ArcOfFire
 		arcOfFireArc = config.getInt("Properties.Fire.ArcOfFire.Arc");
+		arcOfFireRange = config.getInt("Properties.Fire.ArcOfFire.Range");
+		// RingOfFire
+		ringOfFireRange = config.getInt("Properties.Fire.RingOfFire.Range");
 		// Extinguish
 		extinguishRange = config.getDouble("Properties.Fire.Extinguish.Range");
 		extinguishRadius = config
@@ -299,7 +308,6 @@ public class ConfigManager {
 		fireJetCooldown = config.getLong("Properties.Fire.FireJet.CoolDown");
 		// FireStream
 		fireStreamSpeed = config.getDouble("Properties.Fire.FireStream.Speed");
-		fireStreamRange = config.getDouble("Properties.Fire.FireStream.Range");
 		// HeatMelt
 		heatMeltRange = config.getInt("Properties.Fire.HeatMelt.Range");
 		heatMeltRadius = config.getInt("Properties.Fire.HeatMelt.Radius");
@@ -385,6 +393,7 @@ public class ConfigManager {
 
 		config.set("Bending.Option.Reverse-Earthbending", false);
 		config.set("Bending.Option.Reverse-Earthbending-Check-Time", 500000);
+		config.set("Bending.Option.Firebending-Dissipate-Time", 400);
 
 		config.set("Properties.ChiBlocker.ChiBlock-Duration", 2500);
 		config.set("Properties.ChiBlocker.Dodge-Chance", 25);
@@ -460,6 +469,9 @@ public class ConfigManager {
 		config.set("Properties.Earth.Tremorsense.Light-Threshold", 7);
 
 		config.set("Properties.Fire.ArcOfFire.Arc", 20);
+		config.set("Properties.Fire.ArcOfFire.Range", 9);
+
+		config.set("Properties.Fire.RingOfFire.Range", 7);
 
 		config.set("Properties.Fire.Extinguish.Range", 20);
 		config.set("Properties.Fire.Extinguish.Radius", 20);
@@ -472,7 +484,6 @@ public class ConfigManager {
 		config.set("Properties.Fire.FireJet.CoolDown", 6000);
 
 		config.set("Properties.Fire.FireStream.Speed", 15);
-		config.set("Properties.Fire.FireStream.Range", 10);
 
 		config.set("Properties.Fire.HeatMelt.Range", 15);
 		config.set("Properties.Fire.HeatMelt.Radius", 5);
@@ -506,7 +517,7 @@ public class ConfigManager {
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
-		
+
 		config.set("MySQL.Use-MySQL", false);
 		config.set("MySQL.MySQL-host", "localhost");
 		config.set("MySQL.MySQL-portnumber", 3306);

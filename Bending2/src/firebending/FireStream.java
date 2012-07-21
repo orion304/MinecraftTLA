@@ -18,8 +18,10 @@ public class FireStream {
 
 	public static ConcurrentHashMap<Integer, FireStream> instances = new ConcurrentHashMap<Integer, FireStream>();
 	public static ConcurrentHashMap<Block, Player> ignitedblocks = new ConcurrentHashMap<Block, Player>();
+	public static ConcurrentHashMap<Block, Long> ignitedtimes = new ConcurrentHashMap<Block, Long>();
 	public static ConcurrentHashMap<LivingEntity, Player> ignitedentities = new ConcurrentHashMap<LivingEntity, Player>();
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
 	static final long soonesttime = Tools.timeinterval;
 
 	public static int firedamage = 3;
@@ -27,8 +29,10 @@ public class FireStream {
 
 	private static int ID = Integer.MIN_VALUE;
 	private static double speed = ConfigManager.fireStreamSpeed;
-	private static double defaultrange = ConfigManager.fireStreamRange;
+	// private static double defaultrange = ConfigManager.fireStreamRange;
 	private static long interval = (long) (1000. / speed);
+
+	private static long dissipateAfter = ConfigManager.dissipateAfter;
 
 	private Player player;
 	private Location origin;
@@ -36,37 +40,39 @@ public class FireStream {
 	private Vector direction;
 	private int id;
 	private long time;
-	private double range = defaultrange;
+	private double range;
 
-	public FireStream(Player player) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
-				return;
-			}
-		}
-		range = Tools.firebendingDayAugment(defaultrange, player.getWorld());
-		this.player = player;
-		location = player.getLocation();
-		direction = player.getEyeLocation().getDirection();
-		origin = location.clone();
-		this.location = origin.clone();
-		this.direction = direction.clone();
-		this.direction.setY(0);
-		this.direction = this.direction.clone().normalize();
-		this.location = this.location.clone().add(this.direction);
-		id = ID;
-		if (ID >= Integer.MAX_VALUE) {
-			ID = Integer.MIN_VALUE;
-		}
-		ID++;
-		time = System.currentTimeMillis();
-		instances.put(id, this);
-		timers.put(player, System.currentTimeMillis());
+	//
+	// public FireStream(Player player) {
+	// if (timers.containsKey(player)) {
+	// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+	// return;
+	// }
+	// }
+	// range = Tools.firebendingDayAugment(defaultrange, player.getWorld());
+	// this.player = player;
+	// location = player.getLocation();
+	// direction = player.getEyeLocation().getDirection();
+	// origin = location.clone();
+	// this.location = origin.clone();
+	// this.direction = direction.clone();
+	// this.direction.setY(0);
+	// this.direction = this.direction.clone().normalize();
+	// this.location = this.location.clone().add(this.direction);
+	// id = ID;
+	// if (ID >= Integer.MAX_VALUE) {
+	// ID = Integer.MIN_VALUE;
+	// }
+	// ID++;
+	// time = System.currentTimeMillis();
+	// instances.put(id, this);
+	// timers.put(player, System.currentTimeMillis());
+	//
+	// }
 
-	}
-
-	public FireStream(Location location, Vector direction, Player player) {
-		range = Tools.firebendingDayAugment(defaultrange, player.getWorld());
+	public FireStream(Location location, Vector direction, Player player,
+			int range) {
+		this.range = Tools.firebendingDayAugment(range, player.getWorld());
 		this.player = player;
 		origin = location.clone();
 		this.location = origin.clone();
@@ -115,6 +121,7 @@ public class FireStream {
 	private void ignite(Block block) {
 		block.setType(Material.FIRE);
 		ignitedblocks.put(block, this.player);
+		ignitedtimes.put(block, System.currentTimeMillis());
 	}
 
 	public static boolean isIgnitable(Block block) {
@@ -141,7 +148,7 @@ public class FireStream {
 				Material.OBSIDIAN, Material.REDSTONE_ORE, Material.SAND,
 				Material.SANDSTONE, Material.SMOOTH_BRICK, Material.STONE,
 				Material.SOUL_SAND, Material.SOIL, Material.SNOW_BLOCK,
-				Material.WOOD, Material.WOOL };
+				Material.WOOD, Material.WOOL, Material.LEAVES };
 
 		Block belowblock = block.getRelative(BlockFace.DOWN);
 		if (Arrays.asList(ignitable).contains(belowblock.getType())) {
@@ -155,12 +162,42 @@ public class FireStream {
 		instances.remove(id);
 	}
 
+	public static void removeAll() {
+		for (Block block : ignitedblocks.keySet())
+			remove(block);
+	}
+
+	public static void dissipateAll() {
+		if (dissipateAfter != 0)
+			for (Block block : ignitedtimes.keySet()) {
+				if (block.getType() != Material.FIRE) {
+					remove(block);
+				} else {
+					long time = ignitedtimes.get(block);
+					if (System.currentTimeMillis() > time + dissipateAfter) {
+						block.setType(Material.AIR);
+						remove(block);
+					}
+				}
+			}
+	}
+
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
 	}
 
 	public static String getDescription() {
 		return "To use, simply left-click in any direction. A line of fire will flow from your location, igniting anything in its path.";
+	}
+
+	public static void remove(Block block) {
+		if (ignitedblocks.containsKey(block)) {
+			ignitedblocks.remove(block);
+		}
+		if (ignitedtimes.containsKey(block)) {
+			ignitedtimes.remove(block);
+		}
+
 	}
 
 }

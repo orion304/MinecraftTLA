@@ -1,18 +1,16 @@
-package airbending;
+package firebending;
 
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
-import net.minecraft.server.EntityHuman;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -20,9 +18,9 @@ import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 
-public class AirBlast {
+public class FireBlast {
 
-	public static ConcurrentHashMap<Integer, AirBlast> instances = new ConcurrentHashMap<Integer, AirBlast>();
+	public static ConcurrentHashMap<Integer, FireBlast> instances = new ConcurrentHashMap<Integer, FireBlast>();
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 	static final long soonesttime = Tools.timeinterval;
 
@@ -44,11 +42,11 @@ public class AirBlast {
 	private double speedfactor;
 	private int ticks = 0;
 
-	private ArrayList<Block> affectedlevers = new ArrayList<Block>();
+	// private ArrayList<Block> affectedlevers = new ArrayList<Block>();
 
 	// private long time;
 
-	public AirBlast(Player player) {
+	public FireBlast(Player player) {
 		if (timers.containsKey(player)) {
 			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
 				return;
@@ -93,34 +91,30 @@ public class AirBlast {
 		// }
 
 		Block block = location.getBlock();
-		for (Block testblock : Tools.getBlocksAroundPoint(location,
-				affectingradius)) {
-			if (testblock.getType() == Material.FIRE) {
-				testblock.setType(Material.AIR);
-				testblock.getWorld().playEffect(testblock.getLocation(),
-						Effect.EXTINGUISH, 0);
+		// for (Block testblock : Tools.getBlocksAroundPoint(location,
+		// affectingradius)) {
+		// if (testblock.getType() == Material.FIRE) {
+		// testblock.setType(Material.AIR);
+		// testblock.getWorld().playEffect(testblock.getLocation(),
+		// Effect.EXTINGUISH, 0);
+		// }
+		// if (((block.getType() == Material.LEVER) || (block.getType() ==
+		// Material.STONE_BUTTON))
+		// && !affectedlevers.contains(block)) {
+		// EntityHuman eH = ((CraftPlayer) player).getHandle();
+		//
+		// net.minecraft.server.Block.byId[block.getTypeId()].interact(
+		// ((CraftWorld) block.getWorld()).getHandle(),
+		// block.getX(), block.getY(), block.getZ(), eH);
+		//
+		// affectedlevers.add(block);
+		// }
+		// }
+		if (Tools.isSolid(block) || block.isLiquid()) {
+			if (FireStream.isIgnitable(block.getRelative(BlockFace.UP))) {
+				ignite(location);
 			}
-			if (((block.getType() == Material.LEVER) || (block.getType() == Material.STONE_BUTTON))
-					&& !affectedlevers.contains(block)) {
-				EntityHuman eH = ((CraftPlayer) player).getHandle();
-
-				net.minecraft.server.Block.byId[block.getTypeId()].interact(
-						((CraftWorld) block.getWorld()).getHandle(),
-						block.getX(), block.getY(), block.getZ(), eH);
-
-				affectedlevers.add(block);
-			}
-		}
-		if (block.getType() != Material.AIR && !affectedlevers.contains(block)) {
-			if (block.getType() == Material.LAVA
-					|| block.getType() == Material.STATIONARY_LAVA) {
-				if (block.getData() == full) {
-					block.setType(Material.OBSIDIAN);
-				} else {
-					block.setType(Material.COBBLESTONE);
-				}
-				instances.remove(id);
-			}
+			instances.remove(id);
 			return false;
 		}
 
@@ -132,6 +126,8 @@ public class AirBlast {
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
 			affect(entity);
+			if (entity instanceof LivingEntity)
+				break;
 		}
 
 		advanceLocation();
@@ -140,12 +136,29 @@ public class AirBlast {
 	}
 
 	private void advanceLocation() {
-		location.getWorld().playEffect(location, Effect.SMOKE, 4, (int) range);
+		location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0,
+				(int) range);
+		location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 1,
+				(int) range);
 		location = location.add(direction.clone().multiply(speedfactor));
+	}
+
+	private void ignite(Location location) {
+		for (Block block : Tools
+				.getBlocksAroundPoint(location, affectingradius)) {
+			if (FireStream.isIgnitable(block))
+				block.setType(Material.FIRE);
+		}
 	}
 
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
+	}
+
+	public static void progressAll() {
+		for (int id : instances.keySet()) {
+			progress(id);
+		}
 	}
 
 	private void affect(Entity entity) {
@@ -156,11 +169,11 @@ public class AirBlast {
 			} else {
 				entity.setVelocity(direction.clone().multiply(pushfactor));
 			}
-			entity.setFallDistance(0);
-			if (entity.getFireTicks() > 0)
-				entity.getWorld().playEffect(entity.getLocation(),
-						Effect.EXTINGUISH, 0);
-			entity.setFireTicks(0);
+			if (entity instanceof LivingEntity) {
+				entity.setFireTicks(120);
+				Tools.damageEntity(player, entity, 2);
+				instances.remove(id);
+			}
 		}
 	}
 
@@ -171,6 +184,7 @@ public class AirBlast {
 	}
 
 	public static String getDescription() {
-		return "AirBlast is the most fundamental bending technique of an airbender. To use, simply left-click in a direction. A gust of wind will be created at your fingertips, launching anything in its path harmlessly back. Additionally, the airbender can create a sustained gust by sneaking (default: shift). A gust of air can extinguish fires and cool lava. ";
+		return "FireBlast is the most fundamental bending technique of a firebender. To use, simply left-click in a direction. A blast of fire will be created at your fingertips, launching anything in its path back and damaging it, while setting it on fire.";
 	}
+
 }

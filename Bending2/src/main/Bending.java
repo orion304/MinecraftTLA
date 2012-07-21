@@ -50,7 +50,7 @@ import earthbending.EarthGrab;
 import earthbending.EarthTunnel;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
-import firebending.FireStream;
+import firebending.FireBlast;
 import firebending.Fireball;
 import firebending.HeatMelt;
 import firebending.RingOfFire;
@@ -214,32 +214,35 @@ public class Bending extends JavaPlugin {
 		configManager.load(new File(getDataFolder(), "config.yml"));
 
 		registerCommands();
-		
-		//if (ConfigManager.useMySQL)
-		//	loadMySQL();
-		//else
-		//	config = new BendingPlayers(getDataFolder());
+
+		// if (ConfigManager.useMySQL)
+		// loadMySQL();
+		// else
+		// config = new BendingPlayers(getDataFolder());
 
 	}
 
-//	private void loadMySQL() {
-//		MySQL mysql = new MySQL(log, "[Bending]", ConfigManager.dbHost, ConfigManager.dbPort, ConfigManager.dbDB, ConfigManager.dbUser, ConfigManager.dbPass);
-//		try{
-//        mysql.open();
-//		}catch(Exception e){
-//			Tools.verbose("MySQL connection failed");
-//		}
-//        if (mysql.checkConnection()) {
-//            log.info("[Bending]" + "MySQL connection successful");
-//            if (!mysql.checkTable("Bending")) {
-//                log.info("[Bending]" + "Creating table bending...");
-//                String query = "CREATE TABLE IF NOT EXISTS Bending ('player' TEXT NOT NULL, 'bending' TEXT NOT NULL) ;";
-//                mysql.createTable(query);
-//            }
-//        } else {
-//            log.severe("[Bending]" + "MySQL connection failed");
-//    }
-//	}
+	// private void loadMySQL() {
+	// MySQL mysql = new MySQL(log, "[Bending]", ConfigManager.dbHost,
+	// ConfigManager.dbPort, ConfigManager.dbDB, ConfigManager.dbUser,
+	// ConfigManager.dbPass);
+	// try{
+	// mysql.open();
+	// }catch(Exception e){
+	// Tools.verbose("MySQL connection failed");
+	// }
+	// if (mysql.checkConnection()) {
+	// log.info("[Bending]" + "MySQL connection successful");
+	// if (!mysql.checkTable("Bending")) {
+	// log.info("[Bending]" + "Creating table bending...");
+	// String query =
+	// "CREATE TABLE IF NOT EXISTS Bending ('player' TEXT NOT NULL, 'bending' TEXT NOT NULL) ;";
+	// mysql.createTable(query);
+	// }
+	// } else {
+	// log.severe("[Bending]" + "MySQL connection failed");
+	// }
+	// }
 
 	public void reloadConfiguration() {
 		getConfig().options().copyDefaults(true);
@@ -274,9 +277,9 @@ public class Bending extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		Player player = null;
-        if (sender instanceof Player){
-		player = (Player) sender;
-        }
+		if (sender instanceof Player) {
+			player = (Player) sender;
+		}
 		if (cmd.getName().equalsIgnoreCase("bending")) {
 			if (Arrays.asList(args).isEmpty()) {
 				sender.sendMessage(ChatColor.RED
@@ -288,9 +291,9 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 
-			if (args[0].equalsIgnoreCase("remove") && args.length >= 2
-					&& (sender.hasPermission("bending.admin.remove")
-							|| player == null)) {
+			if (args[0].equalsIgnoreCase("remove")
+					&& args.length >= 2
+					&& (sender.hasPermission("bending.admin.remove") || player == null)) {
 				String playerlist = "";
 				for (String playername : Arrays.asList(args)) {
 					Player targetplayer = this.getServer()
@@ -307,9 +310,9 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 
-			if (args[0].equalsIgnoreCase("reload") && args.length == 1
-					&& (sender.hasPermission("bending.admin.reload") 
-					|| (player == null))) {
+			if (args[0].equalsIgnoreCase("reload")
+					&& args.length == 1
+					&& (sender.hasPermission("bending.admin.reload") || (player == null))) {
 				configManager
 						.load(new File(this.getDataFolder(), "config.yml"));
 				config.reload();
@@ -317,10 +320,9 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 
-			if (args[0].equalsIgnoreCase("permaremove") && args.length >= 2
-					&& (sender.hasPermission("bending.admin.permaremove")
-							|| player == null))
-							{
+			if (args[0].equalsIgnoreCase("permaremove")
+					&& args.length >= 2
+					&& (sender.hasPermission("bending.admin.permaremove") || player == null)) {
 				String playerlist = "";
 				for (String playername : Arrays.asList(args)) {
 					Player targetplayer = this.getServer()
@@ -342,7 +344,7 @@ public class Bending extends JavaPlugin {
 				if (args.length == 1)
 					return false;
 				if (args.length == 2) {
-					if (player == null){
+					if (player == null) {
 						sender.sendMessage("That command cannot be used from the console");
 						return true;
 					}
@@ -415,8 +417,7 @@ public class Bending extends JavaPlugin {
 			}
 
 			if (args[0].equalsIgnoreCase("add")
-					&& (sender.hasPermission("bending.admin.add")
-							|| player == null)) {
+					&& (sender.hasPermission("bending.admin.add") || player == null)) {
 				if (args.length == 1) {
 					sender.sendMessage(ChatColor.DARK_RED
 							+ "Use /bending help <page> if you want to see a list of permissions.");
@@ -427,7 +428,7 @@ public class Bending extends JavaPlugin {
 					return true;
 				}
 				if (args.length == 2) {
-					if (player == null){
+					if (player == null) {
 						sender.sendMessage("That command cannot be used from the console");
 						return true;
 					}
@@ -573,8 +574,7 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-				} else if (args[0].equalsIgnoreCase("clear")
-						&& player != null
+				} else if (args[0].equalsIgnoreCase("clear") && player != null
 						&& sender.hasPermission("bending.commnd.clear")) {
 					if (!ConfigManager.bendToItem) {
 						if (Integer.parseInt(args[1]) > 0
@@ -593,8 +593,7 @@ public class Bending extends JavaPlugin {
 				}
 			}
 
-			else if (args[0].equalsIgnoreCase("display")
-					&& player != null
+			else if (args[0].equalsIgnoreCase("display") && player != null
 					&& sender.hasPermission("bending.command.display")) {
 				if (!ConfigManager.bendToItem) {
 					for (int i = 0; i <= 8; i++) {
@@ -619,8 +618,7 @@ public class Bending extends JavaPlugin {
 					}
 				}
 				return true;
-			} else if (args[0].equalsIgnoreCase("clear")
-					&& player != null) {
+			} else if (args[0].equalsIgnoreCase("clear") && player != null) {
 				if (!ConfigManager.bendToItem) {
 					for (int i = 0; i <= 8; i++) {
 						config.removeAbility(player, i);
@@ -732,8 +730,7 @@ public class Bending extends JavaPlugin {
 				}
 			}
 			if (args[0].equalsIgnoreCase("help")
-					&& (sender.hasPermission("bending.command.help")
-							|| player == null)) {
+					&& (sender.hasPermission("bending.command.help") || player == null)) {
 				int pages = 0;
 				int page = 1;
 				List<String> command = new ArrayList<String>();
@@ -818,8 +815,8 @@ public class Bending extends JavaPlugin {
 						case Fireball:
 							sender.sendMessage(cc + Fireball.getDescription());
 							break;
-						case FireStream:
-							sender.sendMessage(cc + FireStream.getDescription());
+						case FireBlast:
+							sender.sendMessage(cc + FireBlast.getDescription());
 							break;
 						case HeatMelt:
 							sender.sendMessage(cc + HeatMelt.getDescription());

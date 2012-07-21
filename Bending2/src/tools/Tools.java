@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
+import main.BendingManager;
 import main.BendingPlayers;
 
 import org.bukkit.Bukkit;
@@ -24,7 +25,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -48,6 +49,7 @@ import earthbending.CompactColumn;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
+import firebending.FireStream;
 
 public class Tools {
 
@@ -221,8 +223,8 @@ public class Tools {
 			Location location = block.getLocation();
 
 			Block affectedblock = location.clone().add(norm).getBlock();
-			block.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND,
-					0);
+			block.getWorld().playEffect(block.getLocation(),
+					Effect.GHAST_SHOOT, 0, 4);
 			if (EarthPassive.isPassiveSand(affectedblock)) {
 				EarthPassive.revertSand(affectedblock);
 			}
@@ -496,8 +498,9 @@ public class Tools {
 				damage = AvatarState.getValue(damage);
 			}
 			((LivingEntity) entity).damage(damage, player);
-			((LivingEntity) entity).setLastDamageCause(new EntityDamageEvent(
-					entity, DamageCause.ENTITY_ATTACK, damage));
+			((LivingEntity) entity)
+					.setLastDamageCause(new EntityDamageByEntityEvent(player,
+							entity, DamageCause.CUSTOM, damage));
 		}
 	}
 
@@ -602,6 +605,8 @@ public class Tools {
 		WaterWall.removeAll();
 		Wave.removeAll();
 		AirScooter.removeAll();
+		FireStream.removeAll();
+		BendingManager.removeFlyers();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
 		}

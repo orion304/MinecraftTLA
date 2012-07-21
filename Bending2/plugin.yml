@@ -24,7 +24,7 @@ permissions:
       bending.air.Passive: true
       bending.air.AirSpout: true
       bending.air.AirScooter: true
-      bending.air.AirBurst: true
+      bending.air.AirBurst: false
   bending.fire.*:
     description: Allows all fire bending.
     children:
@@ -32,7 +32,7 @@ permissions:
       bending.fire.Extinguish: true
       bending.fire.Fireball: true
       bending.fire.FireJet: true
-      bending.fire.FireStream: true
+      bending.fire.FireBlast: true
       bending.fire.HeatMelt: true
       bending.fire.Passive: true
       bending.fire.RingOfFire: true
@@ -63,7 +63,7 @@ permissions:
       bending.earth.Collapse: true
       bending.earth.Passive: true
       bending.earth.Tremorsense: true
-      bending.earth.Shockwave: true
+      bending.earth.Shockwave: false
   bending.*:
     description: Allows all bending.
     children:
@@ -143,8 +143,8 @@ permissions:
   bending.fire.FireJet:
     description: Allows the use of FireJet.
     default: true
-  bending.fire.FireStream:
-    description: Allows the use of FireStream.
+  bending.fire.FireBlast:
+    description: Allows the use of FireBlast
     default: true
   bending.fire.HeatMelt:
     description: Allows the use of HeatMelt.

@@ -6,12 +6,15 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class RingOfFire {
 
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 	static final long soonesttime = Tools.timeinterval;
+
+	static final int defaultrange = ConfigManager.ringOfFireRange;
 
 	public RingOfFire(Player player) {
 		if (timers.containsKey(player)) {
@@ -36,7 +39,7 @@ public class RingOfFire {
 			direction.setX(vx);
 			direction.setZ(vz);
 
-			new FireStream(location, direction, player);
+			new FireStream(location, direction, player, defaultrange);
 		}
 	}
 

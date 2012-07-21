@@ -32,6 +32,7 @@ import tools.BendingType;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
+import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.Melt;
 import waterbending.Plantbending;
@@ -43,6 +44,7 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+import airbending.AirBurst;
 import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSuction;
@@ -61,6 +63,7 @@ import earthbending.EarthWall;
 import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
+import firebending.FireBlast;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
@@ -199,6 +202,10 @@ public class BendingListener implements Listener {
 					new AirScooter(player);
 				}
 
+				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+					AirBurst.coneBurst(player);
+				}
+
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
@@ -237,16 +244,16 @@ public class BendingListener implements Listener {
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Fire")) {
 
+				if (Tools.getBendingAbility(player) == Abilities.FireBlast) {
+					new FireBlast(player);
+				}
+
 				if (Tools.getBendingAbility(player) == Abilities.Fireball) {
 					new Fireball(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.Extinguish) {
 					new Extinguish(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.FireStream) {
-					new FireStream(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.ArcOfFire) {
@@ -269,7 +276,7 @@ public class BendingListener implements Listener {
 					new Illumination(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Walloffire
+				if (Tools.getBendingAbility(player) == Abilities.WallOfFire
 						&& player.isOp()) {
 					new WallOfFire(player);
 				}
@@ -302,6 +309,10 @@ public class BendingListener implements Listener {
 				if (Tools.getBendingAbility(player) == Abilities.WaterSpout
 						&& player.isOp()) {
 					new WaterSpout(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.Bloodbending) {
+					Bloodbending.launch(player);
 				}
 
 			}
@@ -338,6 +349,10 @@ public class BendingListener implements Listener {
 				if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
 					new AirSuction(player);
 				}
+
+				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+					new AirBurst(player);
+				}
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.Tornado) {
@@ -366,6 +381,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.Wave) {
 				new Wave(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.Bloodbending) {
+				new Bloodbending(player);
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.FreezeMelt) {
@@ -400,15 +419,32 @@ public class BendingListener implements Listener {
 			if (Tools.isBender(player, BendingType.Air)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Air)) {
+				if (!BendingManager.flyingplayers.contains(player)) {
+					player.setAllowFlight(true);
+					BendingManager.flyingplayers.add(player);
+				}
 				event.setCancelled(true);
 			} else if (Tools.isBender(player, BendingType.Water)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Water)) {
-				event.setCancelled(WaterPassive.softenLanding(player));
+				if (WaterPassive.softenLanding(player)) {
+					if (!BendingManager.flyingplayers.contains(player)) {
+						player.setAllowFlight(true);
+						BendingManager.flyingplayers.add(player);
+					}
+					event.setCancelled(true);
+				}
 			} else if (Tools.isBender(player, BendingType.Earth)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Earth)) {
-				event.setCancelled(EarthPassive.softenLanding(player));
+				if (EarthPassive.softenLanding(player)) {
+					if (!BendingManager.flyingplayers.contains(player)) {
+						player.setAllowFlight(true);
+						BendingManager.flyingplayers.add(player);
+					}
+					event.setCancelled(true);
+				}
+
 			} else if (Tools.isBender(player, BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.FALL) {
 				event.setDamage((int) ((double) event.getDamage() * (ConfigManager.falldamagereduction / 100.)));
@@ -520,6 +556,9 @@ public class BendingListener implements Listener {
 		}
 		if (!event.isCancelled()) {
 			event.setCancelled(!Wave.canThaw(block));
+		}
+		if (FireStream.ignitedblocks.containsKey(block)) {
+			FireStream.remove(block);
 		}
 	}
 

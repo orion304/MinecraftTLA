@@ -18,13 +18,12 @@ import org.bukkit.util.Vector;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
-import firebending.Fireball;
 
 public class AirSwipe {
 
 	public static ConcurrentHashMap<Integer, AirSwipe> instances = new ConcurrentHashMap<Integer, AirSwipe>();
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = Fireball.soonesttime;
+	static final long soonesttime = ConfigManager.airSwipeCooldown;
 
 	private static int ID = Integer.MIN_VALUE;
 

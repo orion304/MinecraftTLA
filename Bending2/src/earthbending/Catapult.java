@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.BendingManager;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -25,7 +27,6 @@ public class Catapult {
 	// private static long interval = 1500;
 
 	private Player player;
-	private boolean canfly = false;
 	private Location origin;
 	private Location location;
 	private Vector direction;
@@ -68,7 +69,11 @@ public class Catapult {
 			}
 			time = System.currentTimeMillis() - interval;
 			// time = System.currentTimeMillis();
-			canfly = player.getAllowFlight();
+			player.setAllowFlight(true);
+			if (!BendingManager.flyingplayers.contains(player)) {
+				BendingManager.flyingplayers.add(player);
+				player.setAllowFlight(true);
+			}
 			instances.put(player.getEntityId(), this);
 			timers.put(player, System.currentTimeMillis());
 		}
@@ -77,7 +82,6 @@ public class Catapult {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			player.setAllowFlight(canfly);
 			instances.remove(player.getEntityId());
 			return false;
 		}
@@ -85,7 +89,6 @@ public class Catapult {
 			// Tools.verbose("Catapult progressing");
 			time = System.currentTimeMillis();
 			if (!moveEarth()) {
-				player.setAllowFlight(canfly);
 				instances.remove(player.getEntityId());
 				return false;
 			}
@@ -140,8 +143,6 @@ public class Catapult {
 
 	public static void removeAll() {
 		for (int id : instances.keySet()) {
-			Catapult cata = instances.get(id);
-			cata.player.setAllowFlight(cata.canfly);
 			instances.remove(id);
 		}
 	}
