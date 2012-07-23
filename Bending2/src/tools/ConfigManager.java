@@ -18,9 +18,9 @@ public class ConfigManager {
 	public static boolean bendToItem = false;
 	public static boolean colors = true;
 	public static boolean compatibility = true;
-	public static int airdmg = 1;
+	public static int airdmg = 2;
 	public static int earthdmg = 7;
-	public static int waterdmg = 7;
+	public static int waterdmg = 5;
 	public static Map<String, String> prefixes = new HashMap<String, String>();
 	public static Map<String, String> color = new HashMap<String, String>();
 	public static List<String> earthbendable = new ArrayList<String>();
@@ -35,7 +35,7 @@ public class ConfigManager {
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;
-	public static double airBlastPush = 1;
+	public static double airBlastPush = 1.2;
 	public static int airBubbleRadius = 7;
 	public static float airPassiveFactor = 0.3F;
 	public static double airShieldRadius = 7;
@@ -78,6 +78,13 @@ public class ConfigManager {
 	public static int tremorsenseMaxDepth;
 	public static int tremorsenseRadius;
 	public static byte tremorsenseLightThreshold;
+	public static double fireBlastSpeed = 15;
+	public static double fireBlastRange = 15;
+	public static double fireBlastRadius = 2;
+	public static double fireBlastPush = .3;
+	public static int fireBlastDamage = 2;
+	public static long fireBlastCooldown = 1500;
+	public static boolean fireBlastDissipate = false;
 	public static int arcOfFireArc = 20;
 	public static int arcOfFireRange = 9;
 	public static int ringOfFireRange = 7;
@@ -290,6 +297,16 @@ public class ConfigManager {
 		tremorsenseLightThreshold = (byte) config
 				.getInt("Properties.Earth.Tremorsense.Light-Threshold");
 		// FIRE
+		// FireBlast
+		fireBlastRange = config.getDouble("Properties.Fire.FireBlast.Range");
+		fireBlastSpeed = config.getDouble("Properties.Fire.FireBlast.Speed");
+		fireBlastPush = config.getDouble("Properties.Fire.FireBlast.Push");
+		fireBlastRadius = config.getDouble("Properties.Fire.FireBlast.Radius");
+		fireBlastCooldown = config
+				.getLong("Properties.Fire.FireBlast.Cooldown");
+		fireBlastDamage = config.getInt("Properties.Fire.FireBlast.Damage");
+		fireBlastDissipate = config
+				.getBoolean("Properties.Fire.FireBlast.Dissipates");
 		// ArcOfFire
 		arcOfFireArc = config.getInt("Properties.Fire.ArcOfFire.Arc");
 		arcOfFireRange = config.getInt("Properties.Fire.ArcOfFire.Range");
@@ -405,7 +422,7 @@ public class ConfigManager {
 		config.set("Properties.Air.AirBlast.Speed", 25);
 		config.set("Properties.Air.AirBlast.Range", 20);
 		config.set("Properties.Air.AirBlast.Affecting-Radius", 2);
-		config.set("Properties.Air.AirBlast.Push-Factor", 1);
+		config.set("Properties.Air.AirBlast.Push-Factor", 1.2);
 
 		config.set("Properties.Air.AirBubble.Radius", 5);
 
@@ -467,6 +484,14 @@ public class ConfigManager {
 		config.set("Properties.Earth.Tremorsense.Max-Depth", 10);
 		config.set("Properties.Earth.Tremorsense.Radius", 5);
 		config.set("Properties.Earth.Tremorsense.Light-Threshold", 7);
+
+		config.set("Properties.Fire.FireBlast.Speed", 15);
+		config.set("Properties.Fire.FireBlast.Damage", 2);
+		config.set("Properties.Fire.FireBlast.Cooldown", 1500);
+		config.set("Properties.Fire.FireBlast.Radius", 2);
+		config.set("Properties.Fire.FireBlast.Push", .3);
+		config.set("Properties.Fire.FireBlast.Range", 15);
+		config.set("Properties.Fire.FireBlast.Dissipates", false);
 
 		config.set("Properties.Fire.ArcOfFire.Arc", 20);
 		config.set("Properties.Fire.ArcOfFire.Range", 9);

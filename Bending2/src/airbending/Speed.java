@@ -23,7 +23,7 @@ public class Speed {
 		this.player = player;
 		id = player.getEntityId();
 		// canfly = player.getAllowFlight();
-		// player.setAllowFlight(true);
+		player.setAllowFlight(true);
 		instances.put(id, this);
 	}
 

@@ -22,9 +22,9 @@ permissions:
       bending.air.Tornado: true
       bending.air.AirBlast: true
       bending.air.Passive: true
-      bending.air.AirSpout: true
+#      bending.air.AirSpout: true
+#      bending.air.AirBurst: true
       bending.air.AirScooter: true
-      bending.air.AirBurst: false
   bending.fire.*:
     description: Allows all fire bending.
     children:
@@ -37,7 +37,7 @@ permissions:
       bending.fire.Passive: true
       bending.fire.RingOfFire: true
       bending.fire.Illumination: true
-      bending.fire.WallOfFire: true
+#      bending.fire.WallOfFire: true
   bending.water.*:
     description: Allows all water bending.
     children:
@@ -47,10 +47,10 @@ permissions:
       bending.water.WalkOnWater: true
       bending.water.WaterBubble: true
       bending.water.WaterManipulation: true
-      bending.water.WaterSpout: true
       bending.water.WaterWall: true
       bending.water.Wave: true
       bending.water.Passive: true
+#      bending.water.WaterSpout: true
   bending.earth.*:
     description: Allows all earth bending.
     children:
@@ -63,7 +63,7 @@ permissions:
       bending.earth.Collapse: true
       bending.earth.Passive: true
       bending.earth.Tremorsense: true
-      bending.earth.Shockwave: false
+#      bending.earth.Shockwave: true
   bending.*:
     description: Allows all bending.
     children:
@@ -87,6 +87,8 @@ permissions:
       bending.commnd.clear: true
       bending.command.display: true
       bending.command.bind: true
+#      bending.fire.Lightning: true
+#      bending.water.Bloodbending: true
       
   bending.command:
     description: Allows all user commands.
@@ -130,7 +132,8 @@ permissions:
     default: true
   bending.air.AirBurst:
     description: Allows the use of AirBurst.
-    default: true
+#    default: true
+    default: false
   bending.fire.ArcOfFire:
     description: Allows the use of ArcOfFire.
     default: true
@@ -160,7 +163,12 @@ permissions:
     default: true
   bending.fire.WallOfFire:
     description: Allows the use of WallOfFire.
-    default: true
+#    default: true
+    default: false
+  bending.fire.Lightning:
+    description: Allows the use of Lightning.
+#    default: op
+    default: false
   bending.water.FreezeMelt:
     description: Allows the use of Freeze.
     default: true
@@ -184,13 +192,17 @@ permissions:
     default: true
   bending.water.WaterSpout:
     description: Allows the use of WaterSpout.
-    default: true
+    default: false
   bending.water.WaterWall:
     description: Allows the use of WaterWall.
     default: true
   bending.water.Wave:
     description: Allows the use of Wave.
     default: true
+  bending.water.Bloodbending:
+    description: Allows the use of Bloodbending.
+#    default: op
+    default: false
   bending.earth.Catapult:
     description: Allows the use of Catapult.
     default: true
@@ -220,7 +232,8 @@ permissions:
     default: true 
   bending.earth.Shockwave:
     description: Allows the use of Shockwave.
-    default: true 
+#    default: true
+    default: false
   bending.AvatarState:
     description: Allows the use of AvatarState.
     default: op

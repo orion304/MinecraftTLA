@@ -51,6 +51,7 @@ public class Tornado {
 				angle = 0;
 		}
 
+		player.setAllowFlight(true);
 		instances.put(player.getEntityId(), this);
 
 	}

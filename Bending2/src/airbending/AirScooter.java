@@ -26,7 +26,7 @@ public class AirScooter {
 	private Player player;
 	private Block floorblock;
 	private long time;
-	private boolean canfly, wasflying;
+	// private boolean canfly, wasflying;
 	private ArrayList<Double> angles = new ArrayList<Double>();
 
 	public AirScooter(Player player) {
@@ -39,8 +39,8 @@ public class AirScooter {
 		if (Tools.isSolid(player.getLocation().add(0, -.5, 0).getBlock()))
 			return;
 		this.player = player;
-		wasflying = player.isFlying();
-		canfly = player.getAllowFlight();
+		// wasflying = player.isFlying();
+		// canfly = player.getAllowFlight();
 		player.setAllowFlight(true);
 		player.setFlying(true);
 		player.setSprinting(false);
@@ -64,7 +64,7 @@ public class AirScooter {
 			remove();
 			return;
 		}
-		if (!player.isOnline() || player.isDead()) {
+		if (!player.isOnline() || player.isDead() || !player.isFlying()) {
 			remove();
 			return;
 		}
@@ -139,8 +139,8 @@ public class AirScooter {
 	}
 
 	private void remove() {
-		player.setAllowFlight(canfly);
-		player.setFlying(wasflying);
+		player.setAllowFlight(false);
+		player.setFlying(false);
 		instances.remove(player);
 	}
 

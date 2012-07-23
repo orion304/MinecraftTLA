@@ -22,15 +22,15 @@ public class FireBlast {
 
 	public static ConcurrentHashMap<Integer, FireBlast> instances = new ConcurrentHashMap<Integer, FireBlast>();
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = Tools.timeinterval;
+	static final long soonesttime = ConfigManager.fireBlastCooldown;
 
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
 
-	public static double speed = ConfigManager.airBlastSpeed;
-	public static double range = ConfigManager.airBlastRange;
-	public static double affectingradius = ConfigManager.airBlastRadius;
-	public static double pushfactor = ConfigManager.airBlastPush;
+	private static double speed = ConfigManager.fireBlastSpeed;
+	private static double affectingradius = ConfigManager.fireBlastRadius;
+	private static double pushfactor = ConfigManager.fireBlastPush;
+	private static boolean dissipate = ConfigManager.fireBlastDissipate;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
 
@@ -41,6 +41,8 @@ public class FireBlast {
 	private int id;
 	private double speedfactor;
 	private int ticks = 0;
+	private int damage = ConfigManager.fireBlastDamage;
+	private double range = ConfigManager.fireBlastRange;
 
 	// private ArrayList<Block> affectedlevers = new ArrayList<Block>();
 
@@ -55,6 +57,7 @@ public class FireBlast {
 		if (player.getEyeLocation().getBlock().isLiquid()) {
 			return;
 		}
+		range = Tools.firebendingDayAugment(range, player.getWorld());
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		location = player.getEyeLocation();
@@ -138,16 +141,20 @@ public class FireBlast {
 	private void advanceLocation() {
 		location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0,
 				(int) range);
-		location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 1,
-				(int) range);
 		location = location.add(direction.clone().multiply(speedfactor));
 	}
 
 	private void ignite(Location location) {
 		for (Block block : Tools
 				.getBlocksAroundPoint(location, affectingradius)) {
-			if (FireStream.isIgnitable(block))
+			if (FireStream.isIgnitable(block)) {
 				block.setType(Material.FIRE);
+				if (dissipate) {
+					FireStream.ignitedblocks.put(block, player);
+					FireStream.ignitedtimes.put(block,
+							System.currentTimeMillis());
+				}
+			}
 		}
 	}
 
@@ -171,7 +178,9 @@ public class FireBlast {
 			}
 			if (entity instanceof LivingEntity) {
 				entity.setFireTicks(120);
-				Tools.damageEntity(player, entity, 2);
+				Tools.damageEntity(player, entity, (int) Tools
+						.firebendingDayAugment((double) damage,
+								entity.getWorld()));
 				instances.remove(id);
 			}
 		}

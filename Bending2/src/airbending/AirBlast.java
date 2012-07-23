@@ -150,11 +150,14 @@ public class AirBlast {
 
 	private void affect(Entity entity) {
 		if (entity.getEntityId() != player.getEntityId()) {
+			Vector velocity = entity.getVelocity();
 			if (AvatarState.isAvatarState(player)) {
-				entity.setVelocity(direction.clone().multiply(
-						AvatarState.getValue(pushfactor)));
+				entity.setVelocity(velocity.clone().add(
+						direction.clone().multiply(
+								AvatarState.getValue(pushfactor))));
 			} else {
-				entity.setVelocity(direction.clone().multiply(pushfactor));
+				entity.setVelocity(velocity.add(direction.clone().multiply(
+						pushfactor)));
 			}
 			entity.setFallDistance(0);
 			if (entity.getFireTicks() > 0)
@@ -171,6 +174,9 @@ public class AirBlast {
 	}
 
 	public static String getDescription() {
-		return "AirBlast is the most fundamental bending technique of an airbender. To use, simply left-click in a direction. A gust of wind will be created at your fingertips, launching anything in its path harmlessly back. Additionally, the airbender can create a sustained gust by sneaking (default: shift). A gust of air can extinguish fires and cool lava. ";
+		return "AirBlast is the most fundamental bending technique of an airbender."
+				+ " To use, simply left-click in a direction. A gust of wind will be"
+				+ " created at your fingertips, launching anything in its path harmlessly back."
+				+ " A gust of air can extinguish fires on the ground or on a player, and can cool lava. ";
 	}
 }

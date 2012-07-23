@@ -615,7 +615,7 @@ public class Tools {
 	public static boolean canBend(Player player, Abilities ability) {
 		if (ability == null)
 			return false;
-		if (isChiBlocked(player))
+		if (isChiBlocked(player) && ability != Abilities.AvatarState)
 			return false;
 		if (hasPermission(player, ability)
 				&& !isRegionProtected(player, ability, true))

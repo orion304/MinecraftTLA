@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -176,6 +177,10 @@ public class BendingListener implements Listener {
 	public void onPlayerSwing(PlayerAnimationEvent event) {
 
 		Player player = event.getPlayer();
+
+		if (Bloodbending.isBloodbended(player)) {
+			event.setCancelled(true);
+		}
 
 		// Tools.verbose(Tools.getBendingAbility(player));
 
@@ -600,6 +605,8 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
+		// if (Bloodbending.isBloodbended(player))
+		// event.setCancelled(true);
 		if (Tools.isBender(player, BendingType.Water)
 				&& (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
 			WalkOnWater.freeze(player);
@@ -642,6 +649,12 @@ public class BendingListener implements Listener {
 		if (TempBlock.isTempBlock(event.getBlock()))
 			event.setCancelled(true);
 		if (WaterManipulation.canPhysicsChange(event.getBlock()))
+			event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onEntityTarget(EntityTargetEvent event) {
+		if (Bloodbending.isBloodbended(event.getEntity()))
 			event.setCancelled(true);
 	}
 
