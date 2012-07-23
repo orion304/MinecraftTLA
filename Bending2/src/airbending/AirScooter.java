@@ -157,7 +157,10 @@ public class AirScooter {
 	}
 
 	public static String getDescription() {
-		return "Bind this ability to a slot and on left click.... to be continued";
+		return "AirScooter is a fast means of transportation. To use, sprint, jump then click with "
+				+ "this ability selected. You will hop on a scooter of air and be propelled forward "
+				+ "in the direction you're looking (you don't need to press anything). "
+				+ "This ability can be used to levitate above liquids, but it cannot go up steep slopes.";
 	}
 
 	public static void removeAll() {

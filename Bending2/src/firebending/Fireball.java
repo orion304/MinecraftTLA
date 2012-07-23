@@ -78,6 +78,9 @@ public class Fireball {
 	}
 
 	public static String getDescription() {
-		return "To use, simply left-click in a direction. A large ball of fire will launch from your fist, exploding on contact and occasionally catching nearby things on fire, as well as destroying parts of the environment.";
+		return "To use, simply left-click in a direction. "
+				+ "A large ball of fire will launch from your fist, "
+				+ "exploding on contact and occasionally catching nearby things on fire, "
+				+ "as well as destroying parts of the environment.";
 	}
 }

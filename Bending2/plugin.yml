@@ -134,6 +134,10 @@ permissions:
     description: Allows the use of AirBurst.
 #    default: true
     default: false
+  bending.air.AirSpout:
+    description: Allows the use of AirSpout.
+#    default: true
+    default: false
   bending.fire.ArcOfFire:
     description: Allows the use of ArcOfFire.
     default: true

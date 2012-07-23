@@ -62,6 +62,9 @@ public class Extinguish {
 	}
 
 	public static String getDescription() {
-		return "While this ability is selected, the firebender becomes impervious to fire damage and cannot be ignited. If the user left-clicks with this ability, the targeted area will be extinguished, although it will leave any creature burning engulfed in flames.";
+		return "While this ability is selected, the firebender becomes impervious "
+				+ "to fire damage and cannot be ignited. "
+				+ "If the user left-clicks with this ability, the targeted area will be "
+				+ "extinguished, although it will leave any creature burning engulfed in flames.";
 	}
 }

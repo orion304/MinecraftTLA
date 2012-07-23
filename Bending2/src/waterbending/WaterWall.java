@@ -419,7 +419,14 @@ public class WaterWall {
 	}
 
 	public static String getDescription() {
-		return " To use, place your cursor over a waterbendable object and left-click. Smoke will appear where you've selected, indicating the origin of your ability. After you have selected an origin, simply sneak (default: shift) in any direction and you will see your water spout off in that direction, forming a small shield of water wherever you are looking, so long as you are still sneaking. Additionally, left-clicking while the shield is formed will turn the shield from water to ice and back again, as a toggle. To stop concentration on the shield, simply stop sneaking or change to a slot that does not have Water Wall bound to it.";
+		return " To use, place your cursor over a waterbendable object and left-click. "
+				+ "Smoke will appear where you've selected, indicating the origin of your ability. "
+				+ "After you have selected an origin, simply hold sneak (default: shift) in any direction "
+				+ "and you will see your water spout off in that direction, forming a small shield of "
+				+ "water wherever you are looking, so long as you are still sneaking. "
+				+ "Additionally, left-clicking while the shield is formed will turn the shield from "
+				+ "water to ice and back again, as a toggle. To stop concentration on the shield, "
+				+ "simply stop sneaking or change to a slot that does not have Water Wall bound to it.";
 	}
 
 }

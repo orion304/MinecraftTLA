@@ -177,6 +177,7 @@ public class AirBlast {
 		return "AirBlast is the most fundamental bending technique of an airbender."
 				+ " To use, simply left-click in a direction. A gust of wind will be"
 				+ " created at your fingertips, launching anything in its path harmlessly back."
-				+ " A gust of air can extinguish fires on the ground or on a player, and can cool lava. ";
+				+ " A gust of air can extinguish fires on the ground or on a player, and can cool lava. "
+				+ "Additionally, this ability can flip levers and activate buttons.";
 	}
 }

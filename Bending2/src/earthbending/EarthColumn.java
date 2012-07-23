@@ -218,7 +218,13 @@ public class EarthColumn {
 	}
 
 	public static String getDescription() {
-		return "To use, simply left-click on an earthbendable block. A column of earth will shoot upwards from that location. Anything in the way of the column will be brought up with it, leaving talented benders the ability to trap brainless entities up there. Additionally, simply sneak (default shift) looking at an earthbendable block. A wall of earth will shoot upwards from that location. Anything in the way of the wall will be brought up with it. ";
+		return "To use, simply left-click on an earthbendable block. "
+				+ "A column of earth will shoot upwards from that location. "
+				+ "Anything in the way of the column will be brought up with it, "
+				+ "leaving talented benders the ability to trap brainless entities up there. "
+				+ "Additionally, simply sneak (default shift) looking at an earthbendable block. "
+				+ "A wall of earth will shoot upwards from that location. "
+				+ "Anything in the way of the wall will be brought up with it. ";
 	}
 
 }

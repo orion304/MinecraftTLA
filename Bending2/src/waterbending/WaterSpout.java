@@ -181,6 +181,10 @@ public class WaterSpout {
 	}
 
 	public static String getDescription() {
-		return "To use, simply have it selected. If you are in water at the surface and you try to swim up, water will begin funneling from below and lift you up in a column. You can move while in this column and it will stay under you, provided there's water (or ice, snow, etc) an adequate distance below to pool from. Skilled benders can also use this ability to take no falling damage if they're falling onto ice or shallow water, as the spout will pop up and cushion the fall.";
+		return "To use this ability, click while over or in water. "
+				+ "You will spout water up from beneath you to experience controlled levitation. "
+				+ "This ability is a toggle, so you can activate it then use other abilities and it "
+				+ "will remain on. If you go too high or try to spout over an area with no water, snow or ice, "
+				+ "the spout will dissipate and you will fall. Click again with this ability selected to deactivate it.";
 	}
 }

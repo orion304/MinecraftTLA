@@ -187,7 +187,7 @@ public class FireStream {
 	}
 
 	public static String getDescription() {
-		return "To use, simply left-click in any direction. A line of fire will flow from your location, igniting anything in its path.";
+		return "This ability no longer exists.";
 	}
 
 	public static void remove(Block block) {

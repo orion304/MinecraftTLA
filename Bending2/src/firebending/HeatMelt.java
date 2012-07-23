@@ -39,7 +39,8 @@ public class HeatMelt {
 	}
 
 	public static String getDescription() {
-		return "To use, simply left-click. Any meltable blocks around that target location will immediately melt. Additionally, any obsidian will turn back into lava.";
+		return "To use, simply left-click. "
+				+ "Any meltable blocks around that target location will immediately melt.";
 	}
 
 }

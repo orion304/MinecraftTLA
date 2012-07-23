@@ -24,9 +24,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Tools;
+import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.Plantbending;
@@ -37,23 +39,32 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+import airbending.AirBurst;
 import airbending.AirScooter;
 import airbending.AirShield;
+import airbending.AirSpout;
 import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Tornado;
 import earthbending.Catapult;
+import earthbending.Collapse;
 import earthbending.CompactColumn;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthGrab;
 import earthbending.EarthTunnel;
+import earthbending.Shockwave;
+import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
 import firebending.FireBlast;
+import firebending.FireJet;
 import firebending.Fireball;
 import firebending.HeatMelt;
+import firebending.Illumination;
+import firebending.Lightning;
 import firebending.RingOfFire;
+import firebending.WallOfFire;
 
 public class Bending extends JavaPlugin {
 
@@ -741,6 +752,10 @@ public class Bending extends JavaPlugin {
 				}
 				if (args.length > 1) {
 					if (Abilities.getAbility(args[1]) != null) {
+						if (!Tools.hasPermission(player,
+								Abilities.getAbility(args[1]))) {
+							return false;
+						}
 						ChatColor cc = null;
 						if (Abilities.isAirbending(Abilities
 								.getAbility(args[1])))
@@ -781,6 +796,12 @@ public class Bending extends JavaPlugin {
 						case AirScooter:
 							sender.sendMessage(cc + AirScooter.getDescription());
 							break;
+						case AirBurst:
+							sender.sendMessage(cc + AirBurst.getDescription());
+							break;
+						case AirSpout:
+							sender.sendMessage(cc + AirSpout.getDescription());
+							break;
 						case Catapult:
 							sender.sendMessage(cc + Catapult.getDescription());
 							break;
@@ -802,10 +823,16 @@ public class Bending extends JavaPlugin {
 						case EarthBlast:
 							sender.sendMessage(cc + EarthBlast.getDescription());
 							break;
-						// case Collapse: sender.sendMessage(cc +
-						// Collapse.getDescription());
-						// case Tremorsense: sender.sendMessage(cc +
-						// Tremorsense.getDescription());
+						case Collapse:
+							sender.sendMessage(cc + Collapse.getDescription());
+							break;
+						case Tremorsense:
+							sender.sendMessage(cc
+									+ Tremorsense.getDescription());
+							break;
+						case Shockwave:
+							sender.sendMessage(cc + Shockwave.getDescription());
+							break;
 						case ArcOfFire:
 							sender.sendMessage(cc + ArcOfFire.getDescription());
 							break;
@@ -824,10 +851,23 @@ public class Bending extends JavaPlugin {
 						case RingOfFire:
 							sender.sendMessage(cc + RingOfFire.getDescription());
 							break;
-						// case FireJet: sender.sendMessage(cc +
-						// FireJet.getDescription());
-						// case Illumination: sender.sendMessage(cc +
-						// Illumination.getDescription());
+						case FireJet:
+							sender.sendMessage(cc + FireJet.getDescription());
+							break;
+						case Illumination:
+							sender.sendMessage(cc
+									+ Illumination.getDescription());
+							break;
+						case Lightning:
+							sender.sendMessage(cc + Lightning.getDescription());
+							break;
+						case WallOfFire:
+							sender.sendMessage(WallOfFire.getDescription());
+							break;
+						case Bloodbending:
+							sender.sendMessage(cc
+									+ Bloodbending.getDescription());
+							break;
 						case WaterBubble:
 							sender.sendMessage(cc + AirBubble.getDescription());
 							break;
@@ -859,8 +899,10 @@ public class Bending extends JavaPlugin {
 						case Wave:
 							sender.sendMessage(cc + Wave.getDescription());
 							break;
-						// case AvatarState: sender.sendMessage(cc +
-						// AvatarState.getDescription());
+						case AvatarState:
+							sender.sendMessage(cc
+									+ AvatarState.getDescription());
+							break;
 						}
 						return true;
 					}

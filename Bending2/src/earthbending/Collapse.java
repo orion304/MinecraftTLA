@@ -60,4 +60,10 @@ public class Collapse {
 
 	}
 
+	public static String getDescription() {
+		return "This ability acts like CompactColumn in an area around your targetted location - "
+				+ "all earth that can be moved downwards will be moved downwards. "
+				+ "This ability is especially risky or deadly in caves, depending on the "
+				+ "earthbender's goal and technique.";
+	}
 }

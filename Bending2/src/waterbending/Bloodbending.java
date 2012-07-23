@@ -158,4 +158,12 @@ public class Bloodbending {
 		return false;
 	}
 
+	public static String getDescription() {
+		return "This ability was made illegal for a reason. With this ability selected, sneak while "
+				+ "targetting something and you will bloodbend that target. Bloodbent targets cannot move, "
+				+ "bend or attack. You are free to control their actions by looking elsewhere - they will "
+				+ "be forced to move in that direction. Additionally, clicking while bloodbending will "
+				+ "launch that target off in the direction you're looking.";
+	}
+
 }

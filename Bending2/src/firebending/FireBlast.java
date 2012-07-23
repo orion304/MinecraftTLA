@@ -193,7 +193,11 @@ public class FireBlast {
 	}
 
 	public static String getDescription() {
-		return "FireBlast is the most fundamental bending technique of a firebender. To use, simply left-click in a direction. A blast of fire will be created at your fingertips, launching anything in its path back and damaging it, while setting it on fire.";
+		return "FireBlast is the most fundamental bending technique of a firebender. "
+				+ "To use, simply left-click in a direction. A blast of fire will be created at your fingertips. "
+				+ "If this blast contacts an enemy, it will dissipate and engulf them in flames, "
+				+ "doing additional damage and knocking them back slightly. "
+				+ "If the blast hits terrain, it will ignite the nearby area.";
 	}
 
 }

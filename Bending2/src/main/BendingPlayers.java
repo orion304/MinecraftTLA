@@ -38,7 +38,7 @@ public class BendingPlayers {
 		load();
 		dataFolder = file;
 	}
-	
+
 	public void removeBending(Player player) {
 		if (bendingPlayers == null) {
 			return;
@@ -79,7 +79,7 @@ public class BendingPlayers {
 		}
 		return false;
 	}
-	
+
 	public boolean isBender(String player, BendingType type) {
 		if (bendingPlayers == null) {
 			return false;
@@ -107,24 +107,34 @@ public class BendingPlayers {
 		}
 		return false;
 	}
-		public void setBending(Player player, BendingType type) {
+
+	public void setBending(Player player, BendingType type) {
 		String bending = "";
 		String bendingstring = "";
 		if (type == BendingType.Air) {
 			bending = "a";
-			bendingstring = "airbending.html";
+			bendingstring = "As an airbender, you now take no falling damage, have faster sprinting and higher "
+					+ "jumps. Additionally, daily activities are easier for you - your food meter decays at a "
+					+ "much slower rate";
 		} else if (type == BendingType.Earth) {
 			bending = "e";
-			bendingstring = "earthbending.html";
+			bendingstring = "As an earthbender, upon landing on bendable earth, you will briefly turn the "
+					+ "area to soft sand, negating any fall damage you would have otherwise taken.";
 		} else if (type == BendingType.Water) {
 			bending = "w";
-			bendingstring = "waterbending.html";
+			bendingstring = "As a waterbender, you no longer take any fall damage when landing on ice, snow "
+					+ "or even 1-block-deep water. Additionally, sneaking in the water with a bending ability "
+					+ "selected that does not utilize sneak (or no ability at all)"
+					+ " will give you accelerated swimming.";
 		} else if (type == BendingType.Fire) {
 			bending = "f";
-			bendingstring = "firebending.html";
+			bendingstring = "As a firebender, you now more quickly smother yourself when you catch on fire.";
 		} else if (type == BendingType.ChiBlocker) {
 			bending = "c";
-			bendingstring = "chiblocking.html";
+			bendingstring = "As a chiblocker, you have no active abilities to bind. Instead, you have improved "
+					+ "sprinting and jumping, have a dodge chance and deal more damage with your fists. "
+					+ "Additionally, punching a bender will block his/her chi for a few seconds, preventing "
+					+ "him/her from bending (and even stopping their passive!)";
 		} else {
 			bending = "s";
 			player.setDisplayName(player.getName());
@@ -133,14 +143,9 @@ public class BendingPlayers {
 			return;
 		}
 		bendingPlayers.set(player.getName(), bending);
+		player.sendMessage(ChatColor.GOLD + bendingstring);
 		player.sendMessage(ChatColor.GOLD
-				+ "Use '/bending display <element>' to see your available abilities.");
-		player.sendMessage(ChatColor.GOLD
-				+ "'/bending bind <ability>' will bind it to your current slot.");
-		player.sendMessage(ChatColor.GOLD
-				+ "Go to the below website to see how to use the abilities and what they do:");
-		player.sendMessage(ChatColor.GOLD + "http://minecraftTLA.us.to/"
-				+ bendingstring);
+				+ "Use '/bending help' if you need assistance.");
 
 		if (ConfigManager.enabled) {
 			String append = "";
@@ -184,72 +189,9 @@ public class BendingPlayers {
 	}
 
 	public void setBending(Player player, String type) {
-		String bendingstring = "";
-		if (type.equalsIgnoreCase("air")) {
-			setBending(player, BendingType.Air);
-			bendingstring = "airbending.html";
-		}
-		if (type.equalsIgnoreCase("earth")) {
-			setBending(player, BendingType.Earth);
-			bendingstring = "earthbending.html";
-		}
-		if (type.equalsIgnoreCase("water")) {
-			setBending(player, BendingType.Water);
-			bendingstring = "waterbending.html";
-		}
-		if (type.equalsIgnoreCase("fire")) {
-			setBending(player, BendingType.Fire);
-			bendingstring = "firebending.html";
-		}
-		if (type.equalsIgnoreCase("chiblocker")) {
-			setBending(player, BendingType.ChiBlocker);
-			bendingstring = "chiblocking.html";
-		}
-		player.sendMessage(ChatColor.GOLD
-				+ "Use '/bending display <element>' to see your available abilities.");
-		player.sendMessage(ChatColor.GOLD
-				+ "'/bending bind <ability>' will bind it to your current slot.");
-		player.sendMessage(ChatColor.GOLD
-				+ "Go to the below website to see how to use the abilities and what they do:");
-		player.sendMessage(ChatColor.GOLD + "http://minecraftTLA.us.to/"
-				+ bendingstring);
-
-		if (ConfigManager.enabled) {
-			String append = "";
-			if (!player.isOp()) {
-				if (Tools.isBender(player, BendingType.Air)) {
-					append = ConfigManager.getPrefix("Air");
-				} else if (Tools.isBender(player, BendingType.Earth)) {
-					append = ConfigManager.getPrefix("Earth");
-				} else if (Tools.isBender(player, BendingType.Fire)) {
-					append = ConfigManager.getPrefix("Fire");
-				} else if (Tools.isBender(player, BendingType.Water)) {
-					append = ConfigManager.getPrefix("Water");
-				} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
-					append = ConfigManager.getPrefix("ChiBlocker");
-				}
-				if (!(ConfigManager.compatibility))
-					player.setDisplayName(append + player.getName());
-			}
-			if ((ConfigManager.compatibility) && (ConfigManager.enabled)) {
-				ChatColor color = ChatColor.WHITE;
-				if (ConfigManager.colors && (!player.isOp())) {
-					if (Tools.isBender(player, BendingType.Air)) {
-						color = Tools.getColor(ConfigManager.getColor("Air"));
-					} else if (Tools.isBender(player, BendingType.Earth)) {
-						color = Tools.getColor(ConfigManager.getColor("Earth"));
-					} else if (Tools.isBender(player, BendingType.Fire)) {
-						color = Tools.getColor(ConfigManager.getColor("Fire"));
-					} else if (Tools.isBender(player, BendingType.Water)) {
-						color = Tools.getColor(ConfigManager.getColor("Water"));
-					} else if (Tools.isBender(player, BendingType.ChiBlocker)) {
-						color = Tools.getColor(ConfigManager
-								.getColor("ChiBlocker"));
-					}
-					player.setDisplayName("<" + color + append
-							+ player.getName() + ChatColor.WHITE + ">");
-				}
-			}
+		BendingType bendingtype = BendingType.getType(type);
+		if (bendingtype != null) {
+			setBending(player, bendingtype);
 		}
 
 	}
@@ -274,16 +216,10 @@ public class BendingPlayers {
 	}
 
 	public void addBending(Player player, String type) {
-		if (type.equalsIgnoreCase("air"))
-			addBending(player, BendingType.Air);
-		if (type.equalsIgnoreCase("earth"))
-			addBending(player, BendingType.Earth);
-		if (type.equalsIgnoreCase("water"))
-			addBending(player, BendingType.Water);
-		if (type.equalsIgnoreCase("fire"))
-			addBending(player, BendingType.Fire);
-		if (type.equalsIgnoreCase("chiblocker"))
-			addBending(player, BendingType.ChiBlocker);
+		BendingType bendingtype = BendingType.getType(type);
+		if (bendingtype != null) {
+			addBending(player, bendingtype);
+		}
 	}
 
 	public boolean isBender(Player player) {

@@ -440,7 +440,13 @@ public class Wave {
 	}
 
 	public static String getDescription() {
-		return "To use, place your cursor over a waterbendable object (water, ice, plants if you have plantbending) and tap sneak (default: shift). Smoke will appear where you've selected, indicating the origin of your ability. After you have selected an origin, simply left-click in any direction and you will see your water spout off in that direction and form a large wave, knocking back all within its path. If you look towards a creature when you use this ability, it will target that creature.";
+		return "To use, place your cursor over a waterbendable object "
+				+ "(water, ice, plants if you have plantbending) and tap sneak "
+				+ "(default: shift). Smoke will appear where you've selected, "
+				+ "indicating the origin of your ability. After you have selected an origin, "
+				+ "simply left-click in any direction and you will see your water spout off in that "
+				+ "direction and form a large wave, knocking back all within its path. "
+				+ "If you look towards a creature when you use this ability, it will target that creature.";
 	}
 
 }
