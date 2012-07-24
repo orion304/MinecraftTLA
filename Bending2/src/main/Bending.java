@@ -754,157 +754,185 @@ public class Bending extends JavaPlugin {
 					if (Abilities.getAbility(args[1]) != null) {
 						if (!Tools.hasPermission(player,
 								Abilities.getAbility(args[1]))) {
-							return false;
+
+							ChatColor cc = null;
+							if (Abilities.isAirbending(Abilities
+									.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color
+										.get("Air"));
+							if (Abilities.isFirebending(Abilities
+									.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color
+										.get("Fire"));
+							if (Abilities.isEarthbending(Abilities
+									.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color
+										.get("Earth"));
+							if (Abilities.isWaterbending(Abilities
+									.getAbility(args[1])))
+								cc = Tools.getColor(ConfigManager.color
+										.get("Water"));
+							sender.sendMessage(("                                                "
+									+ cc + Abilities.getAbility(args[1]).name()));
+							switch (Abilities.getAbility(args[1])) {
+							case AirBlast:
+								sender.sendMessage(cc
+										+ AirBlast.getDescription());
+								break;
+							case AirBubble:
+								sender.sendMessage(cc
+										+ AirBubble.getDescription());
+								break;
+							case AirShield:
+								sender.sendMessage(cc
+										+ AirShield.getDescription());
+								break;
+							case AirSuction:
+								sender.sendMessage(cc
+										+ AirSuction.getDescription());
+								break;
+							case AirSwipe:
+								sender.sendMessage(cc
+										+ AirSwipe.getDescription());
+								break;
+							case Tornado:
+								sender.sendMessage(cc
+										+ Tornado.getDescription());
+								break;
+							case AirScooter:
+								sender.sendMessage(cc
+										+ AirScooter.getDescription());
+								break;
+							case AirBurst:
+								sender.sendMessage(cc
+										+ AirBurst.getDescription());
+								break;
+							case AirSpout:
+								sender.sendMessage(cc
+										+ AirSpout.getDescription());
+								break;
+							case Catapult:
+								sender.sendMessage(cc
+										+ Catapult.getDescription());
+								break;
+							case RaiseEarth:
+								sender.sendMessage(cc
+										+ EarthColumn.getDescription());
+								break;
+							case EarthGrab:
+								sender.sendMessage(cc
+										+ EarthGrab.getDescription());
+								break;
+							case EarthTunnel:
+								sender.sendMessage(cc
+										+ EarthTunnel.getDescription());
+								break;
+							case CompactColumn:
+								sender.sendMessage(cc
+										+ CompactColumn.getDescription());
+								break;
+							case EarthBlast:
+								sender.sendMessage(cc
+										+ EarthBlast.getDescription());
+								break;
+							case Collapse:
+								sender.sendMessage(cc
+										+ Collapse.getDescription());
+								break;
+							case Tremorsense:
+								sender.sendMessage(cc
+										+ Tremorsense.getDescription());
+								break;
+							case Shockwave:
+								sender.sendMessage(cc
+										+ Shockwave.getDescription());
+								break;
+							case ArcOfFire:
+								sender.sendMessage(cc
+										+ ArcOfFire.getDescription());
+								break;
+							case Extinguish:
+								sender.sendMessage(cc
+										+ Extinguish.getDescription());
+								break;
+							case Fireball:
+								sender.sendMessage(cc
+										+ Fireball.getDescription());
+								break;
+							case FireBlast:
+								sender.sendMessage(cc
+										+ FireBlast.getDescription());
+								break;
+							case HeatMelt:
+								sender.sendMessage(cc
+										+ HeatMelt.getDescription());
+								break;
+							case RingOfFire:
+								sender.sendMessage(cc
+										+ RingOfFire.getDescription());
+								break;
+							case FireJet:
+								sender.sendMessage(cc
+										+ FireJet.getDescription());
+								break;
+							case Illumination:
+								sender.sendMessage(cc
+										+ Illumination.getDescription());
+								break;
+							case Lightning:
+								sender.sendMessage(cc
+										+ Lightning.getDescription());
+								break;
+							case WallOfFire:
+								sender.sendMessage(cc
+										+ WallOfFire.getDescription());
+								break;
+							case Bloodbending:
+								sender.sendMessage(cc
+										+ Bloodbending.getDescription());
+								break;
+							case WaterBubble:
+								sender.sendMessage(cc
+										+ AirBubble.getDescription());
+								break;
+							case FreezeMelt:
+								sender.sendMessage(cc
+										+ FreezeMelt.getDescription());
+								break;
+							case HealingWaters:
+								sender.sendMessage(cc
+										+ HealingWaters.getDescription());
+								break;
+							case Plantbending:
+								sender.sendMessage(cc
+										+ Plantbending.getDescription());
+								break;
+							case WalkOnWater:
+								sender.sendMessage(cc
+										+ WalkOnWater.getDescription());
+								break;
+							case WaterManipulation:
+								sender.sendMessage(cc
+										+ WaterManipulation.getDescription());
+								break;
+							case WaterSpout:
+								sender.sendMessage(cc
+										+ WaterSpout.getDescription());
+								break;
+							case WaterWall:
+								sender.sendMessage(cc
+										+ WaterWall.getDescription());
+								break;
+							case Wave:
+								sender.sendMessage(cc + Wave.getDescription());
+								break;
+							case AvatarState:
+								sender.sendMessage(cc
+										+ AvatarState.getDescription());
+								break;
+							}
+							return true;
 						}
-						ChatColor cc = null;
-						if (Abilities.isAirbending(Abilities
-								.getAbility(args[1])))
-							cc = Tools.getColor(ConfigManager.color.get("Air"));
-						if (Abilities.isFirebending(Abilities
-								.getAbility(args[1])))
-							cc = Tools
-									.getColor(ConfigManager.color.get("Fire"));
-						if (Abilities.isEarthbending(Abilities
-								.getAbility(args[1])))
-							cc = Tools.getColor(ConfigManager.color
-									.get("Earth"));
-						if (Abilities.isWaterbending(Abilities
-								.getAbility(args[1])))
-							cc = Tools.getColor(ConfigManager.color
-									.get("Water"));
-						sender.sendMessage(("                                                "
-								+ cc + Abilities.getAbility(args[1]).name()));
-						switch (Abilities.getAbility(args[1])) {
-						case AirBlast:
-							sender.sendMessage(cc + AirBlast.getDescription());
-							break;
-						case AirBubble:
-							sender.sendMessage(cc + AirBubble.getDescription());
-							break;
-						case AirShield:
-							sender.sendMessage(cc + AirShield.getDescription());
-							break;
-						case AirSuction:
-							sender.sendMessage(cc + AirSuction.getDescription());
-							break;
-						case AirSwipe:
-							sender.sendMessage(cc + AirSwipe.getDescription());
-							break;
-						case Tornado:
-							sender.sendMessage(cc + Tornado.getDescription());
-							break;
-						case AirScooter:
-							sender.sendMessage(cc + AirScooter.getDescription());
-							break;
-						case AirBurst:
-							sender.sendMessage(cc + AirBurst.getDescription());
-							break;
-						case AirSpout:
-							sender.sendMessage(cc + AirSpout.getDescription());
-							break;
-						case Catapult:
-							sender.sendMessage(cc + Catapult.getDescription());
-							break;
-						case RaiseEarth:
-							sender.sendMessage(cc
-									+ EarthColumn.getDescription());
-							break;
-						case EarthGrab:
-							sender.sendMessage(cc + EarthGrab.getDescription());
-							break;
-						case EarthTunnel:
-							sender.sendMessage(cc
-									+ EarthTunnel.getDescription());
-							break;
-						case CompactColumn:
-							sender.sendMessage(cc
-									+ CompactColumn.getDescription());
-							break;
-						case EarthBlast:
-							sender.sendMessage(cc + EarthBlast.getDescription());
-							break;
-						case Collapse:
-							sender.sendMessage(cc + Collapse.getDescription());
-							break;
-						case Tremorsense:
-							sender.sendMessage(cc
-									+ Tremorsense.getDescription());
-							break;
-						case Shockwave:
-							sender.sendMessage(cc + Shockwave.getDescription());
-							break;
-						case ArcOfFire:
-							sender.sendMessage(cc + ArcOfFire.getDescription());
-							break;
-						case Extinguish:
-							sender.sendMessage(cc + Extinguish.getDescription());
-							break;
-						case Fireball:
-							sender.sendMessage(cc + Fireball.getDescription());
-							break;
-						case FireBlast:
-							sender.sendMessage(cc + FireBlast.getDescription());
-							break;
-						case HeatMelt:
-							sender.sendMessage(cc + HeatMelt.getDescription());
-							break;
-						case RingOfFire:
-							sender.sendMessage(cc + RingOfFire.getDescription());
-							break;
-						case FireJet:
-							sender.sendMessage(cc + FireJet.getDescription());
-							break;
-						case Illumination:
-							sender.sendMessage(cc
-									+ Illumination.getDescription());
-							break;
-						case Lightning:
-							sender.sendMessage(cc + Lightning.getDescription());
-							break;
-						case WallOfFire:
-							sender.sendMessage(WallOfFire.getDescription());
-							break;
-						case Bloodbending:
-							sender.sendMessage(cc
-									+ Bloodbending.getDescription());
-							break;
-						case WaterBubble:
-							sender.sendMessage(cc + AirBubble.getDescription());
-							break;
-						case FreezeMelt:
-							sender.sendMessage(cc + FreezeMelt.getDescription());
-							break;
-						case HealingWaters:
-							sender.sendMessage(cc
-									+ HealingWaters.getDescription());
-							break;
-						case Plantbending:
-							sender.sendMessage(cc
-									+ Plantbending.getDescription());
-							break;
-						case WalkOnWater:
-							sender.sendMessage(cc
-									+ WalkOnWater.getDescription());
-							break;
-						case WaterManipulation:
-							sender.sendMessage(cc
-									+ WaterManipulation.getDescription());
-							break;
-						case WaterSpout:
-							sender.sendMessage(cc + WaterSpout.getDescription());
-							break;
-						case WaterWall:
-							sender.sendMessage(cc + WaterWall.getDescription());
-							break;
-						case Wave:
-							sender.sendMessage(cc + Wave.getDescription());
-							break;
-						case AvatarState:
-							sender.sendMessage(cc
-									+ AvatarState.getDescription());
-							break;
-						}
-						return true;
 					}
 					for (String s : command) {
 						if (args[1].equalsIgnoreCase(s.split(" ")[0])) {

@@ -137,9 +137,9 @@ public class Tremorsense {
 	public static String getDescription() {
 		return "This is a pure utility ability for earthbenders. If you have this ability bound to any "
 				+ "slot whatsoever, then you are able to 'see' using the earth. If you are in an area of low-light "
-				+ "and are standing on top of an earthbendable block, this ability will turn that block into "
+				+ "and are standing on top of an earthbendable block, this ability will automatically turn that block into "
 				+ "glowstone, visible *only by you*. If you lose contact with a bendable block, the light will go out, "
-				+ "as you have lost contact with the earth and cannot 'see'. "
+				+ "as you have lost contact with the earth and cannot 'see' until you can touch earth again. "
 				+ "Additionally, if you click with this ability selected, smoke will appear above nearby earth "
 				+ "with pockets of air beneath them.";
 	}

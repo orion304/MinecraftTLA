@@ -134,7 +134,7 @@ public class BendingPlayers {
 			bendingstring = "As a chiblocker, you have no active abilities to bind. Instead, you have improved "
 					+ "sprinting and jumping, have a dodge chance and deal more damage with your fists. "
 					+ "Additionally, punching a bender will block his/her chi for a few seconds, preventing "
-					+ "him/her from bending (and even stopping their passive!)";
+					+ "him/her from bending (and even stopping their passive!).";
 		} else {
 			bending = "s";
 			player.setDisplayName(player.getName());

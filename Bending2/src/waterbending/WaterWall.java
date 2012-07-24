@@ -419,7 +419,7 @@ public class WaterWall {
 	}
 
 	public static String getDescription() {
-		return " To use, place your cursor over a waterbendable object and left-click. "
+		return "To use, place your cursor over a waterbendable object and left-click. "
 				+ "Smoke will appear where you've selected, indicating the origin of your ability. "
 				+ "After you have selected an origin, simply hold sneak (default: shift) in any direction "
 				+ "and you will see your water spout off in that direction, forming a small shield of "

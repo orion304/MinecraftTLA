@@ -49,10 +49,11 @@ public class Speed {
 				&& Tools.canBendPassive(player, BendingType.Air)) {
 			factor = 1;
 		}
+		int jumpfactor = factor + 2;
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70,
 				factor));
 		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70,
-				factor));
+				jumpfactor));
 	}
 
 	public static boolean progress(int ID) {
