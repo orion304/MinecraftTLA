@@ -259,29 +259,27 @@ public class BendingManager implements Runnable {
 		airscooterplayers = AirScooter.getPlayers();
 		players.addAll(avatarstateplayers);
 
-		for (Player player : flyingplayers) {
+		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			if (!avatarstateplayers.contains(player)
-					&& !airscooterplayers.contains(player))
-				player.setFlying(false);
-			if (players.contains(player) && !newflyingplayers.contains(player)) {
-				newflyingplayers.add(player);
-			} else if (!players.contains(player)
-					&& !avatarstateplayers.contains(player)
 					&& !airscooterplayers.contains(player)) {
-				player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+				player.setFlying(player.getGameMode() == GameMode.CREATIVE);
+				continue;
 			}
-		}
-
-		for (Player player : players) {
-			if (!flyingplayers.contains(player)) {
-				newflyingplayers.add(player);
+			if (flyingplayers.contains(player) && players.contains(player)) {
 				player.setAllowFlight(true);
+				newflyingplayers.add(player);
+			} else if (players.contains(player)
+					&& !flyingplayers.contains(player)) {
+				newflyingplayers.add(player);
+			} else if (flyingplayers.contains(player)
+					&& !players.contains(player)) {
+				player.setFlying(player.getGameMode() == GameMode.CREATIVE);
+			} else {
+				player.setFlying(player.getGameMode() == GameMode.CREATIVE);
 			}
 		}
-
 		flyingplayers.clear();
 		flyingplayers.addAll(newflyingplayers);
-
 	}
 
 	public static void removeFlyers() {

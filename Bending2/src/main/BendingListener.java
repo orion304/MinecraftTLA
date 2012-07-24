@@ -281,8 +281,7 @@ public class BendingListener implements Listener {
 					new Illumination(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.WallOfFire
-						&& player.isOp()) {
+				if (Tools.getBendingAbility(player) == Abilities.WallOfFire) {
 					new WallOfFire(player);
 				}
 
@@ -311,8 +310,7 @@ public class BendingListener implements Listener {
 					new Plantbending(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.WaterSpout
-						&& player.isOp()) {
+				if (Tools.getBendingAbility(player) == Abilities.WaterSpout) {
 					new WaterSpout(player);
 				}
 
@@ -638,7 +636,8 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onPlayerKick(PlayerKickEvent event) {
 		Tools.verbose(event.getReason());
-		if (BendingManager.flyingplayers.contains(event.getPlayer())) {
+		if (BendingManager.flyingplayers.contains(event.getPlayer())
+				|| Bloodbending.isBloodbended(event.getPlayer())) {
 			event.setCancelled(true);
 			event.setReason(null);
 		}

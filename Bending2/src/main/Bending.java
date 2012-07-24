@@ -752,7 +752,7 @@ public class Bending extends JavaPlugin {
 				}
 				if (args.length > 1) {
 					if (Abilities.getAbility(args[1]) != null) {
-						if (!Tools.hasPermission(player,
+						if (Tools.hasPermission(player,
 								Abilities.getAbility(args[1]))) {
 
 							ChatColor cc = null;

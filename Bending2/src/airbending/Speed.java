@@ -49,7 +49,7 @@ public class Speed {
 				&& Tools.canBendPassive(player, BendingType.Air)) {
 			factor = 1;
 		}
-		int jumpfactor = factor + 2;
+		int jumpfactor = factor + 1;
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70,
 				factor));
 		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70,
@@ -63,7 +63,12 @@ public class Speed {
 	public static ArrayList<Player> getPlayers() {
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (int id : instances.keySet()) {
-			players.add(instances.get(id).player);
+			Player player = instances.get(id).player;
+			if (player.isSprinting()) {
+				players.add(instances.get(id).player);
+			} else {
+				instances.remove(id);
+			}
 		}
 		return players;
 	}

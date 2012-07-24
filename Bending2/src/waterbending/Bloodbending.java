@@ -40,7 +40,8 @@ public class Bloodbending {
 								|| entity.getEntityId() == player.getEntityId())
 							continue;
 					}
-					targetentities.put(entity, entity.getLocation());
+					Tools.damageEntity(player, entity, 0);
+					targetentities.put(entity, entity.getLocation().clone());
 				}
 			}
 		} else {
@@ -48,7 +49,7 @@ public class Bloodbending {
 			if (target == null)
 				return;
 			Tools.damageEntity(player, target, 0);
-			targetentities.put(target, target.getLocation());
+			targetentities.put(target, target.getLocation().clone());
 		}
 		this.player = player;
 		instances.put(player, this);
@@ -63,7 +64,7 @@ public class Bloodbending {
 		Location location = player.getLocation();
 		for (Entity entity : targetentities.keySet()) {
 			double dx, dy, dz;
-			Location target = entity.getLocation();
+			Location target = entity.getLocation().clone();
 			dx = target.getX() - location.getX();
 			dy = target.getY() - location.getY();
 			dz = target.getZ() - location.getZ();
@@ -85,24 +86,26 @@ public class Bloodbending {
 			ArrayList<Entity> entities = new ArrayList<Entity>();
 			for (Entity entity : Tools.getEntitiesAroundPoint(
 					player.getLocation(), range)) {
+				if (entity instanceof Player) {
+					if (AvatarState.isAvatarState((Player) entity)
+							|| entity.getEntityId() == player.getEntityId())
+						continue;
+				}
 				entities.add(entity);
 				if (!targetentities.containsKey(entity)
 						&& entity instanceof LivingEntity) {
 					Tools.damageEntity(player, entity, 0);
-					targetentities.put(entity, entity.getLocation());
+					targetentities.put(entity, entity.getLocation().clone());
 				}
 				if (entity instanceof LivingEntity) {
-					if (entity instanceof Player) {
-						if (AvatarState.isAvatarState((Player) entity)
-								|| entity.getEntityId() == player.getEntityId())
-							continue;
-						Tools.blockChi((Player) entity, 1000);
-					}
-					Location newlocation = entity.getLocation();
+					Location newlocation = entity.getLocation().clone();
 					Location location = targetentities.get(entity);
-					double distance = location.distanceSquared(newlocation);
-					Vector vector = location.toVector().subtract(
-							newlocation.toVector());
+					double distance = location.distance(newlocation);
+					double dx, dy, dz;
+					dx = location.getX() - newlocation.getX();
+					dy = location.getY() - newlocation.getY();
+					dz = location.getZ() - newlocation.getZ();
+					Vector vector = new Vector(dx, dy, dz);
 					if (distance > .5) {
 						entity.setVelocity(vector.normalize().multiply(.5));
 					} else {
@@ -117,6 +120,12 @@ public class Bloodbending {
 			}
 		} else {
 			for (Entity entity : targetentities.keySet()) {
+				if (entity instanceof Player) {
+					if (AvatarState.isAvatarState((Player) entity)) {
+						targetentities.remove(entity);
+						continue;
+					}
+				}
 				Location newlocation = entity.getLocation();
 				Location location = Tools.getTargetedLocation(
 						player,

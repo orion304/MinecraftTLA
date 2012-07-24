@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
@@ -615,7 +616,8 @@ public class Tools {
 	public static boolean canBend(Player player, Abilities ability) {
 		if (ability == null)
 			return false;
-		if (isChiBlocked(player) && ability != Abilities.AvatarState)
+		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player))
+				&& ability != Abilities.AvatarState)
 			return false;
 		if (hasPermission(player, ability)
 				&& !isRegionProtected(player, ability, true))
@@ -674,7 +676,8 @@ public class Tools {
 	public static boolean canBendPassive(Player player, BendingType type) {
 		if (isRegionProtected(player, null, false))
 			return false;
-		if (isChiBlocked(player))
+		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player))
+				&& !AvatarState.isAvatarState(player))
 			return false;
 		if (player.hasPermission("bending." + type + ".passive")) {
 			return true;

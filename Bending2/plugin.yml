@@ -88,7 +88,7 @@ permissions:
       bending.command.display: true
       bending.command.bind: true
 #      bending.fire.Lightning: true
-#      bending.water.Bloodbending: true
+      bending.water.Bloodbending: true
       
   bending.command:
     description: Allows all user commands.
@@ -205,8 +205,7 @@ permissions:
     default: true
   bending.water.Bloodbending:
     description: Allows the use of Bloodbending.
-#    default: op
-    default: false
+    default: op
   bending.earth.Catapult:
     description: Allows the use of Catapult.
     default: true
