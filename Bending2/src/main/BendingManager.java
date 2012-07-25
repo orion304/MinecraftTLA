@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.server.EntityFireball;
@@ -13,6 +14,7 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
@@ -58,6 +60,10 @@ public class BendingManager implements Runnable {
 
 	public static ArrayList<Player> flyingplayers = new ArrayList<Player>();
 
+	private boolean verbose = true;
+	private long verbosetime;
+	private long verboseinterval = 3 * 60 * 1000;
+
 	long time;
 	long interval;
 	long reverttime;
@@ -68,6 +74,7 @@ public class BendingManager implements Runnable {
 	public BendingManager(Bending instance) {
 		plugin = instance;
 		time = System.currentTimeMillis();
+		verbosetime = System.currentTimeMillis();
 		reverttime = time;
 	}
 
@@ -85,6 +92,10 @@ public class BendingManager implements Runnable {
 		AvatarState.manageAvatarStates();
 		handleFlying();
 		handleDayNight();
+
+		if (verbose
+				&& System.currentTimeMillis() > verbosetime + verboseinterval)
+			handleVerbosity();
 
 	}
 
@@ -202,6 +213,9 @@ public class BendingManager implements Runnable {
 					+ Fireball.duration) {
 				entity.die();
 			}
+			if (!entity.isAlive()) {
+				Fireball.fireballs.remove(entity);
+			}
 		}
 		for (Player ID : WallOfFire.instances.keySet()) {
 			WallOfFire.manageWallOfFire(ID);
@@ -260,22 +274,29 @@ public class BendingManager implements Runnable {
 		players.addAll(avatarstateplayers);
 
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			if (!avatarstateplayers.contains(player)
-					&& !airscooterplayers.contains(player)) {
-				player.setFlying(player.getGameMode() == GameMode.CREATIVE);
+			if (avatarstateplayers.contains(player)
+					|| airscooterplayers.contains(player)) {
 				continue;
 			}
 			if (flyingplayers.contains(player) && players.contains(player)) {
 				player.setAllowFlight(true);
+				if (player.getGameMode() != GameMode.CREATIVE)
+					player.setFlying(false);
 				newflyingplayers.add(player);
 			} else if (players.contains(player)
 					&& !flyingplayers.contains(player)) {
 				newflyingplayers.add(player);
+				if (player.getGameMode() != GameMode.CREATIVE)
+					player.setFlying(false);
 			} else if (flyingplayers.contains(player)
 					&& !players.contains(player)) {
-				player.setFlying(player.getGameMode() == GameMode.CREATIVE);
+				player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+				if (player.getGameMode() != GameMode.CREATIVE)
+					player.setFlying(false);
 			} else {
-				player.setFlying(player.getGameMode() == GameMode.CREATIVE);
+				player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+				if (player.getGameMode() != GameMode.CREATIVE)
+					player.setFlying(false);
 			}
 		}
 		flyingplayers.clear();
@@ -339,6 +360,7 @@ public class BendingManager implements Runnable {
 		}
 
 	}
+
 	// private void manageMessages() {
 	// for (Player player : newplayers) {
 	// player.sendMessage(ChatColor.GOLD
@@ -347,4 +369,226 @@ public class BendingManager implements Runnable {
 	// newplayers.clear();
 	// }
 
+	private void handleVerbosity() {
+		verbosetime = System.currentTimeMillis();
+
+		int airblasts, airbubbles, airscooters, airshields, airsuctions, airswipes, tornados; // ,airbursts,
+																								// airspouts;
+
+		int airblastplayers = 0;
+		airblasts = AirBlast.instances.size();
+
+		int airbubbleplayers = 0;
+		airbubbles = AirBubble.instances.size();
+
+		// int airburstplayers = 0;
+		// airbursts = AirBurst.instances.size();
+
+		int airscooterplayers = 0;
+		airscooters = AirScooter.instances.size();
+
+		int airshieldplayers = 0;
+		airshields = AirShield.instances.size();
+
+		// int airspoutplayer = 0;
+		// airspouts = AirSpout.instances.size();
+
+		int airsuctionplayers = 0;
+		airsuctions = AirSuction.instances.size();
+
+		int airswipeplayers = 0;
+		airswipes = AirSwipe.instances.size();
+
+		int tornadoplayers = 0;
+		tornados = Tornado.instances.size();
+
+		int catapults, compactcolumns, earthblasts, earthcolumns, earthtunnels, tremorsenses; // ,shockwaves;
+
+		int catapultplayers = 0;
+		catapults = Catapult.instances.size();
+
+		int compactcolumnplayers = 0;
+		compactcolumns = CompactColumn.instances.size();
+
+		int earthblastplayers = 0;
+		earthblasts = EarthBlast.instances.size();
+
+		int earthcolumnplayers = 0;
+		earthcolumns = EarthColumn.instances.size();
+
+		int earthtunnelplayers = 0;
+		earthtunnels = EarthTunnel.instances.size();
+
+		// int shockwaveplayers = 0;
+		// shockwaves = Shockwave.instances.size();
+
+		int tremorsenseplayers = 0;
+		tremorsenses = Tremorsense.instances.size();
+
+		int fireballs, fireblasts, firejets, firestreams, illuminations, walloffires; // ,lightings;
+
+		int fireblastplayers = 0;
+		fireblasts = FireBlast.instances.size();
+
+		int firestreamplayers = 0;
+		firestreams = FireStream.instances.size();
+
+		int fireballplayers = 0;
+		fireballs = Fireball.fireballs.size();
+
+		int firejetplayers = 0;
+		firejets = FireJet.instances.size();
+
+		int illuminationplayers = 0;
+		illuminations = Illumination.instances.size();
+
+		// int lightningplayers = 0;
+		// lightnings = Lightning.instances.size();
+
+		int walloffireplayers = 0;
+		walloffires = WallOfFire.instances.size();
+
+		int bloodbendings, freezemelts, watermanipulations, waterspouts, waterwalls, waves;
+
+		int bloodbendingplayers = 0;
+		bloodbendings = Bloodbending.instances.size();
+
+		int freezemeltplayers = 0;
+		freezemelts = FreezeMelt.frozenblocks.size();
+
+		int watermanipulationplayers = 0;
+		watermanipulations = WaterManipulation.instances.size();
+
+		int waterspoutplayers = 0;
+		waterspouts = WaterSpout.instances.size();
+
+		int waterwallplayers = 0;
+		waterwalls = WaterWall.instances.size();
+
+		int waveplayers = 0;
+		waves = Wave.instances.size();
+
+		for (Player player : plugin.getServer().getOnlinePlayers()) {
+			Abilities ability = Tools.getBendingAbility(player);
+			if (ability == Abilities.AirBlast)
+				airblastplayers++;
+			if (ability == Abilities.AirBubble)
+				airbubbleplayers++;
+			// if (ability==Abilities.AirBurst)
+			// airburstplayers++;
+			if (ability == Abilities.AirScooter)
+				airscooterplayers++;
+			if (ability == Abilities.AirShield)
+				airshieldplayers++;
+			// if (ability==Abilities.AirSpout)
+			// airspoutplayers++;
+			if (ability == Abilities.AirSuction)
+				airsuctionplayers++;
+			if (ability == Abilities.AirSwipe)
+				airswipeplayers++;
+			if (ability == Abilities.Tornado)
+				tornadoplayers++;
+
+			if (ability == Abilities.Catapult)
+				catapultplayers++;
+			if (ability == Abilities.Collapse)
+				compactcolumnplayers++;
+			if (ability == Abilities.CompactColumn)
+				compactcolumnplayers++;
+			if (ability == Abilities.EarthBlast)
+				earthblastplayers++;
+			if (ability == Abilities.RaiseEarth)
+				earthcolumnplayers++;
+			if (ability == Abilities.EarthGrab)
+				earthcolumnplayers++;
+			if (ability == Abilities.EarthTunnel)
+				earthtunnelplayers++;
+			if (Tools.hasAbility(player, Abilities.Tremorsense))
+				tremorsenseplayers++;
+			// if (ability==Abilities.Shockwave) shockwaveplayers++;
+
+			if (ability == Abilities.ArcOfFire)
+				firestreamplayers++;
+			if (ability == Abilities.Fireball)
+				fireballplayers++;
+			if (ability == Abilities.FireBlast)
+				fireblastplayers++;
+			if (Tools.hasAbility(player, Abilities.FireJet))
+				firejetplayers++;
+			if (Tools.hasAbility(player, Abilities.Illumination))
+				illuminationplayers++;
+			// if (ability==Abilities.Lightning) lightningplayers++;
+			if (ability == Abilities.RingOfFire)
+				firestreamplayers++;
+			if (ability == Abilities.WallOfFire)
+				walloffireplayers++;
+
+			if (ability == Abilities.Bloodbending)
+				bloodbendingplayers++;
+			if (Tools.hasAbility(player, Abilities.FreezeMelt))
+				freezemeltplayers++;
+			if (ability == Abilities.WalkOnWater)
+				freezemeltplayers++;
+			if (ability == Abilities.WaterBubble)
+				airbubbleplayers++;
+			if (ability == Abilities.WaterManipulation)
+				watermanipulationplayers++;
+			if (Tools.hasAbility(player, Abilities.WaterSpout))
+				waterspoutplayers++;
+			if (ability == Abilities.WaterWall)
+				waterwallplayers++;
+			if (ability == Abilities.Wave)
+				waveplayers++;
+		}
+
+		Tools.writeToLog("Debug data at "
+				+ Calendar.getInstance().get(Calendar.HOUR) + "h "
+				+ Calendar.getInstance().get(Calendar.MINUTE) + "m "
+				+ Calendar.getInstance().get(Calendar.SECOND) + "s");
+
+		verbose("airblasts", airblasts, airblastplayers, false);
+		verbose("airbubbles", airbubbles, airbubbleplayers, true);
+		// verbose("airbursts", airbursts, airburstplayers, false);
+		verbose("airscooters", airscooters, airscooterplayers, true);
+		verbose("airshields", airshields, airshieldplayers, true);
+		// verbose("airspouts", airspouts, airspoutplayers, false);
+		verbose("airsuctions", airsuctions, airsuctionplayers, false);
+		verbose("airswipes", airswipes, airswipeplayers, false);
+		verbose("tornados", tornados, tornadoplayers, true);
+
+		verbose("catapults", catapults, catapultplayers, true);
+		verbose("compactcolumns", compactcolumns, compactcolumnplayers, false);
+		verbose("earthblasts", earthblasts, earthblastplayers, true);
+		verbose("earthcolumns", earthcolumns, earthcolumnplayers, false);
+		verbose("earthtunnels", earthtunnels, earthtunnelplayers, true);
+		// verbose("shockwaves", shockwaves, shockwaveplayers, false);
+		verbose("tremorsenses", tremorsenses, tremorsenseplayers, true);
+
+		verbose("fireballs", fireballs, fireballplayers, false);
+		verbose("fireblasts", fireblasts, fireblastplayers, false);
+		verbose("firejets", firejets, firejetplayers, true);
+		verbose("firestreams", firestreams, firestreamplayers, false);
+		verbose("illuminations", illuminations, illuminationplayers, true);
+		// verbose("lightnings", lightnings, lightningplayers, true);
+		verbose("walloffires", walloffires, walloffireplayers, false);
+
+		verbose("bloodbendings", bloodbendings, bloodbendingplayers, true);
+		verbose("freezemelts", freezemelts, freezemeltplayers, false);
+		verbose("watermanipulations", watermanipulations,
+				watermanipulationplayers, false);
+		verbose("waterspouts", waterspouts, waterspoutplayers, true);
+		verbose("waterwalls", waterwalls, waterwallplayers, true);
+		verbose("waves", waves, waveplayers, true);
+
+		Tools.writeToLog(null);
+	}
+
+	private void verbose(String name, int instances, int players,
+			boolean warning) {
+		if (warning && instances > players) {
+			name = "==WARNING== " + name;
+		}
+		Tools.writeToLog(name + ": " + instances + " instances for " + players
+				+ " players.");
+	}
 }

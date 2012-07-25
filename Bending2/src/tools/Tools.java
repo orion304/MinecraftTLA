@@ -1,5 +1,7 @@
 package tools;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -836,6 +838,23 @@ public class Tools {
 				adjacent = true;
 		}
 		return adjacent;
+	}
+
+	public static <T> void writeToLog(T something) {
+		String string = "";
+		if (something != null) {
+			string = something.toString();
+		}
+		try {
+			FileWriter fstream = new FileWriter("bending.log", true);
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(string);
+			out.newLine();
+			out.close();
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+
 	}
 
 	static {

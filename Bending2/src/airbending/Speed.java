@@ -28,6 +28,10 @@ public class Speed {
 	}
 
 	public boolean progress() {
+		// if (player.isFlying() && player.getGameMode() != GameMode.CREATIVE
+		// && !AirScooter.getPlayers().contains(player)
+		// && !AvatarState.isAvatarState(player))
+		// player.setFlying(false);
 		if (player.isSprinting() && Tools.isBender(player, BendingType.Air)
 				&& Tools.canBendPassive(player, BendingType.Air)) {
 			applySpeed();
