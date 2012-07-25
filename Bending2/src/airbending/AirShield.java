@@ -14,6 +14,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
+import firebending.FireBlast;
 
 public class AirShield {
 
@@ -49,6 +50,8 @@ public class AirShield {
 
 	private void rotateShield() {
 		Location origin = player.getLocation();
+
+		FireBlast.removeFireBlastsAroundPoint(origin, radius);
 
 		for (Entity entity : Tools.getEntitiesAroundPoint(origin, radius)) {
 			if (origin.distance(entity.getLocation()) > 2) {

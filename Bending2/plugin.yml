@@ -37,7 +37,7 @@ permissions:
       bending.fire.Passive: true
       bending.fire.RingOfFire: true
       bending.fire.Illumination: true
-#      bending.fire.WallOfFire: true
+      bending.fire.WallOfFire: true
   bending.water.*:
     description: Allows all water bending.
     children:
@@ -167,8 +167,7 @@ permissions:
     default: true
   bending.fire.WallOfFire:
     description: Allows the use of WallOfFire.
-#    default: true
-    default: false
+    default: true
   bending.fire.Lightning:
     description: Allows the use of Lightning.
 #    default: op

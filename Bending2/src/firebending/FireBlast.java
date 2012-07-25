@@ -186,6 +186,15 @@ public class FireBlast {
 		}
 	}
 
+	public static void removeFireBlastsAroundPoint(Location location,
+			double radius) {
+		for (int id : instances.keySet()) {
+			Location fireblastlocation = instances.get(id).location;
+			if (location.distance(fireblastlocation) <= radius)
+				instances.remove(id);
+		}
+	}
+
 	public static void removeAll() {
 		for (int id : instances.keySet()) {
 			instances.remove(id);

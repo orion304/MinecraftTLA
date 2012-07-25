@@ -101,7 +101,7 @@ public class WallOfFire {
 										block.getX(), (int) y, block.getZ());
 								blocks.add(loca);
 								block.getWorld().playEffect(loca,
-										Effect.MOBSPAWNER_FLAMES, 1);
+										Effect.MOBSPAWNER_FLAMES, 1, 20);
 								blockslocation.put(p, blocks);
 							}
 						}
@@ -109,6 +109,7 @@ public class WallOfFire {
 				}
 				if (blockslocation.containsKey(p)) {
 					for (Location loca : blockslocation.get(p)) {
+						FireBlast.removeFireBlastsAroundPoint(loca, 2);
 						for (Entity en : Tools.getEntitiesAroundPoint(
 								locations.get(p), width + 2)) {
 							if (en instanceof Projectile) {
