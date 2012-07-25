@@ -278,6 +278,11 @@ public class BendingManager implements Runnable {
 					|| airscooterplayers.contains(player)) {
 				continue;
 			}
+			if (Bloodbending.isBloodbended(player)) {
+				player.setAllowFlight(true);
+				player.setFlying(false);
+				continue;
+			}
 			if (flyingplayers.contains(player) && players.contains(player)) {
 				player.setAllowFlight(true);
 				if (player.getGameMode() != GameMode.CREATIVE)
