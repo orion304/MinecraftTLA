@@ -243,23 +243,7 @@ public class Tools {
 				affectedblock.setType(block.getType());
 				affectedblock.setData(block.getData());
 
-				if (tempearthblocks.containsKey(block)) {
-					Block index = tempearthblocks.get(block);
-					tempearthblocks.remove(block);
-					tempearthblocks.put(affectedblock, index);
-					Information info = movedearth.get(index);
-					info.setBlock(affectedblock);
-					info.setTime(System.currentTimeMillis());
-					movedearth.replace(index, info);
-				} else {
-					tempearthblocks.put(affectedblock, block);
-					Information info = new Information();
-					info.setBlock(affectedblock);
-					info.setType(block.getType());
-					info.setData(block.getData());
-					info.setTime(System.currentTimeMillis());
-					movedearth.put(block, info);
-				}
+				addTempEarthBlock(block, affectedblock);
 
 				for (double i = 1; i < chainlength; i++) {
 					affectedblock = location
@@ -284,25 +268,7 @@ public class Tools {
 						return;
 					block.setType(affectedblock.getType());
 					block.setData(affectedblock.getData());
-					if (tempearthblocks.containsKey(affectedblock)) {
-						Block index = tempearthblocks.get(affectedblock);
-						tempearthblocks.remove(affectedblock);
-						tempearthblocks.put(block, index);
-						Information info = movedearth.get(index);
-						if (info != null) {
-							info.setBlock(block);
-							info.setTime(System.currentTimeMillis());
-							movedearth.replace(index, info);
-						}
-					} else {
-						tempearthblocks.put(block, affectedblock);
-						Information info = new Information();
-						info.setBlock(block);
-						info.setType(affectedblock.getType());
-						info.setData(affectedblock.getData());
-						info.setTime(System.currentTimeMillis());
-						movedearth.put(affectedblock, info);
-					}
+					addTempEarthBlock(affectedblock, block);
 					block = affectedblock;
 				}
 				if (!Tools.adjacentToThreeOrMoreSources(block)) {
@@ -316,6 +282,48 @@ public class Tools {
 				// block.setType(Material.COBBLESTONE);
 				// affectedblock.setType(Material.GLASS);
 			}
+		}
+	}
+
+	public static void addTempEarthBlock(Block targetblock, Block sourceblock) {
+		if (tempearthblocks.containsKey(targetblock)) {
+			Block index = tempearthblocks.get(targetblock);
+			tempearthblocks.remove(targetblock);
+			tempearthblocks.put(sourceblock, index);
+			Information info = movedearth.get(index);
+			if (info != null) {
+				info.setBlock(sourceblock);
+				info.setTime(System.currentTimeMillis());
+				movedearth.replace(index, info);
+			}
+		} else {
+			tempearthblocks.put(sourceblock, targetblock);
+			Information info = new Information();
+			info.setBlock(sourceblock);
+			info.setType(targetblock.getType());
+			info.setData(targetblock.getData());
+			info.setTime(System.currentTimeMillis());
+			movedearth.put(targetblock, info);
+		}
+	}
+
+	public static void addTempAirBlock(Block block) {
+		if (tempearthblocks.containsKey(block)) {
+			Block index = tempearthblocks.get(block);
+			tempearthblocks.remove(block);
+			Information info = movedearth.get(index);
+			if (info != null) {
+				info.setTime(System.currentTimeMillis());
+				movedearth.replace(index, info);
+			}
+			block.setType(Material.AIR);
+		} else {
+			Information info = new Information();
+			info.setBlock(block);
+			info.setType(block.getType());
+			info.setTime(System.currentTimeMillis());
+			movedearth.put(block, info);
+			block.setType(Material.AIR);
 		}
 	}
 
@@ -613,6 +621,13 @@ public class Tools {
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
 		}
+		for (Block block : Tools.movedearth.keySet()) {
+			Information info = Tools.movedearth.get(block);
+			if (Tools.tempearthblocks.containsKey(info.getBlock()))
+				Tools.verbose("PROBLEM!");
+			block.setType(info.getType());
+			Tools.movedearth.remove(block);
+		}
 	}
 
 	public static boolean canBend(Player player, Abilities ability) {
@@ -779,10 +794,10 @@ public class Tools {
 				block.setData(full);
 			}
 			if (movedearth.containsKey(index)) {
-				Information info = Tools.movedearth.get(index);
+				Information info = movedearth.get(index);
 				index.setType(info.getType());
 				index.setData(info.getData());
-				Tools.movedearth.remove(index);
+				movedearth.remove(index);
 			}
 			Tools.tempearthblocks.remove(block);
 			if (EarthColumn.blockInAllAffectedBlocks(block)) {

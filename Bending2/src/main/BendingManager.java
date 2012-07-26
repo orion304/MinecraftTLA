@@ -160,7 +160,7 @@ public class BendingManager implements Runnable {
 
 		if (ConfigManager.reverseearthbending
 				&& time > reverttime + ConfigManager.revertchecktime) {
-			Tools.verbose("Removing up to " + Tools.tempearthblocks.size()
+			Tools.writeToLog("Removing up to " + Tools.tempearthblocks.size()
 					+ " blocks...");
 			reverttime = time;
 			for (Block block : Tools.tempearthblocks.keySet()) {
@@ -190,7 +190,17 @@ public class BendingManager implements Runnable {
 
 			}
 
-			Tools.verbose("Still " + Tools.tempearthblocks.size()
+			for (Block block : Tools.movedearth.keySet()) {
+				Information info = Tools.movedearth.get(block);
+				if (time >= info.getTime() + ConfigManager.revertchecktime) {
+					if (Tools.tempearthblocks.containsKey(info.getBlock()))
+						Tools.verbose("PROBLEM!");
+					block.setType(info.getType());
+					Tools.movedearth.remove(block);
+				}
+			}
+
+			Tools.writeToLog("Still " + Tools.tempearthblocks.size()
 					+ " remaining.");
 		}
 

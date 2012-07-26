@@ -19,6 +19,8 @@ public class EarthTunnel {
 	private static final double radiusinc = ConfigManager.earthTunnelRadius;
 	// private static final double speed = 10;
 
+	private static boolean revert = ConfigManager.earthTunnelRevert;
+
 	private static final long interval = ConfigManager.earthTunnelInterval;
 
 	private Player player;
@@ -94,7 +96,11 @@ public class EarthTunnel {
 							.add(vec).getBlock();
 				}
 
-				block.breakNaturally();
+				if (revert) {
+					Tools.addTempAirBlock(block);
+				} else {
+					block.breakNaturally();
+				}
 
 				return true;
 			}

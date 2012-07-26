@@ -62,6 +62,7 @@ public class ConfigManager {
 	public static double compactColumnSpeed = 8;
 	public static double earthBlastRange = 20;
 	public static double earthBlastSpeed = 35;
+	public static boolean earthBlastRevert = true;
 	public static int earthColumnHeight = 6;
 	public static double earthGrabRange = 15;
 	public static long earthPassive = 3000;
@@ -69,6 +70,7 @@ public class ConfigManager {
 	public static double earthTunnelRange = 10;
 	public static double earthTunnelRadius = 0.25;
 	public static long earthTunnelInterval = 30;
+	public static boolean earthTunnelRevert = true;
 	public static int earthWallRange = 15;
 	public static int earthWallHeight = 8;
 	public static int earthWallWidth = 6;
@@ -263,6 +265,8 @@ public class ConfigManager {
 		// EarthBlast
 		earthBlastRange = config.getDouble("Properties.Earth.EarthBlast.Range");
 		earthBlastSpeed = config.getDouble("Properties.Earth.EarthBlast.Speed");
+		earthBlastRevert = config
+				.getBoolean("Properties.Earth.EarthBlast.Revert");
 		// EarthColumn
 		earthColumnHeight = config
 				.getInt("Properties.Earth.EarthColumn.Height");
@@ -280,6 +284,8 @@ public class ConfigManager {
 				.getDouble("Properties.Earth.EarthTunnel.Radius");
 		earthTunnelInterval = config
 				.getLong("Properties.Earth.EarthTunnel.Interval");
+		earthTunnelRevert = config
+				.getBoolean("Properties.Earth.EarthTunnel.Revert");
 		// EarthWall
 		earthWallRange = config.getInt("Properties.Earth.EarthWall.Range");
 		earthWallHeight = config.getInt("Properties.Earth.EarthWall.Height");
@@ -408,7 +414,7 @@ public class ConfigManager {
 		config.set("Bending.Option.Bend-With-Weapon.ChiBlocker", false);
 		config.set("Bending.Option.Bend-To-Item", false);
 
-		config.set("Bending.Option.Reverse-Earthbending", false);
+		config.set("Bending.Option.Reverse-Earthbending", true);
 		config.set("Bending.Option.Reverse-Earthbending-Check-Time", 500000);
 		config.set("Bending.Option.Firebending-Dissipate-Time", 400);
 
@@ -459,6 +465,7 @@ public class ConfigManager {
 
 		config.set("Properties.Earth.EarthBlast.Range", 20);
 		config.set("Properties.Earth.EarthBlast.Speed", 35);
+		config.set("Properties.Earth.EarthBlast.Revert", true);
 
 		config.set("Properties.Earth.EarthColumn.Height", 6);
 
@@ -471,6 +478,7 @@ public class ConfigManager {
 		config.set("Properties.Earth.EarthTunnel.Range", 10);
 		config.set("Properties.Earth.EarthTunnel.Radius", 0.25);
 		config.set("Properties.Earth.EarthTunnel.Interval", 30);
+		config.set("Properties.Earth.EarthTunnel.Revert", true);
 
 		config.set("Properties.Earth.EarthWall.Range", 15);
 		config.set("Properties.Earth.EarthWall.Height", 8);
@@ -587,6 +595,8 @@ public class ConfigManager {
 		defaultearthbendable.add("SAND");
 
 		defaultearthbendable.add("SANDSTONE");
+
+		defaultearthbendable.add("GLOWING_REDSTONE_ORE");
 
 	}
 }

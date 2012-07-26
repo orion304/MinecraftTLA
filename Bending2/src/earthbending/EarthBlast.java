@@ -2,13 +2,13 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -22,6 +22,8 @@ public class EarthBlast {
 	private static double range = ConfigManager.earthBlastRange;
 	private static int damage = ConfigManager.earthdmg;
 	private static double speed = ConfigManager.earthBlastSpeed;
+
+	private static boolean revert = ConfigManager.earthBlastRevert;
 	// private static double speed = 1.5;
 
 	private static long interval = (long) (1000. / speed);
@@ -99,7 +101,8 @@ public class EarthBlast {
 		if (sourceblock != null) {
 			if (sourceblock.getWorld() == player.getWorld()) {
 				if (Tools.tempearthblocks.contains(sourceblock)) {
-					Tools.removeEarthbendedBlockIndex(sourceblock);
+					if (!revert)
+						Tools.removeEarthbendedBlockIndex(sourceblock);
 				}
 				Entity target = Tools.getTargettedEntity(player, range);
 				if (target == null) {
@@ -116,6 +119,9 @@ public class EarthBlast {
 					destination = null;
 				} else {
 					progressing = true;
+					sourceblock.getWorld().playEffect(
+							sourceblock.getLocation(), Effect.GHAST_SHOOT, 0,
+							10);
 					direction = getDirection().normalize();
 					if (sourcetype != Material.SAND
 							&& sourcetype != Material.GRAVEL) {
@@ -156,7 +162,10 @@ public class EarthBlast {
 			if (falling) {
 				location = location.clone().add(0, -1, 0);
 
-				if (location.getBlock().getType() != Material.AIR) {
+				if (location.getBlock().getType() == Material.SNOW
+						|| Tools.isPlant(location.getBlock())) {
+					Tools.breakBlock(location.getBlock());
+				} else if (location.getBlock().getType() != Material.AIR) {
 					falling = false;
 					unfocusBlock();
 					return false;
@@ -172,6 +181,10 @@ public class EarthBlast {
 				if (!falling) {
 					breakBlock();
 					return false;
+				}
+
+				if (revert) {
+					Tools.addTempEarthBlock(sourceblock, location.getBlock());
 				}
 
 				location.getBlock().setType(sourceblock.getType());
@@ -195,7 +208,7 @@ public class EarthBlast {
 				}
 				if (Tools.isTransparentToEarthbending(block)
 						&& !block.isLiquid()) {
-					block.breakNaturally(new ItemStack(Material.AIR));
+					Tools.breakBlock(block);
 				} else if (block.getType() != Material.AIR) {
 					breakBlock();
 					return false;
@@ -213,6 +226,10 @@ public class EarthBlast {
 				if (!progressing) {
 					breakBlock();
 					return false;
+				}
+
+				if (revert) {
+					Tools.addTempEarthBlock(sourceblock, block);
 				}
 
 				block.setType(sourceblock.getType());
@@ -245,7 +262,11 @@ public class EarthBlast {
 
 	private void breakBlock() {
 		sourceblock.setType(sourcetype);
-		sourceblock.breakNaturally();
+		if (revert) {
+			Tools.addTempAirBlock(sourceblock);
+		} else {
+			sourceblock.breakNaturally();
+		}
 
 		instances.remove(player.getEntityId());
 	}

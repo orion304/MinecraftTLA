@@ -18,6 +18,7 @@ import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
 import airbending.AirBlast;
+import firebending.FireBlast;
 
 public class Wave {
 
@@ -230,6 +231,8 @@ public class Wave {
 											.getType() == Material.FIRE)
 									|| Tools.isWaterbendable(block, player)) {
 								blocks.add(block);
+								FireBlast.removeFireBlastsAroundPoint(
+										block.getLocation(), 2);
 							}
 							// if (!blocks.contains(block)
 							// && (Tools.isPlant(block) && block.getType() !=

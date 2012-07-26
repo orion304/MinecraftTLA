@@ -15,6 +15,7 @@ import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 import airbending.AirBlast;
+import firebending.FireBlast;
 
 public class WaterWall {
 
@@ -251,6 +252,8 @@ public class WaterWall {
 							}
 							// block.setType(Material.GLASS);
 							blocks.add(block);
+							FireBlast.removeFireBlastsAroundPoint(
+									block.getLocation(), 2);
 							// Tools.verbose(wallblocks.size());
 						}
 					}
