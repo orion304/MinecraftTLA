@@ -755,7 +755,7 @@ public class Bending extends JavaPlugin {
 						if (Tools.hasPermission(player,
 								Abilities.getAbility(args[1]))) {
 
-							ChatColor cc = null;
+							ChatColor cc = ChatColor.GOLD;
 							if (Abilities.isAirbending(Abilities
 									.getAbility(args[1])))
 								cc = Tools.getColor(ConfigManager.color
