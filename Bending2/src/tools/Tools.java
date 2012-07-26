@@ -566,7 +566,7 @@ public class Tools {
 	}
 
 	public static boolean isMeltable(Block block) {
-		if (block.getType() == Material.ICE) {
+		if (block.getType() == Material.ICE || block.getType() == Material.SNOW) {
 			return true;
 		}
 		return false;

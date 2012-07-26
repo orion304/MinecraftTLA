@@ -47,6 +47,10 @@ public class Melt {
 
 	public static void melt(Block block) {
 		if (Tools.isMeltable(block)) {
+			if (block.getType() == Material.SNOW) {
+				block.setType(Material.AIR);
+				return;
+			}
 			if (FreezeMelt.frozenblocks.containsKey(block)) {
 				FreezeMelt.thaw(block);
 			} else if (!Wave.canThaw(block)) {
@@ -55,9 +59,6 @@ public class Melt {
 				block.setType(Material.WATER);
 				block.setData(full);
 			}
-		}
-		if (block.getType() == Material.SNOW) {
-			block.setType(Material.AIR);
 		}
 	}
 
