@@ -121,7 +121,7 @@ public class ConfigManager {
 	public static double nightFactor = 1.5;
 	public static long chiblockduration = 2500;
 	public static double dodgechance = 25;
-	public static double punchmultiplier = 3;
+	public static double punchdamage = 3;
 	public static double falldamagereduction = 50;
 
 	public static boolean reverseearthbending = true;
@@ -204,8 +204,7 @@ public class ConfigManager {
 		chiblockduration = config
 				.getLong("Properties.ChiBlocker.ChiBlock-Duration");
 		dodgechance = config.getDouble("Properties.ChiBlocker.Dodge-Chance");
-		punchmultiplier = config
-				.getDouble("Properties.ChiBlocker.Punch-Multiplier");
+		punchdamage = config.getDouble("Properties.ChiBlocker.Punch-Damage");
 		falldamagereduction = config
 				.getDouble("Properties.ChiBlocker.Fall-Damage-Reduction");
 		dissipateAfter = config
@@ -420,7 +419,7 @@ public class ConfigManager {
 
 		config.set("Properties.ChiBlocker.ChiBlock-Duration", 2500);
 		config.set("Properties.ChiBlocker.Dodge-Chance", 25);
-		config.set("Properties.ChiBlocker.Punch-Multiplier", 3);
+		config.set("Properties.ChiBlocker.Punch-Damage", 3);
 		config.set("Properties.ChiBlocker.Fall-Damage-Reduction", 50);
 
 		config.set("Properties.GlobalCooldown", 500);

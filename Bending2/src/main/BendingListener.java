@@ -499,7 +499,7 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.ENTITY_ATTACK
 					&& !Tools.isWeapon(((Player) event.getDamager())
 							.getItemInHand().getType())) {
-				event.setDamage((int) ((double) event.getDamage() * ConfigManager.punchmultiplier));
+				event.setDamage((int) (ConfigManager.punchdamage));
 			}
 		}
 
