@@ -102,6 +102,13 @@ public class ConfigManager {
 	public static int illuminationRange = 5;
 	public static int heatMeltRange = 15;
 	public static int heatMeltRadius = 5;
+	public static int wallOfFireRange = 20;
+	public static int wallOfFireHeight = 3;
+	public static int wallOfFireWidth = 6;
+	public static long wallOfFireDuration = 5000;
+	public static int wallOfFireDamage = 4;
+	public static long wallOfFireInterval = 400;
+	public static long wallOfFireCooldown = 10000;
 	public static int freezeMeltRange = 20;
 	public static int freezeMeltRadius = 5;
 	public static double healingWatersRadius = 5;
@@ -330,6 +337,17 @@ public class ConfigManager {
 		fireJetCooldown = config.getLong("Properties.Fire.FireJet.CoolDown");
 		// FireStream
 		fireStreamSpeed = config.getDouble("Properties.Fire.FireStream.Speed");
+		// WallOfFire
+		wallOfFireRange = config.getInt("Properties.Fire.WallOfFire.Range");
+		wallOfFireHeight = config.getInt("Properties.Fire.WallOfFire.Height");
+		wallOfFireWidth = config.getInt("Properties.Fire.WallOfFire.Width");
+		wallOfFireDuration = config
+				.getLong("Properties.Fire.WallOfFire.Duration");
+		wallOfFireDamage = config.getInt("Properties.Fire.WallOfFire.Damage");
+		wallOfFireInterval = config
+				.getLong("Properties.Fire.WallOfFire.Interval");
+		wallOfFireCooldown = config
+				.getLong("Properties.Fire.WallOfFire.Cooldown");
 		// HeatMelt
 		heatMeltRange = config.getInt("Properties.Fire.HeatMelt.Range");
 		heatMeltRadius = config.getInt("Properties.Fire.HeatMelt.Radius");
@@ -523,6 +541,14 @@ public class ConfigManager {
 		config.set("Properties.Fire.Illumination.Range", 5);
 
 		config.set("Properties.Fire.Day-Power-Factor", 1.3);
+
+		config.set("Properties.Fire.WallOfFire.Range", 20);
+		config.set("Properties.Fire.WallOfFire.Height", 3);
+		config.set("Properties.Fire.WallOfFire.Width", 6);
+		config.set("Properties.Fire.WallOfFire.Duration", 5000);
+		config.set("Properties.Fire.WallOfFire.Damage", 4);
+		config.set("Properties.Fire.WallOfFire.Interval", 400);
+		config.set("Properties.Fire.WallOfFire.Cooldown", 10000);
 
 		config.set("Properties.Water.FreezeMelt.Range", 20);
 		config.set("Properties.Water.FreezeMelt.Radius", 5);

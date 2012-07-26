@@ -227,7 +227,7 @@ public class BendingManager implements Runnable {
 				Fireball.fireballs.remove(entity);
 			}
 		}
-		for (Player ID : WallOfFire.instances.keySet()) {
+		for (int ID : WallOfFire.instances.keySet()) {
 			WallOfFire.manageWallOfFire(ID);
 		}
 
