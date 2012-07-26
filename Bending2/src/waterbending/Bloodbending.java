@@ -167,6 +167,15 @@ public class Bloodbending {
 		return false;
 	}
 
+	public static Location getBloodbendingLocation(Entity entity) {
+		for (Player player : instances.keySet()) {
+			if (instances.get(player).targetentities.containsKey(entity)) {
+				return instances.get(player).targetentities.get(entity);
+			}
+		}
+		return null;
+	}
+
 	public static String getDescription() {
 		return "This ability was made illegal for a reason. With this ability selected, sneak while "
 				+ "targetting something and you will bloodbend that target. Bloodbent targets cannot move, "

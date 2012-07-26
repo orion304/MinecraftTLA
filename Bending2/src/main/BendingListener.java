@@ -2,6 +2,7 @@ package main;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
@@ -603,8 +605,16 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
-		// if (Bloodbending.isBloodbended(player))
-		// event.setCancelled(true);
+		if (Bloodbending.isBloodbended(player)) {
+			double distance1, distance2;
+			Location loc = Bloodbending.getBloodbendingLocation(player);
+			distance1 = event.getFrom().distance(loc);
+			distance2 = event.getTo().distance(loc);
+			if (distance2 > distance1)
+				player.setVelocity(new Vector(0, 0, 0));
+			// return;
+		}
+
 		if (Tools.isBender(player, BendingType.Water)
 				&& (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
 			WalkOnWater.freeze(player);
