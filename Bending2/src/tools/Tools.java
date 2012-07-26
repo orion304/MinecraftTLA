@@ -53,6 +53,7 @@ import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
 import firebending.FireStream;
+import firebending.Illumination;
 
 public class Tools {
 
@@ -617,6 +618,7 @@ public class Tools {
 		Wave.removeAll();
 		AirScooter.removeAll();
 		FireStream.removeAll();
+		Illumination.removeAll();
 		BendingManager.removeFlyers();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);

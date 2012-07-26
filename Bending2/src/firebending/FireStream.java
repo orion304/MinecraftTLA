@@ -147,8 +147,8 @@ public class FireStream {
 				Material.MYCEL, Material.NETHER_BRICK, Material.NETHERRACK,
 				Material.OBSIDIAN, Material.REDSTONE_ORE, Material.SAND,
 				Material.SANDSTONE, Material.SMOOTH_BRICK, Material.STONE,
-				Material.SOUL_SAND, Material.SOIL, Material.SNOW_BLOCK,
-				Material.WOOD, Material.WOOL, Material.LEAVES };
+				Material.SOUL_SAND, Material.SNOW_BLOCK, Material.WOOD,
+				Material.WOOL, Material.LEAVES };
 
 		Block belowblock = block.getRelative(BlockFace.DOWN);
 		if (Arrays.asList(ignitable).contains(belowblock.getType())) {
