@@ -620,6 +620,9 @@ public class BendingListener implements Listener {
 			WalkOnWater.freeze(player);
 		}
 
+		if (WaterSpout.instances.containsKey(player))
+			WaterSpout.spout(player);
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)

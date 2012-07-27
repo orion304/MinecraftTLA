@@ -195,6 +195,7 @@ permissions:
     default: true
   bending.water.WaterSpout:
     description: Allows the use of WaterSpout.
+#    default: true
     default: false
   bending.water.WaterWall:
     description: Allows the use of WaterWall.
