@@ -27,9 +27,9 @@ public class FastSwimming {
 					&& !(Tools.getBendingAbility(player) == Abilities.WaterManipulation
 							|| Tools.getBendingAbility(player) == Abilities.Wave
 							|| Tools.getBendingAbility(player) == Abilities.WaterWall
-							|| Tools.getBendingAbility(player) == Abilities.HealingWaters || Tools
-							.getBendingAbility(player) == Abilities.FreezeMelt)
-					|| Tools.getBendingAbility(player) == Abilities.Bloodbending) {
+							|| Tools.getBendingAbility(player) == Abilities.HealingWaters
+							|| Tools.getBendingAbility(player) == Abilities.FreezeMelt || Tools
+							.getBendingAbility(player) == Abilities.Bloodbending)) {
 				player.setVelocity(player.getEyeLocation().getDirection()
 						.clone().normalize().multiply(factor));
 			}

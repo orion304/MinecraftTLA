@@ -619,6 +619,7 @@ public class BendingListener implements Listener {
 				&& (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
 			WalkOnWater.freeze(player);
 		}
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
