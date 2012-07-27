@@ -15,6 +15,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import firebending.Illumination;
+
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
@@ -117,7 +119,7 @@ public class AirSwipe {
 						if (testblock.getType() == Material.FIRE) {
 							testblock.setType(Material.AIR);
 						}
-						if (isBlockBreakable(testblock)) {
+						if (isBlockBreakable(testblock) && !Illumination.blocks.containsKey(testblock)) {
 							testblock.breakNaturally();
 						}
 					}
