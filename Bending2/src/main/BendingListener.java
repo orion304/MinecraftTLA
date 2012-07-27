@@ -645,7 +645,7 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onPlayerKick(PlayerKickEvent event) {
-		Tools.verbose(event.getReason());
+		// Tools.verbose(event.getReason());
 		if (BendingManager.flyingplayers.contains(event.getPlayer())
 				|| Bloodbending.isBloodbended(event.getPlayer())) {
 			event.setCancelled(true);

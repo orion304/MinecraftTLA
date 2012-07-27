@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.server.EntityFireball;
@@ -555,11 +554,6 @@ public class BendingManager implements Runnable {
 			if (ability == Abilities.Wave)
 				waveplayers++;
 		}
-
-		Tools.writeToLog("Debug data at "
-				+ Calendar.getInstance().get(Calendar.HOUR) + "h "
-				+ Calendar.getInstance().get(Calendar.MINUTE) + "m "
-				+ Calendar.getInstance().get(Calendar.SECOND) + "s");
 
 		verbose("airblasts", airblasts, airblastplayers, false);
 		verbose("airbubbles", airbubbles, airbubbleplayers, true);

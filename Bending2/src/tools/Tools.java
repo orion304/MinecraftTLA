@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -858,9 +859,39 @@ public class Tools {
 	}
 
 	public static <T> void writeToLog(T something) {
+		Calendar cal = Calendar.getInstance();
+		int month, day, year, hour, minute, second;
+		String Month, Day, Year, Hour, Minute, Second;
+
+		month = cal.get(Calendar.MONTH);
+		day = cal.get(Calendar.DAY_OF_MONTH);
+		year = cal.get(Calendar.YEAR);
+		hour = cal.get(Calendar.HOUR_OF_DAY);
+		minute = cal.get(Calendar.MINUTE);
+		second = cal.get(Calendar.SECOND);
+
+		Month = "" + month;
+		Day = "" + day;
+		Year = "" + year;
+
+		Hour = "" + hour;
+		if (hour < 10)
+			Hour = "0" + hour;
+
+		Minute = "" + minute;
+		if (minute < 10)
+			Minute = "0" + minute;
+
+		Second = "" + second;
+		if (second < 10)
+			Second = "0" + second;
+
+		String Time = "[" + Month + "/" + Day + "/" + Year + " " + Hour + ":"
+				+ Minute + ":" + Second + "]";
+
 		String string = "";
 		if (something != null) {
-			string = something.toString();
+			string = Time + " " + something.toString();
 		}
 		try {
 			FileWriter fstream = new FileWriter("bending.log", true);

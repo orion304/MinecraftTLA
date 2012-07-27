@@ -89,6 +89,9 @@ public class Bending extends JavaPlugin {
 
 	public void onDisable() {
 
+		Tools.writeToLog("-----Bending stopped-----");
+		Tools.writeToLog(null);
+
 		Fireball.removeAllFireballs();
 		Tools.stopAllBending();
 
@@ -107,6 +110,8 @@ public class Bending extends JavaPlugin {
 				1);
 
 		removeFireballs();
+
+		Tools.writeToLog("-----Bending loaded-----");
 
 		log.info("Bending v" + this.getDescription().getVersion()
 				+ " has been loaded.");
