@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
+import firebending.Illumination;
 
 public class AirSwipe {
 
@@ -118,7 +119,7 @@ public class AirSwipe {
 							testblock.setType(Material.AIR);
 						}
 						if (isBlockBreakable(testblock)) {
-							testblock.breakNaturally();
+							Tools.breakBlock(testblock);
 						}
 					}
 
@@ -177,7 +178,8 @@ public class AirSwipe {
 
 	private boolean isBlockBreakable(Block block) {
 		Integer id = block.getTypeId();
-		if (Arrays.asList(breakables).contains(id)) {
+		if (Arrays.asList(breakables).contains(id)
+				&& !Illumination.blocks.containsKey(block)) {
 			return true;
 		}
 		return false;
