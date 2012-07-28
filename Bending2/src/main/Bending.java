@@ -229,6 +229,11 @@ public class Bending extends JavaPlugin {
 		}
 
 		registerCommands();
+		
+		//if (ConfigManager.useMySQL)
+		//	loadMySQL();
+		//else
+		//	config = new BendingPlayers(getDataFolder());
 
 		// if (ConfigManager.useMySQL)
 		// loadMySQL();

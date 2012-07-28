@@ -286,7 +286,7 @@ public class EarthBlast {
 			instances.get(id).breakBlock();
 		}
 	}
-
+	
 	public static String getDescription() {
 		return "To use, place your cursor over an earthbendable object (dirt, rock, ores, etc) "
 				+ "and tap sneak (default: shift). The object will temporarily turn to stone, "

@@ -33,6 +33,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+
+import tools.Abilities;
+import tools.AvatarState;
+import tools.BendingType;
+import tools.ConfigManager;
+import tools.Information;
+import tools.TempBlock;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.WalkOnWater;
@@ -44,8 +53,6 @@ import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
