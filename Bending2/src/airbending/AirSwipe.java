@@ -119,7 +119,7 @@ public class AirSwipe {
 						if (testblock.getType() == Material.FIRE) {
 							testblock.setType(Material.AIR);
 						}
-						if (isBlockBreakable(testblock) && !Illumination.blocks.containsKey(testblock)) {
+						if (isBlockBreakable(testblock)) {
 							testblock.breakNaturally();
 						}
 					}
