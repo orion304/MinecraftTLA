@@ -79,8 +79,8 @@ public class Bending extends JavaPlugin {
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
 	public static ConfigManager configManager = new ConfigManager();
-	public BendingPlayers config = new BendingPlayers(getDataFolder());
-	public Tools tools = new Tools(config);
+	public StorageManager config;
+	public Tools tools;
 
 	public String[] waterbendingabilities;
 	public String[] airbendingabilities;
@@ -95,7 +95,13 @@ public class Bending extends JavaPlugin {
 	}
 
 	public void onEnable() {
+		
+		configManager.load(new File(getDataFolder(), "config.yml"));
+		
+		config = new StorageManager(getDataFolder());
 
+		tools = new Tools(config);
+		
 		waterbendingabilities = Abilities.getWaterbendingAbilities();
 		airbendingabilities = Abilities.getAirbendingAbilities();
 		earthbendingabilities = Abilities.getEarthbendingAbilities();
@@ -222,8 +228,6 @@ public class Bending extends JavaPlugin {
 			// Failed to submit the stats :-(
 		}
 
-		configManager.load(new File(getDataFolder(), "config.yml"));
-
 		registerCommands();
 
 		// if (ConfigManager.useMySQL)
@@ -326,7 +330,6 @@ public class Bending extends JavaPlugin {
 					&& (sender.hasPermission("bending.admin.reload") || (player == null))) {
 				configManager
 						.load(new File(this.getDataFolder(), "config.yml"));
-				config.reload();
 				sender.sendMessage("Config reloaded");
 				return true;
 			}

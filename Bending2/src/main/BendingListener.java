@@ -5,6 +5,9 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,6 +24,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -613,7 +617,7 @@ public class BendingListener implements Listener {
 			if (distance2 > distance1)
 				player.setVelocity(new Vector(0, 0, 0));
 			// return;
-		}
+			}
 
 		if (Tools.isBender(player, BendingType.Water)
 				&& (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
@@ -666,5 +670,24 @@ public class BendingListener implements Listener {
 		if (Bloodbending.isBloodbended(event.getEntity()))
 			event.setCancelled(true);
 	}
+	
+	//@EventHandler
+	//public void onPlayerInteract(PlayerInteractEntityEvent event){
+	//	Entity rightclicked = event.getRightClicked();
+	//	Player player = event.getPlayer();
+	//	if (!Tools.isBender(player, BendingType.Air))
+	//		return;
+	//	if (!(player.getItemInHand().getType() == Material.AIR))
+	//		return;
+	//	EntityType type = event.getRightClicked().getType();
+	//	if (type == EntityType.COW || type == EntityType.CHICKEN || type == EntityType.SHEEP
+	//			|| type == EntityType.PIG){
+	//		rightclicked.setPassenger(player);
+	//	}
+	//	if (rightclicked.getPassenger() == player){
+	//		rightclicked.setPassenger(null);
+	//	}
+	//	
+	//}
 
 }

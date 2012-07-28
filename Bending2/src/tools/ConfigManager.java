@@ -189,7 +189,7 @@ public class ConfigManager {
 		useWeapon.put("Water", config.getBoolean(
 				"Bending.Option.Bend-With-Weapon.Water", false));
 		// MySQL
-		useMySQL = config.getBoolean("MySQL.Use-MySQL", false);
+		useMySQL = config.getBoolean("MySQL.Use-MySQL");//, false);
 		dbHost = config.getString("MySQL.MySQL-host",
 				"jdbc:mysql://localhost:3306");
 		dbUser = config.getString("MySQL.User", "root");

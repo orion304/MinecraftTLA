@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
 import main.BendingManager;
-import main.BendingPlayers;
+import main.StorageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -56,7 +56,7 @@ import firebending.FireStream;
 
 public class Tools {
 
-	private static BendingPlayers config;
+	private static StorageManager config;
 
 	private static final Map<String, ChatColor> colors;
 
@@ -76,8 +76,8 @@ public class Tools {
 	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
 
-	public Tools(BendingPlayers instance) {
-		config = instance;
+	public Tools(StorageManager config2) {
+		config = config2;
 	}
 
 	public static HashSet<Byte> getTransparentEarthbending() {
