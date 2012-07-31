@@ -5,6 +5,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -72,6 +73,7 @@ import firebending.FireStream;
 import firebending.Fireball;
 import firebending.HeatMelt;
 import firebending.Illumination;
+import firebending.Lightning;
 import firebending.RingOfFire;
 import firebending.WallOfFire;
 
@@ -396,6 +398,18 @@ public class BendingListener implements Listener {
 				new Melt(player);
 			}
 
+			if (Tools.getBendingAbility(player) == Abilities.Lightning) {
+				new Lightning(player);
+			}
+			
+		}
+		if (!event.isSneaking()){
+			if (Tools.getBendingAbility(player) == Abilities.Lightning)
+				if (Lightning.ready.contains(player)){
+					Lightning.StrikeLightning(player);
+				} else {
+					Lightning.warmups.remove(player);
+				}
 		}
 
 	}
@@ -585,6 +599,8 @@ public class BendingListener implements Listener {
 			WaterWall.thaw(block);
 		} else if (Illumination.blocks.containsKey(block)) {
 			event.setCancelled(true);
+		} else if (Illumination.blocks.containsKey(block.getRelative(BlockFace.UP))) {
+			event.setCancelled(true);	
 		} else if (!Wave.canThaw(block)) {
 			Wave.thaw(block);
 			// event.setCancelled(true);

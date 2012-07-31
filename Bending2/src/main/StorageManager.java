@@ -19,8 +19,8 @@ public class StorageManager {
 
 		private File dataFolder;
 		public BendingPlayers config;
-		private Boolean useMySQL;
-		private Boolean useFlatFile;
+		public static Boolean useMySQL;
+		public static Boolean useFlatFile;
 		public MySQL MySql;
 
 		// private InputStream defConfigStream;
@@ -37,7 +37,7 @@ public class StorageManager {
 		}
 
 		public void removeBending(Player player) {
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 				if (config.checkKeys(player.getName())){
 					for (int i = 0; i <= 8; i++) {
 						removeAbility(player, i);
@@ -48,7 +48,7 @@ public class StorageManager {
 					config.setKey(player.getName(), "");
 					player.setDisplayName(player.getName());
 				}
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				String removeEle = "DELETE FROM bending_element WHERE player ='"+ player.getName() + "'";
 				this.MySql.delete(removeEle);
 				String removeBind = "DELETE FROM bending_ability WHERE player ='"+ player.getName() + "'";
@@ -59,7 +59,7 @@ public class StorageManager {
 		}
 
 		public boolean isBender(Player player, BendingType type) {
-			if (this.useFlatFile) {
+			if (StorageManager.useFlatFile) {
 				if (config.checkKeys(player.getName())) {
 					if (config.getKey(player.getName()).contains("a")
 							&& type == BendingType.Air) {
@@ -82,7 +82,7 @@ public class StorageManager {
 						return true;
 					}
 				}
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				try {
 				String getEle = "SELECT bending FROM bending_element WHERE player ='" + player.getName() + "'";
 				ResultSet bending = this.MySql.getConnection().createStatement().executeQuery(getEle);
@@ -116,7 +116,7 @@ public class StorageManager {
 			}
 
 		public boolean isBender(String player, BendingType type) {
-			if (this.useFlatFile) {
+			if (StorageManager.useFlatFile) {
 				if (config.checkKeys(player)) {
 					if (config.getKey(player).contains("a")
 						&& type == BendingType.Air) {
@@ -139,7 +139,7 @@ public class StorageManager {
 						return true;
 					}
 				}
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				try {
 					String getEle = "SELECT bending FROM bending_element WHERE player ='" + player + "'";
 					ResultSet bending = this.MySql.getConnection().createStatement().executeQuery(getEle);						if (bending.next()){
@@ -203,9 +203,9 @@ public class StorageManager {
 				player.setDisplayName(player.getName());
 				return;
 			}
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 				config.setKey(player.getName(), bending);
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				String checkEntry = "SELECT bending FROM bending_element WHERE player ='" + player.getName() + "'";
 				ResultSet rs = this.MySql.select(checkEntry);
 				try {
@@ -274,9 +274,9 @@ public class StorageManager {
 
 		public void addBending(Player player, BendingType type) {
 			String bending = "";
-			if (this.useFlatFile)
+			if (StorageManager.useFlatFile)
 				bending = config.getKey(player.getName());
-			else if (this.useMySQL){
+			else if (StorageManager.useMySQL){
 				String getBending = "SELECT bending FROM bending_element WHERE player ='" + player.getName() + "'";
 				ResultSet rs = this.MySql.select(getBending);
 				
@@ -302,9 +302,9 @@ public class StorageManager {
 					bending += "c";
 				}
 			}
-			if(this.useFlatFile)
+			if(StorageManager.useFlatFile)
 				config.setKey(player.getName(), bending);
-			else if (this.useMySQL){
+			else if (StorageManager.useMySQL){
 				String checkEntry = "SELECT * FROM bending_element WHERE player ='" + player.getName() + "'";
 				ResultSet rs = this.MySql.select(checkEntry);
 				try {
@@ -328,9 +328,66 @@ public class StorageManager {
 				addBending(player, bendingtype);
 			}
 		}
+		
+		public void addBending(String player, BendingType type) {
+			String bending = "";
+			if (StorageManager.useFlatFile)
+				bending = config.getKey(player);
+			else if (StorageManager.useMySQL){
+				String getBending = "SELECT bending FROM bending_element WHERE player ='" + player + "'";
+				ResultSet rs = this.MySql.select(getBending);
+				
+				try {
+					if (rs.next()){
+						bending = rs.getString("bending");
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (!isBender(player, type)) {
+				if (type == BendingType.Air) {
+					bending += "a";
+				} else if (type == BendingType.Earth) {
+					bending += "e";
+				} else if (type == BendingType.Water) {
+					bending += "w";
+				} else if (type == BendingType.Fire) {
+					bending += "f";
+				} else if (type == BendingType.ChiBlocker) {
+					bending += "c";
+				}
+			}
+			if(StorageManager.useFlatFile)
+				config.setKey(player, bending);
+			else if (StorageManager.useMySQL){
+				String checkEntry = "SELECT * FROM bending_element WHERE player ='" + player + "'";
+				ResultSet rs = this.MySql.select(checkEntry);
+				try {
+					if (rs.next()){
+						String updateEntry = "UPDATE bending_element SET bending = '" + bending + "' WHERE player ='" + player + "'";
+						this.MySql.update(updateEntry);
+					} else {
+						String insertEntry = "INSERT INTO bending_element VALUES('" + player + "','" + bending + "')";
+						this.MySql.insert(insertEntry);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		public void addBending(String player, String type) {
+			BendingType bendingtype = BendingType.getType(type);
+			if (bendingtype != null) {
+				addBending(player, bendingtype);
+			}
+		}
 
 		public boolean isBender(Player player) {
-			if (this.useFlatFile) {
+			if (StorageManager.useFlatFile) {
 				if (config.checkKeys(player.getName())) {
 					if (config.getKey(player.getName()).contains("a")
 							|| config.getKey(player.getName()).contains(
@@ -346,7 +403,7 @@ public class StorageManager {
 						return true;
 					}
 				}
-			} else if (this.useMySQL) {
+			} else if (StorageManager.useMySQL) {
 				String getEle = "SELECT bending FROM bending_element WHERE player ='" + player.getName() + "'";
 				ResultSet result = this.MySql.select(getEle);
 				try {
@@ -381,12 +438,20 @@ public class StorageManager {
 				}
 			}
 		}
+		
+		public void setAbility(String player, String ability, int slot) {
+			for (Abilities a : Abilities.values()) {
+				if (ability.equalsIgnoreCase(a.name())) {
+					setAbility(player, a, slot);
+				}
+			}
+		}
 
 		public void setAbility(Player player, Abilities ability, int slot) {
 			String setter = player.getName() + "<Bind" + slot + ">";
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 				config.setKey(setter, ability.name());
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				String checkAbilities = "SELECT ability FROM bending_ability WHERE setter ='" + setter + "' AND player = '" + player.getName() + "'";
 				ResultSet set = this.MySql.select(checkAbilities);
 				try {
@@ -395,6 +460,28 @@ public class StorageManager {
 								this.MySql.update(updateAbility);
 					} else {
 						String insertAbility = "INSERT INTO bending_ability VALUES('" + player.getName() + "','" + setter + "','" + ability.name() + "')";
+						this.MySql.insert(insertAbility);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		public void setAbility(String player, Abilities ability, int slot) {
+			String setter = player + "<Bind" + slot + ">";
+			if (StorageManager.useFlatFile){
+				config.setKey(setter, ability.name());
+			} else if (StorageManager.useMySQL){
+				String checkAbilities = "SELECT ability FROM bending_ability WHERE setter ='" + setter + "' AND player = '" + player + "'";
+				ResultSet set = this.MySql.select(checkAbilities);
+				try {
+					if (set.next()){
+								String updateAbility = "UPDATE bending_ability SET ability = '" + ability.name() + "' WHERE player ='" + player + "' AND setter = '" + setter + "'";
+								this.MySql.update(updateAbility);
+					} else {
+						String insertAbility = "INSERT INTO bending_ability VALUES('" + player + "','" + setter + "','" + ability.name() + "')";
 						this.MySql.insert(insertAbility);
 					}
 				} catch (SQLException e) {
@@ -412,12 +499,20 @@ public class StorageManager {
 				}
 			}
 		}
+		
+		public void setAbility(String player, String ability, Material mat) {
+			for (Abilities a : Abilities.values()) {
+				if (ability.equalsIgnoreCase(a.name())) {
+					setAbility(player, a, mat);
+				}
+			}
+		}
 
 		public void setAbility(Player player, Abilities ability, Material mat) {
 			String setter = player.getName() + "<Bind" + mat.name() + ">";
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 				config.setKey(setter, ability.name());
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				String checkAbilities = "SELECT ability FROM bending_ability WHERE setter ='" + setter + "' AND player ='" + player.getName() + "'";
 				ResultSet set = this.MySql.select(checkAbilities);
 				try {
@@ -426,6 +521,28 @@ public class StorageManager {
 						this.MySql.update(updateAbility);
 					} else {
 						String insertAbility = "INSERT INTO bending_ability VALUES('" + player.getName() + "','" + setter + "','" + ability.name() + "')";
+						this.MySql.insert(insertAbility);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		public void setAbility(String player, Abilities ability, Material mat) {
+			String setter = player + "<Bind" + mat.name() + ">";
+			if (StorageManager.useFlatFile){
+				config.setKey(setter, ability.name());
+			} else if (StorageManager.useMySQL){
+				String checkAbilities = "SELECT ability FROM bending_ability WHERE setter ='" + setter + "' AND player ='" + player + "'";
+				ResultSet set = this.MySql.select(checkAbilities);
+				try {
+					if (set.next()){
+						String updateAbility = "UPDATE bending_ability SET ability = '" + ability.name() + "' WHERE player ='" + player + "' AND setter = '" + setter + "'";
+						this.MySql.update(updateAbility);
+					} else {
+						String insertAbility = "INSERT INTO bending_ability VALUES('" + player + "','" + setter + "','" + ability.name() + "')";
 						this.MySql.insert(insertAbility);
 					}
 				} catch (SQLException e) {
@@ -444,9 +561,9 @@ public class StorageManager {
 		public Abilities getAbility(Player player, int slot) {
 			String ability = "";
 			String setter = player.getName() + "<Bind" + slot + ">";
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 				ability = config.getKey(setter);
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				String selectAbility = "SELECT ability FROM bending_ability WHERE setter ='" + setter + "' AND player = '" + player.getName() + "'";
 				ResultSet abilitySet = this.MySql.select(selectAbility);
 				
@@ -471,9 +588,9 @@ public class StorageManager {
 		public Abilities getAbility(Player player, Material mat) {
 			String ability = "";
 			String setter = player.getName() + "<Bind" + mat.name() + ">";
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 			ability = config.getKey(setter);
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				String selectAbility = "SELECT ability FROM bending_ability WHERE setter ='" + setter + "' AND player = '" + player.getName() + "'";
 				ResultSet abilitySet = this.MySql.select(selectAbility);
 				
@@ -515,17 +632,17 @@ public class StorageManager {
 		}
 
 		public void removeAbility(Player player, int slot) {
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 				String setter = player.getName() + "<Bind" + slot + ">";
 				config.setKey(setter, null);
-			} else if (this.useMySQL){
+			} else if (StorageManager.useMySQL){
 				
 			}
 			
 		}
 
 		public void removeAbility(Player player, Material mat) {
-			if (this.useFlatFile){
+			if (StorageManager.useFlatFile){
 			String setter = player.getName() + "<Bind" + mat.name() + ">";
 			config.setKey(setter, null);
 			}
@@ -539,18 +656,18 @@ public class StorageManager {
 		}
 		
 		private void initialize(File file){
-			this.useMySQL = ConfigManager.useMySQL;
-			this.useFlatFile = !ConfigManager.useMySQL;
-			if (this.useMySQL){
+			StorageManager.useMySQL = ConfigManager.useMySQL;
+			StorageManager.useFlatFile = !ConfigManager.useMySQL;
+			if (StorageManager.useMySQL){
 				this.MySql = new MySQL(ConfigManager.dbHost, ConfigManager.dbUser, ConfigManager.dbPass, ConfigManager.dbDB, ConfigManager.dbPort);
 				String createTable1 = "CREATE TABLE IF NOT EXISTS Bending_Element(player TEXT NOT NULL, bending TEXT NOT NULL)";
 			    String createTable2 = "CREATE TABLE IF NOT EXISTS Bending_Ability(player TEXT NOT NULL, setter TEXT NOT NULL, ability TEXT NOT NULL)";
 			    MySql.execute(createTable1);
 			    MySql.execute(createTable2);
-			} else if (this.useFlatFile){
+			} else if (StorageManager.useFlatFile){
 				this.config = new BendingPlayers(file);
 			}
-			Tools.verbose(this.useFlatFile? "Flat" : "MySQL");
+			Tools.verbose(StorageManager.useFlatFile? "Flat" : "MySQL");
 		}
 
 	}

@@ -130,6 +130,8 @@ public class ConfigManager {
 	public static double dodgechance = 25;
 	public static double punchdamage = 3;
 	public static double falldamagereduction = 50;
+	public static long lightningwarmup = 7500;
+	public static int lightningrange = 15;
 
 	public static boolean reverseearthbending = true;
 	public static long revertchecktime = 300000;
@@ -393,6 +395,10 @@ public class ConfigManager {
 
 		// Night
 		nightFactor = config.getDouble("Properties.Water.Night-Power-Factor");
+		
+		// Lightning
+		lightningwarmup = config.getLong("Properties.Lightning.Warmup");
+		lightningrange = config.getInt("Properties.Lightning.Range");
 
 		try {
 			config.options().copyDefaults(true);
@@ -575,6 +581,9 @@ public class ConfigManager {
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
+		
+		config.set("Properties.Lightning.Warmup", 7500);
+		config.set("Properties.Lightning.Range", 15);
 
 		config.set("MySQL.Use-MySQL", false);
 		config.set("MySQL.MySQL-host", "localhost");

@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +40,10 @@ public class BendingPlayers {
 		if (!(bendingPlayers == null))
 			return bendingPlayers.getKeys(false).contains(s);
 		return false;
+	}
+	
+	public Set<String> getKeys(){
+		return bendingPlayers.getKeys(false);
 	}
 	
 	public void setKey(String key, String field){

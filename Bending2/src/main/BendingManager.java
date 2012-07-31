@@ -52,6 +52,7 @@ import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
 import firebending.Illumination;
+import firebending.Lightning;
 import firebending.WallOfFire;
 
 public class BendingManager implements Runnable {
@@ -230,6 +231,12 @@ public class BendingManager implements Runnable {
 		for (int ID : WallOfFire.instances.keySet()) {
 			WallOfFire.manageWallOfFire(ID);
 		}
+		
+		for (int ID : Lightning.instances.keySet()) {
+			Lightning.ChargingLightning(ID);
+			Lightning.progress(ID);
+		}
+		
 
 		FireBlast.progressAll();
 

@@ -87,7 +87,7 @@ permissions:
       bending.commnd.clear: true
       bending.command.display: true
       bending.command.bind: true
-#      bending.fire.Lightning: true
+      bending.fire.Lightning: true
       bending.water.Bloodbending: true
       
   bending.command:
@@ -170,7 +170,7 @@ permissions:
     default: true
   bending.fire.Lightning:
     description: Allows the use of Lightning.
-#    default: op
+    default: op
     default: false
   bending.water.FreezeMelt:
     description: Allows the use of Freeze.
@@ -280,4 +280,6 @@ permissions:
     default: true
   bending.avatar:
     description: Give the avatar prefix.
+    default: op
+  bending.command.import:
     default: op

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import main.Metrics.Graph;
@@ -1043,6 +1044,55 @@ public class Bending extends JavaPlugin {
 							+ "========================");
 					return true;
 				}
+			}
+			if (args[0].equalsIgnoreCase("import")
+					&& (sender.hasPermission("bending.command.import") || player == null)) {
+				if (StorageManager.useFlatFile){
+					sender.sendMessage("MySQL needs to be enabled to import bendingPlayers");
+					return true;
+				}
+				BendingPlayers temp = new BendingPlayers(getDataFolder());
+				Set<String> keys = temp.getKeys();
+				
+				for (String s: keys){
+					if (s.contains("<")){
+						String[] getplayername = s.split("<");
+						String playername = getplayername[0];
+						String[] getSetter = s.split("<");
+						String Setter = getSetter[1];
+						String binded = Setter.replace("Bind", "").replace(">", "");
+						String ability = temp.getKey(s);
+						if ((binded.equalsIgnoreCase("0") || binded.equalsIgnoreCase("1")
+								|| binded.equalsIgnoreCase("2") || binded.equalsIgnoreCase("3")
+								|| binded.equalsIgnoreCase("4") || binded.equalsIgnoreCase("5")
+								|| binded.equalsIgnoreCase("6") || binded.equalsIgnoreCase("7")
+								|| binded.equalsIgnoreCase("8"))) {
+						     int slot = Integer.parseInt(binded);
+						     config.setAbility(playername, ability, slot);
+						} else {
+							config.setAbility(playername, ability, Material.matchMaterial(binded));
+						}
+					} else {
+						String playerName = s;
+						String bending = temp.getKey(s);
+						if (bending.contains("a"))
+							config.addBending(playerName, BendingType.Air);
+						if (bending.contains("w"))
+							config.addBending(playerName, BendingType.Water);
+						if (bending.contains("f"))
+							config.addBending(playerName, BendingType.Fire);
+						if (bending.contains("e"))
+							config.addBending(playerName, BendingType.Earth);
+						if (bending.contains("c"))
+							config.addBending(playerName, BendingType.ChiBlocker);
+							
+							
+					}
+						
+				}
+				temp = null;
+				sender.sendMessage("Imported BendingPlayers to MySQL");
+				return true;
 			}
 		}
 		sender.sendMessage(ChatColor.DARK_RED
