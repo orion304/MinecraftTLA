@@ -310,7 +310,7 @@ public class Bending extends JavaPlugin {
 		if (cmd.getName().equalsIgnoreCase("bending")) {
 			if (Arrays.asList(args).isEmpty()) {
 				sender.sendMessage(ChatColor.RED
-						+ "Use /bending help <page> if you want to see a list of permissions.");
+						+ "Use /bending help <page> if you want to see a list of commands.");
 				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <ability> if you want to see how to use it.");
 				sender.sendMessage(ChatColor.RED
@@ -447,7 +447,7 @@ public class Bending extends JavaPlugin {
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
 					sender.sendMessage(ChatColor.RED
-							+ "Use /bending help <page> if you want to see a list of permissions.");
+							+ "Use /bending help <page> if you want to see a list of commands.");
 					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
 					sender.sendMessage(ChatColor.RED
@@ -460,7 +460,7 @@ public class Bending extends JavaPlugin {
 					&& (sender.hasPermission("bending.admin.add") || player == null)) {
 				if (args.length == 1) {
 					sender.sendMessage(ChatColor.RED
-							+ "Use /bending help <page> if you want to see a list of permissions.");
+							+ "Use /bending help <page> if you want to see a list of commands.");
 					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
 					sender.sendMessage(ChatColor.RED
@@ -571,7 +571,7 @@ public class Bending extends JavaPlugin {
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
 					sender.sendMessage(ChatColor.RED
-							+ "Use /bending help <page> if you want to see a list of permissions.");
+							+ "Use /bending help <page> if you want to see a list of commands.");
 					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
 					sender.sendMessage(ChatColor.RED
@@ -1116,7 +1116,7 @@ public class Bending extends JavaPlugin {
 			}
 		}
 		sender.sendMessage(ChatColor.RED
-				+ "Use /bending help <page> if you want to see a list of permissions.");
+				+ "Use /bending help <page> if you want to see a list of commands.");
 		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <ability> if you want to see how to use it.");
 		sender.sendMessage(ChatColor.RED
