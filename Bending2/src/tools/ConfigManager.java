@@ -132,7 +132,11 @@ public class ConfigManager {
 	public static double falldamagereduction = 50;
 	public static long lightningwarmup = 7500;
 	public static int lightningrange = 15;
-
+	public static boolean lightningspout = false;
+	public static int lightningdamage = 5;
+	public static long eartharmorduration =  30000;
+	public static int eartharmorstrength = 2;
+	public static long eartharmorcooldown = 150000;
 	public static boolean reverseearthbending = true;
 	public static long revertchecktime = 300000;
 
@@ -397,8 +401,15 @@ public class ConfigManager {
 		nightFactor = config.getDouble("Properties.Water.Night-Power-Factor");
 		
 		// Lightning
-		lightningwarmup = config.getLong("Properties.Lightning.Warmup");
-		lightningrange = config.getInt("Properties.Lightning.Range");
+		lightningwarmup = config.getLong("Properties.Fire.Lightning.Warmup");
+		lightningrange = config.getInt("Properties.Fire.Lightning.Range");
+		lightningspout = config.getBoolean("Properties.Fire.Lightning.SpoutPlugin");
+		lightningdamage = config.getInt("Properties.Fire.Lightning.Damage");
+		
+		//EarthArmor
+		eartharmorduration = config.getLong("Properties.Earth.EarthArmor.Duration" , 30000);
+		eartharmorstrength = config.getInt("Properties.Earth.EarthArmor.Strength" , 2);
+		eartharmorcooldown = config.getLong("Properties.Earth.EarthArmor.Cooldown" , 150000);
 
 		try {
 			config.options().copyDefaults(true);
@@ -582,8 +593,14 @@ public class ConfigManager {
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
 		
-		config.set("Properties.Lightning.Warmup", 7500);
-		config.set("Properties.Lightning.Range", 15);
+		config.set("Properties.Fire.Lightning.Warmup", 7500);
+		config.set("Properties.Fire.Lightning.Range", 15);
+		config.set("Properties.Fire.Lightning.SpoutPlugin", false);
+		config.set("Properties.Fire.Lightning.Damage", 5);
+		
+		config.set("Properties.Earth.EarthArmor.Duration" , 30000);
+		config.set("Properties.Earth.EarthArmor.Strength" , 2);
+		config.set("Properties.Earth.EarthArmor.Cooldown" , 150000);
 
 		config.set("MySQL.Use-MySQL", false);
 		config.set("MySQL.MySQL-host", "localhost");

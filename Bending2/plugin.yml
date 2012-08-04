@@ -170,8 +170,8 @@ permissions:
     default: true
   bending.fire.Lightning:
     description: Allows the use of Lightning.
-    default: op
-    default: false
+    default: true
+    #default: false
   bending.water.FreezeMelt:
     description: Allows the use of Freeze.
     default: true
@@ -195,7 +195,7 @@ permissions:
     default: true
   bending.water.WaterSpout:
     description: Allows the use of WaterSpout.
-    default: false
+    default: true
   bending.water.WaterWall:
     description: Allows the use of WaterWall.
     default: true
@@ -236,6 +236,10 @@ permissions:
     description: Allows the use of Shockwave.
 #    default: true
     default: false
+  
+  bending.earth.EarthArmor:
+    default: true
+    
   bending.AvatarState:
     description: Allows the use of AvatarState.
     default: op

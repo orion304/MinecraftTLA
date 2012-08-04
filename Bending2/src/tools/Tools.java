@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import main.Bending;
 import main.BendingManager;
 import main.StorageManager;
+import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
+import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -82,6 +84,7 @@ public class Tools {
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
 	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
+	public static List<Player> toggledBending = new ArrayList<Player>();
 
 	public Tools(StorageManager config2) {
 		config = config2;
@@ -188,7 +191,7 @@ public class Tools {
 	public static void moveEarth(Location location, Vector direction,
 			int chainlength) {
 		Block block = location.getBlock();
-		moveEarth(block, direction, chainlength);
+		moveEarth(block, direction, chainlength, true);
 		// if (isEarthbendable(block)) {
 		// Vector norm = direction.clone().normalize();
 		// Vector negnorm = norm.clone().multiply(-1);
@@ -221,8 +224,13 @@ public class Tools {
 		// }
 		// }
 	}
+	
+	public static void moveEarth(Block block, Vector direction,
+			int chainlength) {
+		moveEarth(block, direction, chainlength, true);
+	}
 
-	public static void moveEarth(Block block, Vector direction, int chainlength) {
+	public static void moveEarth(Block block, Vector direction, int chainlength, boolean throwplayer) {
 		// verbose("Moving earth");
 		// verbose(direction);
 		// verbose(isEarthbendable(block));
@@ -242,9 +250,11 @@ public class Tools {
 				return;
 			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(affectedblock)) {
-				for (Entity entity : getEntitiesAroundPoint(
-						affectedblock.getLocation(), 1.75)) {
-					entity.setVelocity(norm.clone().multiply(.75));
+				if (throwplayer) {
+					for (Entity entity : getEntitiesAroundPoint(
+							affectedblock.getLocation(), 1.75)) {
+						entity.setVelocity(norm.clone().multiply(.75));
+					}
 				}
 
 				affectedblock.setType(block.getType());
@@ -644,17 +654,24 @@ public class Tools {
 				&& ability != Abilities.AvatarState)
 			return false;
 		if (hasPermission(player, ability)
-				&& !isRegionProtected(player, ability, true))
+				&& !isRegionProtected(player, ability, true)
+				&& !toggledBending(player))
 			return true;
 		return false;
 
 	}
 
+	public static boolean toggledBending(Player player) {
+		if (toggledBending.contains(player))
+			return true;
+		return false;
+	}
+
 	public static boolean isRegionProtected(Player player, Abilities ability,
 			boolean look) {
-		Plugin p = Bukkit.getPluginManager().getPlugin("WorldGuard");
-		if (p == null)
-			return false;
+		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
+		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
+		if (wgp != null){
 		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
 				.getPlugin("WorldGuard");
 		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
@@ -681,6 +698,28 @@ public class Tools {
 		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
 				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
 			return true;
+		}
+		}
+		
+		if (psp != null){
+			PreciousStones ps = (PreciousStones) psp;
+			Block b = player.getLocation().getBlock();
+		
+			if (look) {
+				try {
+					int range = 20;
+					if (ability == Abilities.Fireball)
+						range = 100;
+					Block c = player.getTargetBlock(null, range);
+					return ps.getForceFieldManager().hasSourceField(c.getLocation(), FieldFlag.PREVENT_PVP);
+					} catch (IllegalStateException e) {
+						return false;
+					}
+					
+				}
+				
+				
+			return ps.getForceFieldManager().hasSourceField(b.getLocation(), FieldFlag.PREVENT_PVP);
 		}
 
 		// EntityDamageByEntityEvent damageEvent = new

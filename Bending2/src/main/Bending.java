@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
 import tools.AvatarState;
@@ -50,6 +51,7 @@ import airbending.Tornado;
 import earthbending.Catapult;
 import earthbending.Collapse;
 import earthbending.CompactColumn;
+import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthGrab;
@@ -92,6 +94,10 @@ public class Bending extends JavaPlugin {
 
 		Fireball.removeAllFireballs();
 		Tools.stopAllBending();
+		for (String s : EarthArmor.durations.keySet()){
+			EarthArmor.removeEffect(Bukkit.getPlayer(s));
+			Bukkit.getPlayer(s).removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+		}
 
 	}
 
@@ -305,9 +311,9 @@ public class Bending extends JavaPlugin {
 			if (Arrays.asList(args).isEmpty()) {
 				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <page> if you want to see a list of permissions.");
-				sender.sendMessage(ChatColor.DARK_RED
+				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <ability> if you want to see how to use it.");
-				sender.sendMessage(ChatColor.DARK_RED
+				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <command> if you need help with a command.");
 				return true;
 			}
@@ -338,6 +344,20 @@ public class Bending extends JavaPlugin {
 						.load(new File(this.getDataFolder(), "config.yml"));
 				sender.sendMessage("Config reloaded");
 				return true;
+			}
+			
+			if (args[0].equalsIgnoreCase("toggle")
+					&& args.length == 1
+					&& (sender.hasPermission("bending.command.toggle"))) {
+				if (!Tools.toggledBending.contains(player)){
+					Tools.toggledBending.add(player);
+					player.sendMessage(ChatColor.AQUA + "You toggled your bending. You now can't use bending until you use that command again.");
+					return true;
+				} else {
+					Tools.toggledBending.remove(player);
+					player.sendMessage(ChatColor.AQUA + "You toggled you bending back. You can now use them freely again!");
+					return true;
+				}
 			}
 
 			if (args[0].equalsIgnoreCase("permaremove")
@@ -426,11 +446,11 @@ public class Bending extends JavaPlugin {
 					}
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <page> if you want to see a list of permissions.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <command> if you need help with a command.");
 					return true;
 				}
@@ -439,11 +459,11 @@ public class Bending extends JavaPlugin {
 			if (args[0].equalsIgnoreCase("add")
 					&& (sender.hasPermission("bending.admin.add") || player == null)) {
 				if (args.length == 1) {
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <page> if you want to see a list of permissions.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <command> if you need help with a command.");
 					return true;
 				}
@@ -550,11 +570,11 @@ public class Bending extends JavaPlugin {
 					}
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <page> if you want to see a list of permissions.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <command> if you need help with a command.");
 					return true;
 				}
@@ -1095,11 +1115,11 @@ public class Bending extends JavaPlugin {
 				return true;
 			}
 		}
-		sender.sendMessage(ChatColor.DARK_RED
+		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <page> if you want to see a list of permissions.");
-		sender.sendMessage(ChatColor.DARK_RED
+		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <ability> if you want to see how to use it.");
-		sender.sendMessage(ChatColor.DARK_RED
+		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <command> if you need help with a command.");
 		return true;
 

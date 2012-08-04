@@ -7,23 +7,28 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.particle.Particle;
 import org.getspout.spoutapi.particle.Particle.ParticleType;
-import org.getspout.spoutapi.player.SpoutPlayer;
 
 import tools.ConfigManager;
+import tools.Tools;
 
 public class Lightning {
 	
 	public static int distance = ConfigManager.lightningrange;
 	private static long warmup = ConfigManager.lightningwarmup;
 	private static long duration = 3000;
+	public static int damage = ConfigManager.lightningdamage;
 
 	private static int ID = Integer.MIN_VALUE;
 	private int id;
@@ -32,9 +37,10 @@ public class Lightning {
 	public static Map<Player, Long> warmups = new HashMap<Player, Long>();
 	public static Map<Player, Long> durations = new HashMap<Player, Long>();
 	public static List<Player> ready = new ArrayList<Player>();
-	public static List<Block> blocks = new ArrayList<Block>();
+	public static Map<Player, List<Location>> locations = new HashMap<Player, List<Location>>();
 	public static Map <Player, Location> playerlocs = new HashMap<Player, Location>();
 	private static Random ran = new Random();
+	private static Plugin sp = Bukkit.getPluginManager().getPlugin("SpoutPlugin");
 
 	
 	public Lightning (Player player){
@@ -50,14 +56,12 @@ public class Lightning {
 	
 	public static void ChargingLightning(int ID){
 		Player player = instances.get(ID).player;
-		SpoutPlayer splayer = SpoutManager.getPlayer(player);
 		if (warmups.containsKey(player)){
 			if (warmups.get(player) + warmup <= System.currentTimeMillis()){
 				if (!ready.contains(player))
 					ready.add(player);
-				if (!splayer.isSpoutCraftEnabled()) {
-					player.getLocation().getWorld().playEffect(player.getLocation(), Effect.MOBSPAWNER_FLAMES, 1);
-			} else {
+					player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 2, 1), false);
+					if (sp != null && ConfigManager.lightningspout){
 				Random ran = new Random();
 				Location loc = player.getEyeLocation();
 				loc.setY(player.getEyeLocation().getY() - 0.3);
@@ -72,14 +76,15 @@ public class Lightning {
 		if (ready.contains(player)){
 			ready.remove(player);
 			warmups.remove(player);
-			SpoutPlayer splayer = SpoutManager.getPlayer(player);
-			if (!splayer.isSpoutCraftEnabled()){
 				Block tblock = player.getTargetBlock(null, 20);
-				tblock.getWorld().strikeLightning(tblock.getLocation());
-			} else {				
+				tblock.getWorld().strikeLightningEffect(tblock.getLocation());
+				for (Entity entity: Tools.getEntitiesAroundPoint(tblock.getLocation(), 2))
+					Tools.damageEntity(player, entity, damage);
+			if (sp != null && ConfigManager.lightningspout){			
 				Location loc = player.getEyeLocation();
 				List<Location> locs = new ArrayList<Location>();
 				locs.add(loc);
+				populateMap(player);
 				//spoutLocs.put(player, locs);
 				//playerlocs.put(player, loc);
 				durations.put(player, System.currentTimeMillis());
@@ -119,13 +124,33 @@ public class Lightning {
 		//Tools.verbose(newlocs.size());
 	//}
 	
+	public static void populateMap(Player p){
+		List<Location> locs = new ArrayList<Location>();
+		Location loc = null;
+		Vector vec = p.getLocation().getDirection();
+		int playerZ = (int) p.getLocation().getZ();
+		int playerX = (int) p.getLocation().getX();
+		for (Block b: p.getLineOfSight(null, distance)){
+			//loc = b.getLocation();
+			//locs.add(loc);
+			loc = b.getLocation().add(b.getLocation().getDirection().clone().multiply(0.1));
+			loc.setX(loc.getX() + (p.getLocation().getX() - (playerX - 1)));
+			loc.setZ(loc.getZ() + (p.getLocation().getZ() - playerZ));
+			locs.add(loc);
+			//loc = b.getLocation().add(vec.multiply(-0.2));
+			//locs.add(loc);
+			//loc = b.getLocation().add(vec.multiply(-0.8));
+			//locs.add(loc);
+		}
+		locations.put(p, locs);
+	}
+	
 	public static void progress(int ID){
 		Player player = instances.get(ID).player;
 		if (durations.containsKey(player)){
 			if (durations.get(player) + duration >= System.currentTimeMillis()){
-		blocks = player.getLineOfSight(null, distance);
-		for (Block b: blocks){
-			new Particle(ParticleType.REDDUST, b.getLocation(), new Vector((ran.nextFloat() - 0.5) * 0.1 , 0.6, (ran.nextFloat() - 0.5) * 0.1)).setParticleBlue(250 / 237).setParticleGreen(149 / 250).setParticleRed(100 / 250).setGravity(0f).setMaxAge(30).setAmount(1).setScale(0.2f).spawn();
+		for (Location loc: locations.get(player)){
+			new Particle(ParticleType.REDDUST, loc, new Vector((ran.nextFloat() - 0.5) * 0.1 , 0.6, (ran.nextFloat() - 0.5) * 0.1)).setParticleBlue(250 / 237).setParticleGreen(149 / 250).setParticleRed(100 / 250).setGravity(0f).setMaxAge(30).setAmount(1).setScale(0.01f).spawn();
 		}
 			}
 		}

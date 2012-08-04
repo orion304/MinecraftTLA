@@ -1,11 +1,18 @@
 package main;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,14 +27,20 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -58,6 +71,7 @@ import airbending.Tornado;
 import earthbending.Catapult;
 import earthbending.Collapse;
 import earthbending.CompactColumn;
+import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthGrab;
@@ -132,6 +146,30 @@ public class BendingListener implements Listener {
 			player.setDisplayName("<" + color + append + player.getName()
 					+ ChatColor.WHITE + ">");
 		}
+		
+		YamlConfiguration dc = new YamlConfiguration();
+	    File sv = new File(Bukkit.getPluginManager().getPlugin("Bending").getDataFolder(), "Armour.sav");
+	    if (sv.exists() && (dc.contains("Armors." + player.getName() + ".Boots") && dc.contains("Armors." + player.getName() + ".Leggings")
+	    		&& dc.contains("Armors." + player.getName() + ".Chest") && dc.contains("Armors." + player.getName() + ".Helm")))
+	    {
+	    	ItemStack boots = new ItemStack(Material.matchMaterial(dc.getString("Armors." + player.getName() + ".Boots").split(":")[0]));
+	    	ItemStack leggings = new ItemStack(Material.matchMaterial(dc.getString("Armors." + player.getName() + ".Leggings").split(":")[0]));
+	    	ItemStack chest = new ItemStack(Material.matchMaterial(dc.getString("Armors." + player.getName() + ".Chest").split(":")[0]));
+	    	ItemStack helm = new ItemStack(Material.matchMaterial(dc.getString("Armors." + player.getName() + ".Helm").split(":")[0]));
+	    	boots.setDurability(Short.parseShort(dc.getString("Armors." + player.getName() + ".Boots").split(":")[1]));
+	    	leggings.setDurability(Short.parseShort(dc.getString("Armors." + player.getName() + ".Leggings").split(":")[1]));
+	    	chest.setDurability(Short.parseShort(dc.getString("Armors." + player.getName() + ".Chest").split(":")[1]));
+	    	helm.setDurability(Short.parseShort(dc.getString("Armors." + player.getName() + ".Helm").split(":")[1]));
+	    	ItemStack[] armors = {boots , leggings, chest, helm};
+	    	player.getInventory().setArmorContents(armors);
+	    }
+	 try
+	    {
+	      dc.save(sv);
+	    }
+	    catch (IOException e)
+	    {
+	    }
 	}
 
 	@EventHandler
@@ -246,6 +284,10 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.Tremorsense) {
 					new Tremorsense(player);
+				}
+				
+				if (Tools.getBendingAbility(player) == Abilities.EarthArmor){
+					new EarthArmor(player);
 				}
 
 			}
@@ -462,8 +504,8 @@ public class BendingListener implements Listener {
 						BendingManager.flyingplayers.add(player);
 					}
 					event.setCancelled(true);
+				
 				}
-
 			} else if (Tools.isBender(player, BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.FALL) {
 				event.setDamage((int) ((double) event.getDamage() * (ConfigManager.falldamagereduction / 100.)));
@@ -473,6 +515,12 @@ public class BendingListener implements Listener {
 					&& (event.getCause() == DamageCause.FIRE || event
 							.getCause() == DamageCause.FIRE_TICK)) {
 				event.setCancelled(!Extinguish.canBurn(player));
+			}
+			
+			if (Tools.isBender(player, BendingType.Earth)
+					&& (event.getCause() == DamageCause.SUFFOCATION
+					&& EarthArmor.movingArmor.containsKey(player))) {
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -620,6 +668,21 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
+		if (WaterSpout.instances.containsKey(event.getPlayer())){
+		    Vector vel = new Vector();
+		    vel.setX(event.getTo().getX() - event.getFrom().getX());
+		    vel.setY(event.getTo().getY() - event.getFrom().getY());
+		    vel.setZ(event.getTo().getZ() - event.getFrom().getZ());
+		    //You now know the old velocity. Set to match recommended velocity
+		    double currspeed = vel.length();
+		    if (currspeed > 0.01) {
+		        //only if moving set a factor
+		        double recspeed = 0.6;
+		        vel = vel.multiply(recspeed * currspeed);
+		        //apply the new velocity (MAY REQUIRE A SCHEDULED TASK INSTEAD!)
+		        event.getPlayer().setVelocity(vel);
+		    }
+		}
 		Player player = event.getPlayer();
 		if (Bloodbending.isBloodbended(player)) {
 			double distance1, distance2;
@@ -683,6 +746,44 @@ public class BendingListener implements Listener {
 			event.setCancelled(true);
 	}
 	
+	
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent event) {
+		if (event.getSlotType() == SlotType.ARMOR
+				&& EarthArmor.durations.containsKey(event.getView().getPlayer().getName()))
+			event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		if (EarthArmor.durations.containsKey(event.getPlayer().getName())){
+			EarthArmor.removeEffect(event.getPlayer());
+			event.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerDeath(PlayerDeathEvent event) {
+		if (EarthArmor.armorsaves.containsKey(event.getEntity().getName())){
+			List<ItemStack> drops = event.getDrops();
+			List<ItemStack> newdrops = new ArrayList<ItemStack>();
+			for (int i = 0; i < drops.size(); i++){
+				if (!(drops.get(i).getType() == Material.LEATHER_BOOTS
+						|| drops.get(i).getType() == Material.LEATHER_CHESTPLATE
+						|| drops.get(i).getType() == Material.LEATHER_HELMET
+						|| drops.get(i).getType() == Material.LEATHER_LEGGINGS
+						|| drops.get(i).getType() == Material.AIR))
+							newdrops.add((drops.get(i)));
+			}
+			for (ItemStack is : EarthArmor.armorsaves.get(event.getEntity().getName())){
+				if (!(is.getType() == Material.AIR))
+				newdrops.add(is);
+			}
+			event.getDrops().clear();
+			event.getDrops().addAll(newdrops);
+			EarthArmor.removeEffect(event.getEntity());
+		}
+	}
 	//@EventHandler
 	//public void onPlayerInteract(PlayerInteractEntityEvent event){
 	//	Entity rightclicked = event.getRightClicked();

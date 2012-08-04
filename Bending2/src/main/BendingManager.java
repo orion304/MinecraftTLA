@@ -42,6 +42,7 @@ import airbending.Speed;
 import airbending.Tornado;
 import earthbending.Catapult;
 import earthbending.CompactColumn;
+import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
@@ -154,6 +155,12 @@ public class BendingManager implements Runnable {
 		for (Player player : EarthTunnel.instances.keySet()) {
 			EarthTunnel.progress(player);
 		}
+		
+		for (Player player : EarthArmor.movingArmor.keySet()){
+			EarthArmor.moveArmor(player);
+		}
+		//for (String player : EarthArmor.durations.keySet())
+		//	EarthArmor.removeEffect(Bukkit.getPlayer(player));
 
 		EarthPassive.revertSands();
 
