@@ -89,6 +89,7 @@ public class Bending extends JavaPlugin {
 	public String[] airbendingabilities;
 	public String[] earthbendingabilities;
 	public String[] firebendingabilities;
+	public String[] chiblockingabilities;
 
 	public void onDisable() {
 
@@ -113,6 +114,7 @@ public class Bending extends JavaPlugin {
 		airbendingabilities = Abilities.getAirbendingAbilities();
 		earthbendingabilities = Abilities.getEarthbendingAbilities();
 		firebendingabilities = Abilities.getFirebendingAbilities();
+		chiblockingabilities = Abilities.getChiBlockingAbilities();
 
 		getServer().getPluginManager().registerEvents(listener, this);
 
@@ -594,6 +596,8 @@ public class Bending extends JavaPlugin {
 						abilitylist = earthbendingabilities;
 					} else if (args[1].equalsIgnoreCase("fire")) {
 						abilitylist = firebendingabilities;
+					} else if (args[1].equalsIgnoreCase("chiblocker")) {
+						abilitylist = chiblockingabilities;
 					}
 
 					if (abilitylist != null) {
@@ -727,6 +731,20 @@ public class Bending extends JavaPlugin {
 					}
 					if (config.isBender(player, BendingType.Earth)
 							&& Abilities.isEarthbending(ability)
+							&& Tools.hasPermission(player, ability)) {
+						if (!ConfigManager.bendToItem) {
+							config.setAbility(player, ability, slot);
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
+						} else {
+							config.setAbility(player, ability, mat);
+							sender.sendMessage(ability.name() + " bound to "
+									+ mat.name().replaceAll("_", " "));
+						}
+						return true;
+					}
+					if (config.isBender(player, BendingType.ChiBlocker)
+							&& Abilities.isChiBlocking(ability)
 							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
@@ -1111,7 +1129,7 @@ public class Bending extends JavaPlugin {
 						
 				}
 				temp = null;
-				sender.sendMessage("Imported BendingPlayers to MySQL");
+				sender.sendMessage("Imported BendingPlayers to MySQL.");
 				return true;
 			}
 		}

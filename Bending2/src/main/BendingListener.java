@@ -36,6 +36,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
@@ -68,6 +69,8 @@ import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Speed;
 import airbending.Tornado;
+import chiblocker.HighJump;
+import chiblocker.RapidPunch;
 import earthbending.Catapult;
 import earthbending.Collapse;
 import earthbending.CompactColumn;
@@ -369,6 +372,25 @@ public class BendingListener implements Listener {
 			if (Tools.getBendingAbility(player) == Abilities.AvatarState) {
 				new AvatarState(player);
 			}
+			
+			if (Tools.canBend(player, Tools.getBendingAbility(player))) {
+				
+				if (Tools.getBendingAbility(player) == Abilities.HighJump) {
+					new HighJump(player);
+				}
+				
+				if (Tools.getBendingAbility(player) == Abilities.RapidPunch
+						&& !RapidPunch.punching.contains(player)) {
+					if (RapidPunch.timers.containsKey(player.getName())){
+						if (RapidPunch.timers.get(player.getName()) + 1000 <= System.currentTimeMillis()){
+							new RapidPunch(player);
+						}
+					} else {
+						new RapidPunch(player);
+					}
+				}
+				
+			}
 
 		}
 	}
@@ -561,7 +583,7 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.ENTITY_ATTACK
 					&& !Tools.isWeapon(((Player) event.getDamager())
 							.getItemInHand().getType())) {
-				event.setDamage((int) (ConfigManager.punchdamage));
+				//event.setDamage((int) (ConfigManager.punchdamage));
 			}
 		}
 
@@ -759,6 +781,18 @@ public class BendingListener implements Listener {
 		if (EarthArmor.durations.containsKey(event.getPlayer().getName())){
 			EarthArmor.removeEffect(event.getPlayer());
 			event.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
+		Player p = event.getPlayer();
+		if (Tornado.getPlayers().contains(p)
+				|| Bloodbending.isBloodbended(p)
+			    || Speed.getPlayers().contains(p)
+			    || FireJet.getPlayers().contains(p)
+			    || AvatarState.getPlayers().contains(p)) {
+			event.setCancelled(true);
 		}
 	}
 	

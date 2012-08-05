@@ -14,6 +14,8 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import chiblocker.RapidPunch;
+
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
@@ -90,9 +92,10 @@ public class BendingManager implements Runnable {
 		manageEarthbending();
 		manageFirebending();
 		manageWaterbending();
+		manageChiBlocking();
 		// manageMessages();
 		AvatarState.manageAvatarStates();
-		handleFlying();
+		//handleFlying();
 		handleDayNight();
 
 		if (verbose
@@ -253,6 +256,11 @@ public class BendingManager implements Runnable {
 
 		Illumination.manage(plugin.getServer());
 
+	}
+	
+	private void manageChiBlocking() {
+		for (Player p : RapidPunch.targets.keySet())
+			RapidPunch.startPunch(p);
 	}
 
 	private void manageWaterbending() {
