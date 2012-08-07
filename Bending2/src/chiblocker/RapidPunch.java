@@ -33,7 +33,6 @@ public class RapidPunch {
 			return;
 		if (cooldowns.containsKey(p.getName()) && cooldowns.get(p.getName()) + cooldown >= System.currentTimeMillis())
 			return;
-		Tools.verbose("Trying to create new FastPunch  " + p.getName());
 		double lowestdistance = distance + 1;
 		Entity t = null;
 		for (Entity entity : Tools.getEntitiesAroundPoint(p.getEyeLocation(), distance)) {
@@ -52,7 +51,6 @@ public class RapidPunch {
 			return;
 		targets.put(p , t);
 		numpunches.put(p.getName(), 0);
-		Tools.verbose("Created new punch " + t.getEntityId());
 	}
 
 	public static void startPunch(Player p) {
@@ -69,13 +67,11 @@ public class RapidPunch {
 			//lt.setHealth(finalhealth);
 			lt.damage(damage, p);
 			lt.setNoDamageTicks(0);
-			Tools.verbose(lt.getHealth());
 		}
 		//((LivingEntity)t).damage(damage);
 		//Tools.damageEntity(p, t, damage);
 		cooldowns.put(p.getName(), System.currentTimeMillis());
 		swing(p);
-		//Tools.verbose("Damaging" + numpunches.get(p.getName()));
 		int incr = numpunches.get(p.getName());
 		incr++;
 		numpunches.put(p.getName(), incr);

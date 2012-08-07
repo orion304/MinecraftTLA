@@ -69,7 +69,7 @@ public class EarthArmor {
 			if (durations.containsKey(p.getName())){
 				if (durations.get(p.getName()) + duration <= System.currentTimeMillis()){
 					removeEffect(p);
-					Tools.verbose("REMOVIN");
+					//Tools.verbose("REMOVIN");
 					return;
 				}
 				return;

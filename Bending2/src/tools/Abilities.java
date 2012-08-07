@@ -10,7 +10,7 @@ public enum Abilities {
 
 	ArcOfFire, Extinguish, Fireball, HeatMelt, RingOfFire, FireJet, Illumination, WallOfFire, FireBlast, Lightning,
 
-	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending,
+	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike,
 	
 	HighJump, RapidPunch,
 
@@ -29,7 +29,7 @@ public enum Abilities {
 	}
 
 	private enum WaterbendingAbilities {
-		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending;
+		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike;
 	}
 	
 	private enum ChiBlockingAbilities {

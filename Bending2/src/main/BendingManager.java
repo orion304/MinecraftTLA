@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.server.EntityFireball;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -26,6 +27,7 @@ import waterbending.Bloodbending;
 import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
+import waterbending.IceSpike;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -281,6 +283,15 @@ public class BendingManager implements Runnable {
 		for (int ID : Wave.instances.keySet()) {
 			Wave.progress(ID);
 		}
+		
+		for (int ID : IceSpike.instances.keySet()) {
+			IceSpike.progress(ID);
+		}
+		
+		//for (Player player : IceSpike.removeTimers.keySet()) {
+		//	if (IceSpike.removeTimers.get(player) + IceSpike.removeTimer <= System.currentTimeMillis())
+		//		IceSpike.restore(player);
+		//}
 
 		Bloodbending.progressAll();
 

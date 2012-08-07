@@ -52,8 +52,10 @@ import tools.TempBlock;
 import tools.Tools;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
+import waterbending.IceSpike;
 import waterbending.Melt;
 import waterbending.Plantbending;
+import waterbending.SpikeField;
 import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -342,6 +344,10 @@ public class BendingListener implements Listener {
 				if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
 					WaterManipulation.moveWater(player);
 				}
+				
+				if (Tools.getBendingAbility(player) == Abilities.IceSpike) {
+					new IceSpike(player);
+				}
 
 				if (Tools.getBendingAbility(player) == Abilities.FreezeMelt) {
 					new FreezeMelt(player);
@@ -436,6 +442,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
 				new WaterManipulation(player);
+			}
+			
+			if (Tools.getBendingAbility(player) == Abilities.IceSpike) {
+				new SpikeField(player);
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.EarthTunnel) {

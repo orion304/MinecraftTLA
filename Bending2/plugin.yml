@@ -291,3 +291,5 @@ permissions:
     default: op
   bending.chiblocker.FastPunch:
     default: op
+  bending.water.IceSpike:
+    default: op
