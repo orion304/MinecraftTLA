@@ -28,14 +28,13 @@ permissions:
   bending.fire.*:
     description: Allows all fire bending.
     children:
-      bending.fire.ArcOfFire: true
+      bending.fire.Blaze: true
       bending.fire.Extinguish: true
       bending.fire.Fireball: true
       bending.fire.FireJet: true
       bending.fire.FireBlast: true
       bending.fire.HeatMelt: true
       bending.fire.Passive: true
-      bending.fire.RingOfFire: true
       bending.fire.Illumination: true
       bending.fire.WallOfFire: true
       bending.fire.Lightning: true
@@ -51,7 +50,7 @@ permissions:
       bending.water.WaterWall: true
       bending.water.Wave: true
       bending.water.Passive: true
- #     bending.water.WaterSpout: false
+      bending.water.WaterSpout: true
  #     bending.water.Bloodbending: false
   bending.earth.*:
     description: Allows all earth bending.
@@ -148,8 +147,8 @@ permissions:
     description: Allows the use of AirSpout.
 #    default: true
     default: false
-  bending.fire.ArcOfFire:
-    description: Allows the use of ArcOfFire.
+  bending.fire.Blaze:
+    description: Allows the use of Blaze.
     default: true
   bending.fire.Extinguish:
     description: Allows the use of Extinguish.
@@ -168,9 +167,6 @@ permissions:
     default: true
   bending.fire.Passive:
     description: Allows the use of Passive.
-    default: true
-  bending.fire.RingOfFire:
-    description: Allows the use of RingOfFire.
     default: true
   bending.fire.Illumination:
     description: Allows the use of Illumination.
@@ -204,8 +200,7 @@ permissions:
     default: true
   bending.water.WaterSpout:
     description: Allows the use of WaterSpout.
-#    default: true
-    default: false
+    default: true
   bending.water.WaterWall:
     description: Allows the use of WaterWall.
     default: true

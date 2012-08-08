@@ -103,7 +103,7 @@ public class WaterSpout {
 		// }
 		player.removePotionEffect(PotionEffectType.SPEED);
 		Location location = player.getLocation().clone().add(0, .2, 0);
-		Block block;
+		Block block = location.clone().getBlock();
 		int height = spoutableWaterHeight(location, player);
 		location = spout.base.getLocation();
 
@@ -121,6 +121,11 @@ public class WaterSpout {
 					affectedblocks.put(block, block);
 				}
 				newaffectedblocks.put(block, block);
+			}
+			if (player.getLocation().getBlockY() > block.getY()) {
+				player.setFlying(false);
+			} else {
+				player.setFlying(true);
 			}
 		} else {
 			instances.get(player).remove();

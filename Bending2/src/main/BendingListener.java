@@ -701,10 +701,12 @@ public class BendingListener implements Listener {
 			vel.setZ(event.getTo().getZ() - event.getFrom().getZ());
 			// You now know the old velocity. Set to match recommended velocity
 			double currspeed = vel.length();
-			if (currspeed > 0.02) {
+			double maxspeed = .15;
+			if (currspeed > maxspeed) {
 				// only if moving set a factor
-				double recspeed = 0.6;
-				vel = vel.multiply(recspeed * currspeed);
+				// double recspeed = 0.6;
+				// vel = vel.ultiply(recspeed * currspeed);
+				vel = vel.normalize().multiply(maxspeed);
 				// apply the new velocity (MAY REQUIRE A SCHEDULED TASK
 				// INSTEAD!)
 				event.getPlayer().setVelocity(vel);
