@@ -43,6 +43,8 @@ import airbending.AirShield;
 import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Tornado;
+import chiblocking.HighJump;
+import chiblocking.RapidPunch;
 import earthbending.Catapult;
 import earthbending.Collapse;
 import earthbending.EarthArmor;
@@ -969,6 +971,14 @@ public class Bending extends JavaPlugin {
 							case EarthArmor:
 								sender.sendMessage(cc
 										+ EarthArmor.getDescription());
+								break;
+							case RapidPunch:
+								sender.sendMessage(cc
+										+ RapidPunch.getDescription());
+								break;
+							case HighJump:
+								sender.sendMessage(cc
+										+ HighJump.getDescription());
 								break;
 							}
 							return true;
