@@ -105,11 +105,11 @@ public class WaterSpout {
 		Location location = player.getLocation().clone().add(0, .2, 0);
 		Block block = location.clone().getBlock();
 		int height = spoutableWaterHeight(location, player);
-		location = spout.base.getLocation();
 
 		// Tools.verbose(height + " " + WaterSpout.height + " "
 		// + affectedblocks.size());
 		if (height != -1) {
+			location = spout.base.getLocation();
 			for (int i = 1; i <= height; i++) {
 				block = location.clone().add(0, i, 0).getBlock();
 				if (!TempBlock.isTempBlock(block)) {
