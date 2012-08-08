@@ -778,8 +778,7 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.getSlotType() == SlotType.ARMOR
-				&& EarthArmor.instances
-						.containsKey(event.getView().getPlayer()))
+				&& !EarthArmor.canRemoveArmor((Player) event.getWhoClicked()))
 			event.setCancelled(true);
 	}
 

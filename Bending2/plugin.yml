@@ -65,7 +65,7 @@ permissions:
       bending.earth.Collapse: true
       bending.earth.Passive: true
       bending.earth.Tremorsense: true
-      bending.earth.EarthArmor: true;
+      bending.earth.EarthArmor: true
 #      bending.earth.Shockwave: false
   bending.*:
     description: Allows all bending.
