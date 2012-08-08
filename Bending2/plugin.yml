@@ -92,6 +92,7 @@ permissions:
       bending.command.bind: true
       bending.fire.Lightning: false
       bending.water.Bloodbending: true
+      bending.command.toggle: true
       
   bending.command:
     description: Allows all user commands.
@@ -102,6 +103,7 @@ permissions:
       bending.command.display: true
       bending.command.bind: true
       bending.command.help: true
+      bending.command.toggle: true
 
   bending.air.AirSwipe:
     description: Allows the use of AirSwipe.
@@ -285,6 +287,9 @@ permissions:
   bending.command.help:
     description: Allows the use of /bending help
     default: true
+  bending.command.toggle:
+  	description: Allows the use of /bending toggle
+  	default: true
   bending.avatar:
     description: Give the avatar prefix.
     default: op
