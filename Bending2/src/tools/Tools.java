@@ -766,7 +766,7 @@ public class Tools {
 			return true;
 		}
 		if (Abilities.isChiBlocking(ability)
-				&& player.hasPermission("bending.chiblocker." + ability)) {
+				&& player.hasPermission("bending.chiblocking." + ability)) {
 			return true;
 		}
 		return false;

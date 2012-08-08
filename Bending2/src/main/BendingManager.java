@@ -297,17 +297,20 @@ public class BendingManager implements Runnable {
 		ArrayList<Player> newflyingplayers = new ArrayList<Player>();
 		ArrayList<Player> avatarstateplayers = new ArrayList<Player>();
 		ArrayList<Player> airscooterplayers = new ArrayList<Player>();
+		ArrayList<Player> waterspoutplayers = new ArrayList<Player>();
 
 		players.addAll(Tornado.getPlayers());
 		players.addAll(Speed.getPlayers());
 		players.addAll(FireJet.getPlayers());
 		avatarstateplayers = AvatarState.getPlayers();
 		airscooterplayers = AirScooter.getPlayers();
-		players.addAll(avatarstateplayers);
+		waterspoutplayers = WaterSpout.getPlayers();
+		// players.addAll(avatarstateplayers);
 
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			if (avatarstateplayers.contains(player)
-					|| airscooterplayers.contains(player)) {
+					|| airscooterplayers.contains(player)
+					|| waterspoutplayers.contains(player)) {
 				continue;
 			}
 			if (Bloodbending.isBloodbended(player)) {

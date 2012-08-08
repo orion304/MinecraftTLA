@@ -67,6 +67,11 @@ permissions:
       bending.earth.Tremorsense: true
       bending.earth.EarthArmor: true
 #      bending.earth.Shockwave: false
+  bending.chiblocking.*:
+    description: Allows all chiblocking abilities.
+    children:
+      bending.chiblocking.RapidPunch: true
+      bending.chiblocking.HighJump: true
   bending.*:
     description: Allows all bending.
     children:
@@ -243,6 +248,12 @@ permissions:
     default: false
   bending.earth.EarthArmor:
     description: Allows the use of EarthArmor
+    default: true
+  bending.chiblocking.RapidPunch:
+    description: Allows the use of RapidPunch
+    default: true
+  bending.chiblocking.HighJump:
+    description: Allows the use of HighJump
     default: true
   bending.AvatarState:
     description: Allows the use of AvatarState.
