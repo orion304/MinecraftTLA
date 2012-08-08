@@ -61,7 +61,12 @@ public class Collapse {
 	}
 
 	public static String getDescription() {
-		return "This ability acts like CompactColumn in an area around your targetted location - "
+		return " To use, simply left-click on an earthbendable block. "
+				+ "That block and the earthbendable blocks above it will be shoved "
+				+ "back into the earth below them, if they can. "
+				+ "This ability does have the capacity to trap something inside of it, "
+				+ "although it is incredibly difficult to do so. "
+				+ "Additionally, press sneak with this ability to affect an area around your targetted location - "
 				+ "all earth that can be moved downwards will be moved downwards. "
 				+ "This ability is especially risky or deadly in caves, depending on the "
 				+ "earthbender's goal and technique.";

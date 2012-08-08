@@ -37,7 +37,6 @@ import org.bukkit.util.Vector;
 
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
-import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
@@ -622,7 +621,7 @@ public class Tools {
 		EarthColumn.removeAll();
 		EarthPassive.removeAll();
 		FreezeMelt.removeAll();
-		WalkOnWater.removeAll();
+		// WalkOnWater.removeAll();
 		WaterSpout.removeAll();
 		WaterWall.removeAll();
 		Wave.removeAll();

@@ -54,7 +54,6 @@ import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.Melt;
 import waterbending.Plantbending;
-import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
 import waterbending.WaterSpout;
@@ -62,7 +61,6 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
-import airbending.AirBurst;
 import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSuction;
@@ -264,9 +262,9 @@ public class BendingListener implements Listener {
 					new AirScooter(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
-					AirBurst.coneBurst(player);
-				}
+				// if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+				// AirBurst.coneBurst(player);
+				// }
 
 			}
 
@@ -277,15 +275,11 @@ public class BendingListener implements Listener {
 					new Catapult(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Collapse) {
-					new Collapse(player);
-				}
-
 				if (Tools.getBendingAbility(player) == Abilities.RaiseEarth) {
 					new EarthColumn(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.CompactColumn) {
+				if (Tools.getBendingAbility(player) == Abilities.Collapse) {
 					new CompactColumn(player);
 				}
 
@@ -434,9 +428,9 @@ public class BendingListener implements Listener {
 					new AirSuction(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
-					new AirBurst(player);
-				}
+				// if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+				// new AirBurst(player);
+				// }
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.Tornado) {
@@ -445,6 +439,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
 				new EarthBlast(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.Collapse) {
+				new Collapse(player);
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
@@ -641,7 +639,7 @@ public class BendingListener implements Listener {
 		if (block.getType() == Material.FIRE) {
 			return;
 		}
-		event.setCancelled(!WalkOnWater.canThaw(block));
+		// event.setCancelled(!WalkOnWater.canThaw(block));
 		if (!event.isCancelled()) {
 			event.setCancelled(!WaterManipulation.canPhysicsChange(block));
 		}
@@ -668,8 +666,8 @@ public class BendingListener implements Listener {
 		Block block = event.getBlock();
 		if (!FreezeMelt.canThaw(block)) {
 			FreezeMelt.thaw(block);
-		} else if (!WalkOnWater.canThaw(block)) {
-			WalkOnWater.thaw(block);
+			// } else if (!WalkOnWater.canThaw(block)) {
+			// WalkOnWater.thaw(block);
 		} else if (!WaterWall.canThaw(block)) {
 			WaterWall.thaw(block);
 		} else if (Illumination.blocks.containsKey(block)) {
@@ -723,10 +721,10 @@ public class BendingListener implements Listener {
 			// return;
 		}
 
-		if (Tools.isBender(player, BendingType.Water)
-				&& (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
-			WalkOnWater.freeze(player);
-		}
+		// if (Tools.isBender(player, BendingType.Water)
+		// && (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
+		// WalkOnWater.freeze(player);
+		// }
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
@@ -735,9 +733,9 @@ public class BendingListener implements Listener {
 			if (FreezeMelt.frozenblocks.containsKey(block)) {
 				FreezeMelt.thaw(block);
 			}
-			if (WalkOnWater.affectedblocks.containsKey(block)) {
-				WalkOnWater.thaw(block);
-			}
+			// if (WalkOnWater.affectedblocks.containsKey(block)) {
+			// WalkOnWater.thaw(block);
+			// }
 			if (WaterWall.wallblocks.containsKey(block)) {
 				block.setType(Material.AIR);
 			}

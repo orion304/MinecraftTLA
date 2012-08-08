@@ -33,29 +33,23 @@ import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.Plantbending;
-import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
-import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
-import airbending.AirBurst;
 import airbending.AirScooter;
 import airbending.AirShield;
-import airbending.AirSpout;
 import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Tornado;
 import earthbending.Catapult;
 import earthbending.Collapse;
-import earthbending.CompactColumn;
 import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthGrab;
 import earthbending.EarthTunnel;
-import earthbending.Shockwave;
 import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
@@ -845,14 +839,14 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ AirScooter.getDescription());
 								break;
-							case AirBurst:
-								sender.sendMessage(cc
-										+ AirBurst.getDescription());
-								break;
-							case AirSpout:
-								sender.sendMessage(cc
-										+ AirSpout.getDescription());
-								break;
+							// case AirBurst:
+							// sender.sendMessage(cc
+							// + AirBurst.getDescription());
+							// break;
+							// case AirSpout:
+							// sender.sendMessage(cc
+							// + AirSpout.getDescription());
+							// break;
 							case Catapult:
 								sender.sendMessage(cc
 										+ Catapult.getDescription());
@@ -869,10 +863,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ EarthTunnel.getDescription());
 								break;
-							case CompactColumn:
-								sender.sendMessage(cc
-										+ CompactColumn.getDescription());
-								break;
+							// case CompactColumn:
+							// sender.sendMessage(cc
+							// + CompactColumn.getDescription());
+							// break;
 							case EarthBlast:
 								sender.sendMessage(cc
 										+ EarthBlast.getDescription());
@@ -885,10 +879,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ Tremorsense.getDescription());
 								break;
-							case Shockwave:
-								sender.sendMessage(cc
-										+ Shockwave.getDescription());
-								break;
+							// case Shockwave:
+							// sender.sendMessage(cc
+							// + Shockwave.getDescription());
+							// break;
 							case ArcOfFire:
 								sender.sendMessage(cc
 										+ ArcOfFire.getDescription());
@@ -949,18 +943,18 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ Plantbending.getDescription());
 								break;
-							case WalkOnWater:
-								sender.sendMessage(cc
-										+ WalkOnWater.getDescription());
-								break;
+							// case WalkOnWater:
+							// sender.sendMessage(cc
+							// + WalkOnWater.getDescription());
+							// break;
 							case WaterManipulation:
 								sender.sendMessage(cc
 										+ WaterManipulation.getDescription());
 								break;
-							case WaterSpout:
-								sender.sendMessage(cc
-										+ WaterSpout.getDescription());
-								break;
+							// case WaterSpout:
+							// sender.sendMessage(cc
+							// + WaterSpout.getDescription());
+							// break;
 							case WaterWall:
 								sender.sendMessage(cc
 										+ WaterWall.getDescription());

@@ -24,7 +24,6 @@ import waterbending.Bloodbending;
 import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
-import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
 import waterbending.WaterSpout;
@@ -259,11 +258,11 @@ public class BendingManager implements Runnable {
 	}
 
 	private void manageWaterbending() {
-		WalkOnWater.handleFreezing(plugin.getServer());
+		// WalkOnWater.handleFreezing(plugin.getServer());
 
 		FreezeMelt.handleFrozenBlocks();
 
-		WaterSpout.handleSpouts(plugin.getServer());
+		// WaterSpout.handleSpouts(plugin.getServer());
 
 		for (int ID : WaterManipulation.instances.keySet()) {
 			WaterManipulation.progress(ID);
@@ -531,8 +530,8 @@ public class BendingManager implements Runnable {
 				catapultplayers++;
 			if (ability == Abilities.Collapse)
 				compactcolumnplayers++;
-			if (ability == Abilities.CompactColumn)
-				compactcolumnplayers++;
+			// if (ability == Abilities.CompactColumn)
+			// compactcolumnplayers++;
 			if (ability == Abilities.EarthBlast)
 				earthblastplayers++;
 			if (ability == Abilities.RaiseEarth)
@@ -565,8 +564,8 @@ public class BendingManager implements Runnable {
 				bloodbendingplayers++;
 			if (Tools.hasAbility(player, Abilities.FreezeMelt))
 				freezemeltplayers++;
-			if (ability == Abilities.WalkOnWater)
-				freezemeltplayers++;
+			// if (ability == Abilities.WalkOnWater)
+			// freezemeltplayers++;
 			if (ability == Abilities.WaterBubble)
 				airbubbleplayers++;
 			if (ability == Abilities.WaterManipulation)
