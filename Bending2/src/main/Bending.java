@@ -50,6 +50,7 @@ import airbending.Tornado;
 import earthbending.Catapult;
 import earthbending.Collapse;
 import earthbending.CompactColumn;
+import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthGrab;
@@ -970,6 +971,10 @@ public class Bending extends JavaPlugin {
 							case AvatarState:
 								sender.sendMessage(cc
 										+ AvatarState.getDescription());
+								break;
+							case EarthArmor:
+								sender.sendMessage(cc
+										+ EarthArmor.getDescription());
 								break;
 							}
 							return true;

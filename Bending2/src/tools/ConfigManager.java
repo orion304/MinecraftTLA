@@ -595,7 +595,7 @@ public class ConfigManager {
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
 
-		config.set("Properties.Fire.Lightning.Warmup", 7500);
+		config.set("Properties.Fire.Lightning.Warmup", 2000);
 		config.set("Properties.Fire.Lightning.Range", 15);
 		config.set("Properties.Fire.Lightning.Miss-Chance", 5);
 
