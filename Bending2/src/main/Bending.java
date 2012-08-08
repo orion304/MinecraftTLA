@@ -34,6 +34,7 @@ import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.Plantbending;
 import waterbending.WaterManipulation;
+import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
@@ -952,10 +953,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ WaterManipulation.getDescription());
 								break;
-							// case WaterSpout:
-							// sender.sendMessage(cc
-							// + WaterSpout.getDescription());
-							// break;
+							case WaterSpout:
+								sender.sendMessage(cc
+										+ WaterSpout.getDescription());
+								break;
 							case WaterWall:
 								sender.sendMessage(cc
 										+ WaterWall.getDescription());
