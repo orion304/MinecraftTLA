@@ -289,7 +289,7 @@ permissions:
     default: true
   bending.command.toggle:
     description: Allows the use of /bending toggle
-  	default: true
+    default: true
   bending.avatar:
     description: Give the avatar prefix.
     default: op
