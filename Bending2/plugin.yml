@@ -288,7 +288,7 @@ permissions:
     description: Allows the use of /bending help
     default: true
   bending.command.toggle:
-  	description: Allows the use of /bending toggle
+    description: Allows the use of /bending toggle
   	default: true
   bending.avatar:
     description: Give the avatar prefix.
