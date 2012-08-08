@@ -175,8 +175,7 @@ permissions:
     default: true
   bending.fire.Lightning:
     description: Allows the use of Lightning.
-#    default: op
-    default: false
+    default: true
   bending.water.FreezeMelt:
     description: Allows the use of Freeze.
     default: true
