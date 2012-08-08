@@ -209,7 +209,7 @@ public class WaterSpout {
 		return "To use this ability, click while over or in water. "
 				+ "You will spout water up from beneath you to experience controlled levitation. "
 				+ "This ability is a toggle, so you can activate it then use other abilities and it "
-				+ "will remain on. If you go too high or try to spout over an area with no water, snow or ice, "
+				+ "will remain on. If you try to spout over an area with no water, snow or ice, "
 				+ "the spout will dissipate and you will fall. Click again with this ability selected to deactivate it.";
 	}
 }
