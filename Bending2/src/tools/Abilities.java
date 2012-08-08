@@ -6,11 +6,13 @@ public enum Abilities {
 
 	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirBurst, AirSpout,
 
-	Catapult, RaiseEarth, EarthGrab, EarthTunnel, CompactColumn, EarthBlast, Collapse, Tremorsense, Shockwave,
+	Catapult, RaiseEarth, EarthGrab, EarthTunnel, CompactColumn, EarthBlast, Collapse, Tremorsense, Shockwave, EarthArmor,
 
 	ArcOfFire, Extinguish, Fireball, HeatMelt, RingOfFire, FireJet, Illumination, WallOfFire, FireBlast, Lightning,
 
-	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending,
+	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike,
+
+	HighJump, RapidPunch,
 
 	AvatarState;
 
@@ -19,7 +21,7 @@ public enum Abilities {
 	}
 
 	private enum EarthbendingAbilities {
-		Catapult, RaiseEarth, EarthGrab, EarthTunnel, CompactColumn, EarthBlast, Collapse, Tremorsense, Shockwave;
+		Catapult, RaiseEarth, EarthGrab, EarthTunnel, CompactColumn, EarthBlast, Collapse, Tremorsense, Shockwave, EarthArmor;
 	}
 
 	private enum FirebendingAbilities {
@@ -27,7 +29,11 @@ public enum Abilities {
 	}
 
 	private enum WaterbendingAbilities {
-		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending;
+		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike;
+	}
+
+	private enum ChiBlockingAbilities {
+		HighJump, RapidPunch;
 	}
 
 	public static Abilities getAbility(String ability) {
@@ -105,6 +111,24 @@ public enum Abilities {
 		ArrayList<String> list = new ArrayList<String>();
 		for (Abilities a : Abilities.values()) {
 			if (isFirebending(a)) {
+				list.add(a.name());
+			}
+		}
+		return list.toArray(new String[list.size()]);
+	}
+
+	public static boolean isChiBlocking(Abilities ability) {
+		for (ChiBlockingAbilities a : ChiBlockingAbilities.values()) {
+			if (a.name().equalsIgnoreCase(ability.name()))
+				return true;
+		}
+		return false;
+	}
+
+	public static String[] getChiBlockingAbilities() {
+		ArrayList<String> list = new ArrayList<String>();
+		for (Abilities a : Abilities.values()) {
+			if (isChiBlocking(a)) {
 				list.add(a.name());
 			}
 		}

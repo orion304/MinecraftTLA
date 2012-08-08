@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import main.Metrics.Graph;
@@ -79,30 +80,34 @@ public class Bending extends JavaPlugin {
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
 	public static ConfigManager configManager = new ConfigManager();
-	public BendingPlayers config = new BendingPlayers(getDataFolder());
-	public Tools tools = new Tools(config);
+	public StorageManager config;
+	public Tools tools;
 
 	public String[] waterbendingabilities;
 	public String[] airbendingabilities;
 	public String[] earthbendingabilities;
 	public String[] firebendingabilities;
+	public String[] chiblockingabilities;
 
 	public void onDisable() {
 
-		Tools.writeToLog("-----Bending stopped-----");
-		Tools.writeToLog(null);
-
 		Fireball.removeAllFireballs();
 		Tools.stopAllBending();
-
 	}
 
 	public void onEnable() {
+
+		configManager.load(new File(getDataFolder(), "config.yml"));
+
+		config = new StorageManager(getDataFolder());
+
+		tools = new Tools(config);
 
 		waterbendingabilities = Abilities.getWaterbendingAbilities();
 		airbendingabilities = Abilities.getAirbendingAbilities();
 		earthbendingabilities = Abilities.getEarthbendingAbilities();
 		firebendingabilities = Abilities.getFirebendingAbilities();
+		chiblockingabilities = Abilities.getChiBlockingAbilities();
 
 		getServer().getPluginManager().registerEvents(listener, this);
 
@@ -110,8 +115,6 @@ public class Bending extends JavaPlugin {
 				1);
 
 		removeFireballs();
-
-		Tools.writeToLog("-----Bending loaded-----");
 
 		log.info("Bending v" + this.getDescription().getVersion()
 				+ " has been loaded.");
@@ -227,9 +230,12 @@ public class Bending extends JavaPlugin {
 			// Failed to submit the stats :-(
 		}
 
-		configManager.load(new File(getDataFolder(), "config.yml"));
-
 		registerCommands();
+
+		// if (ConfigManager.useMySQL)
+		// loadMySQL();
+		// else
+		// config = new BendingPlayers(getDataFolder());
 
 		// if (ConfigManager.useMySQL)
 		// loadMySQL();
@@ -299,10 +305,10 @@ public class Bending extends JavaPlugin {
 		if (cmd.getName().equalsIgnoreCase("bending")) {
 			if (Arrays.asList(args).isEmpty()) {
 				sender.sendMessage(ChatColor.RED
-						+ "Use /bending help <page> if you want to see a list of permissions.");
-				sender.sendMessage(ChatColor.DARK_RED
+						+ "Use /bending help <page> if you want to see a list of commands.");
+				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <ability> if you want to see how to use it.");
-				sender.sendMessage(ChatColor.DARK_RED
+				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <command> if you need help with a command.");
 				return true;
 			}
@@ -331,9 +337,23 @@ public class Bending extends JavaPlugin {
 					&& (sender.hasPermission("bending.admin.reload") || (player == null))) {
 				configManager
 						.load(new File(this.getDataFolder(), "config.yml"));
-				config.reload();
 				sender.sendMessage("Config reloaded");
 				return true;
+			}
+
+			if (args[0].equalsIgnoreCase("toggle") && args.length == 1
+					&& (sender.hasPermission("bending.command.toggle"))) {
+				if (!Tools.toggledBending.contains(player)) {
+					Tools.toggledBending.add(player);
+					player.sendMessage(ChatColor.AQUA
+							+ "You toggled your bending. You now can't use bending until you use that command again.");
+					return true;
+				} else {
+					Tools.toggledBending.remove(player);
+					player.sendMessage(ChatColor.AQUA
+							+ "You toggled you bending back. You can now use them freely again!");
+					return true;
+				}
 			}
 
 			if (args[0].equalsIgnoreCase("permaremove")
@@ -422,11 +442,11 @@ public class Bending extends JavaPlugin {
 					}
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
-					sender.sendMessage(ChatColor.DARK_RED
-							+ "Use /bending help <page> if you want to see a list of permissions.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
+							+ "Use /bending help <page> if you want to see a list of commands.");
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <command> if you need help with a command.");
 					return true;
 				}
@@ -435,11 +455,11 @@ public class Bending extends JavaPlugin {
 			if (args[0].equalsIgnoreCase("add")
 					&& (sender.hasPermission("bending.admin.add") || player == null)) {
 				if (args.length == 1) {
-					sender.sendMessage(ChatColor.DARK_RED
-							+ "Use /bending help <page> if you want to see a list of permissions.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
+							+ "Use /bending help <page> if you want to see a list of commands.");
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <command> if you need help with a command.");
 					return true;
 				}
@@ -546,11 +566,11 @@ public class Bending extends JavaPlugin {
 					}
 					sender.sendMessage("Usage: /bending add [player] [element]");
 				} else {
-					sender.sendMessage(ChatColor.DARK_RED
-							+ "Use /bending help <page> if you want to see a list of permissions.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
+							+ "Use /bending help <page> if you want to see a list of commands.");
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <ability> if you want to see how to use it.");
-					sender.sendMessage(ChatColor.DARK_RED
+					sender.sendMessage(ChatColor.RED
 							+ "Use /bending help <command> if you need help with a command.");
 					return true;
 				}
@@ -570,6 +590,8 @@ public class Bending extends JavaPlugin {
 						abilitylist = earthbendingabilities;
 					} else if (args[1].equalsIgnoreCase("fire")) {
 						abilitylist = firebendingabilities;
+					} else if (args[1].equalsIgnoreCase("chiblocker")) {
+						abilitylist = chiblockingabilities;
 					}
 
 					if (abilitylist != null) {
@@ -703,6 +725,20 @@ public class Bending extends JavaPlugin {
 					}
 					if (config.isBender(player, BendingType.Earth)
 							&& Abilities.isEarthbending(ability)
+							&& Tools.hasPermission(player, ability)) {
+						if (!ConfigManager.bendToItem) {
+							config.setAbility(player, ability, slot);
+							sender.sendMessage(ability.name()
+									+ " bound to slot " + (slot + 1));
+						} else {
+							config.setAbility(player, ability, mat);
+							sender.sendMessage(ability.name() + " bound to "
+									+ mat.name().replaceAll("_", " "));
+						}
+						return true;
+					}
+					if (config.isBender(player, BendingType.ChiBlocker)
+							&& Abilities.isChiBlocking(ability)
 							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
 							config.setAbility(player, ability, slot);
@@ -1041,12 +1077,67 @@ public class Bending extends JavaPlugin {
 					return true;
 				}
 			}
+			if (args[0].equalsIgnoreCase("import")
+					&& (sender.hasPermission("bending.command.import") || player == null)) {
+				if (StorageManager.useFlatFile) {
+					sender.sendMessage("MySQL needs to be enabled to import bendingPlayers");
+					return true;
+				}
+				BendingPlayers temp = new BendingPlayers(getDataFolder());
+				Set<String> keys = temp.getKeys();
+
+				for (String s : keys) {
+					if (s.contains("<")) {
+						String[] getplayername = s.split("<");
+						String playername = getplayername[0];
+						String[] getSetter = s.split("<");
+						String Setter = getSetter[1];
+						String binded = Setter.replace("Bind", "").replace(">",
+								"");
+						String ability = temp.getKey(s);
+						if ((binded.equalsIgnoreCase("0")
+								|| binded.equalsIgnoreCase("1")
+								|| binded.equalsIgnoreCase("2")
+								|| binded.equalsIgnoreCase("3")
+								|| binded.equalsIgnoreCase("4")
+								|| binded.equalsIgnoreCase("5")
+								|| binded.equalsIgnoreCase("6")
+								|| binded.equalsIgnoreCase("7") || binded
+									.equalsIgnoreCase("8"))) {
+							int slot = Integer.parseInt(binded);
+							config.setAbility(playername, ability, slot);
+						} else {
+							config.setAbility(playername, ability,
+									Material.matchMaterial(binded));
+						}
+					} else {
+						String playerName = s;
+						String bending = temp.getKey(s);
+						if (bending.contains("a"))
+							config.addBending(playerName, BendingType.Air);
+						if (bending.contains("w"))
+							config.addBending(playerName, BendingType.Water);
+						if (bending.contains("f"))
+							config.addBending(playerName, BendingType.Fire);
+						if (bending.contains("e"))
+							config.addBending(playerName, BendingType.Earth);
+						if (bending.contains("c"))
+							config.addBending(playerName,
+									BendingType.ChiBlocker);
+
+					}
+
+				}
+				temp = null;
+				sender.sendMessage("Imported BendingPlayers to MySQL.");
+				return true;
+			}
 		}
-		sender.sendMessage(ChatColor.DARK_RED
-				+ "Use /bending help <page> if you want to see a list of permissions.");
-		sender.sendMessage(ChatColor.DARK_RED
+		sender.sendMessage(ChatColor.RED
+				+ "Use /bending help <page> if you want to see a list of commands.");
+		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <ability> if you want to see how to use it.");
-		sender.sendMessage(ChatColor.DARK_RED
+		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <command> if you need help with a command.");
 		return true;
 

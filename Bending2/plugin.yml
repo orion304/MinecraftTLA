@@ -22,8 +22,8 @@ permissions:
       bending.air.Tornado: true
       bending.air.AirBlast: true
       bending.air.Passive: true
-      bending.air.AirSpout: false
-      bending.air.AirBurst: false
+#      bending.air.AirSpout: false
+#      bending.air.AirBurst: false
       bending.air.AirScooter: true
   bending.fire.*:
     description: Allows all fire bending.
@@ -38,7 +38,7 @@ permissions:
       bending.fire.RingOfFire: true
       bending.fire.Illumination: true
       bending.fire.WallOfFire: true
-      bending.fire.Lightning: false
+      bending.fire.Lightning: true
   bending.water.*:
     description: Allows all water bending.
     children:
@@ -51,8 +51,8 @@ permissions:
       bending.water.WaterWall: true
       bending.water.Wave: true
       bending.water.Passive: true
-      bending.water.WaterSpout: false
-      bending.water.Bloodbending: false
+ #     bending.water.WaterSpout: false
+ #     bending.water.Bloodbending: false
   bending.earth.*:
     description: Allows all earth bending.
     children:
@@ -65,7 +65,8 @@ permissions:
       bending.earth.Collapse: true
       bending.earth.Passive: true
       bending.earth.Tremorsense: true
-      bending.earth.Shockwave: false
+      bending.earth.EarthArmor: true;
+#      bending.earth.Shockwave: false
   bending.*:
     description: Allows all bending.
     children:
@@ -239,6 +240,9 @@ permissions:
     description: Allows the use of Shockwave.
 #    default: true
     default: false
+  bending.earth.EarthArmor:
+    description: Allows the use of EarthArmor
+    default: true
   bending.AvatarState:
     description: Allows the use of AvatarState.
     default: op

@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
 import main.BendingManager;
-import main.BendingPlayers;
+import main.StorageManager;
+import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
+import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,15 +51,15 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
+import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
 import firebending.FireStream;
-import firebending.Illumination;
 
 public class Tools {
 
-	private static BendingPlayers config;
+	private static StorageManager config;
 
 	private static final Map<String, ChatColor> colors;
 
@@ -77,9 +78,10 @@ public class Tools {
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
 	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
+	public static List<Player> toggledBending = new ArrayList<Player>();
 
-	public Tools(BendingPlayers instance) {
-		config = instance;
+	public Tools(StorageManager config2) {
+		config = config2;
 	}
 
 	public static HashSet<Byte> getTransparentEarthbending() {
@@ -183,7 +185,7 @@ public class Tools {
 	public static void moveEarth(Location location, Vector direction,
 			int chainlength) {
 		Block block = location.getBlock();
-		moveEarth(block, direction, chainlength);
+		moveEarth(block, direction, chainlength, true);
 		// if (isEarthbendable(block)) {
 		// Vector norm = direction.clone().normalize();
 		// Vector negnorm = norm.clone().multiply(-1);
@@ -218,6 +220,11 @@ public class Tools {
 	}
 
 	public static void moveEarth(Block block, Vector direction, int chainlength) {
+		moveEarth(block, direction, chainlength, true);
+	}
+
+	public static void moveEarth(Block block, Vector direction,
+			int chainlength, boolean throwplayer) {
 		// verbose("Moving earth");
 		// verbose(direction);
 		// verbose(isEarthbendable(block));
@@ -237,9 +244,11 @@ public class Tools {
 				return;
 			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(affectedblock)) {
-				for (Entity entity : getEntitiesAroundPoint(
-						affectedblock.getLocation(), 1.75)) {
-					entity.setVelocity(norm.clone().multiply(.75));
+				if (throwplayer) {
+					for (Entity entity : getEntitiesAroundPoint(
+							affectedblock.getLocation(), 1.75)) {
+						entity.setVelocity(norm.clone().multiply(.75));
+					}
 				}
 
 				affectedblock.setType(block.getType());
@@ -619,7 +628,7 @@ public class Tools {
 		Wave.removeAll();
 		AirScooter.removeAll();
 		FireStream.removeAll();
-		Illumination.removeAll();
+		EarthArmor.removeAll();
 		BendingManager.removeFlyers();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
@@ -640,43 +649,74 @@ public class Tools {
 				&& ability != Abilities.AvatarState)
 			return false;
 		if (hasPermission(player, ability)
-				&& !isRegionProtected(player, ability, true))
+				&& !isRegionProtected(player, ability, true)
+				&& !toggledBending(player))
 			return true;
 		return false;
 
 	}
 
+	public static boolean toggledBending(Player player) {
+		if (toggledBending.contains(player))
+			return true;
+		return false;
+	}
+
 	public static boolean isRegionProtected(Player player, Abilities ability,
 			boolean look) {
-		Plugin p = Bukkit.getPluginManager().getPlugin("WorldGuard");
-		if (p == null)
-			return false;
-		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
-				.getPlugin("WorldGuard");
-		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
-		// for (Block b: lb){
-		Block b = player.getLocation().getBlock();
-		if (!player.isOnline())
-			return false;
-		if (look) {
-			try {
-				int range = 20;
-				if (ability == Abilities.Fireball)
-					range = 100;
-				Block c = player.getTargetBlock(null, range);
-				if (!(wg.getGlobalRegionManager()
-						.get(c.getLocation().getWorld())
-						.getApplicableRegions(c.getLocation())
-						.allows(DefaultFlag.PVP))) {
-					return true;
-				}
-			} catch (IllegalStateException e) {
+		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
+		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
+		if (wgp != null) {
+			WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
+					.getPlugin("WorldGuard");
+			// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
+			// for (Block b: lb){
+			Block b = player.getLocation().getBlock();
+			if (!player.isOnline())
 				return false;
+			if (look) {
+				try {
+					int range = 20;
+					if (ability == Abilities.Fireball)
+						range = 100;
+					Block c = player.getTargetBlock(null, range);
+					if (!(wg.getGlobalRegionManager()
+							.get(c.getLocation().getWorld())
+							.getApplicableRegions(c.getLocation())
+							.allows(DefaultFlag.PVP))) {
+						return true;
+					}
+				} catch (IllegalStateException e) {
+					return false;
+				}
+			}
+			if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
+					.getApplicableRegions(b.getLocation())
+					.allows(DefaultFlag.PVP))) {
+				return true;
 			}
 		}
-		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
-				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
-			return true;
+
+		if (psp != null) {
+			PreciousStones ps = (PreciousStones) psp;
+			Block b = player.getLocation().getBlock();
+
+			if (look) {
+				try {
+					int range = 20;
+					if (ability == Abilities.Fireball)
+						range = 100;
+					Block c = player.getTargetBlock(null, range);
+					return ps.getForceFieldManager().hasSourceField(
+							c.getLocation(), FieldFlag.PREVENT_PVP);
+				} catch (IllegalStateException e) {
+					return false;
+				}
+
+			}
+
+			return ps.getForceFieldManager().hasSourceField(b.getLocation(),
+					FieldFlag.PREVENT_PVP);
 		}
 
 		// EntityDamageByEntityEvent damageEvent = new
@@ -724,6 +764,10 @@ public class Tools {
 		}
 		if (Abilities.isFirebending(ability)
 				&& player.hasPermission("bending.fire." + ability)) {
+			return true;
+		}
+		if (Abilities.isChiBlocking(ability)
+				&& player.hasPermission("bending.chiblocker." + ability)) {
 			return true;
 		}
 		return false;
@@ -859,39 +903,9 @@ public class Tools {
 	}
 
 	public static <T> void writeToLog(T something) {
-		Calendar cal = Calendar.getInstance();
-		int month, day, year, hour, minute, second;
-		String Month, Day, Year, Hour, Minute, Second;
-
-		month = cal.get(Calendar.MONTH);
-		day = cal.get(Calendar.DAY_OF_MONTH);
-		year = cal.get(Calendar.YEAR);
-		hour = cal.get(Calendar.HOUR_OF_DAY);
-		minute = cal.get(Calendar.MINUTE);
-		second = cal.get(Calendar.SECOND);
-
-		Month = "" + month;
-		Day = "" + day;
-		Year = "" + year;
-
-		Hour = "" + hour;
-		if (hour < 10)
-			Hour = "0" + hour;
-
-		Minute = "" + minute;
-		if (minute < 10)
-			Minute = "0" + minute;
-
-		Second = "" + second;
-		if (second < 10)
-			Second = "0" + second;
-
-		String Time = "[" + Month + "/" + Day + "/" + Year + " " + Hour + ":"
-				+ Minute + ":" + Second + "]";
-
 		String string = "";
 		if (something != null) {
-			string = Time + " " + something.toString();
+			string = something.toString();
 		}
 		try {
 			FileWriter fstream = new FileWriter("bending.log", true);
@@ -903,6 +917,15 @@ public class Tools {
 			System.err.println("Error: " + e.getMessage());
 		}
 
+	}
+
+	public static void removeBlock(Block block) {
+		if (adjacentToThreeOrMoreSources(block)) {
+			block.setType(Material.WATER);
+			block.setData((byte) 0x0);
+		} else {
+			block.setType(Material.AIR);
+		}
 	}
 
 	static {

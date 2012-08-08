@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.server.EntityFireball;
@@ -39,8 +40,10 @@ import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Speed;
 import airbending.Tornado;
+import chiblocking.RapidPunch;
 import earthbending.Catapult;
 import earthbending.CompactColumn;
+import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
@@ -51,6 +54,7 @@ import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
 import firebending.Illumination;
+import firebending.Lightning;
 import firebending.WallOfFire;
 
 public class BendingManager implements Runnable {
@@ -87,6 +91,7 @@ public class BendingManager implements Runnable {
 		manageEarthbending();
 		manageFirebending();
 		manageWaterbending();
+		manageChiBlocking();
 		// manageMessages();
 		AvatarState.manageAvatarStates();
 		handleFlying();
@@ -152,6 +157,12 @@ public class BendingManager implements Runnable {
 		for (Player player : EarthTunnel.instances.keySet()) {
 			EarthTunnel.progress(player);
 		}
+
+		for (Player player : EarthArmor.instances.keySet()) {
+			EarthArmor.moveArmor(player);
+		}
+		// for (String player : EarthArmor.durations.keySet())
+		// EarthArmor.removeEffect(Bukkit.getPlayer(player));
 
 		EarthPassive.revertSands();
 
@@ -230,6 +241,8 @@ public class BendingManager implements Runnable {
 			WallOfFire.manageWallOfFire(ID);
 		}
 
+		Lightning.progressAll();
+
 		FireBlast.progressAll();
 
 		FireJet.progressAll();
@@ -238,6 +251,11 @@ public class BendingManager implements Runnable {
 
 		Illumination.manage(plugin.getServer());
 
+	}
+
+	private void manageChiBlocking() {
+		for (Player p : RapidPunch.targets.keySet())
+			RapidPunch.startPunch(p);
 	}
 
 	private void manageWaterbending() {
@@ -259,6 +277,12 @@ public class BendingManager implements Runnable {
 			Wave.progress(ID);
 		}
 
+		// for (Player player : IceSpike.removeTimers.keySet()) {
+		// if (IceSpike.removeTimers.get(player) + IceSpike.removeTimer <=
+		// System.currentTimeMillis())
+		// IceSpike.restore(player);
+		// }
+
 		Bloodbending.progressAll();
 
 		HealingWaters.heal(plugin.getServer());
@@ -274,20 +298,17 @@ public class BendingManager implements Runnable {
 		ArrayList<Player> newflyingplayers = new ArrayList<Player>();
 		ArrayList<Player> avatarstateplayers = new ArrayList<Player>();
 		ArrayList<Player> airscooterplayers = new ArrayList<Player>();
-		// ArrayList<Player> waterspoutplayers = new ArrayList<Player>();
 
 		players.addAll(Tornado.getPlayers());
 		players.addAll(Speed.getPlayers());
 		players.addAll(FireJet.getPlayers());
 		avatarstateplayers = AvatarState.getPlayers();
 		airscooterplayers = AirScooter.getPlayers();
-		// waterspoutplayers = WaterSpout.getPlayers();
 		players.addAll(avatarstateplayers);
 
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			if (avatarstateplayers.contains(player)
 					|| airscooterplayers.contains(player)) {
-				// || waterspoutplayers.contains(player)) {
 				continue;
 			}
 			if (Bloodbending.isBloodbended(player)) {
@@ -557,6 +578,11 @@ public class BendingManager implements Runnable {
 			if (ability == Abilities.Wave)
 				waveplayers++;
 		}
+
+		Tools.writeToLog("Debug data at "
+				+ Calendar.getInstance().get(Calendar.HOUR) + "h "
+				+ Calendar.getInstance().get(Calendar.MINUTE) + "m "
+				+ Calendar.getInstance().get(Calendar.SECOND) + "s");
 
 		verbose("airblasts", airblasts, airblastplayers, false);
 		verbose("airbubbles", airbubbles, airbubbleplayers, true);

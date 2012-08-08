@@ -106,7 +106,8 @@ public class AirBlast {
 
 				net.minecraft.server.Block.byId[block.getTypeId()].interact(
 						((CraftWorld) block.getWorld()).getHandle(),
-						block.getX(), block.getY(), block.getZ(), eH);
+						block.getX(), block.getY(), block.getZ(), eH, 0, 0, 0,
+						0);
 
 				affectedlevers.add(block);
 			}
