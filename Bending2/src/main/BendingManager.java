@@ -544,7 +544,7 @@ public class BendingManager implements Runnable {
 				tremorsenseplayers++;
 			// if (ability==Abilities.Shockwave) shockwaveplayers++;
 
-			if (ability == Abilities.ArcOfFire)
+			if (ability == Abilities.Blaze)
 				firestreamplayers++;
 			if (ability == Abilities.Fireball)
 				fireballplayers++;
@@ -555,8 +555,6 @@ public class BendingManager implements Runnable {
 			if (Tools.hasAbility(player, Abilities.Illumination))
 				illuminationplayers++;
 			// if (ability==Abilities.Lightning) lightningplayers++;
-			if (ability == Abilities.RingOfFire)
-				firestreamplayers++;
 			if (ability == Abilities.WallOfFire)
 				walloffireplayers++;
 

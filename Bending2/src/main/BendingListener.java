@@ -316,12 +316,8 @@ public class BendingListener implements Listener {
 					new Extinguish(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.ArcOfFire) {
+				if (Tools.getBendingAbility(player) == Abilities.Blaze) {
 					new ArcOfFire(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.RingOfFire) {
-					new RingOfFire(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.HeatMelt) {
@@ -475,6 +471,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.Lightning) {
 				new Lightning(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.Blaze) {
+				new RingOfFire(player);
 			}
 
 		}

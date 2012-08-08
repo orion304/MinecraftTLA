@@ -50,8 +50,10 @@ public class ArcOfFire {
 
 	public static String getDescription() {
 		return "To use, simply left-click in any direction. "
-				+ "An entire arc of fire will flow from your location, "
-				+ "igniting anything in its path.";
+				+ "An arc of fire will flow from your location, "
+				+ "igniting anything in its path."
+				+ " Additionally, tap sneak to engulf the area around you "
+				+ "in roaring flames.";
 	}
 
 }

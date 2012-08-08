@@ -61,7 +61,6 @@ import firebending.Fireball;
 import firebending.HeatMelt;
 import firebending.Illumination;
 import firebending.Lightning;
-import firebending.RingOfFire;
 import firebending.WallOfFire;
 
 public class Bending extends JavaPlugin {
@@ -885,7 +884,7 @@ public class Bending extends JavaPlugin {
 							// sender.sendMessage(cc
 							// + Shockwave.getDescription());
 							// break;
-							case ArcOfFire:
+							case Blaze:
 								sender.sendMessage(cc
 										+ ArcOfFire.getDescription());
 								break;
@@ -905,10 +904,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ HeatMelt.getDescription());
 								break;
-							case RingOfFire:
-								sender.sendMessage(cc
-										+ RingOfFire.getDescription());
-								break;
+							// case RingOfFire:
+							// sender.sendMessage(cc
+							// + RingOfFire.getDescription());
+							// break;
 							case FireJet:
 								sender.sendMessage(cc
 										+ FireJet.getDescription());
