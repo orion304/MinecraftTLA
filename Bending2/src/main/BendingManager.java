@@ -285,7 +285,7 @@ public class BendingManager implements Runnable {
 		}
 		
 		for (int ID : IceSpike.instances.keySet()) {
-			IceSpike.progress(ID);
+			IceSpike.instances.get(ID).progress();
 		}
 		
 		//for (Player player : IceSpike.removeTimers.keySet()) {
