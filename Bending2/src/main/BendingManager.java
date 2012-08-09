@@ -27,7 +27,6 @@ import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
-import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
 import waterbending.WaterSpout;
@@ -260,7 +259,7 @@ public class BendingManager implements Runnable {
 	}
 
 	private void manageWaterbending() {
-		WalkOnWater.handleFreezing(plugin.getServer());
+		// WalkOnWater.handleFreezing(plugin.getServer());
 
 		FreezeMelt.handleFrozenBlocks();
 
@@ -297,17 +296,20 @@ public class BendingManager implements Runnable {
 		ArrayList<Player> newflyingplayers = new ArrayList<Player>();
 		ArrayList<Player> avatarstateplayers = new ArrayList<Player>();
 		ArrayList<Player> airscooterplayers = new ArrayList<Player>();
+		ArrayList<Player> waterspoutplayers = new ArrayList<Player>();
 
 		players.addAll(Tornado.getPlayers());
 		players.addAll(Speed.getPlayers());
 		players.addAll(FireJet.getPlayers());
 		avatarstateplayers = AvatarState.getPlayers();
 		airscooterplayers = AirScooter.getPlayers();
-		players.addAll(avatarstateplayers);
+		waterspoutplayers = WaterSpout.getPlayers();
+		// players.addAll(avatarstateplayers);
 
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			if (avatarstateplayers.contains(player)
-					|| airscooterplayers.contains(player)) {
+					|| airscooterplayers.contains(player)
+					|| waterspoutplayers.contains(player)) {
 				continue;
 			}
 			if (Bloodbending.isBloodbended(player)) {
@@ -530,8 +532,8 @@ public class BendingManager implements Runnable {
 				catapultplayers++;
 			if (ability == Abilities.Collapse)
 				compactcolumnplayers++;
-			if (ability == Abilities.CompactColumn)
-				compactcolumnplayers++;
+			// if (ability == Abilities.CompactColumn)
+			// compactcolumnplayers++;
 			if (ability == Abilities.EarthBlast)
 				earthblastplayers++;
 			if (ability == Abilities.RaiseEarth)
@@ -544,7 +546,7 @@ public class BendingManager implements Runnable {
 				tremorsenseplayers++;
 			// if (ability==Abilities.Shockwave) shockwaveplayers++;
 
-			if (ability == Abilities.ArcOfFire)
+			if (ability == Abilities.Blaze)
 				firestreamplayers++;
 			if (ability == Abilities.Fireball)
 				fireballplayers++;
@@ -555,8 +557,6 @@ public class BendingManager implements Runnable {
 			if (Tools.hasAbility(player, Abilities.Illumination))
 				illuminationplayers++;
 			// if (ability==Abilities.Lightning) lightningplayers++;
-			if (ability == Abilities.RingOfFire)
-				firestreamplayers++;
 			if (ability == Abilities.WallOfFire)
 				walloffireplayers++;
 
@@ -564,8 +564,8 @@ public class BendingManager implements Runnable {
 				bloodbendingplayers++;
 			if (Tools.hasAbility(player, Abilities.FreezeMelt))
 				freezemeltplayers++;
-			if (ability == Abilities.WalkOnWater)
-				freezemeltplayers++;
+			// if (ability == Abilities.WalkOnWater)
+			// freezemeltplayers++;
 			if (ability == Abilities.WaterBubble)
 				airbubbleplayers++;
 			if (ability == Abilities.WaterManipulation)

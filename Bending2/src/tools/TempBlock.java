@@ -38,6 +38,8 @@ public class TempBlock {
 			block.setData(newdata);
 			instances.put(block, this);
 		}
+		if (type == Material.FIRE)
+			type = Material.AIR;
 	}
 
 	public void revertBlock() {

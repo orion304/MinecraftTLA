@@ -38,29 +38,26 @@ import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.Plantbending;
-import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
-import airbending.AirBurst;
 import airbending.AirScooter;
 import airbending.AirShield;
-import airbending.AirSpout;
 import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Tornado;
+import chiblocking.HighJump;
+import chiblocking.RapidPunch;
 import earthbending.Catapult;
 import earthbending.Collapse;
-import earthbending.CompactColumn;
 import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthGrab;
 import earthbending.EarthTunnel;
-import earthbending.Shockwave;
 import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
@@ -70,7 +67,6 @@ import firebending.Fireball;
 import firebending.HeatMelt;
 import firebending.Illumination;
 import firebending.Lightning;
-import firebending.RingOfFire;
 import firebending.WallOfFire;
 
 public class Bending extends JavaPlugin {
@@ -826,14 +822,14 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ AirScooter.getDescription());
 								break;
-							case AirBurst:
-								sender.sendMessage(cc
-										+ AirBurst.getDescription());
-								break;
-							case AirSpout:
-								sender.sendMessage(cc
-										+ AirSpout.getDescription());
-								break;
+							// case AirBurst:
+							// sender.sendMessage(cc
+							// + AirBurst.getDescription());
+							// break;
+							// case AirSpout:
+							// sender.sendMessage(cc
+							// + AirSpout.getDescription());
+							// break;
 							case Catapult:
 								sender.sendMessage(cc
 										+ Catapult.getDescription());
@@ -850,10 +846,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ EarthTunnel.getDescription());
 								break;
-							case CompactColumn:
-								sender.sendMessage(cc
-										+ CompactColumn.getDescription());
-								break;
+							// case CompactColumn:
+							// sender.sendMessage(cc
+							// + CompactColumn.getDescription());
+							// break;
 							case EarthBlast:
 								sender.sendMessage(cc
 										+ EarthBlast.getDescription());
@@ -866,11 +862,11 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ Tremorsense.getDescription());
 								break;
-							case Shockwave:
-								sender.sendMessage(cc
-										+ Shockwave.getDescription());
-								break;
-							case ArcOfFire:
+							// case Shockwave:
+							// sender.sendMessage(cc
+							// + Shockwave.getDescription());
+							// break;
+							case Blaze:
 								sender.sendMessage(cc
 										+ ArcOfFire.getDescription());
 								break;
@@ -890,10 +886,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ HeatMelt.getDescription());
 								break;
-							case RingOfFire:
-								sender.sendMessage(cc
-										+ RingOfFire.getDescription());
-								break;
+							// case RingOfFire:
+							// sender.sendMessage(cc
+							// + RingOfFire.getDescription());
+							// break;
 							case FireJet:
 								sender.sendMessage(cc
 										+ FireJet.getDescription());
@@ -930,10 +926,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ Plantbending.getDescription());
 								break;
-							case WalkOnWater:
-								sender.sendMessage(cc
-										+ WalkOnWater.getDescription());
-								break;
+							// case WalkOnWater:
+							// sender.sendMessage(cc
+							// + WalkOnWater.getDescription());
+							// break;
 							case WaterManipulation:
 								sender.sendMessage(cc
 										+ WaterManipulation.getDescription());
@@ -956,6 +952,14 @@ public class Bending extends JavaPlugin {
 							case EarthArmor:
 								sender.sendMessage(cc
 										+ EarthArmor.getDescription());
+								break;
+							case RapidPunch:
+								sender.sendMessage(cc
+										+ RapidPunch.getDescription());
+								break;
+							case HighJump:
+								sender.sendMessage(cc
+										+ HighJump.getDescription());
 								break;
 							}
 							return true;

@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -48,9 +49,14 @@ public class Lightning {
 		Entity target = Tools.getTargettedEntity(player, distance);
 		if (target == null) {
 			if (target instanceof LivingEntity) {
-				targetlocation = target.getLocation().add(0, -2, 0);
+				targetlocation = target.getLocation();
 			}
 		}
+
+		if (targetlocation.getBlock().getType() == Material.AIR)
+			targetlocation.add(0, -1, 0);
+		if (targetlocation.getBlock().getType() == Material.AIR)
+			targetlocation.add(0, -1, 0);
 
 		if (misschance != 0 && !AvatarState.isAvatarState(player)) {
 			double A = Math.random() * Math.PI * misschance * misschance;

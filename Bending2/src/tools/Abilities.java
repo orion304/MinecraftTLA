@@ -4,32 +4,32 @@ import java.util.ArrayList;
 
 public enum Abilities {
 
-	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirBurst, AirSpout,
+	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirSpout, // AirBurst,
 
-	Catapult, RaiseEarth, EarthGrab, EarthTunnel, CompactColumn, EarthBlast, Collapse, Tremorsense, Shockwave, EarthArmor,
+	Catapult, RaiseEarth, EarthGrab, EarthTunnel, EarthBlast, Collapse, Tremorsense, EarthArmor, // Shockwave,
 
-	ArcOfFire, Extinguish, Fireball, HeatMelt, RingOfFire, FireJet, Illumination, WallOfFire, FireBlast, Lightning,
+	Extinguish, Fireball, HeatMelt, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning,
 
-	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike,
+	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WaterManipulation, WaterWall, Wave, Bloodbending, WaterSpout, IceSpike,
 
 	HighJump, RapidPunch,
 
 	AvatarState;
 
 	private enum AirbendingAbilities {
-		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Speed, Tornado, AirScooter, AirBurst, AirSpout;
+		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirBurst, AirSpout;
 	}
 
 	private enum EarthbendingAbilities {
-		Catapult, RaiseEarth, EarthGrab, EarthTunnel, CompactColumn, EarthBlast, Collapse, Tremorsense, Shockwave, EarthArmor;
+		Catapult, RaiseEarth, EarthGrab, EarthTunnel, EarthBlast, Collapse, Tremorsense, Shockwave, EarthArmor;
 	}
 
 	private enum FirebendingAbilities {
-		ArcOfFire, Extinguish, Fireball, HeatMelt, RingOfFire, FireJet, Illumination, WallOfFire, FireBlast, Lightning;
+		Extinguish, Fireball, HeatMelt, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning;
 	}
 
 	private enum WaterbendingAbilities {
-		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike;
+		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WaterManipulation, WaterWall, Wave, Bloodbending, IceSpike, WaterSpout;
 	}
 
 	private enum ChiBlockingAbilities {

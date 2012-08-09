@@ -37,8 +37,8 @@ public class WaterSpout {
 			return;
 		}
 		this.player = player;
-		// player.setAllowFlight(true);
-		// player.setFlying(true);
+		player.setAllowFlight(true);
+		player.setFlying(true);
 		instances.put(player, this);
 	}
 
@@ -102,14 +102,14 @@ public class WaterSpout {
 		// .multiply(threshold * .5));
 		// }
 		player.removePotionEffect(PotionEffectType.SPEED);
-		Location location = player.getLocation().clone().add(0, .5, 0);
-		Block block;
+		Location location = player.getLocation().clone().add(0, .2, 0);
+		Block block = location.clone().getBlock();
 		int height = spoutableWaterHeight(location, player);
-		location = spout.base.getLocation();
 
 		// Tools.verbose(height + " " + WaterSpout.height + " "
 		// + affectedblocks.size());
 		if (height != -1) {
+			location = spout.base.getLocation();
 			for (int i = 1; i <= height; i++) {
 				block = location.clone().add(0, i, 0).getBlock();
 				if (!TempBlock.isTempBlock(block)) {
@@ -121,6 +121,11 @@ public class WaterSpout {
 					affectedblocks.put(block, block);
 				}
 				newaffectedblocks.put(block, block);
+			}
+			if (player.getLocation().getBlockY() > block.getY()) {
+				player.setFlying(false);
+			} else {
+				player.setFlying(true);
 			}
 		} else {
 			instances.get(player).remove();
@@ -204,7 +209,7 @@ public class WaterSpout {
 		return "To use this ability, click while over or in water. "
 				+ "You will spout water up from beneath you to experience controlled levitation. "
 				+ "This ability is a toggle, so you can activate it then use other abilities and it "
-				+ "will remain on. If you go too high or try to spout over an area with no water, snow or ice, "
+				+ "will remain on. If you try to spout over an area with no water, snow or ice, "
 				+ "the spout will dissipate and you will fall. Click again with this ability selected to deactivate it.";
 	}
 }

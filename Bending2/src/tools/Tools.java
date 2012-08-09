@@ -46,7 +46,6 @@ import tools.Information;
 import tools.TempBlock;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
-import waterbending.WalkOnWater;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
@@ -644,7 +643,7 @@ public class Tools {
 		EarthColumn.removeAll();
 		EarthPassive.removeAll();
 		FreezeMelt.removeAll();
-		WalkOnWater.removeAll();
+		// WalkOnWater.removeAll();
 		WaterSpout.removeAll();
 		WaterWall.removeAll();
 		Wave.removeAll();
@@ -793,7 +792,7 @@ public class Tools {
 			return true;
 		}
 		if (Abilities.isChiBlocking(ability)
-				&& player.hasPermission("bending.chiblocker." + ability)) {
+				&& player.hasPermission("bending.chiblocking." + ability)) {
 			return true;
 		}
 		return false;

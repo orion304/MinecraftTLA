@@ -43,4 +43,8 @@ public class HighJump {
 			return;
 		}
 	}
+
+	public static String getDescription() {
+		return "To use this ability, simply click. You will jump quite high. This ability has a short cooldown.";
+	}
 }

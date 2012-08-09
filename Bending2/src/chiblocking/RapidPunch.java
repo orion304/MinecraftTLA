@@ -92,7 +92,12 @@ public class RapidPunch {
 		for (Player observer : p.getWorld().getPlayers())
 			((CraftPlayer) observer).getHandle().netServerHandler
 					.sendPacket(packet);
-		Tools.verbose("Swingning" + p.getName());
+		// Tools.verbose("Swingning" + p.getName());
+	}
+
+	public static String getDescription() {
+		return "This ability allows the chiblocker to punch rapidly in a short period. To use, simply punch."
+				+ " This has a short cooldown.";
 	}
 
 }
