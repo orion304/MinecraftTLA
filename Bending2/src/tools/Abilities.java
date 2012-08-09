@@ -18,7 +18,7 @@ public enum Abilities {
 	AvatarState;
 
 	private enum AirbendingAbilities {
-		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Speed, Tornado, AirScooter, AirBurst, AirSpout;
+		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirBurst, AirSpout;
 	}
 
 	private enum EarthbendingAbilities {
