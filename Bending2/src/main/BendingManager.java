@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.server.EntityFireball;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -77,8 +76,8 @@ public class BendingManager implements Runnable {
 	ConcurrentHashMap<World, Boolean> nights = new ConcurrentHashMap<World, Boolean>();
 	ConcurrentHashMap<World, Boolean> days = new ConcurrentHashMap<World, Boolean>();
 
-	public BendingManager(Bending instance) {
-		plugin = instance;
+	public BendingManager(Bending bending) {
+		plugin = bending;
 		time = System.currentTimeMillis();
 		verbosetime = System.currentTimeMillis();
 		reverttime = time;
@@ -160,12 +159,10 @@ public class BendingManager implements Runnable {
 		for (Player player : EarthTunnel.instances.keySet()) {
 			EarthTunnel.progress(player);
 		}
-		
-		for (Player player : EarthArmor.movingArmor.keySet()){
+
+		for (Player player : EarthArmor.instances.keySet()) {
 			EarthArmor.moveArmor(player);
 		}
-		//for (String player : EarthArmor.durations.keySet())
-		//	EarthArmor.removeEffect(Bukkit.getPlayer(player));
 
 		EarthPassive.revertSands();
 
@@ -244,11 +241,8 @@ public class BendingManager implements Runnable {
 			WallOfFire.manageWallOfFire(ID);
 		}
 		
-		for (int ID : Lightning.instances.keySet()) {
-			Lightning.ChargingLightning(ID);
-			Lightning.progress(ID);
-		}
-		
+
+		Lightning.progressAll();
 
 		FireBlast.progressAll();
 
@@ -259,7 +253,7 @@ public class BendingManager implements Runnable {
 		Illumination.manage(plugin.getServer());
 
 	}
-	
+
 	private void manageChiBlocking() {
 		for (Player p : RapidPunch.targets.keySet())
 			RapidPunch.startPunch(p);
@@ -288,11 +282,6 @@ public class BendingManager implements Runnable {
 			IceSpike.instances.get(ID).progress();
 		}
 		
-		//for (Player player : IceSpike.removeTimers.keySet()) {
-		//	if (IceSpike.removeTimers.get(player) + IceSpike.removeTimer <= System.currentTimeMillis())
-		//		IceSpike.restore(player);
-		//}
-
 		Bloodbending.progressAll();
 
 		HealingWaters.heal(plugin.getServer());
@@ -372,7 +361,7 @@ public class BendingManager implements Runnable {
 			boolean day = days.get(world);
 			if (Tools.isDay(world) && !day) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Fire))
+					if (Tools.isBender(player.getName(), BendingType.Fire))
 						player.sendMessage(ChatColor.RED
 								+ "You feel the strength of the rising sun empowering your firebending.");
 				}
@@ -381,7 +370,7 @@ public class BendingManager implements Runnable {
 
 			if (!Tools.isDay(world) && day) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Fire))
+					if (Tools.isBender(player.getName(), BendingType.Fire))
 						player.sendMessage(ChatColor.RED
 								+ "You feel the empowering of your firebending subside as the sun sets.");
 				}
@@ -390,7 +379,7 @@ public class BendingManager implements Runnable {
 
 			if (Tools.isNight(world) && !night) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Water))
+					if (Tools.isBender(player.getName(), BendingType.Water))
 						player.sendMessage(ChatColor.BLUE
 								+ "You feel the strength of the rising moon empowering your waterbending.");
 				}
@@ -399,7 +388,7 @@ public class BendingManager implements Runnable {
 
 			if (!Tools.isNight(world) && night) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Water))
+					if (Tools.isBender(player.getName(), BendingType.Water))
 						player.sendMessage(ChatColor.BLUE
 								+ "You feel the empowering of your waterbending subside as the moon sets.");
 				}

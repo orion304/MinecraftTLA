@@ -8,9 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import main.BendingListener;
+import main.BendingManager;
+import main.BendingPlayers;
+import main.Metrics;
 import main.Metrics.Graph;
+import main.StorageManager;
 import net.minecraft.server.EntityFireball;
 
 import org.bukkit.Bukkit;
@@ -23,8 +29,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffectType;
-
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
@@ -78,6 +82,7 @@ public class Bending extends JavaPlugin {
 	public final BendingListener listener = new BendingListener(this);
 
 	private static Map<String, String> commands = new HashMap<String, String>();
+	public static ConcurrentHashMap<String, List<BendingType>> benders = new ConcurrentHashMap<String, List<BendingType>>();
 
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
@@ -95,20 +100,21 @@ public class Bending extends JavaPlugin {
 
 		Fireball.removeAllFireballs();
 		Tools.stopAllBending();
-		for (String s : EarthArmor.durations.keySet()){
-			EarthArmor.removeEffect(Bukkit.getPlayer(s));
-			Bukkit.getPlayer(s).removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-		}
-
 	}
 
 	public void onEnable() {
-		
+
 		configManager.load(new File(getDataFolder(), "config.yml"));
-		
+
 		config = new StorageManager(getDataFolder());
 
 		tools = new Tools(config);
+
+		tools = new Tools(config);
+		
+		for (OfflinePlayer player: Bukkit.getOfflinePlayers()){
+			benders.put(player.getName(), config.getBendingTypes(player.getName()));
+		}
 		
 		waterbendingabilities = Abilities.getWaterbendingAbilities();
 		airbendingabilities = Abilities.getAirbendingAbilities();
@@ -138,7 +144,7 @@ public class Bending extends JavaPlugin {
 					int i = 0;
 					for (OfflinePlayer p : Bukkit.getServer()
 							.getOfflinePlayers()) {
-						if (config.isBender(p.getName(), BendingType.Air))
+						if (Tools.isBender(p.getName(), BendingType.Air))
 							i++;
 					}
 					return i;
@@ -153,7 +159,7 @@ public class Bending extends JavaPlugin {
 					int i = 0;
 					for (OfflinePlayer p : Bukkit.getServer()
 							.getOfflinePlayers()) {
-						if (config.isBender(p.getName(), BendingType.Fire))
+						if (Tools.isBender(p.getName(), BendingType.Fire))
 							i++;
 					}
 					return i;
@@ -168,7 +174,7 @@ public class Bending extends JavaPlugin {
 					int i = 0;
 					for (OfflinePlayer p : Bukkit.getServer()
 							.getOfflinePlayers()) {
-						if (config.isBender(p.getName(), BendingType.Water))
+						if (Tools.isBender(p.getName(), BendingType.Water))
 							i++;
 					}
 					return i;
@@ -183,7 +189,7 @@ public class Bending extends JavaPlugin {
 					int i = 0;
 					for (OfflinePlayer p : Bukkit.getServer()
 							.getOfflinePlayers()) {
-						if (config.isBender(p.getName(), BendingType.Earth))
+						if (Tools.isBender(p.getName(), BendingType.Earth))
 							i++;
 					}
 					return i;
@@ -198,7 +204,7 @@ public class Bending extends JavaPlugin {
 					int i = 0;
 					for (OfflinePlayer p : Bukkit.getServer()
 							.getOfflinePlayers()) {
-						if (config.isBender(p.getName(), BendingType.ChiBlocker))
+						if (Tools.isBender(p.getName(), BendingType.ChiBlocker))
 							i++;
 					}
 					return i;
@@ -214,15 +220,15 @@ public class Bending extends JavaPlugin {
 					for (OfflinePlayer p : Bukkit.getServer()
 							.getOfflinePlayers()) {
 
-						if (!config.isBender(p.getName(),
+						if (!Tools.isBender(p.getName(),
 								BendingType.ChiBlocker)
-								&& !config.isBender(p.getName(),
+								&& !Tools.isBender(p.getName(),
 										BendingType.Air)
-								&& !config.isBender(p.getName(),
+								&& !Tools.isBender(p.getName(),
 										BendingType.Fire)
-								&& !config.isBender(p.getName(),
+								&& !Tools.isBender(p.getName(),
 										BendingType.Water)
-								&& !config.isBender(p.getName(),
+								&& !Tools.isBender(p.getName(),
 										BendingType.Earth))
 							i++;
 					}
@@ -238,40 +244,8 @@ public class Bending extends JavaPlugin {
 		}
 
 		registerCommands();
-		
-		//if (ConfigManager.useMySQL)
-		//	loadMySQL();
-		//else
-		//	config = new BendingPlayers(getDataFolder());
-
-		// if (ConfigManager.useMySQL)
-		// loadMySQL();
-		// else
-		// config = new BendingPlayers(getDataFolder());
 
 	}
-
-	// private void loadMySQL() {
-	// MySQL mysql = new MySQL(log, "[Bending]", ConfigManager.dbHost,
-	// ConfigManager.dbPort, ConfigManager.dbDB, ConfigManager.dbUser,
-	// ConfigManager.dbPass);
-	// try{
-	// mysql.open();
-	// }catch(Exception e){
-	// Tools.verbose("MySQL connection failed");
-	// }
-	// if (mysql.checkConnection()) {
-	// log.info("[Bending]" + "MySQL connection successful");
-	// if (!mysql.checkTable("Bending")) {
-	// log.info("[Bending]" + "Creating table bending...");
-	// String query =
-	// "CREATE TABLE IF NOT EXISTS Bending ('player' TEXT NOT NULL, 'bending' TEXT NOT NULL) ;";
-	// mysql.createTable(query);
-	// }
-	// } else {
-	// log.severe("[Bending]" + "MySQL connection failed");
-	// }
-	// }
 
 	public void reloadConfiguration() {
 		getConfig().options().copyDefaults(true);
@@ -344,10 +318,12 @@ public class Bending extends JavaPlugin {
 					&& (sender.hasPermission("bending.admin.reload") || (player == null))) {
 				configManager
 						.load(new File(this.getDataFolder(), "config.yml"));
-				sender.sendMessage("Config reloaded");
+				config.initialize(getDataFolder());
+				String append = StorageManager.useMySQL ? " Database" : "Players file";
+				sender.sendMessage(ChatColor.AQUA + "Config and Bending" + append + " was reloaded");
 				return true;
 			}
-			
+
 			if (args[0].equalsIgnoreCase("toggle")
 					&& args.length == 1
 					&& (sender.hasPermission("bending.command.toggle"))) {
@@ -390,7 +366,7 @@ public class Bending extends JavaPlugin {
 						sender.sendMessage("That command cannot be used from the console");
 						return true;
 					}
-					if (config.isBender(player)
+					if (Tools.isBender(player.getName())
 							&& !sender.hasPermission("bending.admin.rechoose")) {
 						sender.sendMessage("You've already chosen your bending abilities. Only ops can change this now.");
 						return true;
@@ -475,23 +451,23 @@ public class Bending extends JavaPlugin {
 						return true;
 					}
 					if (args[1].equalsIgnoreCase("water")
-							&& Tools.isBender(player, BendingType.Water)) {
+							&& Tools.isBender(player.getName(), BendingType.Water)) {
 						sender.sendMessage("You are already a waterbender!");
 						return true;
 					} else if (args[1].equalsIgnoreCase("air")
-							&& Tools.isBender(player, BendingType.Air)) {
+							&& Tools.isBender(player.getName(), BendingType.Air)) {
 						sender.sendMessage("You are already an airbender!");
 						return true;
 					} else if (args[1].equalsIgnoreCase("earth")
-							&& Tools.isBender(player, BendingType.Earth)) {
+							&& Tools.isBender(player.getName(), BendingType.Earth)) {
 						sender.sendMessage("You are already an earthbender!");
 						return true;
 					} else if (args[1].equalsIgnoreCase("fire")
-							&& Tools.isBender(player, BendingType.Fire)) {
+							&& Tools.isBender(player.getName(), BendingType.Fire)) {
 						sender.sendMessage("You are already a firebender!");
 						return true;
 					} else if (args[1].equalsIgnoreCase("chiblocker")
-							&& Tools.isBender(player, BendingType.ChiBlocker)) {
+							&& Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
 						sender.sendMessage("You are already a chiblocker!");
 						return true;
 					}
@@ -522,27 +498,27 @@ public class Bending extends JavaPlugin {
 						sender.sendMessage("Usage: /bending choose [player] [element]");
 						return true;
 					} else if (args[2].equalsIgnoreCase("water")
-							&& Tools.isBender(targetplayer, BendingType.Water)) {
+							&& Tools.isBender(targetplayer.getName(), BendingType.Water)) {
 						sender.sendMessage(targetplayer.getName()
 								+ " is already a waterbender!");
 						return true;
 					} else if (args[2].equalsIgnoreCase("air")
-							&& Tools.isBender(targetplayer, BendingType.Air)) {
+							&& Tools.isBender(targetplayer.getName(), BendingType.Air)) {
 						sender.sendMessage(targetplayer.getName()
 								+ " is already an airbender!");
 						return true;
 					} else if (args[2].equalsIgnoreCase("earth")
-							&& Tools.isBender(targetplayer, BendingType.Earth)) {
+							&& Tools.isBender(targetplayer.getName(), BendingType.Earth)) {
 						sender.sendMessage(targetplayer.getName()
 								+ " is already an earthbender!");
 						return true;
 					} else if (args[2].equalsIgnoreCase("fire")
-							&& Tools.isBender(targetplayer, BendingType.Fire)) {
+							&& Tools.isBender(targetplayer.getName(), BendingType.Fire)) {
 						sender.sendMessage(targetplayer.getName()
 								+ " is already a firebender!");
 						return true;
 					} else if (args[2].equalsIgnoreCase("chiblocker")
-							&& Tools.isBender(targetplayer,
+							&& Tools.isBender(targetplayer.getName(),
 									BendingType.ChiBlocker)) {
 						sender.sendMessage(targetplayer.getName()
 								+ " is already a chiblocker!");
@@ -689,7 +665,7 @@ public class Bending extends JavaPlugin {
 					Material mat = player.getInventory().getItemInHand()
 							.getType();
 
-					if (config.isBender(player, BendingType.Water)
+					if (Tools.isBender(player.getName(), BendingType.Water)
 							&& Abilities.isWaterbending(ability)
 							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
@@ -715,7 +691,7 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-					if (config.isBender(player, BendingType.Air)
+					if (Tools.isBender(player.getName(), BendingType.Air)
 							&& Abilities.isAirbending(ability)
 							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
@@ -729,7 +705,7 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-					if (config.isBender(player, BendingType.Earth)
+					if (Tools.isBender(player.getName(), BendingType.Earth)
 							&& Abilities.isEarthbending(ability)
 							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
@@ -743,7 +719,7 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-					if (config.isBender(player, BendingType.ChiBlocker)
+					if (Tools.isBender(player.getName(), BendingType.ChiBlocker)
 							&& Abilities.isChiBlocking(ability)
 							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
@@ -757,7 +733,7 @@ public class Bending extends JavaPlugin {
 						}
 						return true;
 					}
-					if (config.isBender(player, BendingType.Fire)
+					if (Tools.isBender(player.getName(), BendingType.Fire)
 							&& Abilities.isFirebending(ability)
 							&& Tools.hasPermission(player, ability)) {
 						if (!ConfigManager.bendToItem) {
@@ -977,6 +953,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ AvatarState.getDescription());
 								break;
+							case EarthArmor:
+								sender.sendMessage(cc
+										+ EarthArmor.getDescription());
+								break;
 							}
 							return true;
 						}
@@ -1085,30 +1065,36 @@ public class Bending extends JavaPlugin {
 			}
 			if (args[0].equalsIgnoreCase("import")
 					&& (sender.hasPermission("bending.command.import") || player == null)) {
-				if (StorageManager.useFlatFile){
-					sender.sendMessage("MySQL needs to be enabled to import bendingPlayers");
+				if (StorageManager.useFlatFile) {
+					sender.sendMessage(ChatColor.AQUA + "MySQL needs to be enabled to import bendingPlayers");
 					return true;
 				}
 				BendingPlayers temp = new BendingPlayers(getDataFolder());
 				Set<String> keys = temp.getKeys();
-				
-				for (String s: keys){
-					if (s.contains("<")){
+
+				for (String s : keys) {
+					if (s.contains("<")) {
 						String[] getplayername = s.split("<");
 						String playername = getplayername[0];
 						String[] getSetter = s.split("<");
 						String Setter = getSetter[1];
-						String binded = Setter.replace("Bind", "").replace(">", "");
+						String binded = Setter.replace("Bind", "").replace(">",
+								"");
 						String ability = temp.getKey(s);
-						if ((binded.equalsIgnoreCase("0") || binded.equalsIgnoreCase("1")
-								|| binded.equalsIgnoreCase("2") || binded.equalsIgnoreCase("3")
-								|| binded.equalsIgnoreCase("4") || binded.equalsIgnoreCase("5")
-								|| binded.equalsIgnoreCase("6") || binded.equalsIgnoreCase("7")
-								|| binded.equalsIgnoreCase("8"))) {
-						     int slot = Integer.parseInt(binded);
-						     config.setAbility(playername, ability, slot);
+						if ((binded.equalsIgnoreCase("0")
+								|| binded.equalsIgnoreCase("1")
+								|| binded.equalsIgnoreCase("2")
+								|| binded.equalsIgnoreCase("3")
+								|| binded.equalsIgnoreCase("4")
+								|| binded.equalsIgnoreCase("5")
+								|| binded.equalsIgnoreCase("6")
+								|| binded.equalsIgnoreCase("7") || binded
+									.equalsIgnoreCase("8"))) {
+							int slot = Integer.parseInt(binded);
+							config.setAbility(playername, ability, slot);
 						} else {
-							config.setAbility(playername, ability, Material.matchMaterial(binded));
+							config.setAbility(playername, ability,
+									Material.matchMaterial(binded));
 						}
 					} else {
 						String playerName = s;
@@ -1122,16 +1108,32 @@ public class Bending extends JavaPlugin {
 						if (bending.contains("e"))
 							config.addBending(playerName, BendingType.Earth);
 						if (bending.contains("c"))
-							config.addBending(playerName, BendingType.ChiBlocker);
-							
-							
+							config.addBending(playerName,
+									BendingType.ChiBlocker);
+
 					}
-						
+
 				}
 				temp = null;
-				sender.sendMessage("Imported BendingPlayers to MySQL.");
+				sender.sendMessage(ChatColor.AQUA + "Imported BendingPlayers to MySQL.");
 				return true;
 			}
+		if (args[0].equalsIgnoreCase("check"))
+				 {
+			for (String players: benders.keySet()){
+			sender.sendMessage(players + " :" + benders.get(players).size());
+			sender.sendMessage(Tools.isBender(players) ? "True" : "False");
+			sender.sendMessage(ChatColor.RED + (Tools.isBender(players, BendingType.Fire) ? "True" : "False"));
+			sender.sendMessage(ChatColor.AQUA + (Tools.isBender(players, BendingType.Water) ? "True" : "False"));
+			sender.sendMessage(ChatColor.GRAY + (Tools.isBender(players, BendingType.Air) ? "True" : "False"));
+			sender.sendMessage(ChatColor.GREEN + (Tools.isBender(players, BendingType.Earth) ? "True" : "False"));
+			sender.sendMessage(ChatColor.GOLD + (Tools.isBender(players, BendingType.ChiBlocker) ? "True" : "False"));
+					for (BendingType type: benders.get(players)){
+						sender.sendMessage(ChatColor.AQUA + type.toString());
+					}
+						
+			}
+				 }
 		}
 		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <page> if you want to see a list of commands.");

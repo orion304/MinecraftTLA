@@ -130,11 +130,10 @@ public class ConfigManager {
 	public static double dodgechance = 25;
 	public static double punchdamage = 3;
 	public static double falldamagereduction = 50;
-	public static long lightningwarmup = 7500;
+	public static long lightningwarmup = 1500;
 	public static int lightningrange = 15;
-	public static boolean lightningspout = false;
-	public static int lightningdamage = 5;
-	public static long eartharmorduration =  30000;
+	public static double lightningmisschance = 5;
+	public static long eartharmorduration = 30000;
 	public static int eartharmorstrength = 2;
 	public static long eartharmorcooldown = 150000;
 	public static boolean reverseearthbending = true;
@@ -195,7 +194,7 @@ public class ConfigManager {
 		useWeapon.put("Water", config.getBoolean(
 				"Bending.Option.Bend-With-Weapon.Water", false));
 		// MySQL
-		useMySQL = config.getBoolean("MySQL.Use-MySQL");//, false);
+		useMySQL = config.getBoolean("MySQL.Use-MySQL");
 		dbHost = config.getString("MySQL.MySQL-host",
 				"jdbc:mysql://localhost:3306");
 		dbUser = config.getString("MySQL.User", "root");
@@ -400,16 +399,24 @@ public class ConfigManager {
 		// Night
 		nightFactor = config.getDouble("Properties.Water.Night-Power-Factor");
 		
-		// Lightning
-		lightningwarmup = config.getLong("Properties.Fire.Lightning.Warmup");
-		lightningrange = config.getInt("Properties.Fire.Lightning.Range");
-		lightningspout = config.getBoolean("Properties.Fire.Lightning.SpoutPlugin");
-		lightningdamage = config.getInt("Properties.Fire.Lightning.Damage");
-		
 		//EarthArmor
 		eartharmorduration = config.getLong("Properties.Earth.EarthArmor.Duration" , 30000);
 		eartharmorstrength = config.getInt("Properties.Earth.EarthArmor.Strength" , 2);
 		eartharmorcooldown = config.getLong("Properties.Earth.EarthArmor.Cooldown" , 150000);
+
+		// Lightning
+		lightningwarmup = config.getLong("Properties.Fire.Lightning.Warmup");
+		lightningrange = config.getInt("Properties.Fire.Lightning.Range");
+		lightningmisschance = config
+				.getDouble("Properties.Fire.Lightning.Miss-Chance");
+
+		// EarthArmor
+		eartharmorduration = config.getLong(
+				"Properties.Earth.EarthArmor.Duration", 30000);
+		eartharmorstrength = config.getInt(
+				"Properties.Earth.EarthArmor.Strength", 2);
+		eartharmorcooldown = config.getLong(
+				"Properties.Earth.EarthArmor.Cooldown", 150000);
 
 		try {
 			config.options().copyDefaults(true);
@@ -601,6 +608,14 @@ public class ConfigManager {
 		config.set("Properties.Earth.EarthArmor.Duration" , 30000);
 		config.set("Properties.Earth.EarthArmor.Strength" , 2);
 		config.set("Properties.Earth.EarthArmor.Cooldown" , 150000);
+
+		config.set("Properties.Fire.Lightning.Warmup", 2000);
+		config.set("Properties.Fire.Lightning.Range", 15);
+		config.set("Properties.Fire.Lightning.Miss-Chance", 5);
+
+		config.set("Properties.Earth.EarthArmor.Duration", 30000);
+		config.set("Properties.Earth.EarthArmor.Strength", 2);
+		config.set("Properties.Earth.EarthArmor.Cooldown", 150000);
 
 		config.set("MySQL.Use-MySQL", false);
 		config.set("MySQL.MySQL-host", "localhost");

@@ -2,6 +2,7 @@ package tools;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -82,6 +83,10 @@ public class TempBlock {
 		if (instances.containsKey(block))
 			return true;
 		return false;
+	}
+
+	public Location getLocation() {
+		return block.getLocation();
 	}
 
 }

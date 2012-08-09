@@ -1,5 +1,6 @@
 package waterbending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
@@ -21,12 +22,13 @@ public class WaterSpout {
 	public static ConcurrentHashMap<Block, Block> newaffectedblocks = new ConcurrentHashMap<Block, Block>();
 	public static ConcurrentHashMap<Block, Block> baseblocks = new ConcurrentHashMap<Block, Block>();
 
-	private static final int height = ConfigManager.waterSpoutHeight;
-	private static final double threshold = .05;
+	private static final int defaultheight = ConfigManager.waterSpoutHeight;
+
+	// private static final double threshold = .05;
 	// private static final byte half = 0x4;
 	private static final byte full = 0x0;
 	private Player player;
-	private boolean wasflying, canfly;
+	private Block base;
 	private TempBlock baseblock;
 
 	public WaterSpout(Player player) {
@@ -35,17 +37,13 @@ public class WaterSpout {
 			return;
 		}
 		this.player = player;
-		wasflying = player.isFlying();
-		canfly = player.getAllowFlight();
-		player.setAllowFlight(true);
-		player.setFlying(true);
+		// player.setAllowFlight(true);
+		// player.setFlying(true);
 		instances.put(player, this);
 	}
 
 	private void remove() {
 		revertBaseBlock(player);
-		player.setAllowFlight(canfly);
-		player.setFlying(wasflying);
 		instances.remove(player);
 	}
 
@@ -95,22 +93,25 @@ public class WaterSpout {
 		// block.setData(half);
 	}
 
-	private static void spout(Player player) {
+	public static void spout(Player player) {
+		WaterSpout spout = instances.get(player);
 		player.setSprinting(false);
-		if (player.getVelocity().length() > threshold) {
-			// Tools.verbose("Too fast!");
-			player.setVelocity(player.getVelocity().clone().normalize()
-					.multiply(threshold * .5));
-		}
+		// if (player.getVelocity().length() > threshold) {
+		// // Tools.verbose("Too fast!");
+		// player.setVelocity(player.getVelocity().clone().normalize()
+		// .multiply(threshold * .5));
+		// }
 		player.removePotionEffect(PotionEffectType.SPEED);
 		Location location = player.getLocation().clone().add(0, .5, 0);
 		Block block;
 		int height = spoutableWaterHeight(location, player);
+		location = spout.base.getLocation();
+
 		// Tools.verbose(height + " " + WaterSpout.height + " "
 		// + affectedblocks.size());
-		if (height != 0) {
-			for (int i = 0; i <= height - 1; i++) {
-				block = location.clone().add(0, -i, 0).getBlock();
+		if (height != -1) {
+			for (int i = 1; i <= height; i++) {
+				block = location.clone().add(0, i, 0).getBlock();
 				if (!TempBlock.isTempBlock(block)) {
 					new TempBlock(block, Material.WATER, full);
 				}
@@ -127,8 +128,14 @@ public class WaterSpout {
 	}
 
 	private static int spoutableWaterHeight(Location location, Player player) {
+		WaterSpout spout = instances.get(player);
+		int height = defaultheight;
+		if (Tools.isNight(player.getWorld()))
+			height = (int) Tools.waterbendingNightAugment((double) height,
+					player.getWorld());
+		int maxheight = (int) ((double) defaultheight * ConfigManager.nightFactor) + 5;
 		Block blocki;
-		for (int i = 0; i <= height; i++) {
+		for (int i = 0; i <= maxheight; i++) {
 			blocki = location.clone().add(0, -i, 0).getBlock();
 			if (!affectedblocks.contains(blocki)) {
 				if (blocki.getType() == Material.WATER
@@ -136,6 +143,9 @@ public class WaterSpout {
 					if (!TempBlock.isTempBlock(blocki)) {
 						revertBaseBlock(player);
 					}
+					spout.base = blocki;
+					if (i > height)
+						return height;
 					return i;
 				}
 				if (blocki.getType() == Material.ICE
@@ -148,16 +158,19 @@ public class WaterSpout {
 					}
 					// blocki.setType(Material.WATER);
 					// blocki.setData(full);
+					spout.base = blocki;
+					if (i > height)
+						return height;
 					return i;
 				}
 				if (blocki.getType() != Material.AIR) {
 					revertBaseBlock(player);
-					return 0;
+					return -1;
 				}
 			}
 		}
 		revertBaseBlock(player);
-		return 0;
+		return -1;
 	}
 
 	public static void revertBaseBlock(Player player) {
@@ -178,6 +191,13 @@ public class WaterSpout {
 			TempBlock.revertBlock(block, Material.AIR);
 			affectedblocks.remove(block);
 		}
+	}
+
+	public static ArrayList<Player> getPlayers() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (Player player : instances.keySet())
+			players.add(player);
+		return players;
 	}
 
 	public static String getDescription() {

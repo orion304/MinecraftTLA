@@ -29,24 +29,24 @@ public class BendingPlayers {
 		load();
 		dataFolder = file;
 	}
-	
-	public String getKey(String s){
+
+	public String getKey(String s) {
 		if (!(bendingPlayers == null))
 			return bendingPlayers.getString(s, "");
 		return "";
 	}
-	
-	public Boolean checkKeys(String s){
+
+	public Boolean checkKeys(String s) {
 		if (!(bendingPlayers == null))
 			return bendingPlayers.getKeys(false).contains(s);
 		return false;
 	}
-	
-	public Set<String> getKeys(){
+
+	public Set<String> getKeys() {
 		return bendingPlayers.getKeys(false);
 	}
-	
-	public void setKey(String key, String field){
+
+	public void setKey(String key, String field) {
 		if (!(bendingPlayers == null))
 			bendingPlayers.set(key, field);
 		save();

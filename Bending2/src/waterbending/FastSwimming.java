@@ -19,7 +19,7 @@ public class FastSwimming {
 
 	public static void HandleSwim(Server server) {
 		for (Player player : server.getOnlinePlayers()) {
-			if (Tools.isBender(player, BendingType.Water)
+			if (Tools.isBender(player.getName(), BendingType.Water)
 					&& Tools.canBendPassive(player, BendingType.Water)
 					&& player.isSneaking()
 					&& Tools.isWater(player.getLocation().getBlock())
@@ -27,8 +27,9 @@ public class FastSwimming {
 					&& !(Tools.getBendingAbility(player) == Abilities.WaterManipulation
 							|| Tools.getBendingAbility(player) == Abilities.Wave
 							|| Tools.getBendingAbility(player) == Abilities.WaterWall
-							|| Tools.getBendingAbility(player) == Abilities.HealingWaters || Tools
-							.getBendingAbility(player) == Abilities.FreezeMelt)) {
+							|| Tools.getBendingAbility(player) == Abilities.HealingWaters
+							|| Tools.getBendingAbility(player) == Abilities.FreezeMelt || Tools
+							.getBendingAbility(player) == Abilities.Bloodbending)) {
 				player.setVelocity(player.getEyeLocation().getDirection()
 						.clone().normalize().multiply(factor));
 			}

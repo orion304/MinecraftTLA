@@ -5,8 +5,6 @@
 	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/Bukkit Related/McMyAdmin 2 -- 1.1/Minecraft/CraftBukkit.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/Bukkit Related/McMyAdmin 2 -- 1.1/Minecraft/plugins/WorldEdit.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/Bukkit Related/McMyAdmin 2 -- 1.1/Minecraft/plugins/Worldguard.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/Bukkit Related/McMyAdmin 2 -- 1.1/Minecraft/plugins/SpoutPlugin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alex/Desktop/New folder/NoCheatPlus.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Alex/Downloads/PreciousStones.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

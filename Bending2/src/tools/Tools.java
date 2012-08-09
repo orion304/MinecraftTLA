@@ -58,6 +58,7 @@ import airbending.AirScooter;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
+import earthbending.EarthArmor;
 import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
@@ -230,7 +231,8 @@ public class Tools {
 		moveEarth(block, direction, chainlength, true);
 	}
 
-	public static void moveEarth(Block block, Vector direction, int chainlength, boolean throwplayer) {
+	public static void moveEarth(Block block, Vector direction,
+			int chainlength, boolean throwplayer) {
 		// verbose("Moving earth");
 		// verbose(direction);
 		// verbose(isEarthbendable(block));
@@ -450,8 +452,22 @@ public class Tools {
 		return false;
 	}
 
-	public static boolean isBender(Player player, BendingType type) {
-		return config.isBender(player, type);
+	//public static boolean isBender(Player player, BendingType type) {
+	//	//return config.isBender(player, type);
+	//	return Bending.benders.get(player.getName()).contains(type);
+	//}
+	
+	public static boolean isBender(String player, BendingType type) {
+		//return config.isBender(player, type);
+		//if (Bending.benders.contains(player))
+		if (Bending.benders.get(player) != null)
+			return Bending.benders.get(player).contains(type);
+		return false;
+	}
+	
+	public static boolean isBender(String player) {
+		//return config.isBender(player, type);
+		return Bending.benders.contains(player);
 	}
 
 	public static Abilities getBendingAbility(Player player) {
@@ -634,6 +650,7 @@ public class Tools {
 		Wave.removeAll();
 		AirScooter.removeAll();
 		FireStream.removeAll();
+		EarthArmor.removeAll();
 		BendingManager.removeFlyers();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
@@ -671,55 +688,57 @@ public class Tools {
 			boolean look) {
 		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
 		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
-		if (wgp != null){
-		WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
-				.getPlugin("WorldGuard");
-		// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
-		// for (Block b: lb){
-		Block b = player.getLocation().getBlock();
-		if (!player.isOnline())
-			return false;
-		if (look) {
-			try {
-				int range = 20;
-				if (ability == Abilities.Fireball)
-					range = 100;
-				Block c = player.getTargetBlock(null, range);
-				if (!(wg.getGlobalRegionManager()
-						.get(c.getLocation().getWorld())
-						.getApplicableRegions(c.getLocation())
-						.allows(DefaultFlag.PVP))) {
-					return true;
-				}
-			} catch (IllegalStateException e) {
-				return false;
-			}
-		}
-		if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
-				.getApplicableRegions(b.getLocation()).allows(DefaultFlag.PVP))) {
-			return true;
-		}
-		}
-		
-		if (psp != null){
-			PreciousStones ps = (PreciousStones) psp;
+		if (wgp != null) {
+			WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
+					.getPlugin("WorldGuard");
+			// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
+			// for (Block b: lb){
 			Block b = player.getLocation().getBlock();
-		
+			if (!player.isOnline())
+				return false;
 			if (look) {
 				try {
 					int range = 20;
 					if (ability == Abilities.Fireball)
 						range = 100;
 					Block c = player.getTargetBlock(null, range);
-					return ps.getForceFieldManager().hasSourceField(c.getLocation(), FieldFlag.PREVENT_PVP);
-					} catch (IllegalStateException e) {
-						return false;
+					if (!(wg.getGlobalRegionManager()
+							.get(c.getLocation().getWorld())
+							.getApplicableRegions(c.getLocation())
+							.allows(DefaultFlag.PVP))) {
+						return true;
 					}
-					
+				} catch (IllegalStateException e) {
+					return false;
 				}
-				
-				
-			return ps.getForceFieldManager().hasSourceField(b.getLocation(), FieldFlag.PREVENT_PVP);
+			}
+			if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
+					.getApplicableRegions(b.getLocation())
+					.allows(DefaultFlag.PVP))) {
+				return true;
+			}
+		}
+
+		if (psp != null) {
+			PreciousStones ps = (PreciousStones) psp;
+			Block b = player.getLocation().getBlock();
+
+			if (look) {
+				try {
+					int range = 20;
+					if (ability == Abilities.Fireball)
+						range = 100;
+					Block c = player.getTargetBlock(null, range);
+					return ps.getForceFieldManager().hasSourceField(
+							c.getLocation(), FieldFlag.PREVENT_PVP);
+				} catch (IllegalStateException e) {
+					return false;
+				}
+
+			}
+
+			return ps.getForceFieldManager().hasSourceField(b.getLocation(),
+					FieldFlag.PREVENT_PVP);
 		}
 
 		// EntityDamageByEntityEvent damageEvent = new
@@ -767,6 +786,10 @@ public class Tools {
 		}
 		if (Abilities.isFirebending(ability)
 				&& player.hasPermission("bending.fire." + ability)) {
+			return true;
+		}
+		if (Abilities.isChiBlocking(ability)
+				&& player.hasPermission("bending.chiblocker." + ability)) {
 			return true;
 		}
 		if (Abilities.isChiBlocking(ability)
@@ -920,6 +943,15 @@ public class Tools {
 			System.err.println("Error: " + e.getMessage());
 		}
 
+	}
+
+	public static void removeBlock(Block block) {
+		if (adjacentToThreeOrMoreSources(block)) {
+			block.setType(Material.WATER);
+			block.setData((byte) 0x0);
+		} else {
+			block.setType(Material.AIR);
+		}
 	}
 
 	static {

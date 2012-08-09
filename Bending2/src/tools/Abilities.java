@@ -11,7 +11,7 @@ public enum Abilities {
 	ArcOfFire, Extinguish, Fireball, HeatMelt, RingOfFire, FireJet, Illumination, WallOfFire, FireBlast, Lightning,
 
 	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike,
-	
+
 	HighJump, RapidPunch,
 
 	AvatarState;
@@ -31,7 +31,7 @@ public enum Abilities {
 	private enum WaterbendingAbilities {
 		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WalkOnWater, WaterManipulation, WaterSpout, WaterWall, Wave, Bloodbending, IceSpike;
 	}
-	
+
 	private enum ChiBlockingAbilities {
 		HighJump, RapidPunch;
 	}
@@ -116,7 +116,7 @@ public enum Abilities {
 		}
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	public static boolean isChiBlocking(Abilities ability) {
 		for (ChiBlockingAbilities a : ChiBlockingAbilities.values()) {
 			if (a.name().equalsIgnoreCase(ability.name()))
