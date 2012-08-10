@@ -17,6 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
 
+import firebending.FireBlast;
+import firebending.FireStream;
+
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -43,6 +46,8 @@ public class WallOfFire {
 	private static Map<Entity, Long> damaged = new HashMap<Entity, Long>();
 	private static long damageinterval = 1000;
 
+
+	
 	public WallOfFire(Player player) {
 		if (ID >= Integer.MAX_VALUE) {
 			ID = Integer.MIN_VALUE;

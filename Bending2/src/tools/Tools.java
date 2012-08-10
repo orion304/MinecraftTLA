@@ -35,6 +35,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+
+import tools.Abilities;
+import tools.AvatarState;
+import tools.BendingType;
+import tools.ConfigManager;
+import tools.Information;
+import tools.TempBlock;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.WaterManipulation;
@@ -45,8 +54,6 @@ import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
@@ -217,8 +224,9 @@ public class Tools {
 		// }
 		// }
 	}
-
-	public static void moveEarth(Block block, Vector direction, int chainlength) {
+	
+	public static void moveEarth(Block block, Vector direction,
+			int chainlength) {
 		moveEarth(block, direction, chainlength, true);
 	}
 
@@ -443,8 +451,22 @@ public class Tools {
 		return false;
 	}
 
-	public static boolean isBender(Player player, BendingType type) {
-		return config.isBender(player, type);
+	//public static boolean isBender(Player player, BendingType type) {
+	//	//return config.isBender(player, type);
+	//	return Bending.benders.get(player.getName()).contains(type);
+	//}
+	
+	public static boolean isBender(String player, BendingType type) {
+		//return config.isBender(player, type);
+		//if (Bending.benders.contains(player))
+		if (Bending.benders.get(player) != null)
+			return Bending.benders.get(player).contains(type);
+		return false;
+	}
+	
+	public static boolean isBender(String player) {
+		//return config.isBender(player, type);
+		return Bending.benders.contains(player);
 	}
 
 	public static Abilities getBendingAbility(Player player) {
@@ -763,6 +785,10 @@ public class Tools {
 		}
 		if (Abilities.isFirebending(ability)
 				&& player.hasPermission("bending.fire." + ability)) {
+			return true;
+		}
+		if (Abilities.isChiBlocking(ability)
+				&& player.hasPermission("bending.chiblocker." + ability)) {
 			return true;
 		}
 		if (Abilities.isChiBlocking(ability)
