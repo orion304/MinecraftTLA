@@ -759,8 +759,8 @@ public class StorageManager {
 					ConfigManager.dbPass, ConfigManager.dbDB,
 					ConfigManager.dbPort);
 			if (this.MySql.initialize()){
-			String createTable1 = "CREATE TABLE IF NOT EXISTS Bending_Element(player TEXT NOT NULL, bending TEXT NOT NULL)";
-			String createTable2 = "CREATE TABLE IF NOT EXISTS Bending_Ability(player TEXT NOT NULL, setter TEXT NOT NULL, ability TEXT NOT NULL)";
+			String createTable1 = "CREATE TABLE IF NOT EXISTS bending_element(player TEXT NOT NULL, bending TEXT NOT NULL)";
+			String createTable2 = "CREATE TABLE IF NOT EXISTS bending_ability(player TEXT NOT NULL, setter TEXT NOT NULL, ability TEXT NOT NULL)";
 			MySql.execute(createTable1);
 			MySql.execute(createTable2);
 			} else {

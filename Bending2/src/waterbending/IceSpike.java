@@ -1,10 +1,13 @@
 package waterbending;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -44,16 +47,42 @@ public class IceSpike {
 	private int height = 2;
 	private Vector thrown = new Vector(0, 0.7, 0);
 	private ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
+	private List<LivingEntity> damaged = new ArrayList<LivingEntity>();
 
 	public IceSpike(Player player) {
 		if (cooldowns.contains(player) && cooldowns.get(player) + cooldown >= System.currentTimeMillis())
 			return;
 		try {
 			this.player = player;
-			block = player.getTargetBlock(null,
-					(int) range);
+			
+			
+			double lowestdistance = range + 1;
+			Entity closestentity = null;
+			for (Entity entity : Tools.getEntitiesAroundPoint(player.getLocation(), range)) {
+				if (Tools.getDistanceFromLine(player.getLocation().getDirection(), player.getLocation(),
+						entity.getLocation()) <= 2
+						&& (entity instanceof LivingEntity)
+						&& (entity.getEntityId() != player.getEntityId())) {
+					double distance = player.getLocation().distance(entity.getLocation());
+					if (distance < lowestdistance) {
+						closestentity = entity;
+						lowestdistance = distance;
+					}
+				}
+			}
+			if (closestentity != null){
+				//Tools.verbose("closestentity targetting");
+					Block temptestingblock = closestentity.getLocation().getBlock().getRelative(BlockFace.DOWN, 1);
+					//if (temptestingblock.getType() == Material.ICE){
+						this.block = temptestingblock;
+					//}
+				} else {
+					this.block = player.getTargetBlock(null,
+							(int) range);
+				}
 			origin = block.getLocation();
 			location = origin.clone();
+			
 		} catch (IllegalStateException e) {
 			return;
 		}
@@ -133,7 +162,7 @@ public class IceSpike {
 		}
 	}
 
-	private boolean canInstantiate() {
+	private boolean canInstantiate() {	
 		if (block.getType() != Material.ICE)
 			return false;
 		for (Block block : affectedblocks.keySet()) {
@@ -177,13 +206,15 @@ public class IceSpike {
 		progress++;
 		Block affectedblock = location.clone().add(direction).getBlock();
 		location = location.add(direction);
-		for (Entity en : Tools.getEntitiesAroundPoint(location, 0.9)){
+		for (Entity en : Tools.getEntitiesAroundPoint(location, 1.4)){
 			if (en instanceof LivingEntity 
-					&& en != player){
+					&& en != player
+					&& !damaged.contains(((LivingEntity)en))){
 				LivingEntity le = (LivingEntity)en;
 				le.setVelocity(thrown);
 				le.damage(damage);
-				Tools.verbose(damage + " Hp:" + le.getHealth());
+				damaged.add(le);
+				//Tools.verbose(damage + " Hp:" + le.getHealth());
 			}
 		}
 		affectedblock.setType(Material.ICE);

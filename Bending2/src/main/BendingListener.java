@@ -55,11 +55,7 @@ import waterbending.FreezeMelt;
 import waterbending.IceSpike;
 import waterbending.Melt;
 import waterbending.Plantbending;
-<<<<<<< HEAD
 import waterbending.SpikeField;
-import waterbending.WalkOnWater;
-=======
->>>>>>> refs/remotes/origin/master
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
 import waterbending.WaterSpout;

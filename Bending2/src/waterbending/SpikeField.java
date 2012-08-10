@@ -23,14 +23,15 @@ public class SpikeField {
 	private Vector thrown = new Vector(0, 1, 0);
 	
 	public SpikeField(Player p){
-		Tools.verbose("Trying to create IceField" + numofspikes);
+		//Tools.verbose("Trying to create IceField" + numofspikes);
 		int locX = p.getLocation().getBlockX();
 		int locY = p.getLocation().getBlockY();
 		int locZ = p.getLocation().getBlockZ();
 		List<Block> iceblocks = new ArrayList<Block>();
 		for (int x = -(radius - 1); x <= (radius - 1); x++){
 			for (int z = -(radius - 1); z <= (radius - 1); z++){
-				Block testblock = p.getWorld().getBlockAt(locX + x, locY - 1, locZ + z);
+				for (int y = -1; y <= 3; y++){
+				Block testblock = p.getWorld().getBlockAt(locX + x, locY + y, locZ + z);
 				if (testblock.getType() == Material.ICE
 						&& testblock.getRelative(BlockFace.UP).getType() == Material.AIR
 						&& !(testblock.getX() == p.getEyeLocation().getBlock().getX() &&
@@ -38,13 +39,14 @@ public class SpikeField {
 					iceblocks.add(testblock);
 					///Tools.verbose("X: " + testblock.getLocation().getX() + " Y: " + testblock.getLocation().getY() + " Z: " + testblock.getLocation().getZ());
 				}
+				}
 			}
 		}
 		for (int i = 0; i < numofspikes; i++){
 			if (iceblocks.isEmpty())
 				return;
 			Block targetblock = iceblocks.get(ran.nextInt(iceblocks.size()));
-			Tools.verbose("X: " + targetblock.getLocation().getX() + " Y: " + targetblock.getLocation().getY() + " Z: " + targetblock.getLocation().getZ());
+			//Tools.verbose("X: " + targetblock.getLocation().getX() + " Y: " + targetblock.getLocation().getY() + " Z: " + targetblock.getLocation().getZ());
 			if (targetblock.getRelative(BlockFace.UP).getType() != Material.ICE){
 				new IceSpike(p, targetblock.getLocation(), damage, thrown, cooldown);
 				iceblocks.remove(targetblock);
