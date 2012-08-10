@@ -534,7 +534,7 @@ public class ConfigManager {
 		config.set("Properties.Earth.CompactColumn.Range", 20);
 		config.set("Properties.Earth.CompactColumn.Speed", 8);
 
-		config.set("Properties.Earth.Earthblast.Prepare-Range", 5);
+		config.set("Properties.Earth.EarthBlast.Prepare-Range", 5);
 		config.set("Properties.Earth.EarthBlast.Range", 20);
 		config.set("Properties.Earth.EarthBlast.Speed", 35);
 		config.set("Properties.Earth.EarthBlast.Revert", true);

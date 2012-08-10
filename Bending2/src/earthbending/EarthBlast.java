@@ -171,7 +171,7 @@ public class EarthBlast {
 					unfocusBlock();
 					return false;
 				}
-				if (!Tools.isEarthbendable(sourceblock)) {
+				if (sourceblock.getType() == Material.AIR) {
 					instances.remove(player.getEntityId());
 					return false;
 				}
