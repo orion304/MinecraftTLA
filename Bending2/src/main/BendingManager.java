@@ -14,6 +14,8 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import chiblocker.RapidPunch;
+
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
@@ -24,6 +26,7 @@ import waterbending.Bloodbending;
 import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
+import waterbending.IceSpike;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
 import waterbending.WaterSpout;
@@ -39,7 +42,6 @@ import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Speed;
 import airbending.Tornado;
-import chiblocking.RapidPunch;
 import earthbending.Catapult;
 import earthbending.CompactColumn;
 import earthbending.EarthArmor;
@@ -73,8 +75,8 @@ public class BendingManager implements Runnable {
 	ConcurrentHashMap<World, Boolean> nights = new ConcurrentHashMap<World, Boolean>();
 	ConcurrentHashMap<World, Boolean> days = new ConcurrentHashMap<World, Boolean>();
 
-	public BendingManager(Bending instance) {
-		plugin = instance;
+	public BendingManager(Bending bending) {
+		plugin = bending;
 		time = System.currentTimeMillis();
 		verbosetime = System.currentTimeMillis();
 		reverttime = time;
@@ -93,7 +95,7 @@ public class BendingManager implements Runnable {
 		manageChiBlocking();
 		// manageMessages();
 		AvatarState.manageAvatarStates();
-		handleFlying();
+		//handleFlying();
 		handleDayNight();
 
 		if (verbose
@@ -160,8 +162,6 @@ public class BendingManager implements Runnable {
 		for (Player player : EarthArmor.instances.keySet()) {
 			EarthArmor.moveArmor(player);
 		}
-		// for (String player : EarthArmor.durations.keySet())
-		// EarthArmor.removeEffect(Bukkit.getPlayer(player));
 
 		EarthPassive.revertSands();
 
@@ -239,6 +239,7 @@ public class BendingManager implements Runnable {
 		for (int ID : WallOfFire.instances.keySet()) {
 			WallOfFire.manageWallOfFire(ID);
 		}
+		
 
 		Lightning.progressAll();
 
@@ -275,13 +276,11 @@ public class BendingManager implements Runnable {
 		for (int ID : Wave.instances.keySet()) {
 			Wave.progress(ID);
 		}
-
-		// for (Player player : IceSpike.removeTimers.keySet()) {
-		// if (IceSpike.removeTimers.get(player) + IceSpike.removeTimer <=
-		// System.currentTimeMillis())
-		// IceSpike.restore(player);
-		// }
-
+		
+		for (int ID : IceSpike.instances.keySet()) {
+			IceSpike.instances.get(ID).progress();
+		}
+		
 		Bloodbending.progressAll();
 
 		HealingWaters.heal(plugin.getServer());
@@ -364,7 +363,7 @@ public class BendingManager implements Runnable {
 			boolean day = days.get(world);
 			if (Tools.isDay(world) && !day) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Fire))
+					if (Tools.isBender(player.getName(), BendingType.Fire))
 						player.sendMessage(ChatColor.RED
 								+ "You feel the strength of the rising sun empowering your firebending.");
 				}
@@ -373,7 +372,7 @@ public class BendingManager implements Runnable {
 
 			if (!Tools.isDay(world) && day) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Fire))
+					if (Tools.isBender(player.getName(), BendingType.Fire))
 						player.sendMessage(ChatColor.RED
 								+ "You feel the empowering of your firebending subside as the sun sets.");
 				}
@@ -382,7 +381,7 @@ public class BendingManager implements Runnable {
 
 			if (Tools.isNight(world) && !night) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Water))
+					if (Tools.isBender(player.getName(), BendingType.Water))
 						player.sendMessage(ChatColor.BLUE
 								+ "You feel the strength of the rising moon empowering your waterbending.");
 				}
@@ -391,7 +390,7 @@ public class BendingManager implements Runnable {
 
 			if (!Tools.isNight(world) && night) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player, BendingType.Water))
+					if (Tools.isBender(player.getName(), BendingType.Water))
 						player.sendMessage(ChatColor.BLUE
 								+ "You feel the empowering of your waterbending subside as the moon sets.");
 				}
