@@ -26,10 +26,10 @@ public class MySQL {
 		this.port = port;
 		this.log = Bending.log;
 
-		initialize();
+		//if (!initialize())
 	}
 
-	private void initialize() {
+	public boolean initialize() {
 		{
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
@@ -42,10 +42,13 @@ public class MySQL {
 				// "CREATE TABLE IF NOT EXISTS Bending ('player' TEXT NOT NULL, 'setter' TEXT NOT NULL, 'ability' TEXT NOT NULL)";
 				// this.connection.createStatement().executeQuery(createTable1);
 				// this.connection.createStatement().executeQuery(createTable2);
+				return true;
 			} catch (ClassNotFoundException e) {
-				this.log.severe("ClassNotFoundException! " + e.getMessage());
+				//this.log.severe("ClassNotFoundException! " + e.getMessage());
+				return false;
 			} catch (SQLException e) {
-				this.log.severe("SQLException! " + e.getMessage());
+				this.log.severe("MySQL connection failed. Be sure to check if your config file was set properly. Defaulting to flatfiles.");
+				return false;
 			}
 		}
 

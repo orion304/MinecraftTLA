@@ -298,3 +298,11 @@ permissions:
   bending.avatar:
     description: Give the avatar prefix.
     default: op
+  bending.command.import:
+    default: op
+  bending.chiblocker.HighJump:
+    default: op
+  bending.chiblocker.FastPunch:
+    default: op
+  bending.water.IceSpike:
+    default: op
