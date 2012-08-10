@@ -19,6 +19,7 @@ public class EarthBlast {
 
 	public static ConcurrentHashMap<Integer, EarthBlast> instances = new ConcurrentHashMap<Integer, EarthBlast>();
 
+	private static double preparerange = ConfigManager.earthBlastPrepareRange;
 	private static double range = ConfigManager.earthBlastRange;
 	private static int damage = ConfigManager.earthdmg;
 	private static double speed = ConfigManager.earthBlastSpeed;
@@ -53,7 +54,7 @@ public class EarthBlast {
 	public boolean prepare() {
 		cancelPrevious();
 		Block block = player.getTargetBlock(Tools.getTransparentEarthbending(),
-				(int) range);
+				(int) preparerange);
 		if (Tools.isEarthbendable(block)) {
 			sourceblock = block;
 			focusBlock();
@@ -153,10 +154,27 @@ public class EarthBlast {
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
 
-			if (!progressing && !falling
-					&& Tools.getBendingAbility(player) != Abilities.EarthBlast) {
-				unfocusBlock();
-				return false;
+			if (!progressing && !falling) {
+				if (Tools.getBendingAbility(player) != Abilities.EarthBlast) {
+					unfocusBlock();
+					return false;
+				}
+				if (sourceblock == null) {
+					instances.remove(player.getEntityId());
+					return false;
+				}
+				if (player.getWorld() != sourceblock.getWorld()) {
+					unfocusBlock();
+					return false;
+				}
+				if (sourceblock.getLocation().distance(player.getLocation()) > preparerange) {
+					unfocusBlock();
+					return false;
+				}
+				if (!Tools.isEarthbendable(sourceblock)) {
+					instances.remove(player.getEntityId());
+					return false;
+				}
 			}
 
 			if (falling) {
@@ -286,7 +304,7 @@ public class EarthBlast {
 			instances.get(id).breakBlock();
 		}
 	}
-	
+
 	public static String getDescription() {
 		return "To use, place your cursor over an earthbendable object (dirt, rock, ores, etc) "
 				+ "and tap sneak (default: shift). The object will temporarily turn to stone, "

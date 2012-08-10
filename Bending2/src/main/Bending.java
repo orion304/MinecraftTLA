@@ -33,6 +33,7 @@ import tools.Tools;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
+import waterbending.IceSpike;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
@@ -966,6 +967,10 @@ public class Bending extends JavaPlugin {
 							case HighJump:
 								sender.sendMessage(cc
 										+ HighJump.getDescription());
+								break;
+							case IceSpike:
+								sender.sendMessage(cc
+										+ IceSpike.getDescription());
 								break;
 							}
 							return true;

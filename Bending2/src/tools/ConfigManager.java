@@ -60,6 +60,7 @@ public class ConfigManager {
 	public static double catapultPush = 5;
 	public static double compactColumnRange = 20;
 	public static double compactColumnSpeed = 8;
+	public static double earthBlastPrepareRange = 5;
 	public static double earthBlastRange = 20;
 	public static double earthBlastSpeed = 35;
 	public static boolean earthBlastRevert = true;
@@ -146,7 +147,6 @@ public class ConfigManager {
 	public static int icespikeareadamage = 2;
 	public static int icespikearearadius = 4;
 	public static double icespikeareathrowingmult = 1;
-	
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
 	public static long dissipateAfter = 400;
@@ -283,6 +283,8 @@ public class ConfigManager {
 		compactColumnSpeed = config
 				.getDouble("Properties.Earth.CompactColumn.Speed");
 		// EarthBlast
+		earthBlastPrepareRange = config
+				.getDouble("Properties.Earth.EarthBlast.Prepare-Range");
 		earthBlastRange = config.getDouble("Properties.Earth.EarthBlast.Range");
 		earthBlastSpeed = config.getDouble("Properties.Earth.EarthBlast.Speed");
 		earthBlastRevert = config
@@ -407,11 +409,14 @@ public class ConfigManager {
 
 		// Night
 		nightFactor = config.getDouble("Properties.Water.Night-Power-Factor");
-		
-		//EarthArmor
-		eartharmorduration = config.getLong("Properties.Earth.EarthArmor.Duration" , 30000);
-		eartharmorstrength = config.getInt("Properties.Earth.EarthArmor.Strength" , 2);
-		eartharmorcooldown = config.getLong("Properties.Earth.EarthArmor.Cooldown" , 150000);
+
+		// EarthArmor
+		eartharmorduration = config.getLong(
+				"Properties.Earth.EarthArmor.Duration", 30000);
+		eartharmorstrength = config.getInt(
+				"Properties.Earth.EarthArmor.Strength", 2);
+		eartharmorcooldown = config.getLong(
+				"Properties.Earth.EarthArmor.Cooldown", 150000);
 
 		// Lightning
 		lightningwarmup = config.getLong("Properties.Fire.Lightning.Warmup");
@@ -426,16 +431,22 @@ public class ConfigManager {
 				"Properties.Earth.EarthArmor.Strength", 2);
 		eartharmorcooldown = config.getLong(
 				"Properties.Earth.EarthArmor.Cooldown", 150000);
-		
-		//IceSpike
-		icespikecooldown = config.getLong("Properties.Water.IceSpike.Cooldown", 6000);
+
+		// IceSpike
+		icespikecooldown = config.getLong("Properties.Water.IceSpike.Cooldown",
+				6000);
 		icespikedamage = config.getInt("Properties.Water.IceSpike.Damage", 4);
-		icespikerange= config.getInt("Properties.Water.IceSpike.Range", 20);
-		icespikethrowingmult= config.getDouble("Properties.Water.IceSpike.ThrowingMult", 0.7);
-		icespikeareacooldown= config.getLong("Properties.Water.IceSpike.AreaCooldown", 20000);
-		icespikeareadamage= config.getInt("Properties.Water.IceSpike.AreaDamage", 2);
-		icespikearearadius = config.getInt("Properties.Water.IceSpike.AreaRadius", 4);
-		icespikeareathrowingmult= config.getDouble("Properties.Water.IceSpike.AreaThrowingMult", 1);
+		icespikerange = config.getInt("Properties.Water.IceSpike.Range", 20);
+		icespikethrowingmult = config.getDouble(
+				"Properties.Water.IceSpike.ThrowingMult", 0.7);
+		icespikeareacooldown = config.getLong(
+				"Properties.Water.IceSpike.AreaCooldown", 20000);
+		icespikeareadamage = config.getInt(
+				"Properties.Water.IceSpike.AreaDamage", 2);
+		icespikearearadius = config.getInt(
+				"Properties.Water.IceSpike.AreaRadius", 4);
+		icespikeareathrowingmult = config.getDouble(
+				"Properties.Water.IceSpike.AreaThrowingMult", 1);
 
 		try {
 			config.options().copyDefaults(true);
@@ -523,6 +534,7 @@ public class ConfigManager {
 		config.set("Properties.Earth.CompactColumn.Range", 20);
 		config.set("Properties.Earth.CompactColumn.Speed", 8);
 
+		config.set("Properties.Earth.Earthblast.Prepare-Range", 5);
 		config.set("Properties.Earth.EarthBlast.Range", 20);
 		config.set("Properties.Earth.EarthBlast.Speed", 35);
 		config.set("Properties.Earth.EarthBlast.Revert", true);
@@ -618,15 +630,15 @@ public class ConfigManager {
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
-		
+
 		config.set("Properties.Fire.Lightning.Warmup", 7500);
 		config.set("Properties.Fire.Lightning.Range", 15);
 		config.set("Properties.Fire.Lightning.SpoutPlugin", false);
 		config.set("Properties.Fire.Lightning.Damage", 5);
-		
-		config.set("Properties.Earth.EarthArmor.Duration" , 30000);
-		config.set("Properties.Earth.EarthArmor.Strength" , 2);
-		config.set("Properties.Earth.EarthArmor.Cooldown" , 150000);
+
+		config.set("Properties.Earth.EarthArmor.Duration", 30000);
+		config.set("Properties.Earth.EarthArmor.Strength", 2);
+		config.set("Properties.Earth.EarthArmor.Cooldown", 150000);
 
 		config.set("Properties.Fire.Lightning.Warmup", 2000);
 		config.set("Properties.Fire.Lightning.Range", 15);
@@ -635,7 +647,7 @@ public class ConfigManager {
 		config.set("Properties.Earth.EarthArmor.Duration", 30000);
 		config.set("Properties.Earth.EarthArmor.Strength", 2);
 		config.set("Properties.Earth.EarthArmor.Cooldown", 150000);
-		
+
 		config.set("Properties.Water.IceSpike.Cooldown", 6000);
 		config.set("Properties.Water.IceSpike.Damage", 4);
 		config.set("Properties.Water.IceSpike.Range", 20);
