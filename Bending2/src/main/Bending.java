@@ -1122,22 +1122,6 @@ public class Bending extends JavaPlugin {
 				sender.sendMessage(ChatColor.AQUA + "Imported BendingPlayers to MySQL.");
 				return true;
 			}
-		if (args[0].equalsIgnoreCase("check"))
-				 {
-			for (String players: benders.keySet()){
-			sender.sendMessage(players + " :" + benders.get(players).size());
-			sender.sendMessage(Tools.isBender(players) ? "True" : "False");
-			sender.sendMessage(ChatColor.RED + (Tools.isBender(players, BendingType.Fire) ? "True" : "False"));
-			sender.sendMessage(ChatColor.AQUA + (Tools.isBender(players, BendingType.Water) ? "True" : "False"));
-			sender.sendMessage(ChatColor.GRAY + (Tools.isBender(players, BendingType.Air) ? "True" : "False"));
-			sender.sendMessage(ChatColor.GREEN + (Tools.isBender(players, BendingType.Earth) ? "True" : "False"));
-			sender.sendMessage(ChatColor.GOLD + (Tools.isBender(players, BendingType.ChiBlocker) ? "True" : "False"));
-					for (BendingType type: benders.get(players)){
-						sender.sendMessage(ChatColor.AQUA + type.toString());
-					}
-						
-			}
-				 }
 		}
 		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <page> if you want to see a list of commands.");

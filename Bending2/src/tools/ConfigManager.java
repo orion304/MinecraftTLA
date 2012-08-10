@@ -138,6 +138,15 @@ public class ConfigManager {
 	public static long eartharmorcooldown = 150000;
 	public static boolean reverseearthbending = true;
 	public static long revertchecktime = 300000;
+	public static long icespikecooldown = 6000;
+	public static int icespikedamage = 4;
+	public static int icespikerange = 20;
+	public static double icespikethrowingmult = 0.7;
+	public static long icespikeareacooldown = 20000;
+	public static int icespikeareadamage = 2;
+	public static int icespikearearadius = 4;
+	public static double icespikeareathrowingmult = 1;
+	
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
 	public static long dissipateAfter = 400;
@@ -417,6 +426,16 @@ public class ConfigManager {
 				"Properties.Earth.EarthArmor.Strength", 2);
 		eartharmorcooldown = config.getLong(
 				"Properties.Earth.EarthArmor.Cooldown", 150000);
+		
+		//IceSpike
+		icespikecooldown = config.getLong("Properties.Water.IceSpike.Cooldown", 6000);
+		icespikedamage = config.getInt("Properties.Water.IceSpike.Damage", 4);
+		icespikerange= config.getInt("Properties.Water.IceSpike.Range", 20);
+		icespikethrowingmult= config.getDouble("Properties.Water.IceSpike.ThrowingMult", 0.7);
+		icespikeareacooldown= config.getLong("Properties.Water.IceSpike.AreaCooldown", 20000);
+		icespikeareadamage= config.getInt("Properties.Water.IceSpike.AreaDamage", 2);
+		icespikearearadius = config.getInt("Properties.Water.IceSpike.AreaRadius", 4);
+		icespikeareathrowingmult= config.getDouble("Properties.Water.IceSpike.AreaThrowingMult", 1);
 
 		try {
 			config.options().copyDefaults(true);
@@ -616,6 +635,15 @@ public class ConfigManager {
 		config.set("Properties.Earth.EarthArmor.Duration", 30000);
 		config.set("Properties.Earth.EarthArmor.Strength", 2);
 		config.set("Properties.Earth.EarthArmor.Cooldown", 150000);
+		
+		config.set("Properties.Water.IceSpike.Cooldown", 6000);
+		config.set("Properties.Water.IceSpike.Damage", 4);
+		config.set("Properties.Water.IceSpike.Range", 20);
+		config.set("Properties.Water.IceSpike.ThrowingMult", 0.7);
+		config.set("Properties.Water.IceSpike.AreaCooldown", 20000);
+		config.set("Properties.Water.IceSpike.AreaDamage", 2);
+		config.set("Properties.Water.IceSpike.AreaRadius", 4);
+		config.set("Properties.Water.IceSpike.AreaThrowingMult", 1);
 
 		config.set("MySQL.Use-MySQL", false);
 		config.set("MySQL.MySQL-host", "localhost");

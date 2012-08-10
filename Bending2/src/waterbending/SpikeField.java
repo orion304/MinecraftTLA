@@ -1,28 +1,33 @@
 package waterbending;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import tools.Tools;
+import tools.ConfigManager;
 
 public class SpikeField {
 	
-	private static int radius = 4;
-	private static int numofspikes = ((radius * 2) * (radius * 2)) / 16;
-	private static long cooldown = 20000;
+	private static int radius = ConfigManager.icespikearearadius;
+	public static int numofspikes = ((radius * 2) * (radius * 2)) / 16;
+	private static long cooldown = ConfigManager.icespikeareacooldown;
+	public static Map<Player, Long> cooldowns = new HashMap<Player, Long>();
 	
 	Random ran = new Random();
-	private int damage = 2;
-	private Vector thrown = new Vector(0, 1, 0);
+	private int damage = ConfigManager.icespikeareadamage;
+	private Vector thrown = new Vector(0, ConfigManager.icespikeareathrowingmult, 0);
 	
 	public SpikeField(Player p){
+		if (cooldowns.containsKey(p))
+			if (cooldowns.get(p) + cooldown >= System.currentTimeMillis())
+				return;
 		//Tools.verbose("Trying to create IceField" + numofspikes);
 		int locX = p.getLocation().getBlockX();
 		int locY = p.getLocation().getBlockY();
@@ -30,7 +35,7 @@ public class SpikeField {
 		List<Block> iceblocks = new ArrayList<Block>();
 		for (int x = -(radius - 1); x <= (radius - 1); x++){
 			for (int z = -(radius - 1); z <= (radius - 1); z++){
-				for (int y = -1; y <= 3; y++){
+				for (int y = -1; y <= 1; y++){
 				Block testblock = p.getWorld().getBlockAt(locX + x, locY + y, locZ + z);
 				if (testblock.getType() == Material.ICE
 						&& testblock.getRelative(BlockFace.UP).getType() == Material.AIR
@@ -49,6 +54,7 @@ public class SpikeField {
 			//Tools.verbose("X: " + targetblock.getLocation().getX() + " Y: " + targetblock.getLocation().getY() + " Z: " + targetblock.getLocation().getZ());
 			if (targetblock.getRelative(BlockFace.UP).getType() != Material.ICE){
 				new IceSpike(p, targetblock.getLocation(), damage, thrown, cooldown);
+				cooldowns.put(p, System.currentTimeMillis());
 				iceblocks.remove(targetblock);
 			}
 		}

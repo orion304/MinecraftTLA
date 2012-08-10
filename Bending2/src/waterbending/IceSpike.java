@@ -1,7 +1,9 @@
 package waterbending;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
@@ -20,7 +22,7 @@ public class IceSpike {
 	
 	public static ConcurrentHashMap<Integer, IceSpike> instances = new ConcurrentHashMap<Integer, IceSpike>();
 	public ConcurrentHashMap<Player, Long> removeTimers = new ConcurrentHashMap<Player, Long>();
-	public static ConcurrentHashMap<Player, Long> cooldowns = new ConcurrentHashMap<Player, Long>();
+	public static Map<Player, Long> cooldowns = new HashMap<Player, Long>();
 	public static final int standardheight = ConfigManager.earthColumnHeight;
 	public static long removeTimer = 500;
 
@@ -29,8 +31,8 @@ public class IceSpike {
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static double range = 20;
-	private long cooldown = 6000;
+	private static double range = ConfigManager.icespikerange;
+	private long cooldown = ConfigManager.icespikecooldown;
 	private static double speed = 25;
 	private static final Vector direction = new Vector(0, 1, 0);
 
@@ -41,17 +43,18 @@ public class IceSpike {
 	private Block block;
 	private Player player;
 	private int progress = 0;
-	private int damage = 8;
+	private int damage = ConfigManager.icespikedamage;
 	private int id;
 	private long time;
 	private int height = 2;
-	private Vector thrown = new Vector(0, 0.7, 0);
+	private Vector thrown = new Vector(0, ConfigManager.icespikethrowingmult, 0);
 	private ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
 	private List<LivingEntity> damaged = new ArrayList<LivingEntity>();
 
 	public IceSpike(Player player) {
-		if (cooldowns.contains(player) && cooldowns.get(player) + cooldown >= System.currentTimeMillis())
-			return;
+		if (cooldowns.containsKey(player))
+				if (cooldowns.get(player) + cooldown >= System.currentTimeMillis())
+					return;
 		try {
 			this.player = player;
 			
@@ -71,7 +74,6 @@ public class IceSpike {
 				}
 			}
 			if (closestentity != null){
-				//Tools.verbose("closestentity targetting");
 					Block temptestingblock = closestentity.getLocation().getBlock().getRelative(BlockFace.DOWN, 1);
 					//if (temptestingblock.getType() == Material.ICE){
 						this.block = temptestingblock;
@@ -82,6 +84,7 @@ public class IceSpike {
 				}
 			origin = block.getLocation();
 			location = origin.clone();
+
 			
 		} catch (IllegalStateException e) {
 			return;
@@ -98,15 +101,13 @@ public class IceSpike {
 				}
 				ID++;
 				time = System.currentTimeMillis() - interval;
+				cooldowns.put(player, System.currentTimeMillis());
 			}
 		}
 	}
 
 	public IceSpike(Player player, Location origin, int damage, Vector throwing, long aoecooldown) {
 		this.cooldown = aoecooldown;
-		if (cooldowns.contains(player))
-				if (cooldowns.get(player) + cooldown >= System.currentTimeMillis())
-					return;
 		this.player = player;
 		this.origin = origin;
 		location = origin.clone();
@@ -190,7 +191,6 @@ public class IceSpike {
 								.add(direction.clone().multiply(
 										-1 * (height))).getBlock(),
 										(height - 1));
-					cooldowns.put(player, System.currentTimeMillis());
 					if (!revertblocks()){
 						instances.remove(id);
 					}
@@ -261,13 +261,13 @@ public class IceSpike {
 	}
 
 	public static String getDescription() {
-		return "To use, simply left-click on an earthbendable block. "
-				+ "A column of earth will shoot upwards from that location. "
-				+ "Anything in the way of the column will be brought up with it, "
-				+ "leaving talented benders the ability to trap brainless entities up there. "
-				+ "Additionally, simply sneak (default shift) looking at an earthbendable block. "
-				+ "A wall of earth will shoot upwards from that location. "
-				+ "Anything in the way of the wall will be brought up with it. ";
+		return "To use, target an entity or target an ice block in range. "
+				+ "An ice spike will quickly raise to damage nearby entities as well as knocking them up. "
+				+ "Alternatively, you can sneak to use a similar ability that will raise " + SpikeField.numofspikes
+				+ " spikes that will look similar to the default point and click ability. "
+				+ " But it will act differently throwing entities a different heigth and dealing "
+				+ " a different amount of damage. This ability is really useful to skilled bender "
+				+ " that freeze a field to take advantage with this powerful ability.";
 	}
 
 }
