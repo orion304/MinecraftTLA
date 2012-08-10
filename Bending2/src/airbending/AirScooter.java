@@ -108,7 +108,6 @@ public class AirScooter {
 		player.setSprinting(false);
 		player.removePotionEffect(PotionEffectType.SPEED);
 		player.setVelocity(velocity);
-
 	}
 
 	private void spinScooter() {

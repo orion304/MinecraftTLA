@@ -20,28 +20,17 @@ public class HighJump {
 	}
 
 	private void jump(Player p) {
-		if (cooldowns.containsKey(p.getName())) {
-			if (cooldowns.get(p.getName()) + cooldown >= System
-					.currentTimeMillis()) {
-				if (p.getLocation().getBlock().getRelative(BlockFace.DOWN)
+		if (cooldowns.containsKey(p.getName())) 
+			if (cooldowns.get(p.getName()) + cooldown >= System.currentTimeMillis()) 
+				return;
+		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN)
 						.getType() == Material.AIR)
-					return;
-				Vector vec = p.getVelocity();
-				vec.setY(jumpheight);
-				p.setVelocity(vec);
-				cooldowns.put(p.getName(), System.currentTimeMillis());
 				return;
-			}
-		} else {
-			if (p.getLocation().getBlock().getRelative(BlockFace.DOWN)
-					.getType() == Material.AIR)
-				return;
-			Vector vec = p.getVelocity();
-			vec.setY(jumpheight);
-			p.setVelocity(vec);
-			cooldowns.put(p.getName(), System.currentTimeMillis());
-			return;
-		}
+		Vector vec = p.getVelocity();
+		vec.setY(jumpheight);
+		p.setVelocity(vec);
+		cooldowns.put(p.getName(), System.currentTimeMillis());
+		return;
 	}
 
 	public static String getDescription() {
