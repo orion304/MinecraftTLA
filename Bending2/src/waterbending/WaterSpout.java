@@ -52,7 +52,9 @@ public class WaterSpout {
 		newaffectedblocks.clear();
 
 		for (Player player : instances.keySet()) {
-			if (Tools.hasAbility(player, Abilities.WaterSpout)
+			if (!player.isOnline() || player.isDead()) {
+				instances.get(player).remove();
+			} else if (Tools.hasAbility(player, Abilities.WaterSpout)
 					&& Tools.canBend(player, Abilities.WaterSpout)) {
 				spout(player);
 			} else {
@@ -168,7 +170,9 @@ public class WaterSpout {
 						return height;
 					return i;
 				}
-				if (blocki.getType() != Material.AIR && !Tools.isPlant(blocki)) {
+				if (blocki.getType() != Material.AIR
+						&& (!Tools.isPlant(blocki) || !Tools
+								.canPlantbend(player))) {
 					revertBaseBlock(player);
 					return -1;
 				}
