@@ -345,6 +345,13 @@ public class Wave {
 		// wave.put(block, block);
 	}
 
+	private void clearWave() {
+		for (Block block : wave.keySet()) {
+			TempBlock.revertBlock(block, Material.AIR);
+		}
+		wave.clear();
+	}
+
 	public static void moveWater(Player player) {
 		if (instances.containsKey(player.getEntityId())) {
 			instances.get(player.getEntityId()).moveWater();
@@ -381,10 +388,7 @@ public class Wave {
 	}
 
 	private void freeze() {
-		for (Block block : wave.keySet()) {
-			block.setType(Material.AIR);
-		}
-		wave.clear();
+		clearWave();
 
 		double freezeradius = radius;
 		if (freezeradius > maxfreezeradius) {

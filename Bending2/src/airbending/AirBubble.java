@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.BendingType;
 import tools.ConfigManager;
 import tools.Tools;
 import waterbending.WaterManipulation;
@@ -18,10 +19,11 @@ public class AirBubble {
 
 	public static ConcurrentHashMap<Integer, AirBubble> instances = new ConcurrentHashMap<Integer, AirBubble>();
 
-	private static double radius = ConfigManager.airBubbleRadius;
+	private static double defaultradius = ConfigManager.airBubbleRadius;
 	// private static byte full = AirBlast.full;
 
 	private Player player;
+	private double radius = defaultradius;
 	private ConcurrentHashMap<Block, Byte> waterorigins;
 
 	public AirBubble(Player player) {
@@ -31,6 +33,12 @@ public class AirBubble {
 	}
 
 	private void pushWater() {
+		radius = defaultradius;
+		if (Tools.isBender(player.getName(), BendingType.Water)
+				&& Tools.isNight(player.getWorld())) {
+			radius = Tools.waterbendingNightAugment(defaultradius,
+					player.getWorld());
+		}
 		Location location = player.getLocation();
 
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {

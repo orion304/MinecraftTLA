@@ -11,7 +11,6 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -676,7 +675,7 @@ public class BendingListener implements Listener {
 		if (block.getType() == Material.FIRE) {
 			return;
 		}
-		// event.setCancelled(!WalkOnWater.canThaw(block));
+		event.setCancelled(Illumination.blocks.containsKey(block));
 		if (!event.isCancelled()) {
 			event.setCancelled(!WaterManipulation.canPhysicsChange(block));
 		}
@@ -695,25 +694,30 @@ public class BendingListener implements Listener {
 	public void onBlockPhysics(BlockPhysicsEvent event) {
 		Block block = event.getBlock();
 		event.setCancelled(!WaterManipulation.canPhysicsChange(block));
+		if (!event.isCancelled())
+			event.setCancelled(Illumination.blocks.containsKey(block));
 
 	}
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
-		if (!FreezeMelt.canThaw(block)) {
+		if (FreezeMelt.frozenblocks.containsKey(block)) {
 			FreezeMelt.thaw(block);
+			event.setCancelled(true);
 			// } else if (!WalkOnWater.canThaw(block)) {
 			// WalkOnWater.thaw(block);
-		} else if (!WaterWall.canThaw(block)) {
+		} else if (WaterWall.wallblocks.containsKey(block)) {
 			WaterWall.thaw(block);
+			event.setCancelled(true);
 		} else if (Illumination.blocks.containsKey(block)) {
 			event.setCancelled(true);
-		} else if (Illumination.blocks.containsKey(block
-				.getRelative(BlockFace.UP))) {
-			event.setCancelled(true);
+			// } else if (Illumination.blocks.containsKey(block
+			// .getRelative(BlockFace.UP))) {
+			// event.setCancelled(true);
 		} else if (!Wave.canThaw(block)) {
 			Wave.thaw(block);
+			event.setCancelled(true);
 			// event.setCancelled(true);
 		} else if (Tools.tempearthblocks.containsKey(block)) {
 			Tools.removeEarthbendedBlockIndex(block);

@@ -609,6 +609,12 @@ public class Tools {
 					&& blocki.getData() == full
 					&& WaterManipulation.canPhysicsChange(blocki))
 				sources++;
+			if (FreezeMelt.frozenblocks.containsKey(blocki)) {
+				if (FreezeMelt.frozenblocks.get(blocki) == full)
+					sources++;
+			} else if (block.getType() == Material.ICE) {
+				sources++;
+			}
 		}
 		if (sources >= 3)
 			return true;
