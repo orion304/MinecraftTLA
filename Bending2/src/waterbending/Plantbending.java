@@ -41,6 +41,7 @@ public class Plantbending {
 	private void revert() {
 		block.setType(type);
 		block.setData(data);
+		instances.remove(id);
 	}
 
 	public static void regrow() {
@@ -50,6 +51,11 @@ public class Plantbending {
 				plantbending.revert();
 			}
 		}
+	}
+
+	public static void regrowAll() {
+		for (int id : instances.keySet())
+			instances.get(id).revert();
 	}
 
 	public static String getDescription() {

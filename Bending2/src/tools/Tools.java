@@ -37,6 +37,7 @@ import org.bukkit.util.Vector;
 
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
+import waterbending.Plantbending;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
@@ -649,6 +650,7 @@ public class Tools {
 		FireStream.removeAll();
 		EarthArmor.removeAll();
 		BendingManager.removeFlyers();
+		Plantbending.regrowAll();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
 		}

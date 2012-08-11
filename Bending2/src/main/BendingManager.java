@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.server.EntityFireball;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -169,6 +170,15 @@ public class BendingManager implements Runnable {
 
 		if (ConfigManager.reverseearthbending
 				&& time > reverttime + ConfigManager.revertchecktime) {
+
+			ArrayList<Chunk> chunks = new ArrayList<Chunk>();
+
+			for (Player player : plugin.getServer().getOnlinePlayers()) {
+				Chunk chunk = player.getLocation().getChunk();
+				if (!chunks.contains(chunk))
+					chunks.add(chunk);
+			}
+
 			Tools.writeToLog("Removing up to " + Tools.tempearthblocks.size()
 					+ " blocks...");
 			reverttime = time;
@@ -178,7 +188,8 @@ public class BendingManager implements Runnable {
 				Block index = Tools.tempearthblocks.get(block);
 				if (Tools.movedearth.containsKey(index)) {
 					Information info = Tools.movedearth.get(index);
-					if (time < info.getTime() + ConfigManager.revertchecktime) {
+					if (time < info.getTime() + ConfigManager.revertchecktime
+							|| chunks.contains(index.getChunk())) {
 						remove = false;
 					}
 				}
