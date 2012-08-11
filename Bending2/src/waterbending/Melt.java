@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.AvatarState;
+import tools.TempBlock;
 import tools.Tools;
 
 public class Melt {
@@ -46,7 +47,8 @@ public class Melt {
 	}
 
 	public static void melt(Block block) {
-		if (Tools.isMeltable(block)) {
+		if (Tools.isMeltable(block) && !TempBlock.isTempBlock(block)
+				&& WaterManipulation.canPhysicsChange(block)) {
 			if (block.getType() == Material.SNOW) {
 				block.setType(Material.AIR);
 				return;
@@ -63,7 +65,8 @@ public class Melt {
 	}
 
 	public static void evaporate(Block block) {
-		if (Tools.isWater(block)) {
+		if (Tools.isWater(block) && !TempBlock.isTempBlock(block)
+				&& WaterManipulation.canPhysicsChange(block)) {
 			block.setType(Material.AIR);
 			block.getWorld().playEffect(block.getLocation(), Effect.SMOKE, 1);
 		}

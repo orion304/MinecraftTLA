@@ -10,6 +10,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
 import tools.Abilities;
 import tools.BendingType;
 import tools.ConfigManager;
@@ -22,7 +23,7 @@ public class StorageManager {
 	public static Boolean useMySQL;
 	public static Boolean useFlatFile;
 	public MySQL MySql;
-	
+
 	// private InputStream defConfigStream;
 
 	// public BendingPlayers(File file, InputStream inputStream) {
@@ -59,68 +60,68 @@ public class StorageManager {
 		}
 		List<BendingType> templist = new ArrayList<BendingType>();
 		Bending.benders.put(player.getName(), templist);
-		//Bending.benders.remove(player.getName());
+		// Bending.benders.remove(player.getName());
 		return;
 	}
 
-	//public boolean isBender(Player player, BendingType type) {
-	//	if (StorageManager.useFlatFile) {
-	//		if (config.checkKeys(player.getName())) {
-	//			if (config.getKey(player.getName()).contains("a")
-	//					&& type == BendingType.Air) {
-	//				return true;
-	//			}
-	//			if (config.getKey(player.getName()).contains("e")
-	//					&& type == BendingType.Earth) {
-	//				return true;
-	//			}
-	//			if (config.getKey(player.getName()).contains("w")
-	//					&& type == BendingType.Water) {
-	//				return true;
-	//			}
-	//			if (config.getKey(player.getName()).contains("f")
-	//					&& type == BendingType.Fire) {
-	//				return true;
-	//			}
-	//			if (config.getKey(player.getName()).contains("c")
-	//					&& type == BendingType.ChiBlocker) {
-	//				return true;
-	//			}
-	//		}
-	//	} else if (StorageManager.useMySQL) {
-	//		try {
-	//			String getEle = "SELECT bending FROM bending_element WHERE player ='"
-	//					+ player.getName() + "'";
-	//			ResultSet bending = this.MySql.getConnection()
-	//					.createStatement().executeQuery(getEle);
-	//			if (bending.next()) {
-	//				if (bending.getString("bending").contains("a")
-	//						&& type == BendingType.Air) {
-	//					return true;
-	//				}
-	//				if (bending.getString("bending").contains("e")
-	//						&& type == BendingType.Earth) {
-	//					return true;
-	//				}
-	//				if (bending.getString("bending").contains("w")
-	//						&& type == BendingType.Water) {
-	//					return true;
-	//				}
-	//				if (bending.getString("bending").contains("f")
-	//						&& type == BendingType.Fire) {
-	//					return true;
-	//				}
-	//				if (bending.getString("bending").contains("c")
-	//						&& type == BendingType.ChiBlocker) {
-	//					return true;
-	//				}
-	//			}
-	//		} catch (SQLException e) {
-	//			return false;
-	//		}
-	//	}
-	//	return false;
-	//}
+	// public boolean isBender(Player player, BendingType type) {
+	// if (StorageManager.useFlatFile) {
+	// if (config.checkKeys(player.getName())) {
+	// if (config.getKey(player.getName()).contains("a")
+	// && type == BendingType.Air) {
+	// return true;
+	// }
+	// if (config.getKey(player.getName()).contains("e")
+	// && type == BendingType.Earth) {
+	// return true;
+	// }
+	// if (config.getKey(player.getName()).contains("w")
+	// && type == BendingType.Water) {
+	// return true;
+	// }
+	// if (config.getKey(player.getName()).contains("f")
+	// && type == BendingType.Fire) {
+	// return true;
+	// }
+	// if (config.getKey(player.getName()).contains("c")
+	// && type == BendingType.ChiBlocker) {
+	// return true;
+	// }
+	// }
+	// } else if (StorageManager.useMySQL) {
+	// try {
+	// String getEle = "SELECT bending FROM bending_element WHERE player ='"
+	// + player.getName() + "'";
+	// ResultSet bending = this.MySql.getConnection()
+	// .createStatement().executeQuery(getEle);
+	// if (bending.next()) {
+	// if (bending.getString("bending").contains("a")
+	// && type == BendingType.Air) {
+	// return true;
+	// }
+	// if (bending.getString("bending").contains("e")
+	// && type == BendingType.Earth) {
+	// return true;
+	// }
+	// if (bending.getString("bending").contains("w")
+	// && type == BendingType.Water) {
+	// return true;
+	// }
+	// if (bending.getString("bending").contains("f")
+	// && type == BendingType.Fire) {
+	// return true;
+	// }
+	// if (bending.getString("bending").contains("c")
+	// && type == BendingType.ChiBlocker) {
+	// return true;
+	// }
+	// }
+	// } catch (SQLException e) {
+	// return false;
+	// }
+	// }
+	// return false;
+	// }
 
 	public boolean isBender(String player, BendingType type) {
 		if (StorageManager.useFlatFile) {
@@ -141,7 +142,7 @@ public class StorageManager {
 						&& type == BendingType.Fire) {
 					return true;
 				}
-				if (config.getKey(player).contains("f")
+				if (config.getKey(player).contains("c")
 						&& type == BendingType.ChiBlocker) {
 					return true;
 				}
@@ -252,7 +253,8 @@ public class StorageManager {
 					append = ConfigManager.getPrefix("Fire");
 				} else if (Tools.isBender(player.getName(), BendingType.Water)) {
 					append = ConfigManager.getPrefix("Water");
-				} else if (Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
+				} else if (Tools.isBender(player.getName(),
+						BendingType.ChiBlocker)) {
 					append = ConfigManager.getPrefix("ChiBlocker");
 				}
 				if (!(ConfigManager.compatibility))
@@ -263,13 +265,17 @@ public class StorageManager {
 				if (ConfigManager.colors && (!player.isOp())) {
 					if (Tools.isBender(player.getName(), BendingType.Air)) {
 						color = Tools.getColor(ConfigManager.getColor("Air"));
-					} else if (Tools.isBender(player.getName(), BendingType.Earth)) {
+					} else if (Tools.isBender(player.getName(),
+							BendingType.Earth)) {
 						color = Tools.getColor(ConfigManager.getColor("Earth"));
-					} else if (Tools.isBender(player.getName(), BendingType.Fire)) {
+					} else if (Tools.isBender(player.getName(),
+							BendingType.Fire)) {
 						color = Tools.getColor(ConfigManager.getColor("Fire"));
-					} else if (Tools.isBender(player.getName(), BendingType.Water)) {
+					} else if (Tools.isBender(player.getName(),
+							BendingType.Water)) {
 						color = Tools.getColor(ConfigManager.getColor("Water"));
-					} else if (Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
+					} else if (Tools.isBender(player.getName(),
+							BendingType.ChiBlocker)) {
 						color = Tools.getColor(ConfigManager
 								.getColor("ChiBlocker"));
 					}
@@ -347,15 +353,15 @@ public class StorageManager {
 			}
 		}
 		List<BendingType> templist;
-		if (Bending.benders.contains(player.getName())){
+		if (Bending.benders.contains(player.getName())) {
 			templist = Bending.benders.get(player.getName());
 			templist.add(type);
 		} else {
-		templist = new ArrayList<BendingType>();
-		templist.add(type);
+			templist = new ArrayList<BendingType>();
+			templist.add(type);
 		}
 		Bending.benders.put(player.getName(), templist);
-		
+
 	}
 
 	public void addBending(Player player, String type) {
@@ -418,12 +424,12 @@ public class StorageManager {
 			}
 		}
 		List<BendingType> templist;
-		if (Bending.benders.contains(player)){
+		if (Bending.benders.contains(player)) {
 			templist = Bending.benders.get(player);
 			templist.add(type);
 		} else {
-		templist = new ArrayList<BendingType>();
-		templist.add(type);
+			templist = new ArrayList<BendingType>();
+			templist.add(type);
 		}
 		Bending.benders.put(player, templist);
 	}
@@ -435,38 +441,38 @@ public class StorageManager {
 		}
 	}
 
-	//public boolean isBender(Player player) {
-	//	if (StorageManager.useFlatFile) {
-	//		if (config.checkKeys(player.getName())) {
-	//			if (config.getKey(player.getName()).contains("a")
-	//					|| config.getKey(player.getName()).contains("e")
-	//					|| config.getKey(player.getName()).contains("w")
-	//					|| config.getKey(player.getName()).contains("f")
-	//					|| config.getKey(player.getName()).contains("s")
-	//					|| config.getKey(player.getName()).contains("c")) {
-	//				return true;
-	//			}
-	//		}
-	//	} else if (StorageManager.useMySQL) {
-	//		String getEle = "SELECT bending FROM bending_element WHERE player ='"
-	//				+ player.getName() + "'";
-	//		ResultSet result = this.MySql.select(getEle);
-	//		try {
-	//			if (result.next()) {
-	//				String bending = result.getString("bending");
-	//				if (bending.contains("a") || bending.contains("e")
-	//						|| bending.contains("w") || bending.contains("f")
-	//						|| bending.contains("s") || bending.contains("c")) {
-	//					return true;
-	//				}
-	//			}
-	//		} catch (SQLException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}
-	//	}
-	//	return false;
-	//}
+	// public boolean isBender(Player player) {
+	// if (StorageManager.useFlatFile) {
+	// if (config.checkKeys(player.getName())) {
+	// if (config.getKey(player.getName()).contains("a")
+	// || config.getKey(player.getName()).contains("e")
+	// || config.getKey(player.getName()).contains("w")
+	// || config.getKey(player.getName()).contains("f")
+	// || config.getKey(player.getName()).contains("s")
+	// || config.getKey(player.getName()).contains("c")) {
+	// return true;
+	// }
+	// }
+	// } else if (StorageManager.useMySQL) {
+	// String getEle = "SELECT bending FROM bending_element WHERE player ='"
+	// + player.getName() + "'";
+	// ResultSet result = this.MySql.select(getEle);
+	// try {
+	// if (result.next()) {
+	// String bending = result.getString("bending");
+	// if (bending.contains("a") || bending.contains("e")
+	// || bending.contains("w") || bending.contains("f")
+	// || bending.contains("s") || bending.contains("c")) {
+	// return true;
+	// }
+	// }
+	// } catch (SQLException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// return false;
+	// }
 
 	public void setAbility(Player player, String ability, int slot) {
 		for (Abilities a : Abilities.values()) {
@@ -715,7 +721,7 @@ public class StorageManager {
 		}
 		return list;
 	}
-	
+
 	public List<BendingType> getBendingTypes(String player) {
 		List<BendingType> list = new ArrayList<BendingType>();
 
@@ -758,11 +764,11 @@ public class StorageManager {
 			this.MySql = new MySQL(ConfigManager.dbHost, ConfigManager.dbUser,
 					ConfigManager.dbPass, ConfigManager.dbDB,
 					ConfigManager.dbPort);
-			if (this.MySql.initialize()){
-			String createTable1 = "CREATE TABLE IF NOT EXISTS bending_element(player TEXT NOT NULL, bending TEXT NOT NULL)";
-			String createTable2 = "CREATE TABLE IF NOT EXISTS bending_ability(player TEXT NOT NULL, setter TEXT NOT NULL, ability TEXT NOT NULL)";
-			MySql.execute(createTable1);
-			MySql.execute(createTable2);
+			if (this.MySql.initialize()) {
+				String createTable1 = "CREATE TABLE IF NOT EXISTS bending_element(player TEXT NOT NULL, bending TEXT NOT NULL)";
+				String createTable2 = "CREATE TABLE IF NOT EXISTS bending_ability(player TEXT NOT NULL, setter TEXT NOT NULL, ability TEXT NOT NULL)";
+				MySql.execute(createTable1);
+				MySql.execute(createTable2);
 			} else {
 				this.MySql = null;
 				this.config = new BendingPlayers(file);
@@ -772,7 +778,7 @@ public class StorageManager {
 		} else if (StorageManager.useFlatFile) {
 			this.config = new BendingPlayers(file);
 		}
-		//Tools.verbose(StorageManager.useFlatFile ? "Flat" : "MySQL");
+		// Tools.verbose(StorageManager.useFlatFile ? "Flat" : "MySQL");
 	}
 
 }
