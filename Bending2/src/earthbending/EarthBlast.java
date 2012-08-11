@@ -19,7 +19,7 @@ public class EarthBlast {
 
 	public static ConcurrentHashMap<Integer, EarthBlast> instances = new ConcurrentHashMap<Integer, EarthBlast>();
 
-	private static double preparerange = ConfigManager.earthBlastPrepareRange;
+	private static double preparerange = 7; // ConfigManager.earthBlastPrepareRange;
 	private static double range = ConfigManager.earthBlastRange;
 	private static int damage = ConfigManager.earthdmg;
 	private static double speed = ConfigManager.earthBlastSpeed;

@@ -168,7 +168,7 @@ public class WaterSpout {
 						return height;
 					return i;
 				}
-				if (blocki.getType() != Material.AIR) {
+				if (blocki.getType() != Material.AIR && !Tools.isPlant(blocki)) {
 					revertBaseBlock(player);
 					return -1;
 				}
