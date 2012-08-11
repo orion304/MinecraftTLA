@@ -114,7 +114,7 @@ public class ConfigManager {
 	public static int freezeMeltRadius = 5;
 	public static double healingWatersRadius = 5;
 	public static long healingWatersInterval = 750;
-	public static int plantbendingRange = 10;
+	public static long plantbendingRegrowTime = 180000;
 	public static double walkOnWaterRadius = 3.5;
 	public static double waterManipulationRange = 20;
 	public static double waterManipulationSpeed = 35;
@@ -381,8 +381,8 @@ public class ConfigManager {
 		healingWatersInterval = config
 				.getLong("Properties.Water.HealingWaters.Interval");
 		// Plantbending
-		plantbendingRange = config
-				.getInt("Properties.Water.Plantbending.Range");
+		plantbendingRegrowTime = config
+				.getLong("Properties.Water.Plantbending.Regrow-Time");
 		// WalkOnWater
 		walkOnWaterRadius = config
 				.getDouble("Properties.Water.WalkOnWater.Radius");
@@ -611,7 +611,7 @@ public class ConfigManager {
 		config.set("Properties.Water.HealingWaters.Radius", 5);
 		config.set("Properties.Water.HealingWaters.Interval", 750);
 
-		config.set("Properties.Water.Plantbending.Range", 10);
+		config.set("Properties.Water.Plantbending.Regrow-Time", 180000);
 
 		config.set("Properties.Water.WalkOnWater.Radius", 3.5);
 

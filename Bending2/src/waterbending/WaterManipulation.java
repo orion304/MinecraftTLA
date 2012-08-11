@@ -131,6 +131,8 @@ public class WaterManipulation {
 							targetdestination).normalize();
 					targetdestination = Tools.getPointOnLine(firstdestination,
 							targetdestination, range);
+					if (Tools.isPlant(sourceblock))
+						new Plantbending(sourceblock);
 					addWater(sourceblock);
 				}
 			}

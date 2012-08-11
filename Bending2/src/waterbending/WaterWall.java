@@ -159,6 +159,8 @@ public class WaterWall {
 						firstdestination).normalize();
 				targetdirection = getDirection(firstdestination,
 						targetdestination).normalize();
+				if (Tools.isPlant(sourceblock))
+					new Plantbending(sourceblock);
 				addWater(sourceblock);
 			}
 

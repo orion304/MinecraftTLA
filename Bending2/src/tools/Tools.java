@@ -421,8 +421,8 @@ public class Tools {
 		if ((block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
 				&& block.getData() == full)
 			return true;
-		if (block.getType() == Material.ICE || block.getType() == Material.SNOW
-				|| block.getType() == Material.SNOW_BLOCK)
+		if (block.getType() == Material.ICE || block.getType() == Material.SNOW)
+			// || block.getType() == Material.SNOW_BLOCK)
 			return true;
 		if (canPlantbend(player) && isPlant(block))
 			return true;

@@ -144,6 +144,8 @@ public class Wave {
 				if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
 					sourceblock.setType(Material.AIR);
 				}
+				if (Tools.isPlant(sourceblock))
+					new Plantbending(sourceblock);
 				addWater(sourceblock);
 
 			}
