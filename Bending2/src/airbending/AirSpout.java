@@ -47,7 +47,7 @@ public class AirSpout {
 	}
 
 	private void spout() {
-		if (!Tools.hasPermission(player, Abilities.AirSpout)
+		if (!Tools.canBend(player, Abilities.AirSpout)
 				|| !Tools.hasAbility(player, Abilities.AirSpout)
 				|| player.getEyeLocation().getBlock().isLiquid()
 				|| Tools.isSolid(player.getEyeLocation().getBlock())) {
