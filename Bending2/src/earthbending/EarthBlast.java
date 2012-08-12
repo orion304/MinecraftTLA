@@ -19,6 +19,7 @@ public class EarthBlast {
 
 	public static ConcurrentHashMap<Integer, EarthBlast> instances = new ConcurrentHashMap<Integer, EarthBlast>();
 
+	private static boolean hitself = false; // ConfigManager.earthBlastHitSelf;
 	private static double preparerange = 7; // ConfigManager.earthBlastPrepareRange;
 	private static double range = ConfigManager.earthBlastRange;
 	private static int damage = ConfigManager.earthdmg;
@@ -192,9 +193,11 @@ public class EarthBlast {
 				}
 
 				for (Entity entity : Tools.getEntitiesAroundPoint(location, 1)) {
-					if (entity instanceof LivingEntity) {
+					if (entity instanceof LivingEntity
+							&& (entity.getEntityId() != player.getEntityId() || hitself)) {
 						Tools.damageEntity(player, entity, damage);
 						falling = false;
+
 					}
 				}
 
@@ -235,7 +238,8 @@ public class EarthBlast {
 				}
 
 				for (Entity entity : Tools.getEntitiesAroundPoint(location, 3)) {
-					if (entity instanceof LivingEntity) {
+					if (entity instanceof LivingEntity
+							&& (entity.getEntityId() != player.getEntityId() || hitself)) {
 						entity.setVelocity(entity.getVelocity().clone()
 								.add(direction));
 						Tools.damageEntity(player, entity, damage);

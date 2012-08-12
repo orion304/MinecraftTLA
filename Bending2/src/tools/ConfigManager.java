@@ -60,7 +60,8 @@ public class ConfigManager {
 	public static double catapultPush = 5;
 	public static double compactColumnRange = 20;
 	public static double compactColumnSpeed = 8;
-	public static double earthBlastPrepareRange = 5;
+	public static boolean earthBlastHitSelf = false;
+	public static double earthBlastPrepareRange = 7;
 	public static double earthBlastRange = 20;
 	public static double earthBlastSpeed = 35;
 	public static boolean earthBlastRevert = true;
@@ -285,6 +286,8 @@ public class ConfigManager {
 		compactColumnSpeed = config
 				.getDouble("Properties.Earth.CompactColumn.Speed");
 		// EarthBlast
+		earthBlastHitSelf = config
+				.getBoolean("Properties.Earth.EarthBlast.Hit-Self");
 		earthBlastPrepareRange = config
 				.getDouble("Properties.Earth.EarthBlast.Prepare-Range");
 		earthBlastRange = config.getDouble("Properties.Earth.EarthBlast.Range");
@@ -537,7 +540,8 @@ public class ConfigManager {
 		config.set("Properties.Earth.CompactColumn.Range", 20);
 		config.set("Properties.Earth.CompactColumn.Speed", 8);
 
-		config.set("Properties.Earth.EarthBlast.Prepare-Range", 5);
+		config.set("Properties.Earth.EarthBlast.Hit-Self", false);
+		config.set("Properties.Earth.EarthBlast.Prepare-Range", 7);
 		config.set("Properties.Earth.EarthBlast.Range", 20);
 		config.set("Properties.Earth.EarthBlast.Speed", 35);
 		config.set("Properties.Earth.EarthBlast.Revert", true);
