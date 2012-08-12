@@ -185,8 +185,7 @@ public class Tools {
 
 	public static void moveEarth(Location location, Vector direction,
 			int chainlength) {
-		Block block = location.getBlock();
-		moveEarth(block, direction, chainlength, true);
+		moveEarth(location, direction, chainlength, true);
 		// if (isEarthbendable(block)) {
 		// Vector norm = direction.clone().normalize();
 		// Vector negnorm = norm.clone().multiply(-1);
@@ -218,6 +217,12 @@ public class Tools {
 		// // affectedblock.setType(Material.GLASS);
 		// }
 		// }
+	}
+
+	public static void moveEarth(Location location, Vector direction,
+			int chainlength, boolean throwplayer) {
+		Block block = location.getBlock();
+		moveEarth(block, direction, chainlength, throwplayer);
 	}
 
 	public static void moveEarth(Block block, Vector direction, int chainlength) {

@@ -103,7 +103,7 @@ public class Catapult {
 			ticks++;
 		}
 
-		Tools.moveEarth(location, direction, distance);
+		Tools.moveEarth(location, direction, distance, false);
 		location = location.clone().add(direction);
 
 		if (catapult) {
