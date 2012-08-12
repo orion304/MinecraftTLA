@@ -50,6 +50,7 @@ public class ConfigManager {
 	public static double airSwipePush = 1;
 	public static long airSwipeCooldown = 1000;
 	public static double airScooterSpeed = .675;
+	public static double airSpoutHeight = 20;
 	public static double tornadoRadius = 10;
 	public static double tornadoHeight = 25;
 	public static double tornadoRange = 25;
@@ -150,7 +151,6 @@ public class ConfigManager {
 	public static int icespikearearadius = 4;
 	public static double icespikeareathrowingmult = 1;
 	public static boolean useTagAPI = true;
-	
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
 	public static long dissipateAfter = 400;
@@ -206,7 +206,7 @@ public class ConfigManager {
 				"Bending.Option.Bend-With-Weapon.Fire", false));
 		useWeapon.put("Water", config.getBoolean(
 				"Bending.Option.Bend-With-Weapon.Water", false));
-		
+
 		useTagAPI = config.getBoolean("Bending.Option.Use-TagAPI", true);
 		// MySQL
 		useMySQL = config.getBoolean("MySQL.Use-MySQL");
@@ -279,6 +279,8 @@ public class ConfigManager {
 				.getDouble("Properties.Air.Tornado.Player-Push-Factor");
 		// Air Scooter
 		airScooterSpeed = config.getDouble("Properties.Air.AirScooter.Speed");
+		// Air Spout
+		airSpoutHeight = config.getDouble("Properties.Air.AirSpout.Height");
 		// EARTH
 		// Catapult
 		catapultLength = config.getInt("Properties.Earth.Catapult.Length");
@@ -537,6 +539,8 @@ public class ConfigManager {
 		config.set("Properties.Air.Tornado.Player-Push-Factor", 1);
 
 		config.set("Properties.Air.AirScooter.Speed", .675);
+
+		config.set("Properties.Air.AirSpout.Height", 20);
 
 		config.set("Properties.Earth.Catapult.Length", 7);
 		config.set("Properties.Earth.Catapult.Speed", 12);
