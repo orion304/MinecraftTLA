@@ -65,6 +65,8 @@ public class BendingManager implements Runnable {
 
 	public static ArrayList<Player> flyingplayers = new ArrayList<Player>();
 
+	private static boolean safeRevert = ConfigManager.safeRevert;
+
 	private boolean verbose = true;
 	private long verbosetime;
 	private long verboseinterval = 3 * 60 * 1000;
@@ -189,7 +191,7 @@ public class BendingManager implements Runnable {
 				if (Tools.movedearth.containsKey(index)) {
 					Information info = Tools.movedearth.get(index);
 					if (time < info.getTime() + ConfigManager.revertchecktime
-							|| chunks.contains(index.getChunk())) {
+							|| (chunks.contains(index.getChunk()) && safeRevert)) {
 						remove = false;
 					}
 				}

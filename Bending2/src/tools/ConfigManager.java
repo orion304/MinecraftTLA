@@ -138,6 +138,7 @@ public class ConfigManager {
 	public static int eartharmorstrength = 2;
 	public static long eartharmorcooldown = 150000;
 	public static boolean reverseearthbending = true;
+	public static boolean safeRevert = true;
 	public static long revertchecktime = 300000;
 	public static long icespikecooldown = 6000;
 	public static int icespikedamage = 4;
@@ -219,6 +220,7 @@ public class ConfigManager {
 		// Earthbending revert
 		reverseearthbending = config
 				.getBoolean("Bending.Option.Reverse-Earthbending");
+		safeRevert = config.getBoolean("Bending.Option.Safe-Revert");
 		revertchecktime = config
 				.getLong("Bending.Option.Reverse-Earthbending-Check-Time");
 
@@ -486,6 +488,7 @@ public class ConfigManager {
 		config.set("Bending.Option.Bend-To-Item", false);
 
 		config.set("Bending.Option.Reverse-Earthbending", true);
+		config.set("Bending.Option.Safe-Revert", true);
 		config.set("Bending.Option.Reverse-Earthbending-Check-Time", 500000);
 		config.set("Bending.Option.Firebending-Dissipate-Time", 400);
 
