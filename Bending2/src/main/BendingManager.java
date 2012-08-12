@@ -38,6 +38,7 @@ import airbending.AirBurst;
 import airbending.AirPassive;
 import airbending.AirScooter;
 import airbending.AirShield;
+import airbending.AirSpout;
 import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Speed;
@@ -138,6 +139,8 @@ public class BendingManager implements Runnable {
 		AirBurst.progressAll();
 
 		AirScooter.progressAll();
+
+		AirSpout.spoutAll();
 	}
 
 	private void manageEarthbending() {
@@ -311,6 +314,7 @@ public class BendingManager implements Runnable {
 		ArrayList<Player> avatarstateplayers = new ArrayList<Player>();
 		ArrayList<Player> airscooterplayers = new ArrayList<Player>();
 		ArrayList<Player> waterspoutplayers = new ArrayList<Player>();
+		ArrayList<Player> airspoutplayers = new ArrayList<Player>();
 
 		players.addAll(Tornado.getPlayers());
 		players.addAll(Speed.getPlayers());
@@ -318,12 +322,14 @@ public class BendingManager implements Runnable {
 		avatarstateplayers = AvatarState.getPlayers();
 		airscooterplayers = AirScooter.getPlayers();
 		waterspoutplayers = WaterSpout.getPlayers();
+		airspoutplayers = AirSpout.getPlayers();
 		// players.addAll(avatarstateplayers);
 
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			if (avatarstateplayers.contains(player)
 					|| airscooterplayers.contains(player)
-					|| waterspoutplayers.contains(player)) {
+					|| waterspoutplayers.contains(player)
+					|| airspoutplayers.contains(player)) {
 				continue;
 			}
 			if (Bloodbending.isBloodbended(player)) {

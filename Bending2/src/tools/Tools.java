@@ -45,6 +45,7 @@ import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
+import airbending.AirSpout;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
@@ -657,6 +658,7 @@ public class Tools {
 		EarthArmor.removeAll();
 		BendingManager.removeFlyers();
 		Plantbending.regrowAll();
+		AirSpout.removeAll();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
 		}

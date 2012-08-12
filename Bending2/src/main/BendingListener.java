@@ -64,6 +64,7 @@ import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
 import airbending.AirShield;
+import airbending.AirSpout;
 import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Speed;
@@ -263,6 +264,10 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.AirScooter) {
 					new AirScooter(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.AirSpout) {
+					new AirSpout(player);
 				}
 
 				// if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
