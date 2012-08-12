@@ -22,7 +22,7 @@ permissions:
       bending.air.Tornado: true
       bending.air.AirBlast: true
       bending.air.Passive: true
-#      bending.air.AirSpout: false
+      bending.air.AirSpout: true
 #      bending.air.AirBurst: false
       bending.air.AirScooter: true
   bending.fire.*:
@@ -145,8 +145,7 @@ permissions:
     default: false
   bending.air.AirSpout:
     description: Allows the use of AirSpout.
-#    default: true
-    default: false
+    default: true
   bending.fire.Blaze:
     description: Allows the use of Blaze.
     default: true
