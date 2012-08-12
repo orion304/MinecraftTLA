@@ -8,6 +8,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -810,7 +811,7 @@ public class BendingListener implements Listener {
 	public void onBlockForm(BlockFormEvent event) {
 		if (TempBlock.isTempBlock(event.getBlock()))
 			event.setCancelled(true);
-		if (WaterManipulation.canPhysicsChange(event.getBlock()))
+		if (!WaterManipulation.canPhysicsChange(event.getBlock()))
 			event.setCancelled(true);
 	}
 
@@ -863,7 +864,7 @@ public class BendingListener implements Listener {
 				|| Speed.getPlayers().contains(p)
 				|| FireJet.getPlayers().contains(p)
 				|| AvatarState.getPlayers().contains(p)) {
-			event.setCancelled(true);
+			event.setCancelled(p.getGameMode() != GameMode.CREATIVE);
 		}
 	}
 
