@@ -12,9 +12,9 @@ public enum Abilities {
 
 	Extinguish, Fireball, HeatMelt, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning,
 
-	WaterBubble, FreezeMelt, HealingWaters, WaterManipulation, WaterWall, Wave, Bloodbending, WaterSpout, IceSpike,
+	WaterBubble, FreezeMelt, HealingWaters, Plantbending, WaterManipulation, WaterWall, Wave, Bloodbending, WaterSpout, IceSpike,
 
-	HighJump, RapidPunch,
+	HighJump, RapidPunch, Paralyze,
 
 	AvatarState;
 
@@ -35,7 +35,7 @@ public enum Abilities {
 	}
 
 	private enum ChiBlockingAbilities {
-		HighJump, RapidPunch;
+		HighJump, RapidPunch, Paralyze;
 	}
 
 	public static Abilities getAbility(String ability) {

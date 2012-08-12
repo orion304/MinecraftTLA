@@ -149,6 +149,8 @@ public class ConfigManager {
 	public static int icespikeareadamage = 2;
 	public static int icespikearearadius = 4;
 	public static double icespikeareathrowingmult = 1;
+	public static boolean useTagAPI = true;
+	
 
 	private static List<String> defaultearthbendable = new ArrayList<String>();
 	public static long dissipateAfter = 400;
@@ -204,6 +206,8 @@ public class ConfigManager {
 				"Bending.Option.Bend-With-Weapon.Fire", false));
 		useWeapon.put("Water", config.getBoolean(
 				"Bending.Option.Bend-With-Weapon.Water", false));
+		
+		useTagAPI = config.getBoolean("Bending.Option.Use-TagAPI", true);
 		// MySQL
 		useMySQL = config.getBoolean("MySQL.Use-MySQL");
 		dbHost = config.getString("MySQL.MySQL-host",
@@ -489,6 +493,7 @@ public class ConfigManager {
 		config.set("Bending.Option.Bend-With-Weapon.Earth", true);
 		config.set("Bending.Option.Bend-With-Weapon.ChiBlocker", false);
 		config.set("Bending.Option.Bend-To-Item", false);
+		config.set("Bending.Option.Use-TagAPI", true);
 
 		config.set("Bending.Option.Reverse-Earthbending", true);
 		config.set("Bending.Option.Safe-Revert", true);

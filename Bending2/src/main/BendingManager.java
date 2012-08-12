@@ -168,7 +168,6 @@ public class BendingManager implements Runnable {
 		for (Player player : EarthArmor.instances.keySet()) {
 			EarthArmor.moveArmor(player);
 		}
-
 		EarthPassive.revertSands();
 
 		Tremorsense.manage(plugin.getServer());
@@ -269,8 +268,8 @@ public class BendingManager implements Runnable {
 	}
 
 	private void manageChiBlocking() {
-		for (Player p : RapidPunch.targets.keySet())
-			RapidPunch.startPunch(p);
+		for (Player p : RapidPunch.instance.keySet())
+			RapidPunch.instance.get(p).startPunch(p);
 	}
 
 	private void manageWaterbending() {
@@ -290,6 +289,10 @@ public class BendingManager implements Runnable {
 
 		for (int ID : Wave.instances.keySet()) {
 			Wave.progress(ID);
+		}
+
+		for (int ID : IceSpike.instances.keySet()) {
+			IceSpike.instances.get(ID).progress();
 		}
 
 		for (int ID : IceSpike.instances.keySet()) {

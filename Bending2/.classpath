@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/WorldGuard.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/craftbukkit.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/PreciousStones.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/TagAPI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

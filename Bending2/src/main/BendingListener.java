@@ -392,47 +392,20 @@ public class BendingListener implements Listener {
 				new AvatarState(player);
 			}
 
-			if (Tools.canBend(player, Tools.getBendingAbility(player))) {
-
-				if (Tools.getBendingAbility(player) == Abilities.HighJump) {
-					new HighJump(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.RapidPunch
-						&& !RapidPunch.punching.contains(player)) {
-					if (RapidPunch.timers.containsKey(player.getName())) {
-						if (RapidPunch.timers.get(player.getName()) + 1000 <= System
-								.currentTimeMillis()) {
-							new RapidPunch(player);
-						}
-					} else {
-						new RapidPunch(player);
-					}
-				}
-
+			if (Tools.getBendingAbility(player) == Abilities.HighJump) {
+				new HighJump(player);
 			}
 
-			if (Tools.canBend(player, Tools.getBendingAbility(player))) {
+			if (Tools.getBendingAbility(player) == Abilities.RapidPunch) {
+				new RapidPunch(player);
+			}
 
-				if (Tools.getBendingAbility(player) == Abilities.HighJump) {
-					new HighJump(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.RapidPunch
-						&& !RapidPunch.punching.contains(player)) {
-					if (RapidPunch.timers.containsKey(player.getName())) {
-						if (RapidPunch.timers.get(player.getName()) + 1000 <= System
-								.currentTimeMillis()) {
-							new RapidPunch(player);
-						}
-					} else {
-						new RapidPunch(player);
-					}
-				}
-
+			if (Tools.getBendingAbility(player) == Abilities.Paralyze) {
+				// new Paralyze(player);
 			}
 
 		}
+
 	}
 
 	@EventHandler
