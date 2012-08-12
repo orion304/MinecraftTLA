@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -44,7 +45,11 @@ public class ArcOfFire {
 			direction.setX(vx);
 			direction.setZ(vz);
 
-			new FireStream(location, direction, player, defaultrange);
+			int range = defaultrange;
+			if (AvatarState.isAvatarState(player))
+				range = AvatarState.getValue(range);
+
+			new FireStream(location, direction, player, range);
 		}
 	}
 
