@@ -248,7 +248,8 @@ public class Tools {
 				if (throwplayer) {
 					for (Entity entity : getEntitiesAroundPoint(
 							affectedblock.getLocation(), 1.75)) {
-						entity.setVelocity(norm.clone().multiply(.75));
+						entity.setVelocity(entity.getVelocity().clone()
+								.add(norm.clone().multiply(.75)));
 					}
 				}
 
