@@ -63,14 +63,14 @@ public class StorageManager {
 		}
 		List<BendingType> templist = new ArrayList<BendingType>();
 		Bending.benders.put(player.getName(), templist);
-		if (Bukkit.getPluginManager().isPluginEnabled("TagAPI")
+		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
 				&& ConfigManager.useTagAPI)
 			try {
 				TagAPI.refreshPlayer(player);
-			} catch (TagAPIException  e){
-				
+			} catch (TagAPIException e) {
+
 			}
-		//Bending.benders.remove(player.getName());
+		// Bending.benders.remove(player.getName());
 		return;
 	}
 
@@ -298,12 +298,12 @@ public class StorageManager {
 		List<BendingType> templist = new ArrayList<BendingType>();
 		templist.add(type);
 		Bending.benders.put(player.getName(), templist);
-		if (Bukkit.getPluginManager().isPluginEnabled("TagAPI")
+		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
 				&& ConfigManager.useTagAPI)
 			try {
 				TagAPI.refreshPlayer(player);
-			} catch (TagAPIException  e){
-				
+			} catch (TagAPIException e) {
+
 			}
 	}
 
@@ -379,14 +379,14 @@ public class StorageManager {
 			templist.add(type);
 		}
 		Bending.benders.put(player.getName(), templist);
-		if (Bukkit.getPluginManager().isPluginEnabled("TagAPI")
+		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
 				&& ConfigManager.useTagAPI)
 			try {
 				TagAPI.refreshPlayer(player);
-			} catch (TagAPIException  e){
-				
+			} catch (TagAPIException e) {
+
 			}
-		
+
 	}
 
 	public void addBending(Player player, String type) {
