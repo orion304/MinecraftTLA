@@ -79,6 +79,8 @@ public class EarthBlast {
 	}
 
 	private void focusBlock() {
+		if (EarthPassive.isPassiveSand(sourceblock))
+			EarthPassive.revertSand(sourceblock);
 		if (sourceblock.getType() == Material.SAND) {
 			sourceblock.setType(Material.SANDSTONE);
 			sourcetype = Material.SAND;
