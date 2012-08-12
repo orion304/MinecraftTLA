@@ -17,7 +17,6 @@ import tools.AvatarState;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
-import airbending.AirBlast;
 import firebending.FireBlast;
 
 public class Wave {
@@ -144,6 +143,8 @@ public class Wave {
 				if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
 					sourceblock.setType(Material.AIR);
 				}
+				if (Tools.isPlant(sourceblock))
+					new Plantbending(sourceblock);
 				addWater(sourceblock);
 
 			}
@@ -184,7 +185,7 @@ public class Wave {
 
 			if (!progressing) {
 				sourceblock.getWorld().playEffect(location, Effect.SMOKE, 4,
-						(int) AirBlast.range);
+						(int) range);
 				return false;
 			}
 
@@ -345,6 +346,13 @@ public class Wave {
 		// wave.put(block, block);
 	}
 
+	private void clearWave() {
+		for (Block block : wave.keySet()) {
+			TempBlock.revertBlock(block, Material.AIR);
+		}
+		wave.clear();
+	}
+
 	public static void moveWater(Player player) {
 		if (instances.containsKey(player.getEntityId())) {
 			instances.get(player.getEntityId()).moveWater();
@@ -381,10 +389,7 @@ public class Wave {
 	}
 
 	private void freeze() {
-		for (Block block : wave.keySet()) {
-			block.setType(Material.AIR);
-		}
-		wave.clear();
+		clearWave();
 
 		double freezeradius = radius;
 		if (freezeradius > maxfreezeradius) {

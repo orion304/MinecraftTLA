@@ -2,8 +2,6 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import main.BendingManager;
-
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -69,11 +67,10 @@ public class Catapult {
 			}
 			time = System.currentTimeMillis() - interval;
 			// time = System.currentTimeMillis();
-			player.setAllowFlight(true);
-			if (!BendingManager.flyingplayers.contains(player)) {
-				BendingManager.flyingplayers.add(player);
-				player.setAllowFlight(true);
-			}
+			// if (!BendingManager.flyingplayers.contains(player)) {
+			// BendingManager.flyingplayers.add(player);
+			// player.setAllowFlight(true);
+			// }
 			instances.put(player.getEntityId(), this);
 			timers.put(player, System.currentTimeMillis());
 		}
@@ -106,13 +103,16 @@ public class Catapult {
 			ticks++;
 		}
 
-		Tools.moveEarth(location, direction, distance);
+		Tools.moveEarth(location, direction, distance, false);
 		location = location.clone().add(direction);
 
 		if (catapult) {
 			if (location.distance(origin) < .5) {
 				// if (loc.distance(origin) < .5) {
 				for (Entity entity : Tools.getEntitiesAroundPoint(origin, 2)) {
+					if (entity instanceof Player) {
+						((Player) entity).setAllowFlight(true);
+					}
 					entity.setVelocity(direction.clone().multiply(
 							push * distance / length));
 				}
@@ -124,6 +124,9 @@ public class Catapult {
 			if (location.distance(origin) <= length - distance) {
 				// if (loc.distance(origin) <= length - distance) {
 				for (Entity entity : Tools.getEntitiesAroundPoint(location, 2)) {
+					if (entity instanceof Player) {
+						((Player) entity).setAllowFlight(true);
+					}
 					entity.setVelocity(direction.clone().multiply(
 							push * distance / length));
 				}

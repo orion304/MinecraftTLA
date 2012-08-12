@@ -1,25 +1,61 @@
 package waterbending;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 
 import tools.ConfigManager;
-import tools.Tools;
 
 public class Plantbending {
 
-	private static final int range = ConfigManager.plantbendingRange;
+	private static final long regrowtime = ConfigManager.plantbendingRegrowTime;
+	private static ConcurrentHashMap<Integer, Plantbending> instances = new ConcurrentHashMap<Integer, Plantbending>();
 
-	public Plantbending(Player player) {
-		Block block = player.getTargetBlock(null, range);
-		if (Tools.isPlant(block)
-				&& !(block.getType() == Material.VINE
-						|| block.getType() == Material.LEAVES
-						|| block.getType() == Material.SUGAR_CANE || block
-						.getType() == Material.CACTUS)) {
-			block.setType(Material.WATER);
+	private static int ID = Integer.MIN_VALUE;
+
+	private Block block;
+	private Material type;
+	private byte data;
+	private long time;
+	private int id;
+
+	public Plantbending(Block block) {
+		if (regrowtime != 0 && block.getType() != Material.CACTUS
+				&& block.getType() != Material.SUGAR_CANE_BLOCK) {
+			this.block = block;
+			type = block.getType();
+			data = block.getData();
+			time = System.currentTimeMillis() + regrowtime / 2
+					+ (long) (Math.random() * (double) regrowtime) / 2;
+			id = ID;
+			instances.put(id, this);
+			if (ID >= Integer.MAX_VALUE) {
+				ID = Integer.MIN_VALUE;
+			} else {
+				ID++;
+			}
 		}
+	}
+
+	private void revert() {
+		block.setType(type);
+		block.setData(data);
+		instances.remove(id);
+	}
+
+	public static void regrow() {
+		for (int id : instances.keySet()) {
+			Plantbending plantbending = instances.get(id);
+			if (plantbending.time < System.currentTimeMillis()) {
+				plantbending.revert();
+			}
+		}
+	}
+
+	public static void regrowAll() {
+		for (int id : instances.keySet())
+			instances.get(id).revert();
 	}
 
 	public static String getDescription() {

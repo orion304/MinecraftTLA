@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
+import tools.TempBlock;
 import tools.Tools;
 
 public class FreezeMelt {
@@ -38,7 +39,8 @@ public class FreezeMelt {
 	private static boolean isFreezable(Block block) {
 		if (block.getType() == Material.WATER
 				|| block.getType() == Material.STATIONARY_WATER)
-			if (WaterManipulation.canPhysicsChange(block))
+			if (WaterManipulation.canPhysicsChange(block)
+					&& !TempBlock.isTempBlock(block))
 				return true;
 		return false;
 	}

@@ -57,9 +57,9 @@ public class EarthTunnel {
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
 			// Tools.verbose("progressing");
-			if (/*
-				 * !player.getEyeLocation().equals(location) ||
-				 */!player.isSneaking()) {
+			if (Math.abs(Math.toDegrees(player.getEyeLocation().getDirection()
+					.angle(direction))) > 20
+					|| !player.isSneaking()) {
 				instances.remove(player);
 				return false;
 			} else {

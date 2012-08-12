@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 public enum Abilities {
 
-	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirSpout, // AirBurst,
+	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, // AirSpout,
+																				// //
+																				// AirBurst,
 
 	Catapult, RaiseEarth, EarthGrab, EarthTunnel, EarthBlast, Collapse, Tremorsense, EarthArmor, // Shockwave,
 
@@ -29,7 +31,7 @@ public enum Abilities {
 	}
 
 	private enum WaterbendingAbilities {
-		WaterBubble, FreezeMelt, HealingWaters, Plantbending, WaterManipulation, WaterWall, Wave, Bloodbending, IceSpike, WaterSpout;
+		WaterBubble, FreezeMelt, HealingWaters, WaterManipulation, WaterWall, Wave, Bloodbending, IceSpike, WaterSpout;
 	}
 
 	private enum ChiBlockingAbilities {

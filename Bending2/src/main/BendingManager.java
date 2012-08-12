@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.server.EntityFireball;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,6 +29,7 @@ import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
+import waterbending.Plantbending;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
 import waterbending.WaterSpout;
@@ -64,6 +66,8 @@ public class BendingManager implements Runnable {
 	public Bending plugin;
 
 	public static ArrayList<Player> flyingplayers = new ArrayList<Player>();
+
+	private static boolean safeRevert = ConfigManager.safeRevert;
 
 	private boolean verbose = true;
 	private long verbosetime;
@@ -169,6 +173,15 @@ public class BendingManager implements Runnable {
 
 		if (ConfigManager.reverseearthbending
 				&& time > reverttime + ConfigManager.revertchecktime) {
+
+			ArrayList<Chunk> chunks = new ArrayList<Chunk>();
+
+			for (Player player : plugin.getServer().getOnlinePlayers()) {
+				Chunk chunk = player.getLocation().getChunk();
+				if (!chunks.contains(chunk))
+					chunks.add(chunk);
+			}
+
 			Tools.writeToLog("Removing up to " + Tools.tempearthblocks.size()
 					+ " blocks...");
 			reverttime = time;
@@ -178,7 +191,8 @@ public class BendingManager implements Runnable {
 				Block index = Tools.tempearthblocks.get(block);
 				if (Tools.movedearth.containsKey(index)) {
 					Information info = Tools.movedearth.get(index);
-					if (time < info.getTime() + ConfigManager.revertchecktime) {
+					if (time < info.getTime() + ConfigManager.revertchecktime
+							|| (chunks.contains(index.getChunk()) && safeRevert)) {
 						remove = false;
 					}
 				}
@@ -291,6 +305,8 @@ public class BendingManager implements Runnable {
 
 		WaterPassive.handlePassive(plugin.getServer());
 		FastSwimming.HandleSwim(plugin.getServer());
+
+		Plantbending.regrow();
 
 	}
 

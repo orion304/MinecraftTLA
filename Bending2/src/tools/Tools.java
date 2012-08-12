@@ -35,17 +35,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-
-import tools.Abilities;
-import tools.AvatarState;
-import tools.BendingType;
-import tools.ConfigManager;
-import tools.Information;
-import tools.TempBlock;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
+import waterbending.Plantbending;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
@@ -54,6 +46,8 @@ import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
@@ -84,6 +78,7 @@ public class Tools {
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
 	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
+	public static ConcurrentHashMap<Player, Player> tempflyers = new ConcurrentHashMap<Player, Player>();
 	public static List<Player> toggledBending = new ArrayList<Player>();
 
 	public Tools(StorageManager config2) {
@@ -190,8 +185,7 @@ public class Tools {
 
 	public static void moveEarth(Location location, Vector direction,
 			int chainlength) {
-		Block block = location.getBlock();
-		moveEarth(block, direction, chainlength, true);
+		moveEarth(location, direction, chainlength, true);
 		// if (isEarthbendable(block)) {
 		// Vector norm = direction.clone().normalize();
 		// Vector negnorm = norm.clone().multiply(-1);
@@ -224,9 +218,14 @@ public class Tools {
 		// }
 		// }
 	}
-	
-	public static void moveEarth(Block block, Vector direction,
-			int chainlength) {
+
+	public static void moveEarth(Location location, Vector direction,
+			int chainlength, boolean throwplayer) {
+		Block block = location.getBlock();
+		moveEarth(block, direction, chainlength, throwplayer);
+	}
+
+	public static void moveEarth(Block block, Vector direction, int chainlength) {
 		moveEarth(block, direction, chainlength, true);
 	}
 
@@ -244,8 +243,8 @@ public class Tools {
 			Block affectedblock = location.clone().add(norm).getBlock();
 			block.getWorld().playEffect(block.getLocation(),
 					Effect.GHAST_SHOOT, 0, 4);
-			if (EarthPassive.isPassiveSand(affectedblock)) {
-				EarthPassive.revertSand(affectedblock);
+			if (EarthPassive.isPassiveSand(block)) {
+				EarthPassive.revertSand(block);
 			}
 			if (affectedblock == null)
 				return;
@@ -279,8 +278,8 @@ public class Tools {
 						}
 						break;
 					}
-					if (EarthPassive.isPassiveSand(block)) {
-						EarthPassive.revertSand(block);
+					if (EarthPassive.isPassiveSand(affectedblock)) {
+						EarthPassive.revertSand(affectedblock);
 					}
 					if (block == null)
 						return;
@@ -429,8 +428,8 @@ public class Tools {
 		if ((block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
 				&& block.getData() == full)
 			return true;
-		if (block.getType() == Material.ICE || block.getType() == Material.SNOW
-				|| block.getType() == Material.SNOW_BLOCK)
+		if (block.getType() == Material.ICE || block.getType() == Material.SNOW)
+			// || block.getType() == Material.SNOW_BLOCK)
 			return true;
 		if (canPlantbend(player) && isPlant(block))
 			return true;
@@ -438,7 +437,7 @@ public class Tools {
 	}
 
 	public static boolean canPlantbend(Player player) {
-		return config.hasAbility(player, Abilities.Plantbending);
+		return player.hasPermission("bending.water.plantbending");
 	}
 
 	public static boolean hasAbility(Player player, Abilities ability) {
@@ -451,21 +450,21 @@ public class Tools {
 		return false;
 	}
 
-	//public static boolean isBender(Player player, BendingType type) {
-	//	//return config.isBender(player, type);
-	//	return Bending.benders.get(player.getName()).contains(type);
-	//}
-	
+	// public static boolean isBender(Player player, BendingType type) {
+	// //return config.isBender(player, type);
+	// return Bending.benders.get(player.getName()).contains(type);
+	// }
+
 	public static boolean isBender(String player, BendingType type) {
-		//return config.isBender(player, type);
-		//if (Bending.benders.contains(player))
+		// return config.isBender(player, type);
+		// if (Bending.benders.contains(player))
 		if (Bending.benders.get(player) != null)
 			return Bending.benders.get(player).contains(type);
 		return false;
 	}
-	
+
 	public static boolean isBender(String player) {
-		//return config.isBender(player, type);
+		// return config.isBender(player, type);
 		return Bending.benders.contains(player);
 	}
 
@@ -617,6 +616,12 @@ public class Tools {
 					&& blocki.getData() == full
 					&& WaterManipulation.canPhysicsChange(blocki))
 				sources++;
+			if (FreezeMelt.frozenblocks.containsKey(blocki)) {
+				if (FreezeMelt.frozenblocks.get(blocki) == full)
+					sources++;
+			} else if (blocki.getType() == Material.ICE) {
+				sources++;
+			}
 		}
 		if (sources >= 3)
 			return true;
@@ -651,13 +656,14 @@ public class Tools {
 		FireStream.removeAll();
 		EarthArmor.removeAll();
 		BendingManager.removeFlyers();
+		Plantbending.regrowAll();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
 		}
 		for (Block block : Tools.movedearth.keySet()) {
 			Information info = Tools.movedearth.get(block);
-			if (Tools.tempearthblocks.containsKey(info.getBlock()))
-				Tools.verbose("PROBLEM!");
+			// if (Tools.tempearthblocks.containsKey(info.getBlock()))
+			// Tools.verbose("PROBLEM!");
 			block.setType(info.getType());
 			Tools.movedearth.remove(block);
 		}

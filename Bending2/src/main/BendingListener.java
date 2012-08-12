@@ -8,10 +8,10 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,7 +54,6 @@ import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.IceSpike;
 import waterbending.Melt;
-import waterbending.Plantbending;
 import waterbending.SpikeField;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -142,7 +141,8 @@ public class BendingListener implements Listener {
 					color = Tools.getColor(ConfigManager.getColor("Fire"));
 				} else if (Tools.isBender(player.getName(), BendingType.Water)) {
 					color = Tools.getColor(ConfigManager.getColor("Water"));
-				} else if (Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
+				} else if (Tools.isBender(player.getName(),
+						BendingType.ChiBlocker)) {
 					color = Tools
 							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
@@ -218,7 +218,8 @@ public class BendingListener implements Listener {
 					color = Tools.getColor(ConfigManager.getColor("Fire"));
 				} else if (Tools.isBender(player.getName(), BendingType.Water)) {
 					color = Tools.getColor(ConfigManager.getColor("Water"));
-				} else if (Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
+				} else if (Tools.isBender(player.getName(),
+						BendingType.ChiBlocker)) {
 					color = Tools
 							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
@@ -297,8 +298,8 @@ public class BendingListener implements Listener {
 				if (Tools.getBendingAbility(player) == Abilities.Tremorsense) {
 					new Tremorsense(player);
 				}
-				
-				if (Tools.getBendingAbility(player) == Abilities.EarthArmor){
+
+				if (Tools.getBendingAbility(player) == Abilities.EarthArmor) {
 					new EarthArmor(player);
 				}
 
@@ -351,7 +352,7 @@ public class BendingListener implements Listener {
 				if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
 					WaterManipulation.moveWater(player);
 				}
-				
+
 				if (Tools.getBendingAbility(player) == Abilities.IceSpike) {
 					new IceSpike(player);
 				}
@@ -368,9 +369,10 @@ public class BendingListener implements Listener {
 					Wave.launch(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Plantbending) {
-					new Plantbending(player);
-				}
+				// if (Tools.getBendingAbility(player) ==
+				// Abilities.Plantbending) {
+				// new Plantbending(player);
+				// }
 
 				if (Tools.getBendingAbility(player) == Abilities.WaterSpout) {
 					new WaterSpout(player);
@@ -448,7 +450,7 @@ public class BendingListener implements Listener {
 			if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
 				new WaterManipulation(player);
 			}
-			
+
 			if (Tools.getBendingAbility(player) == Abilities.IceSpike) {
 				new SpikeField(player);
 			}
@@ -493,7 +495,8 @@ public class BendingListener implements Listener {
 	public void onPlayerSprint(PlayerToggleSprintEvent event) {
 		Player player = event.getPlayer();
 
-		if (!player.isSprinting() && Tools.isBender(player.getName(), BendingType.Air)
+		if (!player.isSprinting()
+				&& Tools.isBender(player.getName(), BendingType.Air)
 				&& Tools.canBendPassive(player, BendingType.Air)) {
 			new Speed(player);
 		}
@@ -537,7 +540,7 @@ public class BendingListener implements Listener {
 						BendingManager.flyingplayers.add(player);
 					}
 					event.setCancelled(true);
-				
+
 				}
 			} else if (Tools.isBender(player.getName(), BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.FALL) {
@@ -594,7 +597,7 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.ENTITY_ATTACK
 					&& !Tools.isWeapon(((Player) event.getDamager())
 							.getItemInHand().getType())) {
-				//event.setDamage((int) (ConfigManager.punchdamage));
+				// event.setDamage((int) (ConfigManager.punchdamage));
 			}
 		}
 
@@ -647,7 +650,7 @@ public class BendingListener implements Listener {
 		if (block.getType() == Material.FIRE) {
 			return;
 		}
-		// event.setCancelled(!WalkOnWater.canThaw(block));
+		event.setCancelled(Illumination.blocks.containsKey(block));
 		if (!event.isCancelled()) {
 			event.setCancelled(!WaterManipulation.canPhysicsChange(block));
 		}
@@ -666,25 +669,34 @@ public class BendingListener implements Listener {
 	public void onBlockPhysics(BlockPhysicsEvent event) {
 		Block block = event.getBlock();
 		event.setCancelled(!WaterManipulation.canPhysicsChange(block));
+		if (!event.isCancelled())
+			event.setCancelled(Illumination.blocks.containsKey(block));
 
 	}
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
-		if (!FreezeMelt.canThaw(block)) {
+		if (WaterWall.wasBrokenFor(event.getPlayer(), block)) {
+			event.setCancelled(true);
+			return;
+		}
+		if (FreezeMelt.frozenblocks.containsKey(block)) {
 			FreezeMelt.thaw(block);
+			event.setCancelled(true);
 			// } else if (!WalkOnWater.canThaw(block)) {
 			// WalkOnWater.thaw(block);
-		} else if (!WaterWall.canThaw(block)) {
+		} else if (WaterWall.wallblocks.containsKey(block)) {
 			WaterWall.thaw(block);
+			event.setCancelled(true);
 		} else if (Illumination.blocks.containsKey(block)) {
 			event.setCancelled(true);
-		} else if (Illumination.blocks.containsKey(block
-				.getRelative(BlockFace.UP))) {
-			event.setCancelled(true);
+			// } else if (Illumination.blocks.containsKey(block
+			// .getRelative(BlockFace.UP))) {
+			// event.setCancelled(true);
 		} else if (!Wave.canThaw(block)) {
 			Wave.thaw(block);
+			event.setCancelled(true);
 			// event.setCancelled(true);
 		} else if (Tools.tempearthblocks.containsKey(block)) {
 			Tools.removeEarthbendedBlockIndex(block);
@@ -729,7 +741,7 @@ public class BendingListener implements Listener {
 			if (distance2 > distance1)
 				player.setVelocity(new Vector(0, 0, 0));
 			// return;
-			}
+		}
 
 		// if (Tools.isBender(player, BendingType.Water)
 		// && (Tools.getBendingAbility(player) == Abilities.WalkOnWater)) {
@@ -773,7 +785,7 @@ public class BendingListener implements Listener {
 	public void onBlockForm(BlockFormEvent event) {
 		if (TempBlock.isTempBlock(event.getBlock()))
 			event.setCancelled(true);
-		if (WaterManipulation.canPhysicsChange(event.getBlock()))
+		if (!WaterManipulation.canPhysicsChange(event.getBlock()))
 			event.setCancelled(true);
 	}
 
@@ -782,25 +794,26 @@ public class BendingListener implements Listener {
 		if (Bloodbending.isBloodbended(event.getEntity()))
 			event.setCancelled(true);
 	}
-	
-	//@EventHandler
-	//public void onPlayerInteract(PlayerInteractEntityEvent event){
-	//	Entity rightclicked = event.getRightClicked();
-	//	Player player = event.getPlayer();
-	//	if (!Tools.isBender(player, BendingType.Air))
-	//		return;
-	//	if (!(player.getItemInHand().getType() == Material.AIR))
-	//		return;
-	//	EntityType type = event.getRightClicked().getType();
-	//	if (type == EntityType.COW || type == EntityType.CHICKEN || type == EntityType.SHEEP
-	//			|| type == EntityType.PIG){
-	//		rightclicked.setPassenger(player);
-	//	}
-	//	if (rightclicked.getPassenger() == player){
-	//		rightclicked.setPassenger(null);
-	//	}
-	//	
-	//}
+
+	// @EventHandler
+	// public void onPlayerInteract(PlayerInteractEntityEvent event){
+	// Entity rightclicked = event.getRightClicked();
+	// Player player = event.getPlayer();
+	// if (!Tools.isBender(player, BendingType.Air))
+	// return;
+	// if (!(player.getItemInHand().getType() == Material.AIR))
+	// return;
+	// EntityType type = event.getRightClicked().getType();
+	// if (type == EntityType.COW || type == EntityType.CHICKEN || type ==
+	// EntityType.SHEEP
+	// || type == EntityType.PIG){
+	// rightclicked.setPassenger(player);
+	// }
+	// if (rightclicked.getPassenger() == player){
+	// rightclicked.setPassenger(null);
+	// }
+	//
+	// }
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
@@ -825,7 +838,7 @@ public class BendingListener implements Listener {
 				|| Speed.getPlayers().contains(p)
 				|| FireJet.getPlayers().contains(p)
 				|| AvatarState.getPlayers().contains(p)) {
-			event.setCancelled(true);
+			event.setCancelled(p.getGameMode() != GameMode.CREATIVE);
 		}
 	}
 
@@ -854,23 +867,23 @@ public class BendingListener implements Listener {
 		}
 	}
 }
-	// @EventHandler
-	// public void onPlayerInteract(PlayerInteractEntityEvent event){
-	// Entity rightclicked = event.getRightClicked();
-	// Player player = event.getPlayer();
-	// if (!Tools.isBender(player, BendingType.Air))
-	// return;
-	// if (!(player.getItemInHand().getType() == Material.AIR))
-	// return;
-	// EntityType type = event.getRightClicked().getType();
-	// if (type == EntityType.COW || type == EntityType.CHICKEN || type ==
-	// EntityType.SHEEP
-	// || type == EntityType.PIG){
-	// rightclicked.setPassenger(player);
-	// }
-	// if (rightclicked.getPassenger() == player){
-	// rightclicked.setPassenger(null);
-	// }
-	//
-	// }
-	
+// @EventHandler
+// public void onPlayerInteract(PlayerInteractEntityEvent event){
+// Entity rightclicked = event.getRightClicked();
+// Player player = event.getPlayer();
+// if (!Tools.isBender(player, BendingType.Air))
+// return;
+// if (!(player.getItemInHand().getType() == Material.AIR))
+// return;
+// EntityType type = event.getRightClicked().getType();
+// if (type == EntityType.COW || type == EntityType.CHICKEN || type ==
+// EntityType.SHEEP
+// || type == EntityType.PIG){
+// rightclicked.setPassenger(player);
+// }
+// if (rightclicked.getPassenger() == player){
+// rightclicked.setPassenger(null);
+// }
+//
+// }
+

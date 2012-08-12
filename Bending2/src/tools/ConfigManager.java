@@ -60,6 +60,8 @@ public class ConfigManager {
 	public static double catapultPush = 5;
 	public static double compactColumnRange = 20;
 	public static double compactColumnSpeed = 8;
+	public static boolean earthBlastHitSelf = false;
+	public static double earthBlastPrepareRange = 7;
 	public static double earthBlastRange = 20;
 	public static double earthBlastSpeed = 35;
 	public static boolean earthBlastRevert = true;
@@ -113,7 +115,7 @@ public class ConfigManager {
 	public static int freezeMeltRadius = 5;
 	public static double healingWatersRadius = 5;
 	public static long healingWatersInterval = 750;
-	public static int plantbendingRange = 10;
+	public static long plantbendingRegrowTime = 180000;
 	public static double walkOnWaterRadius = 3.5;
 	public static double waterManipulationRange = 20;
 	public static double waterManipulationSpeed = 35;
@@ -132,11 +134,12 @@ public class ConfigManager {
 	public static double falldamagereduction = 50;
 	public static long lightningwarmup = 1500;
 	public static int lightningrange = 15;
-	public static double lightningmisschance = 5;
+	public static double lightningmisschance = 10;
 	public static long eartharmorduration = 30000;
 	public static int eartharmorstrength = 2;
 	public static long eartharmorcooldown = 150000;
 	public static boolean reverseearthbending = true;
+	public static boolean safeRevert = true;
 	public static long revertchecktime = 300000;
 	public static long icespikecooldown = 6000;
 	public static int icespikedamage = 4;
@@ -222,6 +225,7 @@ public class ConfigManager {
 		// Earthbending revert
 		reverseearthbending = config
 				.getBoolean("Bending.Option.Reverse-Earthbending");
+		safeRevert = config.getBoolean("Bending.Option.Safe-Revert");
 		revertchecktime = config
 				.getLong("Bending.Option.Reverse-Earthbending-Check-Time");
 
@@ -286,6 +290,10 @@ public class ConfigManager {
 		compactColumnSpeed = config
 				.getDouble("Properties.Earth.CompactColumn.Speed");
 		// EarthBlast
+		earthBlastHitSelf = config
+				.getBoolean("Properties.Earth.EarthBlast.Hit-Self");
+		earthBlastPrepareRange = config
+				.getDouble("Properties.Earth.EarthBlast.Prepare-Range");
 		earthBlastRange = config.getDouble("Properties.Earth.EarthBlast.Range");
 		earthBlastSpeed = config.getDouble("Properties.Earth.EarthBlast.Speed");
 		earthBlastRevert = config
@@ -382,8 +390,8 @@ public class ConfigManager {
 		healingWatersInterval = config
 				.getLong("Properties.Water.HealingWaters.Interval");
 		// Plantbending
-		plantbendingRange = config
-				.getInt("Properties.Water.Plantbending.Range");
+		plantbendingRegrowTime = config
+				.getLong("Properties.Water.Plantbending.Regrow-Time");
 		// WalkOnWater
 		walkOnWaterRadius = config
 				.getDouble("Properties.Water.WalkOnWater.Radius");
@@ -410,11 +418,14 @@ public class ConfigManager {
 
 		// Night
 		nightFactor = config.getDouble("Properties.Water.Night-Power-Factor");
-		
-		//EarthArmor
-		eartharmorduration = config.getLong("Properties.Earth.EarthArmor.Duration" , 30000);
-		eartharmorstrength = config.getInt("Properties.Earth.EarthArmor.Strength" , 2);
-		eartharmorcooldown = config.getLong("Properties.Earth.EarthArmor.Cooldown" , 150000);
+
+		// EarthArmor
+		eartharmorduration = config.getLong(
+				"Properties.Earth.EarthArmor.Duration", 30000);
+		eartharmorstrength = config.getInt(
+				"Properties.Earth.EarthArmor.Strength", 2);
+		eartharmorcooldown = config.getLong(
+				"Properties.Earth.EarthArmor.Cooldown", 150000);
 
 		// Lightning
 		lightningwarmup = config.getLong("Properties.Fire.Lightning.Warmup");
@@ -429,16 +440,22 @@ public class ConfigManager {
 				"Properties.Earth.EarthArmor.Strength", 2);
 		eartharmorcooldown = config.getLong(
 				"Properties.Earth.EarthArmor.Cooldown", 150000);
-		
-		//IceSpike
-		icespikecooldown = config.getLong("Properties.Water.IceSpike.Cooldown", 6000);
+
+		// IceSpike
+		icespikecooldown = config.getLong("Properties.Water.IceSpike.Cooldown",
+				6000);
 		icespikedamage = config.getInt("Properties.Water.IceSpike.Damage", 4);
-		icespikerange= config.getInt("Properties.Water.IceSpike.Range", 20);
-		icespikethrowingmult= config.getDouble("Properties.Water.IceSpike.ThrowingMult", 0.7);
-		icespikeareacooldown= config.getLong("Properties.Water.IceSpike.AreaCooldown", 20000);
-		icespikeareadamage= config.getInt("Properties.Water.IceSpike.AreaDamage", 2);
-		icespikearearadius = config.getInt("Properties.Water.IceSpike.AreaRadius", 4);
-		icespikeareathrowingmult= config.getDouble("Properties.Water.IceSpike.AreaThrowingMult", 1);
+		icespikerange = config.getInt("Properties.Water.IceSpike.Range", 20);
+		icespikethrowingmult = config.getDouble(
+				"Properties.Water.IceSpike.ThrowingMult", 0.7);
+		icespikeareacooldown = config.getLong(
+				"Properties.Water.IceSpike.AreaCooldown", 20000);
+		icespikeareadamage = config.getInt(
+				"Properties.Water.IceSpike.AreaDamage", 2);
+		icespikearearadius = config.getInt(
+				"Properties.Water.IceSpike.AreaRadius", 4);
+		icespikeareathrowingmult = config.getDouble(
+				"Properties.Water.IceSpike.AreaThrowingMult", 1);
 
 		try {
 			config.options().copyDefaults(true);
@@ -479,6 +496,7 @@ public class ConfigManager {
 		config.set("Bending.Option.Use-TagAPI", true);
 
 		config.set("Bending.Option.Reverse-Earthbending", true);
+		config.set("Bending.Option.Safe-Revert", true);
 		config.set("Bending.Option.Reverse-Earthbending-Check-Time", 500000);
 		config.set("Bending.Option.Firebending-Dissipate-Time", 400);
 
@@ -527,6 +545,8 @@ public class ConfigManager {
 		config.set("Properties.Earth.CompactColumn.Range", 20);
 		config.set("Properties.Earth.CompactColumn.Speed", 8);
 
+		config.set("Properties.Earth.EarthBlast.Hit-Self", false);
+		config.set("Properties.Earth.EarthBlast.Prepare-Range", 7);
 		config.set("Properties.Earth.EarthBlast.Range", 20);
 		config.set("Properties.Earth.EarthBlast.Speed", 35);
 		config.set("Properties.Earth.EarthBlast.Revert", true);
@@ -603,7 +623,7 @@ public class ConfigManager {
 		config.set("Properties.Water.HealingWaters.Radius", 5);
 		config.set("Properties.Water.HealingWaters.Interval", 750);
 
-		config.set("Properties.Water.Plantbending.Range", 10);
+		config.set("Properties.Water.Plantbending.Regrow-Time", 180000);
 
 		config.set("Properties.Water.WalkOnWater.Radius", 3.5);
 
@@ -622,24 +642,24 @@ public class ConfigManager {
 		config.set("Properties.Water.FastSwimming.Factor", 0.4);
 
 		config.set("Properties.Water.Night-Power-Factor", 1.5);
-		
+
 		config.set("Properties.Fire.Lightning.Warmup", 7500);
 		config.set("Properties.Fire.Lightning.Range", 15);
 		config.set("Properties.Fire.Lightning.SpoutPlugin", false);
 		config.set("Properties.Fire.Lightning.Damage", 5);
-		
-		config.set("Properties.Earth.EarthArmor.Duration" , 30000);
-		config.set("Properties.Earth.EarthArmor.Strength" , 2);
-		config.set("Properties.Earth.EarthArmor.Cooldown" , 150000);
-
-		config.set("Properties.Fire.Lightning.Warmup", 2000);
-		config.set("Properties.Fire.Lightning.Range", 15);
-		config.set("Properties.Fire.Lightning.Miss-Chance", 5);
 
 		config.set("Properties.Earth.EarthArmor.Duration", 30000);
 		config.set("Properties.Earth.EarthArmor.Strength", 2);
 		config.set("Properties.Earth.EarthArmor.Cooldown", 150000);
-		
+
+		config.set("Properties.Fire.Lightning.Warmup", 2000);
+		config.set("Properties.Fire.Lightning.Range", 15);
+		config.set("Properties.Fire.Lightning.Miss-Chance", 10);
+
+		config.set("Properties.Earth.EarthArmor.Duration", 30000);
+		config.set("Properties.Earth.EarthArmor.Strength", 2);
+		config.set("Properties.Earth.EarthArmor.Cooldown", 150000);
+
 		config.set("Properties.Water.IceSpike.Cooldown", 6000);
 		config.set("Properties.Water.IceSpike.Damage", 4);
 		config.set("Properties.Water.IceSpike.Range", 20);

@@ -14,7 +14,6 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
-import airbending.AirBlast;
 import firebending.FireBlast;
 
 public class WaterWall {
@@ -159,6 +158,8 @@ public class WaterWall {
 						firstdestination).normalize();
 				targetdirection = getDirection(firstdestination,
 						targetdestination).normalize();
+				if (Tools.isPlant(sourceblock))
+					new Plantbending(sourceblock);
 				addWater(sourceblock);
 			}
 
@@ -221,7 +222,7 @@ public class WaterWall {
 
 			if (!progressing) {
 				sourceblock.getWorld().playEffect(location, Effect.SMOKE, 4,
-						(int) AirBlast.range);
+						(int) range);
 				return false;
 			}
 
@@ -326,7 +327,7 @@ public class WaterWall {
 	}
 
 	private void reduceWater(Block block) {
-		if (affectedblocks.contains(block)) {
+		if (affectedblocks.containsKey(block)) {
 			if (!Tools.adjacentToThreeOrMoreSources(block)) {
 				block.setType(Material.WATER);
 				block.setData(half);
@@ -337,7 +338,7 @@ public class WaterWall {
 
 	private void removeWater(Block block) {
 		if (block != null) {
-			if (affectedblocks.contains(block)) {
+			if (affectedblocks.containsKey(block)) {
 				if (!Tools.adjacentToThreeOrMoreSources(block)) {
 					block.setType(Material.AIR);
 				}
@@ -369,9 +370,11 @@ public class WaterWall {
 	}
 
 	private void addWater(Block block) {
-		if (!affectedblocks.contains(block)) {
+		if (!affectedblocks.containsKey(block)) {
 			affectedblocks.put(block, block);
 		}
+		if (FreezeMelt.frozenblocks.containsKey(block))
+			FreezeMelt.frozenblocks.remove(block);
 		block.setType(Material.WATER);
 		block.setData(full);
 	}
@@ -419,6 +422,17 @@ public class WaterWall {
 
 	public static void thaw(Block block) {
 		finalRemoveWater(block);
+	}
+
+	public static boolean wasBrokenFor(Player player, Block block) {
+		if (instances.containsKey(player.getEntityId())) {
+			WaterWall wall = instances.get(player.getEntityId());
+			if (wall.sourceblock == null)
+				return false;
+			if (wall.sourceblock.equals(block))
+				return true;
+		}
+		return false;
 	}
 
 	public static String getDescription() {
