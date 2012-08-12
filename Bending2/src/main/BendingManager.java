@@ -15,6 +15,9 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import chiblocking.RapidPunch;
+
+
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
@@ -43,7 +46,6 @@ import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Speed;
 import airbending.Tornado;
-import chiblocking.RapidPunch;
 import earthbending.Catapult;
 import earthbending.CompactColumn;
 import earthbending.EarthArmor;
@@ -99,7 +101,7 @@ public class BendingManager implements Runnable {
 		manageChiBlocking();
 		// manageMessages();
 		AvatarState.manageAvatarStates();
-		handleFlying();
+		//handleFlying();
 		handleDayNight();
 
 		if (verbose
@@ -168,7 +170,6 @@ public class BendingManager implements Runnable {
 		for (Player player : EarthArmor.instances.keySet()) {
 			EarthArmor.moveArmor(player);
 		}
-
 		EarthPassive.revertSands();
 
 		Tremorsense.manage(plugin.getServer());
@@ -252,9 +253,10 @@ public class BendingManager implements Runnable {
 				Fireball.fireballs.remove(entity);
 			}
 		}
-		for (int ID : WallOfFire.instances.keySet()) {
-			WallOfFire.manageWallOfFire(ID);
+		for (Player player : WallOfFire.instance.keySet()) {
+			WallOfFire.instance.get(player).progress();
 		}
+		
 
 		Lightning.progressAll();
 
@@ -269,8 +271,8 @@ public class BendingManager implements Runnable {
 	}
 
 	private void manageChiBlocking() {
-		for (Player p : RapidPunch.targets.keySet())
-			RapidPunch.startPunch(p);
+		for (Player p : RapidPunch.instance.keySet())
+			RapidPunch.instance.get(p).startPunch(p);
 	}
 
 	private void manageWaterbending() {
@@ -290,6 +292,10 @@ public class BendingManager implements Runnable {
 
 		for (int ID : Wave.instances.keySet()) {
 			Wave.progress(ID);
+		}
+		
+		for (int ID : IceSpike.instances.keySet()) {
+			IceSpike.instances.get(ID).progress();
 		}
 
 		for (int ID : IceSpike.instances.keySet()) {
@@ -505,7 +511,7 @@ public class BendingManager implements Runnable {
 		// lightnings = Lightning.instances.size();
 
 		int walloffireplayers = 0;
-		walloffires = WallOfFire.instances.size();
+		walloffires = WallOfFire.instance.size();
 
 		int bloodbendings, freezemelts, watermanipulations, waterspouts, waterwalls, waves;
 

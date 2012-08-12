@@ -16,13 +16,14 @@ public class HighJump {
 	private Map<String, Long> cooldowns = new HashMap<String, Long>();
 
 	public HighJump(Player p) {
+		if (cooldowns.containsKey(p.getName())
+				&& cooldowns.get(p.getName()) + cooldown >= System
+						.currentTimeMillis())
+			return;
 		jump(p);
 	}
 
 	private void jump(Player p) {
-		if (cooldowns.containsKey(p.getName())) 
-			if (cooldowns.get(p.getName()) + cooldown >= System.currentTimeMillis()) 
-				return;
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN)
 						.getType() == Material.AIR)
 				return;
