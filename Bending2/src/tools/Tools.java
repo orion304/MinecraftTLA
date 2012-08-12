@@ -613,7 +613,7 @@ public class Tools {
 			if (FreezeMelt.frozenblocks.containsKey(blocki)) {
 				if (FreezeMelt.frozenblocks.get(blocki) == full)
 					sources++;
-			} else if (block.getType() == Material.ICE) {
+			} else if (blocki.getType() == Material.ICE) {
 				sources++;
 			}
 		}
