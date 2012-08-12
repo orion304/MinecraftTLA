@@ -34,7 +34,9 @@ public class AirScooter {
 			instances.get(player).remove();
 			return;
 		}
-		if (!player.isSprinting())
+		if (!player.isSprinting()
+				|| Tools.isSolid(player.getEyeLocation().getBlock())
+				|| player.getEyeLocation().getBlock().isLiquid())
 			return;
 		if (Tools.isSolid(player.getLocation().add(0, -.5, 0).getBlock()))
 			return;

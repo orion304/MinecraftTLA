@@ -663,8 +663,8 @@ public class Tools {
 		}
 		for (Block block : Tools.movedearth.keySet()) {
 			Information info = Tools.movedearth.get(block);
-			if (Tools.tempearthblocks.containsKey(info.getBlock()))
-				Tools.verbose("PROBLEM!");
+			// if (Tools.tempearthblocks.containsKey(info.getBlock()))
+			// Tools.verbose("PROBLEM!");
 			block.setType(info.getType());
 			Tools.movedearth.remove(block);
 		}
