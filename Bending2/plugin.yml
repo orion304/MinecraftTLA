@@ -91,7 +91,7 @@ permissions:
       bending.admin.choose: true
       bending.admin.add: true
       bending.command.displayelement: true
-      bending.commnd.clear: true
+      bending.command.clear: true
       bending.command.display: true
       bending.command.bind: true
       bending.fire.Lightning: false
@@ -103,7 +103,7 @@ permissions:
     children:
       bending.command.choose: true
       bending.command.displayelement: true
-      bending.commnd.clear: true
+      bending.command.clear: true
       bending.command.display: true
       bending.command.bind: true
       bending.command.help: true
@@ -280,7 +280,7 @@ permissions:
   bending.command.displayelement: 
     description: Allows the use of /bending display <element>
     default: true
-  bending.commnd.clear: 
+  bending.command.clear: 
     description: Allows the use of /bending clear 
     default: true
   bending.command.display:

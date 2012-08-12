@@ -18,12 +18,10 @@ public class AirSpout {
 	private static ConcurrentHashMap<Player, AirSpout> instances = new ConcurrentHashMap<Player, AirSpout>();
 
 	private static final double height = 13;
-	private static final long interval = 0;
-	private static final double dtheta = 15;
+	private static final long interval = 100;
 
 	private Player player;
 	private long time;
-	private double angle = 0;
 
 	public AirSpout(Player player) {
 		if (instances.containsKey(player)) {
@@ -106,29 +104,26 @@ public class AirSpout {
 			double dy = playerloc.getY() - block.getY();
 			if (dy > height)
 				dy = height;
-			double radius = 1.5;
 			for (int i = 1; i < dy; i++) {
-				double newangle = angle;
-				if (i % 2 == 0) {
-					newangle += 2 * i * dtheta;
-				} else {
-					newangle += dtheta;
-				}
-				double x = location.getX() + radius
-						* Math.cos(Math.toRadians(newangle));
-				double y = location.getY() + i;
-				double z = location.getZ() + radius
-						* Math.sin(Math.toRadians(newangle));
-				Location effectloc = new Location(location.getWorld(), x, y, z);
 				Location effectloc2 = new Location(location.getWorld(),
-						location.getX(), y, location.getZ());
-				// location.getWorld().playEffect(effectloc, Effect.SMOKE, 4,
-				// (int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 4,
+						location.getX(), block.getY() + i, location.getZ());
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 0,
+						(int) height + 5);
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 1,
+						(int) height + 5);
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 2,
+						(int) height + 5);
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 3,
+						(int) height + 5);
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 5,
+						(int) height + 5);
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 6,
+						(int) height + 5);
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 7,
+						(int) height + 5);
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 8,
 						(int) height + 5);
 			}
-
-			angle += 3 * dtheta;
 		}
 	}
 

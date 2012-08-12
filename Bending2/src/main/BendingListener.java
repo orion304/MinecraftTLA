@@ -718,7 +718,8 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (WaterSpout.instances.containsKey(event.getPlayer())) {
+		if (WaterSpout.instances.containsKey(event.getPlayer())
+				|| AirSpout.getPlayers().contains(event.getPlayer())) {
 			Vector vel = new Vector();
 			vel.setX(event.getTo().getX() - event.getFrom().getX());
 			vel.setY(event.getTo().getY() - event.getFrom().getY());
