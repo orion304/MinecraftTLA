@@ -56,7 +56,7 @@ public class EarthPassive {
 	}
 
 	public static boolean isPassiveSand(Block block) {
-		return (sandblocks.contains(block));
+		return (sandblocks.containsKey(block));
 	}
 
 	public static void revertSand(Block block) {
