@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -24,8 +25,10 @@ import tools.Tools;
 
 public class WallOfFire {
 
-	public static Map<Player, WallOfFire> instance = new HashMap<Player, WallOfFire>();
-	
+	private static int ID = Integer.MIN_VALUE;
+	private int id;
+	private Player player;
+
 	private static int range = ConfigManager.wallOfFireRange;
 	private int height = ConfigManager.wallOfFireHeight;
 	private int width = ConfigManager.wallOfFireWidth;
@@ -33,84 +36,159 @@ public class WallOfFire {
 	private int damage = ConfigManager.wallOfFireDamage;
 	private static long interval = ConfigManager.wallOfFireInterval;
 	private static long cooldown = ConfigManager.wallOfFireCooldown;
+	public static ConcurrentHashMap<Integer, WallOfFire> instances = new ConcurrentHashMap<Integer, WallOfFire>();
+	private static Map<Player, Long> durations = new HashMap<Player, Long>();
+	private static Map<Player, Long> intervals = new HashMap<Player, Long>();
+	private static Map<Player, Location> locations = new HashMap<Player, Location>();
+	private static Map<Player, Location> playerlocations = new HashMap<Player, Location>();
+	private static Map<Player, Long> cooldowns = new HashMap<Player, Long>();
+	private static Map<Player, List<Location>> blockslocation = new HashMap<Player, List<Location>>();
+	private static Map<Entity, Long> damaged = new HashMap<Entity, Long>();
+	private static long damageinterval = 1000;
+
+
 	
-	private Location playerLoc;
-	private Player player;
-	private long timer;
-	private List<Block> affectedblocks = new ArrayList<Block>();
-	private List<Entity> damaged = new ArrayList<Entity>();
-	
-	public WallOfFire(Player player){
-		if (instance.containsKey(player))
-			return; 
-		
-		playerLoc = player.getLocation();
-		this.player = player;
-		loadAffectedBlock();
-		int testopenair = 0;
-		for (Block b : affectedblocks){
-			if (b.getType() == Material.AIR
-					|| b.getType() == Material.SNOW
-					|| b.getType() == Material.RED_MUSHROOM
-					|| b.getType() == Material.BROWN_MUSHROOM
-					|| b.getType() == Material.DEAD_BUSH 
-					|| b.getType() == Material.LONG_GRASS){
-				testopenair++;
-			}
+	public WallOfFire(Player player) {
+		if (ID >= Integer.MAX_VALUE) {
+			ID = Integer.MIN_VALUE;
 		}
-		if (testopenair > ((height * width) * 0.5))
-			instance.put(player, this);
+		id = ID++;
+		this.player = player;
+		instances.put(id, this);
+		World world = player.getWorld();
+		if (cooldowns.containsKey(player)) {
+			if (cooldowns.get(player) + cooldown <= System.currentTimeMillis()) {
+				if (Tools.isDay(player.getWorld())) {
+					width = (int) Tools.firebendingDayAugment((double) width,
+							world);
+					height = (int) Tools.firebendingDayAugment((double) height,
+							world);
+					duration = (long) Tools.firebendingDayAugment(
+							(double) duration, world);
+					damage = (int) Tools.firebendingDayAugment((double) damage,
+							world);
+				}
+				WallOfFireStart(player);
+			}
+		} else {
+
+			if (Tools.isDay(player.getWorld())) {
+				width = (int) Tools
+						.firebendingDayAugment((double) width, world);
+				height = (int) Tools.firebendingDayAugment((double) height,
+						world);
+				duration = (long) Tools.firebendingDayAugment(
+						(double) duration, world);
+				damage = (int) Tools.firebendingDayAugment((double) damage,
+						world);
+			}
+			WallOfFireStart(player);
+		}
 	}
-	
-	public void progress(){
-		for (Block b : affectedblocks){
-			if (timer + interval <= System.currentTimeMillis())
-				b.getLocation().getWorld().playEffect(b.getLocation(), Effect.MOBSPAWNER_FLAMES, 1, 20);
-			List<Entity> entities = Tools.getEntitiesAroundPoint(b.getLocation(), 1.4);
-			FireBlast.removeFireBlastsAroundPoint(b.getLocation(), 2);
-			for (Entity en: entities){
-				knockbackEntities(en, b.getLocation());
-				if (!(en instanceof Projectile)
-						&& en.getLocation().distance(b.getLocation()) < 1.1){
-					Tools.damageEntity(player, en, damage);
-					damaged.add(en);
+
+	public void WallOfFireStart(Player p) {
+		durations.put(p, System.currentTimeMillis());
+		intervals.put(p, System.currentTimeMillis());
+		Block tblock = p.getTargetBlock(null, range).getRelative(BlockFace.UP);
+		Location loc = tblock.getLocation();
+		locations.put(p, loc);
+		playerlocations.put(p, p.getLocation());
+		cooldowns.put(p, System.currentTimeMillis());
+		if (!tblock.isEmpty() || !FireStream.isIgnitable(tblock)) {
+			instances.remove(p);
+			durations.remove(p);
+		}
+	}
+
+	public static void manageWallOfFire(int ID) {
+		if (instances.containsKey(ID)) {
+			WallOfFire wof = instances.get(ID);
+			Player p = instances.get(ID).player;
+
+			int damage = wof.damage;
+			int width = wof.width;
+			int height = wof.height;
+			long duration = wof.duration;
+
+			if (durations.containsKey(p)) {
+				if (durations.get(p) + duration >= System.currentTimeMillis()) {
+
+					if (intervals.containsKey(p)) {
+						if (intervals.get(p) + interval <= System
+								.currentTimeMillis()) {
+
+							List<Location> blocks = new ArrayList<Location>();
+							Location loc = locations.get(p);
+							Location yaw = playerlocations.get(p);
+							intervals.put(p, System.currentTimeMillis());
+							Vector direction = yaw.getDirection().normalize();
+							double ox, oy, oz;
+							ox = -direction.getZ();
+							oy = 0;
+							oz = direction.getX();
+							Vector orth = new Vector(ox, oy, oz);
+							orth = orth.normalize();
+							blocks.add(loc);
+							for (int i = -width; i <= width; i++) {
+								Block block = loc.getWorld().getBlockAt(
+										loc.clone().add(
+												orth.clone().multiply(
+														(double) i)));
+								if (FireStream.isIgnitable(block))
+									block.setType(Material.AIR);
+								for (int y = block.getY(); y <= block.getY()
+										+ height; y++) {
+									Location loca = new Location(
+											block.getWorld(), block.getX(),
+											(int) y, block.getZ());
+									blocks.add(loca);
+									block.getWorld().playEffect(loca,
+											Effect.MOBSPAWNER_FLAMES, 1, 20);
+									blockslocation.put(p, blocks);
+								}
+							}
+						}
+					}
+					if (blockslocation.containsKey(p)) {
+						for (Location loca : blockslocation.get(p)) {
+							FireBlast.removeFireBlastsAroundPoint(loca, 2);
+							for (Entity en : Tools.getEntitiesAroundPoint(
+									locations.get(p), width + 2)) {
+								if (en instanceof Projectile) {
+									if (loca.distance(en.getLocation()) <= 3) {
+										// Tools.damageEntity(p, en, damage);
+										en.setVelocity(en.getVelocity()
+												.normalize().setX(0).setZ(0)
+												.multiply(0.1));
+										en.setFireTicks(40);
+									}
+								}
+							}
+							for (Entity en : Tools.getEntitiesAroundPoint(loca,
+									2)) {
+								if (!damaged.containsKey(en))
+									damaged.put(en, System.currentTimeMillis()
+											+ damageinterval);
+								if (damaged.get(en) + damageinterval <= System
+										.currentTimeMillis()) {
+									Tools.damageEntity(p, en, damage);
+									en.setVelocity(new Vector((en.getLocation()
+											.getX() - loca.getBlock()
+											.getLocation().getX()) * 0.2, 0.1,
+											(en.getLocation().getZ() - loca
+													.getBlock().getLocation()
+													.getZ()) * 0.2));
+									en.setFireTicks(81);
+									damaged.put(en, System.currentTimeMillis());
+								}
+							}
+						}
+					}
 				}
 			}
 		}
-		if (timer + interval <= System.currentTimeMillis()){
-			timer = System.currentTimeMillis();
-			damaged.removeAll(damaged);
-		}		
 	}
-	
-	public void knockbackEntities(Entity en, Location loc){
-		en.setVelocity(new Vector((en.getLocation()
-				.getX() - loc.getBlock()
-				.getLocation().getX()) * 0.3, 0.1,
-				(en.getLocation().getZ() - loc
-						.getBlock().getLocation()
-						.getZ()) * 0.3));
-	}
-	
-	public void loadAffectedBlock(){		
-		Vector direction = playerLoc.getDirection().normalize();
-		Vector orth = new Vector(-direction.getZ(), 0, direction.getX());
-		orth = orth.normalize();
-		for (int i = -width; i <= width; i++) {
-			Block block = playerLoc.getWorld().getBlockAt(
-					playerLoc.clone().add(
-							orth.clone().multiply(
-									(double) i)));
-			for (int y = block.getY(); y <= block.getY()
-					+ height; y++) {
-				Location loca = new Location(
-						block.getWorld(), block.getX(),
-						(int) y, block.getZ());
-				affectedblocks.add(playerLoc.getWorld().getBlockAt(loca));
-			}
-		}
-	}
-	
+
 	public static String getDescription() {
 		return "To use this ability, click at a location. A wall of fire "
 				+ "will appear at this location, igniting enemies caught in it "
