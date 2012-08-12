@@ -199,7 +199,8 @@ public class StorageManager {
 			bendingstring = "As a waterbender, you no longer take any fall damage when landing on ice, snow "
 					+ "or even 1-block-deep water. Additionally, sneaking in the water with a bending ability "
 					+ "selected that does not utilize sneak (or no ability at all)"
-					+ " will give you accelerated swimming.";
+					+ " will give you accelerated swimming. "
+					+ "Lastly, you can pull water from plants with your abilities.";
 		} else if (type == BendingType.Fire) {
 			bending = "f";
 			bendingstring = "As a firebender, you now more quickly smother yourself when you catch on fire.";
