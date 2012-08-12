@@ -78,6 +78,7 @@ public class Tools {
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
 	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
+	public static ConcurrentHashMap<Player, Player> tempflyers = new ConcurrentHashMap<Player, Player>();
 	public static List<Player> toggledBending = new ArrayList<Player>();
 
 	public Tools(StorageManager config2) {
