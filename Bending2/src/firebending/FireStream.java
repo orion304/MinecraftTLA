@@ -128,7 +128,7 @@ public class FireStream {
 		Material[] overwriteable = { Material.SAPLING, Material.LONG_GRASS,
 				Material.DEAD_BUSH, Material.YELLOW_FLOWER, Material.RED_ROSE,
 				Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.FIRE,
-				Material.SNOW };
+				Material.SNOW, Material.TORCH };
 
 		if (Arrays.asList(overwriteable).contains(block.getType())) {
 			return true;
