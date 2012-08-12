@@ -272,8 +272,8 @@ public class Tools {
 						}
 						break;
 					}
-					if (EarthPassive.isPassiveSand(block)) {
-						EarthPassive.revertSand(block);
+					if (EarthPassive.isPassiveSand(affectedblock)) {
+						EarthPassive.revertSand(affectedblock);
 					}
 					if (block == null)
 						return;

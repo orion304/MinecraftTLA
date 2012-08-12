@@ -17,7 +17,6 @@ import tools.AvatarState;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
-import airbending.AirBlast;
 import firebending.FireBlast;
 
 public class Wave {
@@ -186,7 +185,7 @@ public class Wave {
 
 			if (!progressing) {
 				sourceblock.getWorld().playEffect(location, Effect.SMOKE, 4,
-						(int) AirBlast.range);
+						(int) range);
 				return false;
 			}
 

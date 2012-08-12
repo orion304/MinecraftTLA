@@ -17,7 +17,6 @@ import tools.AvatarState;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
-import airbending.AirBlast;
 
 public class WaterManipulation {
 
@@ -234,7 +233,7 @@ public class WaterManipulation {
 			} else {
 				if (!progressing) {
 					sourceblock.getWorld().playEffect(location, Effect.SMOKE,
-							4, (int) AirBlast.range);
+							4, (int) range);
 					return false;
 				}
 
@@ -332,7 +331,7 @@ public class WaterManipulation {
 	}
 
 	private void reduceWater(Block block) {
-		if (affectedblocks.contains(block)) {
+		if (affectedblocks.containsKey(block)) {
 			if (!Tools.adjacentToThreeOrMoreSources(block)
 					&& !Tools.adjacentToAnyWater(block)) {
 				block.setType(Material.WATER);
@@ -344,7 +343,7 @@ public class WaterManipulation {
 
 	private void removeWater(Block block) {
 		if (block != null) {
-			if (affectedblocks.contains(block)) {
+			if (affectedblocks.containsKey(block)) {
 				if (!Tools.adjacentToThreeOrMoreSources(block)) {
 					block.setType(Material.AIR);
 				}
@@ -354,7 +353,7 @@ public class WaterManipulation {
 	}
 
 	private void finalRemoveWater(Block block) {
-		if (affectedblocks.contains(block)) {
+		if (affectedblocks.containsKey(block)) {
 			if (!Tools.adjacentToThreeOrMoreSources(block)
 					&& !Tools.adjacentToAnyWater(block)) {
 				block.setType(Material.WATER);
@@ -366,9 +365,11 @@ public class WaterManipulation {
 	}
 
 	private static void addWater(Block block) {
-		if (!affectedblocks.contains(block)) {
+		if (!affectedblocks.containsKey(block)) {
 			affectedblocks.put(block, block);
 		}
+		if (FreezeMelt.frozenblocks.containsKey(block))
+			FreezeMelt.frozenblocks.remove(block);
 		block.setType(Material.WATER);
 		block.setData(full);
 	}
@@ -385,24 +386,41 @@ public class WaterManipulation {
 	}
 
 	public static boolean canFlowFromTo(Block from, Block to) {
-		if (affectedblocks.containsKey(to) || affectedblocks.containsKey(from))
+		// if (to.getType() == Material.TORCH)
+		// return true;
+		if (affectedblocks.containsKey(to) || affectedblocks.containsKey(from)) {
+			// Tools.verbose("affectedblocks");
 			return false;
+		}
 		if (WaterSpout.affectedblocks.containsKey(to)
-				|| WaterSpout.affectedblocks.containsKey(from))
+				|| WaterSpout.affectedblocks.containsKey(from)) {
+			// Tools.verbose("waterspout");
 			return false;
+		}
 		if (WaterWall.affectedblocks.containsKey(to)
-				|| WaterWall.affectedblocks.containsKey(from))
+				|| WaterWall.affectedblocks.containsKey(from)) {
+			// Tools.verbose("waterwallaffectedblocks");
 			return false;
+		}
 		if (WaterWall.wallblocks.containsKey(to)
-				|| WaterWall.wallblocks.containsKey(from))
+				|| WaterWall.wallblocks.containsKey(from)) {
+			// Tools.verbose("waterwallwall");
 			return false;
-		if (Wave.isBlockWave(to) || Wave.isBlockWave(from))
+		}
+		if (Wave.isBlockWave(to) || Wave.isBlockWave(from)) {
+			// Tools.verbose("wave");
 			return false;
-		if (TempBlock.isTempBlock(to) || TempBlock.isTempBlock(from))
+		}
+		if (TempBlock.isTempBlock(to) || TempBlock.isTempBlock(from)) {
+			// Tools.verbose("tempblock");
 			return false;
+		}
 		if (Tools.adjacentToFrozenBlock(to)
-				|| Tools.adjacentToFrozenBlock(from))
+				|| Tools.adjacentToFrozenBlock(from)) {
+			// Tools.verbose("frozen");
 			return false;
+		}
+
 		return true;
 	}
 

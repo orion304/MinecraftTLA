@@ -702,6 +702,10 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
+		if (WaterWall.wasBrokenFor(event.getPlayer(), block)) {
+			event.setCancelled(true);
+			return;
+		}
 		if (FreezeMelt.frozenblocks.containsKey(block)) {
 			FreezeMelt.thaw(block);
 			event.setCancelled(true);
