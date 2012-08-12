@@ -133,7 +133,7 @@ public class ConfigManager {
 	public static double falldamagereduction = 50;
 	public static long lightningwarmup = 1500;
 	public static int lightningrange = 15;
-	public static double lightningmisschance = 5;
+	public static double lightningmisschance = 10;
 	public static long eartharmorduration = 30000;
 	public static int eartharmorstrength = 2;
 	public static long eartharmorcooldown = 150000;
@@ -645,7 +645,7 @@ public class ConfigManager {
 
 		config.set("Properties.Fire.Lightning.Warmup", 2000);
 		config.set("Properties.Fire.Lightning.Range", 15);
-		config.set("Properties.Fire.Lightning.Miss-Chance", 5);
+		config.set("Properties.Fire.Lightning.Miss-Chance", 10);
 
 		config.set("Properties.Earth.EarthArmor.Duration", 30000);
 		config.set("Properties.Earth.EarthArmor.Strength", 2);
