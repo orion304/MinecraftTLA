@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.kitteh.tag.TagAPI;
+import org.kitteh.tag.TagAPIException;
+
 import tools.Abilities;
 import tools.BendingType;
 import tools.ConfigManager;
@@ -59,6 +63,13 @@ public class StorageManager {
 		}
 		List<BendingType> templist = new ArrayList<BendingType>();
 		Bending.benders.put(player.getName(), templist);
+		if (Bukkit.getPluginManager().isPluginEnabled("TagAPI")
+				&& ConfigManager.useTagAPI)
+			try {
+				TagAPI.refreshPlayer(player);
+			} catch (TagAPIException  e){
+				
+			}
 		//Bending.benders.remove(player.getName());
 		return;
 	}
@@ -141,7 +152,7 @@ public class StorageManager {
 						&& type == BendingType.Fire) {
 					return true;
 				}
-				if (config.getKey(player).contains("f")
+				if (config.getKey(player).contains("c")
 						&& type == BendingType.ChiBlocker) {
 					return true;
 				}
@@ -281,6 +292,13 @@ public class StorageManager {
 		List<BendingType> templist = new ArrayList<BendingType>();
 		templist.add(type);
 		Bending.benders.put(player.getName(), templist);
+		if (Bukkit.getPluginManager().isPluginEnabled("TagAPI")
+				&& ConfigManager.useTagAPI)
+			try {
+				TagAPI.refreshPlayer(player);
+			} catch (TagAPIException  e){
+				
+			}
 	}
 
 	public void setBending(Player player, String type) {
@@ -355,6 +373,13 @@ public class StorageManager {
 		templist.add(type);
 		}
 		Bending.benders.put(player.getName(), templist);
+		if (Bukkit.getPluginManager().isPluginEnabled("TagAPI")
+				&& ConfigManager.useTagAPI)
+			try {
+				TagAPI.refreshPlayer(player);
+			} catch (TagAPIException  e){
+				
+			}
 		
 	}
 

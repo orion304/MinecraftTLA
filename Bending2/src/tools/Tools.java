@@ -518,7 +518,7 @@ public class Tools {
 	}
 
 	public static Entity getTargettedEntity(Player player, double range) {
-		double longestr = range;
+		double longestr = range + 1;
 		Entity target = null;
 		Location origin = player.getEyeLocation();
 		Vector direction = player.getEyeLocation().getDirection();

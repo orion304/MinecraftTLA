@@ -76,7 +76,8 @@ public class Bending extends JavaPlugin {
 
 	public final BendingManager manager = new BendingManager(this);
 	public final BendingListener listener = new BendingListener(this);
-
+	public final TagAPIListener Taglistener = new TagAPIListener();
+	
 	private static Map<String, String> commands = new HashMap<String, String>();
 	public static ConcurrentHashMap<String, List<BendingType>> benders = new ConcurrentHashMap<String, List<BendingType>>();
 
@@ -119,6 +120,11 @@ public class Bending extends JavaPlugin {
 		chiblockingabilities = Abilities.getChiBlockingAbilities();
 
 		getServer().getPluginManager().registerEvents(listener, this);
+		
+		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
+				&& ConfigManager.useTagAPI){
+			getServer().getPluginManager().registerEvents(Taglistener, this);
+		}
 
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, manager, 0,
 				1);
@@ -1122,6 +1128,22 @@ public class Bending extends JavaPlugin {
 				sender.sendMessage(ChatColor.AQUA + "Imported BendingPlayers to MySQL.");
 				return true;
 			}
+		if (args[0].equalsIgnoreCase("check"))
+				 {
+			for (String players: benders.keySet()){
+			sender.sendMessage(players + " :" + benders.get(players).size());
+			sender.sendMessage(Tools.isBender(players) ? "True" : "False");
+			sender.sendMessage(ChatColor.RED + (Tools.isBender(players, BendingType.Fire) ? "True" : "False"));
+			sender.sendMessage(ChatColor.AQUA + (Tools.isBender(players, BendingType.Water) ? "True" : "False"));
+			sender.sendMessage(ChatColor.GRAY + (Tools.isBender(players, BendingType.Air) ? "True" : "False"));
+			sender.sendMessage(ChatColor.GREEN + (Tools.isBender(players, BendingType.Earth) ? "True" : "False"));
+			sender.sendMessage(ChatColor.GOLD + (Tools.isBender(players, BendingType.ChiBlocker) ? "True" : "False"));
+					for (BendingType type: benders.get(players)){
+						sender.sendMessage(ChatColor.AQUA + type.toString());
+					}
+						
+			}
+				 }
 		}
 		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <page> if you want to see a list of commands.");
