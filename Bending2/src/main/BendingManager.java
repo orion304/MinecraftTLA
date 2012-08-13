@@ -386,7 +386,9 @@ public class BendingManager implements Runnable {
 			boolean day = days.get(world);
 			if (Tools.isDay(world) && !day) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player.getName(), BendingType.Fire))
+					if (Tools.isBender(player.getName(), BendingType.Fire)
+							&& player
+									.hasPermission("bending.message.daymessage"))
 						player.sendMessage(ChatColor.RED
 								+ "You feel the strength of the rising sun empowering your firebending.");
 				}
@@ -395,7 +397,9 @@ public class BendingManager implements Runnable {
 
 			if (!Tools.isDay(world) && day) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player.getName(), BendingType.Fire))
+					if (Tools.isBender(player.getName(), BendingType.Fire)
+							&& player
+									.hasPermission("bending.message.daymessage"))
 						player.sendMessage(ChatColor.RED
 								+ "You feel the empowering of your firebending subside as the sun sets.");
 				}
@@ -404,7 +408,9 @@ public class BendingManager implements Runnable {
 
 			if (Tools.isNight(world) && !night) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player.getName(), BendingType.Water))
+					if (Tools.isBender(player.getName(), BendingType.Water)
+							&& player
+									.hasPermission("bending.message.nightmessage"))
 						player.sendMessage(ChatColor.BLUE
 								+ "You feel the strength of the rising moon empowering your waterbending.");
 				}
@@ -413,7 +419,9 @@ public class BendingManager implements Runnable {
 
 			if (!Tools.isNight(world) && night) {
 				for (Player player : world.getPlayers()) {
-					if (Tools.isBender(player.getName(), BendingType.Water))
+					if (Tools.isBender(player.getName(), BendingType.Water)
+							&& player
+									.hasPermission("bending.message.nightmessage"))
 						player.sendMessage(ChatColor.BLUE
 								+ "You feel the empowering of your waterbending subside as the moon sets.");
 				}

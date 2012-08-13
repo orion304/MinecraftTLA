@@ -23,7 +23,7 @@ permissions:
       bending.air.AirBlast: true
       bending.air.Passive: true
       bending.air.AirSpout: true
-#      bending.air.AirBurst: false
+#      bending.air.AirBurst: true
       bending.air.AirScooter: true
   bending.fire.*:
     description: Allows all fire bending.
@@ -37,6 +37,7 @@ permissions:
       bending.fire.Illumination: true
       bending.fire.WallOfFire: true
       bending.fire.Lightning: true
+#      bending.fire.FireBurst: true
   bending.water.*:
     description: Allows all water bending.
     children:
@@ -48,12 +49,13 @@ permissions:
       bending.water.Surge: true
       bending.water.Passive: true
       bending.water.WaterSpout: true
- #     bending.water.Bloodbending: false
+      bending.water.IceSpike: true
+ #     bending.water.Torrent: true
+ #     bending.water.OctopusForm: true
   bending.earth.*:
     description: Allows all earth bending.
     children:
       bending.earth.Catapult: true
-      bending.earth.CompactColumn: true
       bending.earth.EarthBlast: true
       bending.earth.RaiseEarth: true
       bending.earth.EarthGrab: true
@@ -68,6 +70,7 @@ permissions:
     children:
       bending.chiblocking.RapidPunch: true
       bending.chiblocking.HighJump: true
+      bending.chiblocking.Paralyze: true
   bending.*:
     description: Allows all bending.
     children:
@@ -91,7 +94,6 @@ permissions:
       bending.command.clear: true
       bending.command.display: true
       bending.command.bind: true
-      bending.fire.Lightning: false
       bending.water.Bloodbending: true
       bending.command.toggle: true
       
@@ -140,9 +142,6 @@ permissions:
     description: Allows the use of AirBurst.
 #    default: true
     default: false
-  bending.air.AirSpout:
-    description: Allows the use of AirSpout.
-    default: true
   bending.fire.Blaze:
     description: Allows the use of Blaze.
     default: true
@@ -170,6 +169,10 @@ permissions:
   bending.fire.Lightning:
     description: Allows the use of Lightning.
     default: true
+  bending.fire.FireBurst:
+    description: Allows the use of FireBurst.
+#    default: true
+    default: false
   bending.water.PhaseChange:
     description: Allows the use of PhaseChange.
     default: true
@@ -197,11 +200,19 @@ permissions:
   bending.water.Bloodbending:
     description: Allows the use of Bloodbending.
     default: op
+  bending.water.OctopusForm:
+    description: Allows the use of OctopusForm.
+#    default: true
+    default: false
+  bending.water.Torrent:
+    description: Allows the use of Torrent.
+#    default: true
+    default: false
+  bending.water.IceSpike:
+    description: Allows the use of IceSpike
+    default: true
   bending.earth.Catapult:
     description: Allows the use of Catapult.
-    default: true
-  bending.earth.CompactColumn:
-    description: Allows the use of CompactColumn.
     default: true
   bending.earth.EarthBlast:
     description: Allows the use of EarthBlast.
@@ -237,6 +248,14 @@ permissions:
   bending.chiblocking.HighJump:
     description: Allows the use of HighJump
     default: true
+  bending.chiblocker.FastPunch:
+    description: Allows the use of FastPunch
+#    default: true
+    default: false
+  bending.chiblocker.Paralyze:
+    description: Allows the use of Paralyze
+#    default: true
+    default: false
   bending.AvatarState:
     description: Allows the use of AvatarState.
     default: op
@@ -287,9 +306,10 @@ permissions:
     default: op
   bending.command.import:
     default: op
-  bending.chiblocker.FastPunch:
-    default: op
-  bending.water.IceSpike:
+    
+  bending.message.daymessage:
+    description: Allows receipt of the sun rising and falling for firebenders
     default: true
-  bending.chiblocker.Paralyze:
-    default: op
+  bending.message.nightmessage:
+    description: Allows receipt of the moon rising and falling for waterbenders
+    default: true
