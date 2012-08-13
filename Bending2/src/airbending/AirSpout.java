@@ -23,6 +23,7 @@ public class AirSpout {
 
 	private Player player;
 	private long time;
+	private int angle = 0;
 
 	public AirSpout(Player player) {
 		if (instances.containsKey(player)) {
@@ -106,25 +107,42 @@ public class AirSpout {
 			double dy = playerloc.getY() - block.getY();
 			if (dy > height)
 				dy = height;
+			Integer[] directions = { 0, 1, 2, 3, 5, 6, 7, 8 };
+			int index = angle;
+
+			angle++;
+			if (angle >= directions.length)
+				angle = 0;
 			for (int i = 1; i < dy; i++) {
+
+				index += 1;
+				if (index >= directions.length)
+					index = 0;
+
 				Location effectloc2 = new Location(location.getWorld(),
 						location.getX(), block.getY() + i, location.getZ());
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 0,
-						(int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 1,
-						(int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 2,
-						(int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 3,
-						(int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 5,
-						(int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 6,
-						(int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 7,
-						(int) height + 5);
-				location.getWorld().playEffect(effectloc2, Effect.SMOKE, 8,
-						(int) height + 5);
+
+				location.getWorld().playEffect(effectloc2, Effect.SMOKE,
+						(int) directions[index], (int) height + 5);
+
+				// Tools.verbose(directions[index]);
+
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 0,
+				// (int) height + 5);
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 1,
+				// (int) height + 5);
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 2,
+				// (int) height + 5);
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 3,
+				// (int) height + 5);
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 5,
+				// (int) height + 5);
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 6,
+				// (int) height + 5);
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 7,
+				// (int) height + 5);
+				// location.getWorld().playEffect(effectloc2, Effect.SMOKE, 8,
+				// (int) height + 5);
 			}
 		}
 	}
