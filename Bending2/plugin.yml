@@ -29,11 +29,10 @@ permissions:
     description: Allows all fire bending.
     children:
       bending.fire.Blaze: true
-      bending.fire.Extinguish: true
+      bending.fire.ControlHeat: true
       bending.fire.Fireball: true
       bending.fire.FireJet: true
       bending.fire.FireBlast: true
-      bending.fire.HeatMelt: true
       bending.fire.Passive: true
       bending.fire.Illumination: true
       bending.fire.WallOfFire: true
@@ -41,14 +40,12 @@ permissions:
   bending.water.*:
     description: Allows all water bending.
     children:
-      bending.water.FreezeMelt: true
+      bending.water.PhaseChange: true
       bending.water.HealingWaters: true
       bending.water.Plantbending: true
-      bending.water.WalkOnWater: true
       bending.water.WaterBubble: true
       bending.water.WaterManipulation: true
-      bending.water.WaterWall: true
-      bending.water.Wave: true
+      bending.water.Surge: true
       bending.water.Passive: true
       bending.water.WaterSpout: true
  #     bending.water.Bloodbending: false
@@ -149,8 +146,8 @@ permissions:
   bending.fire.Blaze:
     description: Allows the use of Blaze.
     default: true
-  bending.fire.Extinguish:
-    description: Allows the use of Extinguish.
+  bending.fire.ControlHeat:
+    description: Allows the use of ControlHeat.
     default: true
   bending.fire.Fireball:
     description: Allows the use of Fireball.
@@ -160,9 +157,6 @@ permissions:
     default: true
   bending.fire.FireBlast:
     description: Allows the use of FireBlast
-    default: true
-  bending.fire.HeatMelt:
-    description: Allows the use of HeatMelt.
     default: true
   bending.fire.Passive:
     description: Allows the use of Passive.
@@ -176,17 +170,14 @@ permissions:
   bending.fire.Lightning:
     description: Allows the use of Lightning.
     default: true
-  bending.water.FreezeMelt:
-    description: Allows the use of Freeze.
+  bending.water.PhaseChange:
+    description: Allows the use of PhaseChange.
     default: true
   bending.water.HealingWaters:
     description: Allows the use of HealingWaters.
     default: true
   bending.water.Plantbending:
     description: Allows the use of Plantbending.
-    default: true
-  bending.water.WalkOnWater:
-    description: Allows the use of WalkOnWater.
     default: true
   bending.water.WaterBubble:
     description: Allows the use of WaterBubble.
@@ -200,11 +191,8 @@ permissions:
   bending.water.WaterSpout:
     description: Allows the use of WaterSpout.
     default: true
-  bending.water.WaterWall:
-    description: Allows the use of WaterWall.
-    default: true
-  bending.water.Wave:
-    description: Allows the use of Wave.
+  bending.water.Surge:
+    description: Allows the use of Sruge.
     default: true
   bending.water.Bloodbending:
     description: Allows the use of Bloodbending.

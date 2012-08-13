@@ -50,6 +50,15 @@ public class WaterWall {
 
 	public WaterWall(Player player) {
 		this.player = player;
+
+		if (Wave.instances.containsKey(player.getEntityId())) {
+			Wave wave = Wave.instances.get(player.getEntityId());
+			if (!wave.progressing) {
+				Wave.launch(player);
+				return;
+			}
+		}
+
 		if (AvatarState.isAvatarState(player)) {
 			radius = AvatarState.getValue(radius);
 		}
@@ -194,7 +203,7 @@ public class WaterWall {
 			// instances.remove(player.getEntityId());
 			return false;
 		}
-		if (!Tools.canBend(player, Abilities.WaterWall)) {
+		if (!Tools.canBend(player, Abilities.Surge)) {
 			if (!forming)
 				removeWater(oldwater);
 			breakBlock();
@@ -209,13 +218,13 @@ public class WaterWall {
 			}
 
 			if (!progressing
-					&& Tools.getBendingAbility(player) != Abilities.WaterWall) {
+					&& Tools.getBendingAbility(player) != Abilities.Surge) {
 				unfocusBlock();
 				return false;
 			}
 
 			if (progressing
-					&& (!player.isSneaking() || Tools.getBendingAbility(player) != Abilities.WaterWall)) {
+					&& (!player.isSneaking() || Tools.getBendingAbility(player) != Abilities.Surge)) {
 				breakBlock();
 				return false;
 			}
@@ -390,6 +399,17 @@ public class WaterWall {
 	}
 
 	public static void form(Player player) {
+		if (!instances.containsKey(player.getEntityId())) {
+			new Wave(player);
+			return;
+		} else {
+			if (Tools.isWaterbendable(
+					player.getTargetBlock(null, (int) Wave.defaultrange),
+					player)) {
+				new Wave(player);
+				return;
+			}
+		}
 		moveWater(player);
 	}
 
@@ -436,14 +456,12 @@ public class WaterWall {
 	}
 
 	public static String getDescription() {
-		return "To use, place your cursor over a waterbendable object and left-click. "
-				+ "Smoke will appear where you've selected, indicating the origin of your ability. "
-				+ "After you have selected an origin, simply hold sneak (default: shift) in any direction "
-				+ "and you will see your water spout off in that direction, forming a small shield of "
-				+ "water wherever you are looking, so long as you are still sneaking. "
-				+ "Additionally, left-clicking while the shield is formed will turn the shield from "
-				+ "water to ice and back again, as a toggle. To stop concentration on the shield, "
-				+ "simply stop sneaking or change to a slot that does not have Water Wall bound to it.";
+		return "This ability has two distinct features. If you sneak to select a source block, "
+				+ "you can then click in a direction and a large wave will be launched in that direction. "
+				+ "If you sneak again while the wave is en route, the wave will freeze the next target it hits. "
+				+ "If, instead, you click to select a source block, you can hold sneak to form a wall of water at "
+				+ "your cursor location. Click to shift between a water wall and an ice wall. "
+				+ "Release sneak to dissipate it.";
 	}
 
 }

@@ -70,8 +70,8 @@ public class FreezeMelt {
 	public static boolean canThaw(Block block) {
 		if (frozenblocks.containsKey(block)) {
 			for (Player player : block.getWorld().getPlayers()) {
-				if (Tools.hasAbility(player, Abilities.FreezeMelt)
-						&& Tools.canBend(player, Abilities.FreezeMelt)) {
+				if (Tools.hasAbility(player, Abilities.PhaseChange)
+						&& Tools.canBend(player, Abilities.PhaseChange)) {
 					double range = Tools.waterbendingNightAugment(defaultrange,
 							player.getWorld());
 					if (AvatarState.isAvatarState(player)) {

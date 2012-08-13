@@ -20,6 +20,10 @@ public class Extinguish {
 	public Extinguish(Player player) {
 		double range = Tools.firebendingDayAugment(defaultrange,
 				player.getWorld());
+		if (Tools.isMeltable(player.getTargetBlock(null, (int) range))) {
+			new HeatMelt(player);
+			return;
+		}
 		double radius = Tools.firebendingDayAugment(defaultradius,
 				player.getWorld());
 		for (Block block : Tools.getBlocksAroundPoint(
@@ -45,7 +49,7 @@ public class Extinguish {
 	}
 
 	public static boolean canBurn(Player player) {
-		if (Tools.getBendingAbility(player) == Abilities.Extinguish
+		if (Tools.getBendingAbility(player) == Abilities.ControlHeat
 				|| FireJet.checkTemporaryImmunity(player)) {
 			player.setFireTicks(0);
 			return false;
@@ -66,6 +70,7 @@ public class Extinguish {
 				+ "to fire damage and cannot be ignited. "
 				+ "If the user left-clicks with this ability, the targeted area will be "
 				+ "extinguished, although it will leave any creature burning engulfed in flames. "
-				+ "This ability can also cool lava.";
+				+ "This ability can also cool lava. If this ability is used while targetting ice or snow, it"
+				+ " will instead melt blocks in that area";
 	}
 }

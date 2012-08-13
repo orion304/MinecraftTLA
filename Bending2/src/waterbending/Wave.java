@@ -35,14 +35,14 @@ public class Wave {
 	private static final double upfactor = ConfigManager.waveVerticalPush;
 	private static final double maxfreezeradius = 7;
 
-	private static double defaultrange = 20;
+	static double defaultrange = 20;
 	// private static int damage = 5;
 	// private static double speed = 1.5;
 
 	private Player player;
 	private Location location = null;
 	private Block sourceblock = null;
-	private boolean progressing = false;
+	boolean progressing = false;
 	private Location targetdestination = null;
 	private Vector targetdirection = null;
 	private ConcurrentHashMap<Block, Block> wave = new ConcurrentHashMap<Block, Block>();
@@ -53,7 +53,7 @@ public class Wave {
 	private boolean freeze = false;
 	private boolean activatefreeze = false;
 	private Location frozenlocation;
-	private double range = defaultrange;
+	double range = defaultrange;
 	private double factor = defaultfactor;
 
 	public Wave(Player player) {
@@ -178,7 +178,7 @@ public class Wave {
 			time = System.currentTimeMillis();
 
 			if (!progressing
-					&& Tools.getBendingAbility(player) != Abilities.Wave) {
+					&& Tools.getBendingAbility(player) != Abilities.Surge) {
 				unfocusBlock();
 				return false;
 			}
@@ -200,8 +200,8 @@ public class Wave {
 					thaw();
 					return false;
 				}
-				if (!Tools.hasAbility(player, Abilities.FreezeMelt)
-						&& Tools.getBendingAbility(player) != Abilities.Wave) {
+				if (!Tools.hasAbility(player, Abilities.PhaseChange)
+						&& Tools.getBendingAbility(player) != Abilities.Surge) {
 					progressing = false;
 					thaw();
 					return false;

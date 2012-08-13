@@ -37,11 +37,11 @@ import waterbending.IceSpike;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
-import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
 import airbending.AirShield;
+import airbending.AirSpout;
 import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Tornado;
@@ -60,7 +60,6 @@ import firebending.Extinguish;
 import firebending.FireBlast;
 import firebending.FireJet;
 import firebending.Fireball;
-import firebending.HeatMelt;
 import firebending.Illumination;
 import firebending.Lightning;
 import firebending.WallOfFire;
@@ -883,7 +882,7 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ ArcOfFire.getDescription());
 								break;
-							case Extinguish:
+							case ControlHeat:
 								sender.sendMessage(cc
 										+ Extinguish.getDescription());
 								break;
@@ -895,10 +894,10 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ FireBlast.getDescription());
 								break;
-							case HeatMelt:
-								sender.sendMessage(cc
-										+ HeatMelt.getDescription());
-								break;
+							// case HeatMelt:
+							// sender.sendMessage(cc
+							// + HeatMelt.getDescription());
+							// break;
 							// case RingOfFire:
 							// sender.sendMessage(cc
 							// + RingOfFire.getDescription());
@@ -927,7 +926,7 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ AirBubble.getDescription());
 								break;
-							case FreezeMelt:
+							case PhaseChange:
 								sender.sendMessage(cc
 										+ FreezeMelt.getDescription());
 								break;
@@ -951,13 +950,13 @@ public class Bending extends JavaPlugin {
 								sender.sendMessage(cc
 										+ WaterSpout.getDescription());
 								break;
-							case WaterWall:
+							case Surge:
 								sender.sendMessage(cc
 										+ WaterWall.getDescription());
 								break;
-							case Wave:
-								sender.sendMessage(cc + Wave.getDescription());
-								break;
+							// case Wave:
+							// sender.sendMessage(cc + Wave.getDescription());
+							// break;
 							case AvatarState:
 								sender.sendMessage(cc
 										+ AvatarState.getDescription());
@@ -977,6 +976,10 @@ public class Bending extends JavaPlugin {
 							case IceSpike:
 								sender.sendMessage(cc
 										+ IceSpike.getDescription());
+								break;
+							case AirSpout:
+								sender.sendMessage(cc
+										+ AirSpout.getDescription());
 								break;
 							}
 							return true;
@@ -1141,33 +1144,33 @@ public class Bending extends JavaPlugin {
 						+ "Imported BendingPlayers to MySQL.");
 				return true;
 			}
-			if (args[0].equalsIgnoreCase("check")) {
-				for (String players : benders.keySet()) {
-					sender.sendMessage(players + " :"
-							+ benders.get(players).size());
-					sender.sendMessage(Tools.isBender(players) ? "True"
-							: "False");
-					sender.sendMessage(ChatColor.RED
-							+ (Tools.isBender(players, BendingType.Fire) ? "True"
-									: "False"));
-					sender.sendMessage(ChatColor.AQUA
-							+ (Tools.isBender(players, BendingType.Water) ? "True"
-									: "False"));
-					sender.sendMessage(ChatColor.GRAY
-							+ (Tools.isBender(players, BendingType.Air) ? "True"
-									: "False"));
-					sender.sendMessage(ChatColor.GREEN
-							+ (Tools.isBender(players, BendingType.Earth) ? "True"
-									: "False"));
-					sender.sendMessage(ChatColor.GOLD
-							+ (Tools.isBender(players, BendingType.ChiBlocker) ? "True"
-									: "False"));
-					for (BendingType type : benders.get(players)) {
-						sender.sendMessage(ChatColor.AQUA + type.toString());
-					}
-
-				}
-			}
+			// if (args[0].equalsIgnoreCase("check")) {
+			// for (String players : benders.keySet()) {
+			// sender.sendMessage(players + " :"
+			// + benders.get(players).size());
+			// sender.sendMessage(Tools.isBender(players) ? "True"
+			// : "False");
+			// sender.sendMessage(ChatColor.RED
+			// + (Tools.isBender(players, BendingType.Fire) ? "True"
+			// : "False"));
+			// sender.sendMessage(ChatColor.AQUA
+			// + (Tools.isBender(players, BendingType.Water) ? "True"
+			// : "False"));
+			// sender.sendMessage(ChatColor.GRAY
+			// + (Tools.isBender(players, BendingType.Air) ? "True"
+			// : "False"));
+			// sender.sendMessage(ChatColor.GREEN
+			// + (Tools.isBender(players, BendingType.Earth) ? "True"
+			// : "False"));
+			// sender.sendMessage(ChatColor.GOLD
+			// + (Tools.isBender(players, BendingType.ChiBlocker) ? "True"
+			// : "False"));
+			// for (BendingType type : benders.get(players)) {
+			// sender.sendMessage(ChatColor.AQUA + type.toString());
+			// }
+			//
+			// }
+			// }
 		}
 		sender.sendMessage(ChatColor.RED
 				+ "Use /bending help <page> if you want to see a list of commands.");

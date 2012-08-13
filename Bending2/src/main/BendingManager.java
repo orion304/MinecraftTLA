@@ -585,7 +585,7 @@ public class BendingManager implements Runnable {
 
 			if (ability == Abilities.Bloodbending)
 				bloodbendingplayers++;
-			if (Tools.hasAbility(player, Abilities.FreezeMelt))
+			if (Tools.hasAbility(player, Abilities.PhaseChange))
 				freezemeltplayers++;
 			// if (ability == Abilities.WalkOnWater)
 			// freezemeltplayers++;
@@ -595,9 +595,9 @@ public class BendingManager implements Runnable {
 				watermanipulationplayers++;
 			if (Tools.hasAbility(player, Abilities.WaterSpout))
 				waterspoutplayers++;
-			if (ability == Abilities.WaterWall)
+			if (ability == Abilities.Surge)
 				waterwallplayers++;
-			if (ability == Abilities.Wave)
+			if (ability == Abilities.Surge)
 				waveplayers++;
 		}
 

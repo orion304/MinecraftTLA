@@ -88,7 +88,6 @@ import firebending.FireBlast;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
-import firebending.HeatMelt;
 import firebending.Illumination;
 import firebending.Lightning;
 import firebending.RingOfFire;
@@ -324,16 +323,12 @@ public class BendingListener implements Listener {
 					new Fireball(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Extinguish) {
+				if (Tools.getBendingAbility(player) == Abilities.ControlHeat) {
 					new Extinguish(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.Blaze) {
 					new ArcOfFire(player);
-				}
-
-				if (Tools.getBendingAbility(player) == Abilities.HeatMelt) {
-					new HeatMelt(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.FireJet) {
@@ -361,17 +356,17 @@ public class BendingListener implements Listener {
 					new IceSpike(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.FreezeMelt) {
+				if (Tools.getBendingAbility(player) == Abilities.PhaseChange) {
 					new FreezeMelt(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.WaterWall) {
+				if (Tools.getBendingAbility(player) == Abilities.Surge) {
 					new WaterWall(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Wave) {
-					Wave.launch(player);
-				}
+				// if (Tools.getBendingAbility(player) == Abilities.Wave) {
+				// Wave.launch(player);
+				// }
 
 				// if (Tools.getBendingAbility(player) ==
 				// Abilities.Plantbending) {
@@ -467,19 +462,19 @@ public class BendingListener implements Listener {
 				new EarthWall(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.WaterWall) {
+			if (Tools.getBendingAbility(player) == Abilities.Surge) {
 				WaterWall.form(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Wave) {
-				new Wave(player);
-			}
+			// if (Tools.getBendingAbility(player) == Abilities.Wave) {
+			// new Wave(player);
+			// }
 
 			if (Tools.getBendingAbility(player) == Abilities.Bloodbending) {
 				new Bloodbending(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.FreezeMelt) {
+			if (Tools.getBendingAbility(player) == Abilities.PhaseChange) {
 				new Melt(player);
 			}
 

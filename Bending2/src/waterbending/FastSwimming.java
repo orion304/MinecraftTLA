@@ -25,12 +25,11 @@ public class FastSwimming {
 					&& Tools.isWater(player.getLocation().getBlock())
 					&& !TempBlock.isTempBlock(player.getLocation().getBlock())
 					&& !(Tools.getBendingAbility(player) == Abilities.WaterManipulation
-							|| Tools.getBendingAbility(player) == Abilities.Wave
-							|| Tools.getBendingAbility(player) == Abilities.WaterWall
+							|| Tools.getBendingAbility(player) == Abilities.Surge
 							|| Tools.getBendingAbility(player) == Abilities.HealingWaters
-							|| Tools.getBendingAbility(player) == Abilities.FreezeMelt || Tools
-							.getBendingAbility(player) == Abilities.Bloodbending
-							|| Tools.getBendingAbility(player) == Abilities.IceSpike)) {
+							|| Tools.getBendingAbility(player) == Abilities.PhaseChange
+							|| Tools.getBendingAbility(player) == Abilities.Bloodbending || Tools
+							.getBendingAbility(player) == Abilities.IceSpike)) {
 				player.setVelocity(player.getEyeLocation().getDirection()
 						.clone().normalize().multiply(factor));
 			}
