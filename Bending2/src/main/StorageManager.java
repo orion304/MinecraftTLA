@@ -11,8 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.kitteh.tag.TagAPI;
-import org.kitteh.tag.TagAPIException;
 
 import tools.Abilities;
 import tools.BendingType;
@@ -27,6 +27,8 @@ public class StorageManager {
 	public static Boolean useFlatFile;
 	public MySQL MySql;
 
+	private Plugin tapi;
+
 	// private InputStream defConfigStream;
 
 	// public BendingPlayers(File file, InputStream inputStream) {
@@ -38,6 +40,7 @@ public class StorageManager {
 	public StorageManager(File file) {
 		dataFolder = file;
 		initialize(dataFolder);
+		tapi = Bukkit.getPluginManager().getPlugin("TagAPI");
 	}
 
 	public void removeBending(Player player) {
@@ -63,13 +66,13 @@ public class StorageManager {
 		}
 		List<BendingType> templist = new ArrayList<BendingType>();
 		Bending.benders.put(player.getName(), templist);
-		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
-				&& ConfigManager.useTagAPI)
+		if (tapi != null && ConfigManager.useTagAPI) {
 			try {
 				TagAPI.refreshPlayer(player);
-			} catch (TagAPIException e) {
+			} catch (Exception e) {
 
 			}
+		}
 		// Bending.benders.remove(player.getName());
 		return;
 	}
@@ -298,13 +301,13 @@ public class StorageManager {
 		List<BendingType> templist = new ArrayList<BendingType>();
 		templist.add(type);
 		Bending.benders.put(player.getName(), templist);
-		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
-				&& ConfigManager.useTagAPI)
+		if (tapi != null && ConfigManager.useTagAPI) {
 			try {
 				TagAPI.refreshPlayer(player);
-			} catch (TagAPIException e) {
+			} catch (Exception e) {
 
 			}
+		}
 	}
 
 	public void setBending(Player player, String type) {
@@ -379,14 +382,13 @@ public class StorageManager {
 			templist.add(type);
 		}
 		Bending.benders.put(player.getName(), templist);
-		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
-				&& ConfigManager.useTagAPI)
+		if (tapi != null && ConfigManager.useTagAPI) {
 			try {
 				TagAPI.refreshPlayer(player);
-			} catch (TagAPIException e) {
+			} catch (Exception e) {
 
 			}
-
+		}
 	}
 
 	public void addBending(Player player, String type) {
