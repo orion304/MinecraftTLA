@@ -175,6 +175,8 @@ public class BendingCommand {
 						"Usage: /bending choose <player> <element>");
 				return;
 			}
+			if (!hasPermission(player, "bending.command.choose"))
+				return;
 			if (Tools.isBender(player.getName())
 					&& !player.hasPermission("bending.admin.rechoose")) {
 				printNoPermissions(player);
@@ -661,23 +663,30 @@ public class BendingCommand {
 				return;
 			}
 
+			boolean none = true;
+
 			if (!ConfigManager.bendToItem) {
 				for (int i = 0; i <= 8; i++) {
 					Abilities a = config.getAbility(player, i);
-					ChatColor color = ChatColor.WHITE;
-					if (Abilities.isAirbending(a)) {
-						color = Tools.getColor(ConfigManager.getColor("Air"));
-					} else if (Abilities.isChiBlocking(a)) {
-						color = Tools.getColor(ConfigManager
-								.getColor("ChiBlocker"));
-					} else if (Abilities.isEarthbending(a)) {
-						color = Tools.getColor(ConfigManager.getColor("Earth"));
-					} else if (Abilities.isFirebending(a)) {
-						color = Tools.getColor(ConfigManager.getColor("Fire"));
-					} else if (Abilities.isWaterbending(a)) {
-						color = Tools.getColor(ConfigManager.getColor("Water"));
-					}
 					if (a != null) {
+						none = false;
+						ChatColor color = ChatColor.WHITE;
+						if (Abilities.isAirbending(a)) {
+							color = Tools.getColor(ConfigManager
+									.getColor("Air"));
+						} else if (Abilities.isChiBlocking(a)) {
+							color = Tools.getColor(ConfigManager
+									.getColor("ChiBlocker"));
+						} else if (Abilities.isEarthbending(a)) {
+							color = Tools.getColor(ConfigManager
+									.getColor("Earth"));
+						} else if (Abilities.isFirebending(a)) {
+							color = Tools.getColor(ConfigManager
+									.getColor("Fire"));
+						} else if (Abilities.isWaterbending(a)) {
+							color = Tools.getColor(ConfigManager
+									.getColor("Water"));
+						}
 						String ability = config.getAbility(player, i).name();
 						sendMessage(player, "Slot " + (i + 1) + ": " + color
 								+ ability);
@@ -688,6 +697,7 @@ public class BendingCommand {
 				for (Material mat : Material.values()) {
 					Abilities a = config.getAbility(player, mat);
 					if (a != null) {
+						none = false;
 						ChatColor color = ChatColor.WHITE;
 						if (Abilities.isAirbending(a)) {
 							color = Tools.getColor(ConfigManager
@@ -711,6 +721,8 @@ public class BendingCommand {
 					}
 				}
 			}
+			if (none)
+				sendMessage(player, "You have no abilities bound.");
 		}
 
 		if (args.length == 2) {
@@ -820,10 +832,13 @@ public class BendingCommand {
 		String playerlist = "";
 		for (int i = 1; i < args.length; i++) {
 			String playername = args[i];
+			String senderName = "The server";
+			if (player != null)
+				senderName = player.getName();
 			Player targetplayer = server.getPlayer(playername);
 			if (targetplayer != null) {
 				config.permaRemoveBending(targetplayer);
-				targetplayer.sendMessage(player.getName()
+				targetplayer.sendMessage(senderName
 						+ " has removed your bending permanently.");
 				playerlist = playerlist + targetplayer.getName() + " ";
 			}
@@ -836,12 +851,15 @@ public class BendingCommand {
 		if (!hasPermission(player, "bending.admin.remove"))
 			return;
 		String playerlist = "";
+		String senderName = "The server";
+		if (player != null)
+			senderName = player.getName();
 		for (int i = 1; i < args.length; i++) {
 			String playername = args[i];
 			Player targetplayer = server.getPlayer(playername);
 			if (targetplayer != null) {
 				config.removeBending(targetplayer);
-				targetplayer.sendMessage(player.getName()
+				targetplayer.sendMessage(senderName
 						+ " has removed your bending.");
 				playerlist = playerlist + targetplayer.getName() + " ";
 			}
@@ -1088,7 +1106,7 @@ public class BendingCommand {
 			return;
 		}
 
-		if (Tools.hasPermission(player, ability)) {
+		if (!Tools.hasPermission(player, ability)) {
 			printNoPermissions(player);
 			return;
 		}

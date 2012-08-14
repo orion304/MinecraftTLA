@@ -388,9 +388,12 @@ public class BendingManager implements Runnable {
 				for (Player player : world.getPlayers()) {
 					if (Tools.isBender(player.getName(), BendingType.Fire)
 							&& player
-									.hasPermission("bending.message.daymessage"))
-						player.sendMessage(ChatColor.RED
+									.hasPermission("bending.message.daymessage")) {
+						ChatColor color = ChatColor.WHITE;
+						color = Tools.getColor(ConfigManager.getColor("Fire"));
+						player.sendMessage(color
 								+ "You feel the strength of the rising sun empowering your firebending.");
+					}
 				}
 				days.replace(world, true);
 			}
@@ -399,9 +402,12 @@ public class BendingManager implements Runnable {
 				for (Player player : world.getPlayers()) {
 					if (Tools.isBender(player.getName(), BendingType.Fire)
 							&& player
-									.hasPermission("bending.message.daymessage"))
-						player.sendMessage(ChatColor.RED
+									.hasPermission("bending.message.daymessage")) {
+						ChatColor color = ChatColor.WHITE;
+						color = Tools.getColor(ConfigManager.getColor("Fire"));
+						player.sendMessage(color
 								+ "You feel the empowering of your firebending subside as the sun sets.");
+					}
 				}
 				days.replace(world, false);
 			}
@@ -410,9 +416,12 @@ public class BendingManager implements Runnable {
 				for (Player player : world.getPlayers()) {
 					if (Tools.isBender(player.getName(), BendingType.Water)
 							&& player
-									.hasPermission("bending.message.nightmessage"))
-						player.sendMessage(ChatColor.BLUE
+									.hasPermission("bending.message.nightmessage")) {
+						ChatColor color = ChatColor.WHITE;
+						color = Tools.getColor(ConfigManager.getColor("Water"));
+						player.sendMessage(color
 								+ "You feel the strength of the rising moon empowering your waterbending.");
+					}
 				}
 				nights.replace(world, true);
 			}
@@ -421,9 +430,12 @@ public class BendingManager implements Runnable {
 				for (Player player : world.getPlayers()) {
 					if (Tools.isBender(player.getName(), BendingType.Water)
 							&& player
-									.hasPermission("bending.message.nightmessage"))
-						player.sendMessage(ChatColor.BLUE
+									.hasPermission("bending.message.nightmessage")) {
+						ChatColor color = ChatColor.WHITE;
+						color = Tools.getColor(ConfigManager.getColor("Water"));
+						player.sendMessage(color
 								+ "You feel the empowering of your waterbending subside as the moon sets.");
+					}
 				}
 				nights.replace(world, false);
 			}
