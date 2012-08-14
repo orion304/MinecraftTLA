@@ -4,6 +4,7 @@ version: 1.0.8
 commands:
     bending:
         description: Chooses the many features of Bending.
+        aliases: [b, bend, tla, mtla, minecrafttla, minecraftthelastairbender, mthelastairbender]
         usage: |
              /<command> choose [element]
              /<command> display [element]

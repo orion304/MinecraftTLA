@@ -459,14 +459,18 @@ public class Tools {
 	public static boolean isBender(String player, BendingType type) {
 		// return config.isBender(player, type);
 		// if (Bending.benders.contains(player))
-		if (Bending.benders.get(player) != null)
+		if (Bending.benders.containsKey(player))
 			return Bending.benders.get(player).contains(type);
 		return false;
 	}
 
 	public static boolean isBender(String player) {
 		// return config.isBender(player, type);
-		return Bending.benders.containsKey(player);
+		if (Bending.benders.containsKey(player)) {
+			if (Bending.benders.get(player).size() > 0)
+				return true;
+		}
+		return false;
 	}
 
 	public static Abilities getBendingAbility(Player player) {

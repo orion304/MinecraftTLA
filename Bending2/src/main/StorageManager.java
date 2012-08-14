@@ -374,7 +374,7 @@ public class StorageManager {
 			}
 		}
 		List<BendingType> templist;
-		if (Bending.benders.contains(player.getName())) {
+		if (Bending.benders.containsKey(player.getName())) {
 			templist = Bending.benders.get(player.getName());
 			templist.add(type);
 		} else {
@@ -451,7 +451,7 @@ public class StorageManager {
 			}
 		}
 		List<BendingType> templist;
-		if (Bending.benders.contains(player)) {
+		if (Bending.benders.containsKey(player)) {
 			templist = Bending.benders.get(player);
 			templist.add(type);
 		} else {

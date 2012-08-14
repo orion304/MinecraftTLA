@@ -52,7 +52,7 @@ public class WaterPassive {
 	public static boolean softenLanding(Player player) {
 		Block block = player.getLocation().getBlock();
 		Block fallblock = block.getRelative(BlockFace.DOWN);
-		if (Tools.isWater(block))
+		if (Tools.isWaterbendable(block, player) && !Tools.isPlant(block))
 			return true;
 		if (fallblock.getType() == Material.AIR)
 			return true;
