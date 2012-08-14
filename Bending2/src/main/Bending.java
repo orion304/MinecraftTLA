@@ -280,6 +280,15 @@ public class Bending extends JavaPlugin {
 			player = (Player) sender;
 		}
 		if (cmd.getName().equalsIgnoreCase("bending")) {
+
+			// Tools.verbose(player.getName());
+			// Tools.verbose(Tools.isBender(player.getName()));
+			// Tools.verbose(sender.hasPermission("bending.admin.add"));
+			// Tools.verbose(sender.hasPermission("bending.admin.choose"));
+			// Tools.verbose(sender.hasPermission("bending.admin.rechoose"));
+			// Tools.verbose(sender.hasPermission("bending.admin.remove"));
+			// Tools.verbose(sender.hasPermission("bending.admin.permaremove"));
+
 			if (Arrays.asList(args).isEmpty()) {
 				sender.sendMessage(ChatColor.RED
 						+ "Use /bending help <page> if you want to see a list of commands.");

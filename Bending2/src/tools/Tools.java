@@ -466,7 +466,7 @@ public class Tools {
 
 	public static boolean isBender(String player) {
 		// return config.isBender(player, type);
-		return Bending.benders.contains(player);
+		return Bending.benders.containsKey(player);
 	}
 
 	public static Abilities getBendingAbility(Player player) {
