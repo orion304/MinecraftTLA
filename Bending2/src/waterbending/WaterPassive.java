@@ -57,7 +57,8 @@ public class WaterPassive {
 		if (fallblock.getType() == Material.AIR)
 			return true;
 		if (Tools.isWaterbendable(fallblock, player)
-				&& !Tools.isPlant(fallblock))
+				&& !Tools.isPlant(fallblock)
+				|| fallblock.getType() == Material.SNOW_BLOCK)
 			return true;
 		return false;
 	}

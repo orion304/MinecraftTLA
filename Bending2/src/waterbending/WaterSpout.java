@@ -142,7 +142,7 @@ public class WaterSpout {
 					player.getWorld());
 		int maxheight = (int) ((double) defaultheight * ConfigManager.nightFactor) + 5;
 		Block blocki;
-		for (int i = 0; i <= maxheight; i++) {
+		for (int i = 0; i < maxheight; i++) {
 			blocki = location.clone().add(0, -i, 0).getBlock();
 			if (!affectedblocks.contains(blocki)) {
 				if (blocki.getType() == Material.WATER
