@@ -85,7 +85,7 @@ public class AirSpout {
 
 	private Block getGround() {
 		Block standingblock = player.getLocation().getBlock();
-		for (int i = 0; i < height + 5; i++) {
+		for (int i = 0; i <= height + 5; i++) {
 			Block block = standingblock.getRelative(BlockFace.DOWN, i);
 			if (Tools.isSolid(block) || block.isLiquid()) {
 				return block;
@@ -113,7 +113,7 @@ public class AirSpout {
 			angle++;
 			if (angle >= directions.length)
 				angle = 0;
-			for (int i = 1; i < dy; i++) {
+			for (int i = 1; i <= dy; i++) {
 
 				index += 1;
 				if (index >= directions.length)
