@@ -1501,17 +1501,18 @@ public class BendingCommand {
 
 	private static void printHelpDialogue(Player player) {
 		if (player == null) {
+			Bending.log.info("Use /bending help to see a list of commands.");
 			Bending.log
-					.info("Use /bending help <page> if you want to see a list of commands.");
+					.info("Use /bending help <command> to see how to use that command.");
 			Bending.log
-					.info("Use /bending help <command> if you help with a command.");
+					.info("Use /bending help <ability> to get help with that ability.");
 		} else {
 			player.sendMessage(ChatColor.RED
-					+ "Use /bending help <page> if you want to see a list of commands.");
+					+ "Use /bending help to see a list of commands.");
 			player.sendMessage(ChatColor.RED
-					+ "Use /bending help <ability> if you want to see how to use it.");
+					+ "Use /bending help <command> to see how to use that command.");
 			player.sendMessage(ChatColor.RED
-					+ "Use /bending help <command> if you need help with a command.");
+					+ "Use /bending help <ability> to get help with that ability.");
 		}
 	}
 
