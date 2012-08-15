@@ -146,51 +146,75 @@ public class BendingCommand {
 
 	}
 
+	private static void printWhoUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.command.who")) {
+			sendNoCommandPermissionMessage(player, "who");
+			return;
+		}
+		printUsageMessage(player, "/bending who",
+				"Displays a list of users online, along with their bending types.");
+		printUsageMessage(player, "/bending who <player>",
+				"Displays which bending types that player has.");
+		sendMessage(player, "**This command does not yet work!**");
+	}
+
 	private static void who(Player player, String[] args) {
 
 	}
 
-	private static void printUsageMessage(Player player, String message) {
+	private static void printUsageMessage(Player player, String command,
+			String description) {
+		ChatColor color = ChatColor.AQUA;
 		if (player == null) {
-			Bending.log.info(message);
+			Bending.log.info(color + "Usage: " + command);
+			Bending.log.info(color + "- " + description);
 		} else {
-			player.sendMessage(message);
+			player.sendMessage(color + "Usage: " + command);
+			player.sendMessage(color + "- " + description);
+		}
+	}
+
+	private static void printChooseUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.admin.choose")
+				&& !hasHelpPermission(player, "bending.admin.rechoose")
+				&& !hasHelpPermission(player, "bending.command.choose")) {
+			sendNoCommandPermissionMessage(player, "choose");
+			return;
+		}
+		if (hasHelpPermission(player, "bending.command.choose")
+				|| hasHelpPermission(player, "bending.admin.rechoose")) {
+			printUsageMessage(player, "/bending choose <element>",
+					"Choose your <element> (Options: air, water, earth, fire, chiblocker).");
+		}
+		if (hasHelpPermission(player, "bending.admin.choose")) {
+			printUsageMessage(player, "/bending choose <player> <element>",
+					"Choose <element> for <player>.");
 		}
 	}
 
 	private static void choose(Player player, String[] args) {
 		if (args.length != 2 && args.length != 3) {
-			if (player == null) {
-				printUsageMessage(player,
-						"Usage: /bending choose <player> <element>");
-			} else {
-				if (player.hasPermission("bending.command.choose")
-						|| player.hasPermission("bending.admin.rechoose")) {
-					printUsageMessage(player,
-							"Usage: /bending choose <element>");
-				}
-				if (player.hasPermission("bending.admin.choose")) {
-					printUsageMessage(player,
-							"Usage: /bending choose <player> <element>");
-				}
+			printChooseUsage(player);
 
-				if (!player.hasPermission("bending.command.choose")
-						&& !player.hasPermission("bending.admin.rechoose")
-						&& !player.hasPermission("bending.admin.choose")) {
-					printNoPermissions(player);
-					return;
-				}
+			if (!player.hasPermission("bending.command.choose")
+					&& !player.hasPermission("bending.admin.rechoose")
+					&& !player.hasPermission("bending.admin.choose")) {
+				printNoPermissions(player);
+				return;
 			}
 			return;
 		}
 		if (args.length == 2) {
 			if (player == null) {
-				printUsageMessage(player,
-						"Usage: /bending choose <player> <element>");
+				printChooseUsage(player);
 				return;
 			}
-			if (!hasPermission(player, "bending.command.choose"))
+			if (!player.hasPermission("bending.command.choose")
+					&& !player.hasPermission("bending.admin.rechoose")
+					&& !player.hasPermission("bending.admin.choose")) {
+				printNoPermissions(player);
 				return;
+			}
 			if (Tools.isBender(player.getName())
 					&& !player.hasPermission("bending.admin.rechoose")) {
 				printNoPermissions(player);
@@ -227,15 +251,14 @@ public class BendingCommand {
 				config.setBending(player, "chiblocker");
 				return;
 			}
-			printUsageMessage(player, "Usage: /bending choose <element>");
+			printChooseUsage(player);
 		} else if (args.length == 3) {
 			if (!hasPermission(player, "bending.admin.choose"))
 				return;
 			String playername = args[1];
 			Player targetplayer = server.getPlayer(playername);
 			if (targetplayer == null) {
-				printUsageMessage(player,
-						"Usage: /bending choose <player> <element>");
+				printChooseUsage(player);
 				return;
 			}
 
@@ -299,8 +322,7 @@ public class BendingCommand {
 				config.setBending(targetplayer, "chiblocker");
 				return;
 			}
-			printUsageMessage(player,
-					"Usage: /bending choose <player> <element>");
+			printChooseUsage(player);
 		}
 	}
 
@@ -310,6 +332,16 @@ public class BendingCommand {
 		} else {
 			player.sendMessage(message);
 		}
+	}
+
+	private static void printImportUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.admin.import")) {
+			sendNoCommandPermissionMessage(player, "import");
+			return;
+		}
+		printUsageMessage(player, "/bending import",
+				"Imports data from your bendingPlayer.yml file to your MySQL database.");
+
 	}
 
 	private static void importBending(Player player, String[] args) {
@@ -377,8 +409,8 @@ public class BendingCommand {
 	}
 
 	private static void help(Player player, String[] args) {
-		int pages = 0;
-		int page = 1;
+		// int pages = 0;
+		// int page = 1;
 		List<String> command = new ArrayList<String>();
 		for (String s : Bending.commands.keySet()) {
 			if (hasHelpPermission(player, "bending." + s)) {
@@ -386,18 +418,20 @@ public class BendingCommand {
 			}
 		}
 		if (args.length > 1) {
+			helpCommand(player, args);
+			Abilities ability = Abilities.getAbility(args[1]);
 			if (Abilities.getAbility(args[1]) != null) {
+				ChatColor cc = ChatColor.GOLD;
+				if (Abilities.isAirbending(Abilities.getAbility(args[1])))
+					cc = Tools.getColor(ConfigManager.color.get("Air"));
+				if (Abilities.isFirebending(Abilities.getAbility(args[1])))
+					cc = Tools.getColor(ConfigManager.color.get("Fire"));
+				if (Abilities.isEarthbending(Abilities.getAbility(args[1])))
+					cc = Tools.getColor(ConfigManager.color.get("Earth"));
+				if (Abilities.isWaterbending(Abilities.getAbility(args[1])))
+					cc = Tools.getColor(ConfigManager.color.get("Water"));
 				if (Tools.hasPermission(player, Abilities.getAbility(args[1]))) {
 
-					ChatColor cc = ChatColor.GOLD;
-					if (Abilities.isAirbending(Abilities.getAbility(args[1])))
-						cc = Tools.getColor(ConfigManager.color.get("Air"));
-					if (Abilities.isFirebending(Abilities.getAbility(args[1])))
-						cc = Tools.getColor(ConfigManager.color.get("Fire"));
-					if (Abilities.isEarthbending(Abilities.getAbility(args[1])))
-						cc = Tools.getColor(ConfigManager.color.get("Earth"));
-					if (Abilities.isWaterbending(Abilities.getAbility(args[1])))
-						cc = Tools.getColor(ConfigManager.color.get("Water"));
 					sendMessage(
 							player,
 							("                                                "
@@ -424,14 +458,6 @@ public class BendingCommand {
 					case AirScooter:
 						sendMessage(player, cc + AirScooter.getDescription());
 						break;
-					// case AirBurst:
-					// sendMessage(player, cc
-					// + AirBurst.getDescription());
-					// break;
-					// case AirSpout:
-					// sendMessage(player, cc
-					// + AirSpout.getDescription());
-					// break;
 					case Catapult:
 						sendMessage(player, cc + Catapult.getDescription());
 						break;
@@ -444,10 +470,6 @@ public class BendingCommand {
 					case EarthTunnel:
 						sendMessage(player, cc + EarthTunnel.getDescription());
 						break;
-					// case CompactColumn:
-					// sendMessage(player, cc
-					// + CompactColumn.getDescription());
-					// break;
 					case EarthBlast:
 						sendMessage(player, cc + EarthBlast.getDescription());
 						break;
@@ -457,10 +479,6 @@ public class BendingCommand {
 					case Tremorsense:
 						sendMessage(player, cc + Tremorsense.getDescription());
 						break;
-					// case Shockwave:
-					// sendMessage(player, cc
-					// + Shockwave.getDescription());
-					// break;
 					case Blaze:
 						sendMessage(player, cc + ArcOfFire.getDescription());
 						break;
@@ -473,14 +491,6 @@ public class BendingCommand {
 					case FireBlast:
 						sendMessage(player, cc + FireBlast.getDescription());
 						break;
-					// case HeatMelt:
-					// sendMessage(player, cc
-					// + HeatMelt.getDescription());
-					// break;
-					// case RingOfFire:
-					// sendMessage(player, cc
-					// + RingOfFire.getDescription());
-					// break;
 					case FireJet:
 						sendMessage(player, cc + FireJet.getDescription());
 						break;
@@ -505,14 +515,6 @@ public class BendingCommand {
 					case HealingWaters:
 						sendMessage(player, cc + HealingWaters.getDescription());
 						break;
-					// case Plantbending:
-					// sendMessage(player, cc
-					// + Plantbending.getDescription());
-					// break;
-					// case WalkOnWater:
-					// sendMessage(player, cc
-					// + WalkOnWater.getDescription());
-					// break;
 					case WaterManipulation:
 						sendMessage(player,
 								cc + WaterManipulation.getDescription());
@@ -523,9 +525,6 @@ public class BendingCommand {
 					case Surge:
 						sendMessage(player, cc + WaterWall.getDescription());
 						break;
-					// case Wave:
-					// sendMessage(player, cc + Wave.getDescription());
-					// break;
 					case AvatarState:
 						sendMessage(player, cc + AvatarState.getDescription());
 						break;
@@ -546,108 +545,270 @@ public class BendingCommand {
 						break;
 					}
 					return;
-				}
-			}
-			for (String s : command) {
-				if (args[1].equalsIgnoreCase(s.split(" ")[0])) {
-					sendMessage(
-							player,
-							ChatColor.AQUA
-									+ "                                        /bending "
-									+ (s.split(" ")[0]));
-					String msg = "";
-					if ((s.split(" ")[0]).equalsIgnoreCase("choose")
-							&& hasHelpPermission(player,
-									"bending.command.choose")) {
-						msg = "The command /bending choose <element> let you choose one of the four elements (air, fire, water, air) each having different abilities. ";
-						if (hasHelpPermission(player, "bending.admin.choose"))
-							msg = msg
-									+ "The command can also be used to set other people bending element like so /bending choose <player> <element>";
-						sendMessage(player, msg);
-					} else if ((s.split(" ")[0]).equalsIgnoreCase("bind")
-							&& hasHelpPermission(player, "bending.command.bind")) {
-						String append = "a slot";
-						if (ConfigManager.bendToItem) {
-							append = "an item";
-						}
-						msg = "The command /bending <bind> <ability> is used to bind an ability to "
-								+ append + ".";
-						sendMessage(player, msg);
-					} else if ((s.split(" ")[0].toLowerCase())
-							.equalsIgnoreCase("help")) {
-
-					} else if ((s.split(" ")[0].toLowerCase())
-							.equalsIgnoreCase("remove")
-							&& hasHelpPermission(player, "bending.admin.remove")) {
-						sendMessage(
-								player,
-								"The command /bending remove <player> will remove the player bending. It can also be used to lift the permaremove of a player.");
-					} else if ((s.split(" ")[0]).equalsIgnoreCase("reload")
-							&& hasHelpPermission(player, "bending.admin.reload")) {
-						player.sendMessage("The command /bending reload will allow you to reload the configuration, so you can make change while the server is running and don't have to restart/reload it.");
-					} else if ((s.split(" ")[0])
-							.equalsIgnoreCase("permaremove")
-							&& hasHelpPermission(player,
-									"bending.admin.permaremove")) {
-						sendMessage(
-								player,
-								"The command /bending permaremove <player> will permanantly remove someone's bending and won't allow him to choose once again until you do /bending remove <player> or manually set his bending");
-					} else if ((s.split(" ")[0]).equalsIgnoreCase("add")
-							&& hasHelpPermission(player, "bending.admin.add")) {
-						sendMessage(
-								player,
-								"The command /bending add <element> allow you to add elements to the one you aleredy have. It can be used to stack all for eleents at once.");
-					} else if ((s.split(" ")[0]).equalsIgnoreCase("display")
-							&& hasHelpPermission(player,
-									"bending.command.display")) {
-						msg = ("The command /bending display allows you to see a list of your binding so you can remember where you binded what.");
-						if (hasHelpPermission(player,
-								"bending.command.displayelement")) {
-							msg = msg
-									+ " The command /bending display <element> can allow you to see a list of abilities an bending element has.";
-						}
-						sendMessage(player, msg);
-					}
-
-					return;
-				}
-			}
-
-			try {
-				page = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
-				page = -1;
-			}
-		}
-		if (page != -1) {
-			pages = command.size() / 8;
-			if (command.size() % 8 != 0)
-				pages++;
-
-			if (page > pages) {
-				if (pages > 1) {
-					sendMessage(player, ChatColor.RED + "There's only " + pages
-							+ " pages of help");
 				} else {
-					sendMessage(player, ChatColor.RED + "There's only " + pages
-							+ " page of help");
+					sendMessage(player, "You do not have permissions to bind "
+							+ cc + ability + ChatColor.WHITE + ".");
 				}
+			}
+			// for (String s : command) {
+			//
+			// if (args[1].equalsIgnoreCase(s.split(" ")[0])) {
+			// sendMessage(
+			// player,
+			// ChatColor.AQUA
+			// + "                                        /bending "
+			// + (s.split(" ")[0]));
+			// String msg = "";
+			// if ((s.split(" ")[0]).equalsIgnoreCase("choose")
+			// && hasHelpPermission(player,
+			// "bending.command.choose")) {
+			// msg =
+			// "The command /bending choose <element> let you choose one of the four elements (air, fire, water, air) each having different abilities. ";
+			// if (hasHelpPermission(player, "bending.admin.choose"))
+			// msg = msg
+			// +
+			// "The command can also be used to set other people bending element like so /bending choose <player> <element>";
+			// sendMessage(player, msg);
+			// } else if ((s.split(" ")[0]).equalsIgnoreCase("bind")
+			// && hasHelpPermission(player, "bending.command.bind")) {
+			// String append = "a slot";
+			// if (ConfigManager.bendToItem) {
+			// append = "an item";
+			// }
+			// msg =
+			// "The command /bending <bind> <ability> is used to bind an ability to "
+			// + append + ".";
+			// sendMessage(player, msg);
+			// } else if ((s.split(" ")[0].toLowerCase())
+			// .equalsIgnoreCase("help")) {
+			//
+			// } else if ((s.split(" ")[0].toLowerCase())
+			// .equalsIgnoreCase("remove")
+			// && hasHelpPermission(player, "bending.admin.remove")) {
+			// sendMessage(
+			// player,
+			// "The command /bending remove <player> will remove the player bending. It can also be used to lift the permaremove of a player.");
+			// } else if ((s.split(" ")[0]).equalsIgnoreCase("reload")
+			// && hasHelpPermission(player, "bending.admin.reload")) {
+			// player.sendMessage("The command /bending reload will allow you to reload the configuration, so you can make change while the server is running and don't have to restart/reload it.");
+			// } else if ((s.split(" ")[0])
+			// .equalsIgnoreCase("permaremove")
+			// && hasHelpPermission(player,
+			// "bending.admin.permaremove")) {
+			// sendMessage(
+			// player,
+			// "The command /bending permaremove <player> will permanantly remove someone's bending and won't allow him to choose once again until you do /bending remove <player> or manually set his bending");
+			// } else if ((s.split(" ")[0]).equalsIgnoreCase("add")
+			// && hasHelpPermission(player, "bending.admin.add")) {
+			// sendMessage(
+			// player,
+			// "The command /bending add <element> allow you to add elements to the one you aleredy have. It can be used to stack all for eleents at once.");
+			// } else if ((s.split(" ")[0]).equalsIgnoreCase("display")
+			// && hasHelpPermission(player,
+			// "bending.command.display")) {
+			// msg =
+			// ("The command /bending display allows you to see a list of your binding so you can remember where you binded what.");
+			// if (hasHelpPermission(player,
+			// "bending.command.displayelement")) {
+			// msg = msg
+			// +
+			// " The command /bending display <element> can allow you to see a list of abilities an bending element has.";
+			// }
+			// sendMessage(player, msg);
+			// }
+			//
+			// return;
+			// }
+			// }
+
+			// try {
+			// page = Integer.parseInt(args[1]);
+			// } catch (NumberFormatException e) {
+			// page = -1;
+			// }
+		} else {
+			printCommands(player);
+		}
+		// if (page != -1) {
+		// pages = command.size() / 8;
+		// if (command.size() % 8 != 0)
+		// pages++;
+		//
+		// if (page > pages) {
+		// if (pages > 1) {
+		// sendMessage(player, ChatColor.RED + "There's only " + pages
+		// + " pages of help");
+		// } else {
+		// sendMessage(player, ChatColor.RED + "There's only " + pages
+		// + " page of help");
+		// }
+		// return;
+		// }
+		// sendMessage(player, ChatColor.AQUA
+		// + "=======================Help===========================");
+		// for (int i = 1; i <= 8; i++) {
+		// if (command.size() > (i + (8 * page) - 9)) {
+		// String comname = "/bending "
+		// + command.get((i + (8 * page) - 9));
+		// sendMessage(player, comname);
+		// }
+		// }
+		// sendMessage(player, ChatColor.AQUA + "=====================Page "
+		// + page + "/" + pages + "========================");
+		// return;
+		// }
+
+	}
+
+	private static void helpCommand(Player player, String[] args) {
+		ChatColor color = ChatColor.AQUA;
+
+		String command = args[1];
+		if (Arrays.asList(bindAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.bind")) {
+				sendMessage(player, color
+						+ "You don't have permission to use bind.");
 				return;
 			}
-			sendMessage(player, ChatColor.AQUA
-					+ "=======================Help===========================");
-			for (int i = 1; i <= 8; i++) {
-				if (command.size() > (i + (8 * page) - 9)) {
-					String comname = "/bending "
-							+ command.get((i + (8 * page) - 9));
-					sendMessage(player, comname);
-				}
+			sendMessage(player, color + "Command: /bending bind");
+			String aliases = "";
+			for (String alias : bindAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printBindUsage(player);
+		} else if (Arrays.asList(clearAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.clear")) {
+				sendMessage(player, color
+						+ "You don't have permission to use clear.");
+				return;
 			}
-			sendMessage(player, ChatColor.AQUA + "=====================Page "
-					+ page + "/" + pages + "========================");
-			return;
+			sendMessage(player, color + "Command: /bending clear");
+			String aliases = "";
+			for (String alias : clearAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printClearUsage(player);
+		} else if (Arrays.asList(chooseAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.choose")
+					&& !hasHelpPermission(player, "bending.admin.choose")
+					&& !hasHelpPermission(player, "bending.admin.rechoose")) {
+				sendMessage(player, color
+						+ "You don't have permission to use choose.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending choose");
+			String aliases = "";
+			for (String alias : chooseAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printChooseUsage(player);
+		} else if (Arrays.asList(addAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.add")) {
+				sendMessage(player, color
+						+ "You don't have permission to use add.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending add");
+			String aliases = "";
+			for (String alias : addAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printAddUsage(player);
+		} else if (Arrays.asList(removeAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.remove")) {
+				sendMessage(player, color
+						+ "You don't have permission to use remove.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending remove");
+			String aliases = "";
+			for (String alias : removeAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printRemoveUsage(player);
+		} else if (Arrays.asList(permaremoveAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.permaremove")) {
+				sendMessage(player, color
+						+ "You don't have permission to use permaremove.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending permaremove");
+			String aliases = "";
+			for (String alias : permaremoveAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printPermaremoveUsage(player);
+		} else if (Arrays.asList(toggleAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.toggle")) {
+				sendMessage(player, color
+						+ "You don't have permission to use toggle.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending toggle");
+			String aliases = "";
+			for (String alias : toggleAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printToggleUsage(player);
+		} else if (Arrays.asList(displayAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.display")) {
+				sendMessage(player, color
+						+ "You don't have permission to use display.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending display");
+			String aliases = "";
+			for (String alias : displayAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printDisplayUsage(player);
+		} else if (Arrays.asList(reloadAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.reload")) {
+				sendMessage(player, color
+						+ "You don't have permission to use reload.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending reload");
+			String aliases = "";
+			for (String alias : reloadAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printReloadUsage(player);
+		} else if (Arrays.asList(importAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.import")) {
+				sendMessage(player, color
+						+ "You don't have permission to use import.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending import");
+			String aliases = "";
+			for (String alias : importAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printImportUsage(player);
+		} else if (Arrays.asList(whoAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.who")) {
+				sendMessage(player, color
+						+ "You don't have permission to use who.");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending who");
+			String aliases = "";
+			for (String alias : whoAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printWhoUsage(player);
 		}
+	}
 
+	private static void printReloadUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.admin.reload")) {
+			sendNoCommandPermissionMessage(player, "reload");
+			return;
+		} else {
+			printUsageMessage(player, "/bending reload",
+					"Reloads the bendingPlayers.yml file.");
+		}
 	}
 
 	private static void reload(Player player, String[] args) {
@@ -661,14 +822,24 @@ public class BendingCommand {
 
 	}
 
+	private static void printDisplayUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.command.display")) {
+			sendNoCommandPermissionMessage(player, "display");
+			return;
+		}
+		if (player != null)
+			printUsageMessage(player, "/bending display",
+					"Displays all the abilities you have bound.");
+		printUsageMessage(player, "/bending display <element>",
+				"Displays all available abilites for <element>");
+	}
+
 	private static void display(Player player, String[] args) {
 		if (!hasPermission(player, "bending.command.display"))
 			return;
 
 		if (args.length > 2) {
-			if (player != null)
-				printUsageMessage(player, "Usage: /bending display");
-			printUsageMessage(player, "Usage: /bending display <element>");
+			printDisplayUsage(player);
 		}
 
 		if (args.length == 1) {
@@ -769,19 +940,29 @@ public class BendingCommand {
 				}
 				return;
 			} else {
-				if (player != null)
-					printUsageMessage(player, "Usage: /bending display");
-				printUsageMessage(player, "Usage: /bending display <element>");
+				printDisplayUsage(player);
 			}
 
 		}
 
 	}
 
+	private static void printToggleUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.command.toggle")) {
+			sendNoCommandPermissionMessage(player, "toggle");
+			return;
+		}
+		printUsageMessage(player, "/bending toggle",
+				"Toggles your bending on or off. Passives will still work.");
+	}
+
 	private static void toggle(Player player, String[] args) {
 		if (args.length == 1) {
-			if (!hasPermission(player, "bending.command.toggle"))
+			if (!hasHelpPermission(player, "bending.command.toggle")
+					&& !hasHelpPermission(player, "bending.admin.toggle")) {
+				printNoPermissions(player);
 				return;
+			}
 			if (player == null) {
 				printNotFromConsole();
 				return;
@@ -840,6 +1021,17 @@ public class BendingCommand {
 
 	}
 
+	private static void printPermaremoveUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.admin.permaremove")) {
+			sendMessage(player,
+					"You do not have the permission to use /bending permaremove");
+		}
+		printUsageMessage(
+				player,
+				"/bending permaremove <player1> [player2] [player3] ...",
+				"Permanently removes the bending of <player1> (optionally accepts a list of players) until someone with permissions chooses their bending.");
+	}
+
 	private static void permaremove(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.permaremove"))
 			return;
@@ -859,6 +1051,20 @@ public class BendingCommand {
 		}
 		sendMessage(player, "You have permanently removed the bending of: "
 				+ playerlist);
+	}
+
+	private static void printRemoveUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.admin.remove")) {
+			sendMessage(player,
+					"You do not have the permission to use /bending remove");
+			return;
+		}
+		if (player != null) {
+			printUsageMessage(player, "/bending remove",
+					"Removes all your bending.");
+		}
+		printUsageMessage(player, "/bending remove <player>",
+				"Removes all of <player>'s bending.");
 	}
 
 	private static void remove(Player player, String[] args) {
@@ -882,26 +1088,23 @@ public class BendingCommand {
 
 	}
 
+	private static void printAddUsage(Player player) {
+		if (player != null)
+			printUsageMessage(player, "/bending add <element>",
+					"Add <element>, allowing you to use it along with what you already can do.");
+		printUsageMessage(player, "/bending add <player> <element>",
+				"Adds <element> to <player>.");
+	}
+
 	private static void add(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.add"))
 			return;
 		if (args.length != 2 && args.length != 3) {
-			if (player == null) {
-				printUsageMessage(player,
-						"Usage: /bending add <player> <element>");
-			} else {
-				printUsageMessage(player, "Usage: /bending add <element>");
-				printUsageMessage(player,
-						"Usage: /bending add <player> <element>");
-			}
+			printAddUsage(player);
 			return;
 		}
 		if (args.length == 2) {
-			if (player == null) {
-				printUsageMessage(player,
-						"Usage: /bending add <player> <element>");
-				return;
-			}
+			printAddUsage(player);
 			String choice = args[1].toLowerCase();
 			if (Arrays.asList(airbendingAliases).contains(choice)) {
 				if (Tools.isBender(player.getName(), BendingType.Air)) {
@@ -948,13 +1151,12 @@ public class BendingCommand {
 				config.addBending(player, "chiblocker");
 				return;
 			}
-			printUsageMessage(player, "Usage: /bending choose <element>");
+			printAddUsage(player);
 		} else if (args.length == 3) {
 			String playername = args[1];
 			Player targetplayer = server.getPlayer(playername);
 			if (targetplayer == null) {
-				printUsageMessage(player,
-						"Usage: /bending add <player> <element>");
+				printAddUsage(player);
 				return;
 			}
 
@@ -1028,10 +1230,21 @@ public class BendingCommand {
 				config.addBending(targetplayer, "chiblocker");
 				return;
 			}
-			printUsageMessage(player, "Usage: /bending add <element>");
-			printUsageMessage(player, "Usage: /bending add <player> <element>");
+			printAddUsage(player);
 		}
 
+	}
+
+	private static void printClearUsage(Player player) {
+		printUsageMessage(player, "/bending clear",
+				"Clears all abilities you have bound.");
+		if (!ConfigManager.bendToItem) {
+			printUsageMessage(player, "/bending clear <slot#>",
+					"Clears the ability bound to <slot#>");
+		} else {
+			printUsageMessage(player, "/bending clear <item>",
+					"Clears the ability bound to <item>");
+		}
 	}
 
 	private static void clear(Player player, String[] args) {
@@ -1043,12 +1256,7 @@ public class BendingCommand {
 		}
 
 		if (args.length != 1 && args.length != 2) {
-			printUsageMessage(player, "Usage: /bending clear");
-			if (!ConfigManager.bendToItem) {
-				printUsageMessage(player, "Usage: /bending clear <slot#>");
-			} else {
-				printUsageMessage(player, "Usage: /bending clear <item>");
-			}
+			printClearUsage(player);
 		}
 
 		if (args.length == 1) {
@@ -1071,22 +1279,33 @@ public class BendingCommand {
 							+ " has been cleared.");
 					return;
 				}
-				printUsageMessage(player, "Usage: /bending clear");
-				printUsageMessage(player, "Usage: /bending clear <slot#>");
+				printClearUsage(player);
 			} else {
 				if (Material.matchMaterial(args[1]) != null) {
 					config.removeAbility(player,
 							Material.matchMaterial(args[1]));
-					printUsageMessage(player, "Item " + args[1]
-							+ "has been cleared.");
+					sendMessage(player, "Item " + args[1] + "has been cleared.");
 					return;
 				}
-				printUsageMessage(player, "Usage: /bending clear");
-				printUsageMessage(player, "Usage: /bending clear <item>");
+				printClearUsage(player);
 			}
 
 		}
 
+	}
+
+	private static void printBindUsage(Player player) {
+		if (!ConfigManager.bendToItem) {
+			printUsageMessage(player, "/bending bind <ability>",
+					"This binds <ability> to the item you are holding.");
+			printUsageMessage(player, "/bending bind <ability> <slot#>",
+					"This binds <ability> to <slot#>.");
+		} else {
+			printUsageMessage(player, "/bending bind <ability>",
+					"This binds <ability> to your current slot.");
+			printUsageMessage(player, "/bending bind <ability> <item>",
+					"This binds <ability> to <item>.");
+		}
 	}
 
 	private static void bind(Player player, String[] args) {
@@ -1098,12 +1317,7 @@ public class BendingCommand {
 		}
 
 		if (args.length != 2 && args.length != 3) {
-			printUsageMessage(player, "/bending bind <ability>");
-			if (!ConfigManager.bendToItem) {
-				printUsageMessage(player, "/bending bind <ability> <slot#>");
-			} else {
-				printUsageMessage(player, "/bending bind <ability> <item>");
-			}
+			printBindUsage(player);
 			return;
 		}
 
@@ -1111,12 +1325,7 @@ public class BendingCommand {
 		Abilities ability = Abilities.getAbility(a);
 
 		if (ability == null) {
-			printUsageMessage(player, "/bending bind <ability>");
-			if (!ConfigManager.bendToItem) {
-				printUsageMessage(player, "/bending bind <ability> <slot#>");
-			} else {
-				printUsageMessage(player, "/bending bind <ability> <item>");
-			}
+			printBindUsage(player);
 			return;
 		}
 
@@ -1131,15 +1340,13 @@ public class BendingCommand {
 		if (args.length == 3 && ConfigManager.bendToItem) {
 			mat = Material.matchMaterial(args[2]);
 			if (mat == null) {
-				printUsageMessage(player, "/bending bind <ability>");
-				printUsageMessage(player, "/bending bind <ability> <item>");
+				printNoPermissions(player);
 				return;
 			}
 		} else if (args.length == 3) {
 			slot = Integer.parseInt(args[2]);
 			if (slot <= 0 || slot >= 10) {
-				printUsageMessage(player, "/bending bind <ability>");
-				printUsageMessage(player, "/bending bind <ability> <slot#>");
+				printNoPermissions(player);
 				return;
 			}
 			slot--;
@@ -1306,6 +1513,55 @@ public class BendingCommand {
 			player.sendMessage(ChatColor.RED
 					+ "Use /bending help <command> if you need help with a command.");
 		}
+	}
+
+	private static void sendNoCommandPermissionMessage(Player player,
+			String command) {
+		sendMessage(player, "You do not have permission to use /bending "
+				+ command + ".");
+	}
+
+	private static void printCommands(Player player) {
+		sendMessage(player, "Bending aliases: bending bend b mtla tla");
+		String slot = "slot#";
+		if (ConfigManager.bendToItem)
+			slot = "item";
+		if (hasHelpPermission(player, "bending.command.bind"))
+			sendMessage(player, "/bending bind <ability> [" + slot + "]");
+		if (hasHelpPermission(player, "bending.command.clear"))
+			sendMessage(player, "/bending clear [" + slot + "]");
+
+		if (hasHelpPermission(player, "bending.admin.choose")) {
+			sendMessage(player, "/bending choose [player] <element>");
+		} else if (hasHelpPermission(player, "bending.command.choose")
+				|| hasHelpPermission(player, "bending.admin.rechoose")) {
+			sendMessage(player, "/bending choose <element>");
+		}
+
+		if (hasHelpPermission(player, "bending.admin.add"))
+			sendMessage(player, "/bending add [player] <element>");
+		if (hasHelpPermission(player, "bending.admin.remove"))
+			sendMessage(player,
+					"/bending remove <player1> [player2] [player3] ...");
+		if (hasHelpPermission(player, "bending.admin.permaremove"))
+			sendMessage(player,
+					"/bending permaremove <player1> [player2] [player3] ...");
+
+		if (hasHelpPermission(player, "bending.admin.toggle")) {
+			sendMessage(player, "/bending toggle [player]");
+		} else if (hasHelpPermission(player, "bending.command.toggle")) {
+			sendMessage(player, "/bending toggle");
+		}
+
+		if (hasHelpPermission(player, "bending.command.display"))
+			sendMessage(player, "/bending display [element]");
+		if (hasHelpPermission(player, "bending.admin.reload"))
+			sendMessage(player, "/bending reload");
+		if (hasHelpPermission(player, "bending.admin.import"))
+			sendMessage(player, "/bending import");
+		if (hasHelpPermission(player, "bending.command.who"))
+			sendMessage(player, "/bending who [player]");
+
 	}
 
 }

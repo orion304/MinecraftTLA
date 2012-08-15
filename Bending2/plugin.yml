@@ -29,6 +29,7 @@ permissions:
   bending.fire.*:
     description: Allows all fire bending.
     children:
+      bending.message.daymessage: true
       bending.fire.Blaze: true
       bending.fire.ControlHeat: true
       bending.fire.Fireball: true
@@ -42,6 +43,7 @@ permissions:
   bending.water.*:
     description: Allows all water bending.
     children:
+      bending.message.nightmessage: true
       bending.water.PhaseChange: true
       bending.water.HealingWaters: true
       bending.water.Plantbending: true
@@ -97,6 +99,8 @@ permissions:
       bending.command.bind: true
       bending.water.Bloodbending: true
       bending.command.toggle: true
+      bending.command.who: true
+      bending.admin.toggle: true
       
   bending.command:
     description: Allows all user commands.
@@ -108,6 +112,7 @@ permissions:
       bending.command.bind: true
       bending.command.help: true
       bending.command.toggle: true
+      bending.command.who: true
 
   bending.air.AirSwipe:
     description: Allows the use of AirSwipe.
@@ -302,6 +307,12 @@ permissions:
   bending.command.toggle:
     description: Allows the use of /bending toggle
     default: true
+  bending.command.who:
+    description: Allows the use of /bending who
+    default: true
+  bending.admin.toggle:
+    description: Allows /bending toggle on others
+    default: op
   bending.avatar:
     description: Give the avatar prefix.
     default: op
