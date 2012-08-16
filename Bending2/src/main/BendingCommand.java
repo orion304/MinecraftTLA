@@ -222,30 +222,55 @@ public class BendingCommand {
 			}
 			String choice = args[1].toLowerCase();
 			if (Arrays.asList(airbendingAliases).contains(choice)) {
+				if (!hasHelpPermission(player, "bending.air")) {
+					sendMessage(player,
+							"You do not have permission to be an airbender.");
+					return;
+				}
 				sendMessage(player, "You are now an airbender!");
 				config.removeBending(player);
 				config.setBending(player, "air");
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
+				if (!hasHelpPermission(player, "bending.fire")) {
+					sendMessage(player,
+							"You do not have permission to be a firebender.");
+					return;
+				}
 				sendMessage(player, "You are now a firebender!");
 				config.removeBending(player);
 				config.setBending(player, "fire");
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
+				if (!hasHelpPermission(player, "bending.earth")) {
+					sendMessage(player,
+							"You do not have permission to be an earthbender.");
+					return;
+				}
 				sendMessage(player, "You are now an earthbender!");
 				config.removeBending(player);
 				config.setBending(player, "earth");
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
+				if (!hasHelpPermission(player, "bending.water")) {
+					sendMessage(player,
+							"You do not have permission to be a waterbender.");
+					return;
+				}
 				sendMessage(player, "You are now a waterbender!");
 				config.removeBending(player);
 				config.setBending(player, "water");
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
+				if (!hasHelpPermission(player, "bending.chiblocking")) {
+					sendMessage(player,
+							"You do not have permission to be a chiblocker.");
+					return;
+				}
 				sendMessage(player, "You are now a chiblocker!");
 				config.removeBending(player);
 				config.setBending(player, "chiblocker");
@@ -268,6 +293,11 @@ public class BendingCommand {
 
 			String choice = args[2].toLowerCase();
 			if (Arrays.asList(airbendingAliases).contains(choice)) {
+				if (!hasHelpPermission(targetplayer, "bending.air")) {
+					sendMessage(player,
+							"They do not have permission to be an airbender.");
+					return;
+				}
 				sendMessage(player,
 						"You have changed " + targetplayer.getName()
 								+ "'s bending.");
@@ -279,6 +309,11 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
+				if (!hasHelpPermission(targetplayer, "bending.fire")) {
+					sendMessage(player,
+							"They do not have permission to be a firebender.");
+					return;
+				}
 				sendMessage(player,
 						"You have changed " + targetplayer.getName()
 								+ "'s bending.");
@@ -290,6 +325,11 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
+				if (!hasHelpPermission(targetplayer, "bending.earth")) {
+					sendMessage(player,
+							"They do not have permission to be an earthbender.");
+					return;
+				}
 				sendMessage(player,
 						"You have changed " + targetplayer.getName()
 								+ "'s bending.");
@@ -301,6 +341,11 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
+				if (!hasHelpPermission(targetplayer, "bending.water")) {
+					sendMessage(player,
+							"They do not have permission to be a waterbender.");
+					return;
+				}
 				sendMessage(player,
 						"You have changed " + targetplayer.getName()
 								+ "'s bending.");
@@ -312,6 +357,11 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
+				if (!hasHelpPermission(targetplayer, "bending.chiblocking")) {
+					sendMessage(player,
+							"They do not have permission to be a chiblocker.");
+					return;
+				}
 				sendMessage(player,
 						"You have changed " + targetplayer.getName()
 								+ "'s bending.");
@@ -1111,6 +1161,11 @@ public class BendingCommand {
 					sendMessage(player, "You are already an airbender.");
 					return;
 				}
+				if (!hasHelpPermission(player, "bending.air")) {
+					sendMessage(player,
+							"You do not have permission to be an airbender.");
+					return;
+				}
 				sendMessage(player, "You are now also an airbender!");
 				config.addBending(player, "air");
 				return;
@@ -1118,6 +1173,11 @@ public class BendingCommand {
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
 				if (Tools.isBender(player.getName(), BendingType.Fire)) {
 					sendMessage(player, "You are already a firebender.");
+					return;
+				}
+				if (!hasHelpPermission(player, "bending.fire")) {
+					sendMessage(player,
+							"You do not have permission to be a firebender.");
 					return;
 				}
 				sendMessage(player, "You are now also a firebender!");
@@ -1129,6 +1189,11 @@ public class BendingCommand {
 					sendMessage(player, "You are already an earthbender.");
 					return;
 				}
+				if (!hasHelpPermission(player, "bending.earth")) {
+					sendMessage(player,
+							"You do not have permission to be an earthbender.");
+					return;
+				}
 				sendMessage(player, "You are now also an earthbender!");
 				config.addBending(player, "earth");
 				return;
@@ -1138,6 +1203,11 @@ public class BendingCommand {
 					sendMessage(player, "You are already a waterbender.");
 					return;
 				}
+				if (!hasHelpPermission(player, "bending.water")) {
+					sendMessage(player,
+							"You do not have permission to be a waterbender.");
+					return;
+				}
 				sendMessage(player, "You are now also a waterbender!");
 				config.addBending(player, "water");
 				return;
@@ -1145,6 +1215,11 @@ public class BendingCommand {
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
 				if (Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
 					sendMessage(player, "You are already a chiblocker.");
+					return;
+				}
+				if (!hasHelpPermission(player, "bending.chiblocking")) {
+					sendMessage(player,
+							"You do not have permission to be a chiblocker.");
 					return;
 				}
 				sendMessage(player, "You are now also a chiblocker!");
@@ -1171,6 +1246,11 @@ public class BendingCommand {
 							+ " is already an airbender.");
 					return;
 				}
+				if (!hasHelpPermission(targetplayer, "bending.air")) {
+					sendMessage(player,
+							"They do not have permission to be an airbender.");
+					return;
+				}
 				sendMessage(player, targetplayer.getName()
 						+ " is now also an airbender!");
 				sendMessage(targetplayer, senderName
@@ -1182,6 +1262,11 @@ public class BendingCommand {
 				if (Tools.isBender(targetplayer.getName(), BendingType.Air)) {
 					sendMessage(player, targetplayer.getName()
 							+ " is already a firebender.");
+					return;
+				}
+				if (!hasHelpPermission(targetplayer, "bending.fire")) {
+					sendMessage(player,
+							"They do not have permission to be a firebender.");
 					return;
 				}
 				sendMessage(player, targetplayer.getName()
@@ -1197,6 +1282,11 @@ public class BendingCommand {
 							+ " is already an earthbender.");
 					return;
 				}
+				if (!hasHelpPermission(targetplayer, "bending.earth")) {
+					sendMessage(player,
+							"They do not have permission to be an earthbender.");
+					return;
+				}
 				sendMessage(player, targetplayer.getName()
 						+ " is now also an earthbender!");
 				sendMessage(targetplayer, senderName
@@ -1210,6 +1300,11 @@ public class BendingCommand {
 							+ " is already a waterbender.");
 					return;
 				}
+				if (!hasHelpPermission(targetplayer, "bending.water")) {
+					sendMessage(player,
+							"They do not have permission to be a waterbender.");
+					return;
+				}
 				sendMessage(player, targetplayer.getName()
 						+ " is now also a waterbender!");
 				sendMessage(targetplayer, senderName
@@ -1221,6 +1316,11 @@ public class BendingCommand {
 				if (Tools.isBender(targetplayer.getName(), BendingType.Air)) {
 					sendMessage(player, targetplayer.getName()
 							+ " is already a chiblocker.");
+					return;
+				}
+				if (!hasHelpPermission(targetplayer, "bending.chiblocking")) {
+					sendMessage(player,
+							"They do not have permission to be a chiblocker.");
 					return;
 				}
 				sendMessage(player, targetplayer.getName()

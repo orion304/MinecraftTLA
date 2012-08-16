@@ -15,6 +15,7 @@ permissions:
   bending.air.*:
     description: Allows all air bending.
     children:
+      bending.air: true
       bending.air.AirSwipe: true
       bending.air.AirBubble: true
       bending.air.AirShield: true
@@ -30,6 +31,7 @@ permissions:
     description: Allows all fire bending.
     children:
       bending.message.daymessage: true
+      bending.fire: true
       bending.fire.Blaze: true
       bending.fire.ControlHeat: true
       bending.fire.Fireball: true
@@ -44,6 +46,7 @@ permissions:
     description: Allows all water bending.
     children:
       bending.message.nightmessage: true
+      bending.water: true
       bending.water.PhaseChange: true
       bending.water.HealingWaters: true
       bending.water.Plantbending: true
@@ -58,6 +61,7 @@ permissions:
   bending.earth.*:
     description: Allows all earth bending.
     children:
+      bending.earth: true
       bending.earth.Catapult: true
       bending.earth.EarthBlast: true
       bending.earth.RaiseEarth: true
@@ -71,6 +75,7 @@ permissions:
   bending.chiblocking.*:
     description: Allows all chiblocking abilities.
     children:
+      bending.chiblocking: true
       bending.chiblocking.RapidPunch: true
       bending.chiblocking.HighJump: true
       bending.chiblocking.Paralyze: true
@@ -81,6 +86,7 @@ permissions:
       bending.water.*: true
       bending.fire.*: true
       bending.air.*: true
+      bending.chiblocking.*: true
       
   bending.admin:
     description: Allows all commands.
@@ -114,6 +120,10 @@ permissions:
       bending.command.toggle: true
       bending.command.who: true
 
+# AIRBENDING PERMISSIONS
+  bending.air:
+    description: Allows being an Airbender.
+    default: true
   bending.air.AirSwipe:
     description: Allows the use of AirSwipe.
     default: true
@@ -148,6 +158,11 @@ permissions:
     description: Allows the use of AirBurst.
 #    default: true
     default: false
+    
+# FIREBENDING PERMISSIONS
+  bending.fire:
+    description: Allows being a Firebender.
+    default: true
   bending.fire.Blaze:
     description: Allows the use of Blaze.
     default: true
@@ -179,6 +194,11 @@ permissions:
     description: Allows the use of FireBurst.
 #    default: true
     default: false
+    
+# WATERBENDING PERMISSIONS
+  bending.water:
+    description: Allows being a Waterbender.
+    default: true
   bending.water.PhaseChange:
     description: Allows the use of PhaseChange.
     default: true
@@ -217,6 +237,11 @@ permissions:
   bending.water.IceSpike:
     description: Allows the use of IceSpike
     default: true
+    
+# EARTHBENDING PERMISSIONS
+  bending.earth:
+    description: Allows being an Earthbender.
+    default: true
   bending.earth.Catapult:
     description: Allows the use of Catapult.
     default: true
@@ -248,6 +273,11 @@ permissions:
   bending.earth.EarthArmor:
     description: Allows the use of EarthArmor
     default: true
+    
+# CHIBLOCKING PERMISSIONS
+  bending.chiblocking:
+    description: Allows being a Chiblocker.
+    default: true
   bending.chiblocking.RapidPunch:
     description: Allows the use of RapidPunch
     default: true
@@ -262,6 +292,8 @@ permissions:
     description: Allows the use of Paralyze
 #    default: true
     default: false
+    
+# ADMIN PERMISSIONS
   bending.AvatarState:
     description: Allows the use of AvatarState.
     default: op
@@ -289,6 +321,11 @@ permissions:
   bending.admin.add: 
     description: Allows the use of /bending add <element>
     default: op
+  bending.admin.toggle:
+    description: Allows /bending toggle on others
+    default: op
+    
+# COMMAND PERMISSIONS
   bending.command.displayelement: 
     description: Allows the use of /bending display <element>
     default: true
@@ -310,9 +347,7 @@ permissions:
   bending.command.who:
     description: Allows the use of /bending who
     default: true
-  bending.admin.toggle:
-    description: Allows /bending toggle on others
-    default: op
+
   bending.avatar:
     description: Give the avatar prefix.
     default: op
