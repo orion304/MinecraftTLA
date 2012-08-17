@@ -81,9 +81,9 @@ public class ConfigManager {
 	public static int collapseRange = 20;
 	public static double collapseRadius = 7;
 	public static long tremorsenseCooldown = 3000;
-	public static int tremorsenseMaxDepth;
-	public static int tremorsenseRadius;
-	public static byte tremorsenseLightThreshold;
+	public static int tremorsenseMaxDepth = 10;
+	public static int tremorsenseRadius = 5;
+	public static byte tremorsenseLightThreshold = 7;
 	public static double fireBlastSpeed = 15;
 	public static double fireBlastRange = 15;
 	public static double fireBlastRadius = 2;
