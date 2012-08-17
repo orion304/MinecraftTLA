@@ -57,6 +57,7 @@ public class AirSpout {
 			remove();
 			return;
 		}
+		player.setFallDistance(0);
 		player.setSprinting(false);
 		Block block = getGround();
 		if (block != null) {
@@ -147,17 +148,21 @@ public class AirSpout {
 		}
 	}
 
-	public static void removeSpouts(Location loc0, double radius) {
+	public static void removeSpouts(Location loc0, double radius,
+			Player sourceplayer) {
 		for (Player player : instances.keySet()) {
-			Location loc1 = player.getLocation().getBlock().getLocation();
-			loc0 = loc0.getBlock().getLocation();
-			double dx = loc1.getX() - loc0.getX();
-			double dz = loc1.getZ() - loc0.getZ();
+			if (!player.equals(sourceplayer)) {
+				Location loc1 = player.getLocation().getBlock().getLocation();
+				loc0 = loc0.getBlock().getLocation();
+				double dx = loc1.getX() - loc0.getX();
+				double dy = loc1.getY() - loc0.getY();
+				double dz = loc1.getZ() - loc0.getZ();
 
-			double distance = Math.sqrt(dx * dx + dz * dz);
+				double distance = Math.sqrt(dx * dx + dz * dz);
 
-			if (distance <= radius)
-				instances.get(player).remove();
+				if (distance <= radius && dy > 0 && dy < height)
+					instances.get(player).remove();
+			}
 		}
 	}
 

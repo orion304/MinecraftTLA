@@ -19,11 +19,12 @@ public class AirBubble {
 
 	public static ConcurrentHashMap<Integer, AirBubble> instances = new ConcurrentHashMap<Integer, AirBubble>();
 
-	private static double defaultradius = ConfigManager.airBubbleRadius;
+	private static double defaultAirRadius = ConfigManager.airBubbleRadius;
+	private static double defaultWaterRadius = ConfigManager.waterBubbleRadius;
 	// private static byte full = AirBlast.full;
 
 	private Player player;
-	private double radius = defaultradius;
+	private double radius;
 	private ConcurrentHashMap<Block, Byte> waterorigins;
 
 	public AirBubble(Player player) {
@@ -33,12 +34,19 @@ public class AirBubble {
 	}
 
 	private void pushWater() {
-		radius = defaultradius;
+		if (Tools.isBender(player.getName(), BendingType.Air)) {
+			radius = defaultAirRadius;
+		} else {
+			radius = defaultWaterRadius;
+		}
 		if (Tools.isBender(player.getName(), BendingType.Water)
 				&& Tools.isNight(player.getWorld())) {
-			radius = Tools.waterbendingNightAugment(defaultradius,
+			radius = Tools.waterbendingNightAugment(defaultWaterRadius,
 					player.getWorld());
 		}
+		if (defaultAirRadius > radius
+				&& Tools.isBender(player.getName(), BendingType.Air))
+			radius = defaultAirRadius;
 		Location location = player.getLocation();
 
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {

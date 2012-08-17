@@ -13,19 +13,20 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import tools.ConfigManager;
 import tools.Tools;
 
 public class RapidPunch {
 
-	private static int damage = 1;
-	private int distance = 8;
-	private long cooldown = 15000;
-	private static int punches = 5;
+	private static int damage = ConfigManager.rapidPunchDamage;
+	private int distance = ConfigManager.rapidPunchDistance;
+	private long cooldown = ConfigManager.rapidPunchCooldown;
+	private static int punches = ConfigManager.rapidPunchPunches;
 
 	private static Map<String, Long> cooldowns = new HashMap<String, Long>();
 	public static ConcurrentHashMap<Player, RapidPunch> instance = new ConcurrentHashMap<Player, RapidPunch>();
 	private int numpunches;
-	//private long timers;
+	// private long timers;
 	private Entity target;
 	public static List<Player> punching = new ArrayList<Player>();
 
@@ -36,14 +37,14 @@ public class RapidPunch {
 				&& cooldowns.get(p.getName()) + cooldown >= System
 						.currentTimeMillis())
 			return;
-		
+
 		Entity t = Tools.getTargettedEntity(p, distance);
-		
+
 		if (t == null)
 			return;
-		
+
 		target = t;
-		numpunches= 0;
+		numpunches = 0;
 		instance.put(p, this);
 		Tools.verbose("PUNCH MOFO");
 	}
@@ -64,7 +65,7 @@ public class RapidPunch {
 
 	private void swing(Player p) {
 		// punching.add(p);
-		//timers = System.currentTimeMillis();
+		// timers = System.currentTimeMillis();
 		Packet18ArmAnimation packet = new Packet18ArmAnimation();
 		packet.a = p.getEntityId();
 		packet.b = (byte) 1;

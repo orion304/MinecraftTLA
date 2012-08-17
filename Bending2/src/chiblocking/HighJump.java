@@ -8,10 +8,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.ConfigManager;
+
 public class HighJump {
 
-	private int jumpheight = 1;
-	private long cooldown = 10000;
+	private int jumpheight = ConfigManager.jumpheight;
+	private long cooldown = ConfigManager.highJumpCooldown;
 
 	private Map<String, Long> cooldowns = new HashMap<String, Long>();
 
@@ -24,9 +26,8 @@ public class HighJump {
 	}
 
 	private void jump(Player p) {
-		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN)
-						.getType() == Material.AIR)
-				return;
+		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
+			return;
 		Vector vec = p.getVelocity();
 		vec.setY(jumpheight);
 		p.setVelocity(vec);

@@ -965,13 +965,14 @@ public class Tools {
 		}
 	}
 
-	public static void removeSpouts(Location location, double radius) {
-		WaterSpout.removeSpouts(location, radius);
-		AirSpout.removeSpouts(location, radius);
+	public static void removeSpouts(Location location, double radius,
+			Player sourceplayer) {
+		WaterSpout.removeSpouts(location, radius, sourceplayer);
+		AirSpout.removeSpouts(location, radius, sourceplayer);
 	}
 
-	public static void removeSpouts(Location location) {
-		removeSpouts(location, 1.5);
+	public static void removeSpouts(Location location, Player sourceplayer) {
+		removeSpouts(location, 1.5, sourceplayer);
 	}
 
 	static {

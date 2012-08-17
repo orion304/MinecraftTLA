@@ -153,7 +153,7 @@ public class AirSwipe {
 	}
 
 	private void affectPeople(Location location, Vector direction) {
-		Tools.removeSpouts(location);
+		Tools.removeSpouts(location, player);
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
 			if (entity.getEntityId() != player.getEntityId()) {

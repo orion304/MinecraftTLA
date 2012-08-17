@@ -224,7 +224,7 @@ public class EarthBlast {
 
 				location = location.clone().add(direction);
 
-				Tools.removeSpouts(location);
+				Tools.removeSpouts(location, player);
 
 				Block block = location.getBlock();
 				if (block.getLocation().equals(sourceblock.getLocation())) {

@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class Bloodbending {
@@ -19,10 +20,10 @@ public class Bloodbending {
 
 	ConcurrentHashMap<Entity, Location> targetentities = new ConcurrentHashMap<Entity, Location>();
 
-	private static final double factor = 2;
+	private static final double factor = ConfigManager.bloodbendingThrowFactor;
 
 	private Player player;
-	private int range = 10;
+	private int range = ConfigManager.bloodbendingRange;
 
 	public Bloodbending(Player player) {
 		if (instances.containsKey(player)) {

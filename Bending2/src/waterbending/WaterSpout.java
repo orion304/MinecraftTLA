@@ -38,8 +38,8 @@ public class WaterSpout {
 		}
 		this.player = player;
 		player.setAllowFlight(true);
-		player.setFlying(true);
 		instances.put(player, this);
+		spout(player);
 	}
 
 	private void remove() {
@@ -97,6 +97,7 @@ public class WaterSpout {
 
 	public static void spout(Player player) {
 		WaterSpout spout = instances.get(player);
+		player.setFallDistance(0);
 		player.setSprinting(false);
 		// if (player.getVelocity().length() > threshold) {
 		// // Tools.verbose("Too fast!");
@@ -209,17 +210,21 @@ public class WaterSpout {
 		return players;
 	}
 
-	public static void removeSpouts(Location loc0, double radius) {
+	public static void removeSpouts(Location loc0, double radius,
+			Player sourceplayer) {
 		for (Player player : instances.keySet()) {
-			Location loc1 = player.getLocation().getBlock().getLocation();
-			loc0 = loc0.getBlock().getLocation();
-			double dx = loc1.getX() - loc0.getX();
-			double dz = loc1.getZ() - loc0.getZ();
+			if (!player.equals(sourceplayer)) {
+				Location loc1 = player.getLocation().getBlock().getLocation();
+				loc0 = loc0.getBlock().getLocation();
+				double dx = loc1.getX() - loc0.getX();
+				double dy = loc1.getY() - loc0.getY();
+				double dz = loc1.getZ() - loc0.getZ();
 
-			double distance = Math.sqrt(dx * dx + dz * dz);
+				double distance = Math.sqrt(dx * dx + dz * dz);
 
-			if (distance <= radius)
-				instances.get(player).remove();
+				if (distance <= radius && dy > 0 && dy < defaultheight)
+					instances.get(player).remove();
+			}
 		}
 	}
 

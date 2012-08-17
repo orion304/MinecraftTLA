@@ -17,9 +17,7 @@ public class ConfigManager {
 	public static boolean bendToItem = false;
 	public static boolean colors = true;
 	public static boolean compatibility = false;
-	public static int airdmg = 2;
-	public static int earthdmg = 7;
-	public static int waterdmg = 5;
+
 	public static Map<String, String> prefixes = new HashMap<String, String>();
 	public static Map<String, String> color = new HashMap<String, String>();
 	public static List<String> earthbendable = new ArrayList<String>();
@@ -33,57 +31,144 @@ public class ConfigManager {
 
 	public static int seaLevel = 62;
 
+	public static long globalCooldown = 500;
+
+	public static long chiblockduration = 2500;
+	public static double dodgechance = 25;
+	public static double punchdamage = 3;
+	public static double falldamagereduction = 50;
+
+	public static boolean reverseearthbending = true;
+	public static boolean safeRevert = true;
+	public static long revertchecktime = 300000;
+
+	public static boolean useTagAPI = true;
+
+	private static List<String> defaultearthbendable = new ArrayList<String>();
+
+	// Air
+	// AirBlast
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;
 	public static double airBlastPush = 1.2;
+
+	// AirBubble
 	public static int airBubbleRadius = 7;
+
+	// AirPassive
 	public static float airPassiveFactor = 0.3F;
+
+	// AirScooter
+	public static double airScooterSpeed = .675;
+
+	// AirShield
 	public static double airShieldRadius = 7;
+
+	// AirSpout
+	public static double airSpoutHeight = 20;
+
+	// AirSuction
 	public static double airSuctionSpeed = 25;
 	public static double airSuctionRange = 20;
 	public static double airSuctionRadius = 2;
 	public static double airSuctionPush = 1;
+
+	// AirSwipe
+	public static int airdmg = 2;
 	public static double airSwipeRange = 16;
 	public static int airSwipeArc = 20;
 	public static double airSwipeSpeed = 25;
 	public static double airSwipeRadius = 2;
 	public static double airSwipePush = 1;
 	public static long airSwipeCooldown = 1000;
-	public static double airScooterSpeed = .675;
-	public static double airSpoutHeight = 20;
+
+	// Tornado
 	public static double tornadoRadius = 10;
 	public static double tornadoHeight = 25;
 	public static double tornadoRange = 25;
 	public static double tornadoMobPush = 1;
 	public static double tornadoPlayerPush = 1;
+
+	// ChiBlocker
+	// HighJump
+	public static int jumpheight = 1;
+	public static long highJumpCooldown = 10000;
+
+	// RapidPunch
+	public static int rapidPunchDamage = 1;
+	public static int rapidPunchDistance = 4;
+	public static long rapidPunchCooldown = 15000;
+	public static int rapidPunchPunches = 5;
+
+	// Earth
+	// Catapult
 	public static int catapultLength = 7;
 	public static double catapultSpeed = 12;
 	public static double catapultPush = 5;
+
+	// Collapse
+	public static int collapseRange = 20;
+	public static double collapseRadius = 7;
+
+	// CompactColumn
 	public static double compactColumnRange = 20;
 	public static double compactColumnSpeed = 8;
+
+	// EarthArmor
+	public static long eartharmorduration = 30000;
+	public static int eartharmorstrength = 2;
+	public static long eartharmorcooldown = 150000;
+
+	// EarthBlast
+	public static int earthdmg = 7;
 	public static boolean earthBlastHitSelf = false;
 	public static double earthBlastPrepareRange = 7;
 	public static double earthBlastRange = 20;
 	public static double earthBlastSpeed = 35;
 	public static boolean earthBlastRevert = true;
+
+	// EarthColumn
 	public static int earthColumnHeight = 6;
+
+	// EarthGrab
 	public static double earthGrabRange = 15;
+
+	// EarthPassive
 	public static long earthPassive = 3000;
+
+	// EarthTunnel
 	public static double earthTunnelMaxRadius = 1;
 	public static double earthTunnelRange = 10;
 	public static double earthTunnelRadius = 0.25;
 	public static long earthTunnelInterval = 30;
 	public static boolean earthTunnelRevert = true;
+
+	// EarthWall
 	public static int earthWallRange = 15;
 	public static int earthWallHeight = 8;
 	public static int earthWallWidth = 6;
-	public static int collapseRange = 20;
-	public static double collapseRadius = 7;
+
+	// Tremorsense
 	public static long tremorsenseCooldown = 3000;
 	public static int tremorsenseMaxDepth = 10;
 	public static int tremorsenseRadius = 5;
 	public static byte tremorsenseLightThreshold = 7;
+
+	// Fire
+	// ArcOfFire
+	public static int arcOfFireArc = 20;
+	public static int arcOfFireRange = 9;
+
+	// Extinguish
+	public static double extinguishRange = 20;
+	public static double extinguishRadius = 20;
+
+	// Fireball
+	public static long fireballCooldown = 2000;
+	public static double fireballSpeed = 0.3;
+
+	// FireBlast
 	public static double fireBlastSpeed = 15;
 	public static double fireBlastRange = 15;
 	public static double fireBlastRadius = 2;
@@ -91,21 +176,32 @@ public class ConfigManager {
 	public static int fireBlastDamage = 2;
 	public static long fireBlastCooldown = 1500;
 	public static boolean fireBlastDissipate = false;
-	public static int arcOfFireArc = 20;
-	public static int arcOfFireRange = 9;
-	public static int ringOfFireRange = 7;
-	public static double extinguishRange = 20;
-	public static double extinguishRadius = 20;
-	public static long fireballCooldown = 2000;
-	public static double fireballSpeed = 0.3;
+
+	// FireJet
 	public static double fireJetSpeed = 0.7;
 	public static long fireJetDuration = 1500;
 	public static long fireJetCooldown = 6000;
+
+	// FireStream
 	public static double fireStreamSpeed = 15;
-	public static double dayFactor = 1.3;
-	public static int illuminationRange = 5;
+	public static long dissipateAfter = 400;
+
+	// HeatMelt
 	public static int heatMeltRange = 15;
 	public static int heatMeltRadius = 5;
+
+	// Illumination
+	public static int illuminationRange = 5;
+
+	// Lightning
+	public static long lightningwarmup = 1500;
+	public static int lightningrange = 15;
+	public static double lightningmisschance = 10;
+
+	// RingOfFire
+	public static int ringOfFireRange = 7;
+
+	// WallOfFire
 	public static int wallOfFireRange = 20;
 	public static int wallOfFireHeight = 3;
 	public static int wallOfFireWidth = 6;
@@ -113,48 +209,63 @@ public class ConfigManager {
 	public static int wallOfFireDamage = 4;
 	public static long wallOfFireInterval = 400;
 	public static long wallOfFireCooldown = 10000;
+
+	// Day
+	public static double dayFactor = 1.3;
+
+	// Water
+	// Bloodbending
+	public static double bloodbendingThrowFactor = 2;
+	public static int bloodbendingRange = 10;
+
+	// FastSwimming
+	public static double fastSwimmingFactor = 0.7;
+
+	// FreezeMelt
 	public static int freezeMeltRange = 20;
 	public static int freezeMeltRadius = 5;
+
+	// HealingWaters
 	public static double healingWatersRadius = 5;
 	public static long healingWatersInterval = 750;
-	public static long plantbendingRegrowTime = 180000;
-	public static double walkOnWaterRadius = 3.5;
-	public static double waterManipulationRange = 20;
-	public static double waterManipulationSpeed = 35;
-	public static int waterSpoutHeight = 15;
-	public static double waterWallRange = 5;
-	public static double waterWallRadius = 2;
-	public static double waveRadius = 3;
-	public static double waveHorizontalPush = 1;
-	public static double waveVerticalPush = 0.2;
-	public static long globalCooldown = 500;
-	public static double fastSwimmingFactor = 0.7;
-	public static double nightFactor = 1.5;
-	public static long chiblockduration = 2500;
-	public static double dodgechance = 25;
-	public static double punchdamage = 3;
-	public static double falldamagereduction = 50;
-	public static long lightningwarmup = 1500;
-	public static int lightningrange = 15;
-	public static double lightningmisschance = 10;
-	public static long eartharmorduration = 30000;
-	public static int eartharmorstrength = 2;
-	public static long eartharmorcooldown = 150000;
-	public static boolean reverseearthbending = true;
-	public static boolean safeRevert = true;
-	public static long revertchecktime = 300000;
+
+	// IceSpike
 	public static long icespikecooldown = 6000;
 	public static int icespikedamage = 4;
 	public static int icespikerange = 20;
 	public static double icespikethrowingmult = 0.7;
+
+	// Plantbending
+	public static long plantbendingRegrowTime = 180000;
+
+	// SpikeField
 	public static long icespikeareacooldown = 20000;
 	public static int icespikeareadamage = 2;
 	public static int icespikearearadius = 4;
 	public static double icespikeareathrowingmult = 1;
-	public static boolean useTagAPI = true;
 
-	private static List<String> defaultearthbendable = new ArrayList<String>();
-	public static long dissipateAfter = 400;
+	// WaterBubble
+	public static double waterBubbleRadius = airBubbleRadius;
+
+	// WaterManipulation
+	public static int waterdmg = 5;
+	public static double waterManipulationRange = 20;
+	public static double waterManipulationSpeed = 35;
+
+	// WaterSpout
+	public static int waterSpoutHeight = 15;
+
+	// WaterWall
+	public static double waterWallRange = 5;
+	public static double waterWallRadius = 2;
+
+	// Wave
+	public static double waveRadius = 3;
+	public static double waveHorizontalPush = 1;
+	public static double waveVerticalPush = 0.2;
+
+	// Night
+	public static double nightFactor = 1.5;
 
 	public void load(File file) {
 		FileConfiguration config = new YamlConfiguration();
@@ -249,8 +360,25 @@ public class ConfigManager {
 		globalCooldown = config.getLong("Properties.GlobalCooldown",
 				globalCooldown);
 
-		// Air
+		// HighJump
+		jumpheight = config.getInt("Properties.ChiBlocker.HighJump.Height",
+				jumpheight);
+		highJumpCooldown = config.getLong(
+				"Properties.ChiBlocker.HighJump.Cooldown", highJumpCooldown);
 
+		// RapidPunch
+		rapidPunchDamage = config.getInt(
+				"Properties.ChiBlocker.RapidPunch.Damage", rapidPunchDamage);
+		rapidPunchDistance = config
+				.getInt("Properties.ChiBlocker.RapidPunch.Distance",
+						rapidPunchDistance);
+		rapidPunchCooldown = config
+				.getLong("Properties.ChiBlocker.RapidPunch.Cooldown",
+						rapidPunchCooldown);
+		rapidPunchPunches = config.getInt(
+				"Properties.ChiBlocker.RapidPunch.Punches", rapidPunchPunches);
+
+		// Air
 		// AirBlast
 		airBlastSpeed = config.getDouble("Properties.Air.AirBlast.Speed",
 				airBlastSpeed);
@@ -493,6 +621,13 @@ public class ConfigManager {
 				dayFactor);
 
 		// Water
+		// Bloodbending
+		bloodbendingThrowFactor = config.getDouble(
+				"Properties.Water.Bloodbending.Throw-Factor",
+				bloodbendingThrowFactor);
+		bloodbendingRange = config.getInt(
+				"Properties.Water.Bloodbending.Range", bloodbendingRange);
+
 		// FreezeMelt
 		freezeMeltRange = config.getInt("Properties.Water.FreezeMelt.Range",
 				freezeMeltRange);
@@ -510,10 +645,6 @@ public class ConfigManager {
 		plantbendingRegrowTime = config.getLong(
 				"Properties.Water.Plantbending.Regrow-Time",
 				plantbendingRegrowTime);
-
-		// WalkOnWater
-		walkOnWaterRadius = config.getDouble(
-				"Properties.Water.WalkOnWater.Radius", walkOnWaterRadius);
 
 		// WaterManipulation
 		waterManipulationRange = config.getDouble(
