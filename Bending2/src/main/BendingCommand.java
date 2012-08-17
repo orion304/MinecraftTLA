@@ -532,7 +532,7 @@ public class BendingCommand {
 					case Blaze:
 						sendMessage(player, cc + ArcOfFire.getDescription());
 						break;
-					case ControlHeat:
+					case HeatControl:
 						sendMessage(player, cc + Extinguish.getDescription());
 						break;
 					case Fireball:

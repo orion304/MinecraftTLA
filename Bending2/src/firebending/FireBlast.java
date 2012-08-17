@@ -126,6 +126,8 @@ public class FireBlast {
 			return false;
 		}
 
+		Tools.removeSpouts(location);
+
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
 			affect(entity);

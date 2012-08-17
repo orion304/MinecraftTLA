@@ -49,7 +49,7 @@ public class Extinguish {
 	}
 
 	public static boolean canBurn(Player player) {
-		if (Tools.getBendingAbility(player) == Abilities.ControlHeat
+		if (Tools.getBendingAbility(player) == Abilities.HeatControl
 				|| FireJet.checkTemporaryImmunity(player)) {
 			player.setFireTicks(0);
 			return false;

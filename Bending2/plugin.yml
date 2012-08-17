@@ -33,7 +33,7 @@ permissions:
       bending.message.daymessage: true
       bending.fire: true
       bending.fire.Blaze: true
-      bending.fire.ControlHeat: true
+      bending.fire.HeatControl: true
       bending.fire.Fireball: true
       bending.fire.FireJet: true
       bending.fire.FireBlast: true
@@ -166,7 +166,7 @@ permissions:
   bending.fire.Blaze:
     description: Allows the use of Blaze.
     default: true
-  bending.fire.ControlHeat:
+  bending.fire.HeatControl:
     description: Allows the use of ControlHeat.
     default: true
   bending.fire.Fireball:

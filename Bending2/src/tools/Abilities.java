@@ -10,7 +10,7 @@ public enum Abilities {
 
 	Catapult, RaiseEarth, EarthGrab, EarthTunnel, EarthBlast, Collapse, Tremorsense, EarthArmor, // Shockwave,
 
-	ControlHeat, Fireball, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, // FireBurst,
+	HeatControl, Fireball, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, // FireBurst,
 
 	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, // Torrent,
 																											// //OctopusForm
@@ -28,7 +28,7 @@ public enum Abilities {
 	}
 
 	private enum FirebendingAbilities {
-		ControlHeat, Fireball, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, FireBurst;
+		HeatControl, Fireball, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, FireBurst;
 	}
 
 	private enum WaterbendingAbilities {

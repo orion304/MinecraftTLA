@@ -965,6 +965,15 @@ public class Tools {
 		}
 	}
 
+	public static void removeSpouts(Location location, double radius) {
+		WaterSpout.removeSpouts(location, radius);
+		AirSpout.removeSpouts(location, radius);
+	}
+
+	public static void removeSpouts(Location location) {
+		removeSpouts(location, 1.5);
+	}
+
 	static {
 		Map<String, ChatColor> tmpMap = new HashMap<String, ChatColor>();
 		tmpMap.put("black", ChatColor.BLACK);

@@ -209,6 +209,20 @@ public class WaterSpout {
 		return players;
 	}
 
+	public static void removeSpouts(Location loc0, double radius) {
+		for (Player player : instances.keySet()) {
+			Location loc1 = player.getLocation().getBlock().getLocation();
+			loc0 = loc0.getBlock().getLocation();
+			double dx = loc1.getX() - loc0.getX();
+			double dz = loc1.getZ() - loc0.getZ();
+
+			double distance = Math.sqrt(dx * dx + dz * dz);
+
+			if (distance <= radius)
+				instances.get(player).remove();
+		}
+	}
+
 	public static String getDescription() {
 		return "To use this ability, click while over or in water. "
 				+ "You will spout water up from beneath you to experience controlled levitation. "

@@ -258,6 +258,8 @@ public class WaterManipulation {
 
 				location = location.clone().add(direction);
 
+				Tools.removeSpouts(location);
+
 				Block block = location.getBlock();
 				if (block.getLocation().equals(sourceblock.getLocation())) {
 					location = location.clone().add(direction);

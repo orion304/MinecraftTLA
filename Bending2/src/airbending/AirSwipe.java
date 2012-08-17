@@ -15,8 +15,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import airbending.AirBlast;
-
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
@@ -155,6 +153,7 @@ public class AirSwipe {
 	}
 
 	private void affectPeople(Location location, Vector direction) {
+		Tools.removeSpouts(location);
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
 			if (entity.getEntityId() != player.getEntityId()) {

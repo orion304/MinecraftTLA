@@ -323,7 +323,7 @@ public class BendingListener implements Listener {
 					new Fireball(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.ControlHeat) {
+				if (Tools.getBendingAbility(player) == Abilities.HeatControl) {
 					new Extinguish(player);
 				}
 
@@ -519,6 +519,7 @@ public class BendingListener implements Listener {
 					player.setAllowFlight(true);
 					BendingManager.flyingplayers.add(player);
 				}
+				event.setDamage(0);
 				event.setCancelled(true);
 			} else if (Tools.isBender(player.getName(), BendingType.Water)
 					&& event.getCause() == DamageCause.FALL
@@ -528,6 +529,7 @@ public class BendingListener implements Listener {
 						player.setAllowFlight(true);
 						BendingManager.flyingplayers.add(player);
 					}
+					event.setDamage(0);
 					event.setCancelled(true);
 				}
 			} else if (Tools.isBender(player.getName(), BendingType.Earth)
@@ -538,6 +540,7 @@ public class BendingListener implements Listener {
 						player.setAllowFlight(true);
 						BendingManager.flyingplayers.add(player);
 					}
+					event.setDamage(0);
 					event.setCancelled(true);
 
 				}
@@ -555,6 +558,7 @@ public class BendingListener implements Listener {
 			if (Tools.isBender(player.getName(), BendingType.Earth)
 					&& (event.getCause() == DamageCause.SUFFOCATION && TempBlock
 							.isTempBlock(player.getEyeLocation().getBlock()))) {
+				event.setDamage(0);
 				event.setCancelled(true);
 			}
 		}

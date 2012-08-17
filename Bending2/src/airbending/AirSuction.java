@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
+import waterbending.WaterSpout;
 
 public class AirSuction {
 
@@ -48,6 +49,9 @@ public class AirSuction {
 		if (player.getEyeLocation().getBlock().isLiquid()) {
 			return;
 		}
+		if (AirSpout.getPlayers().contains(player)
+				|| WaterSpout.getPlayers().contains(player))
+			return;
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		origin = player.getEyeLocation().clone();

@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.AvatarState;
+import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
 
@@ -15,6 +16,7 @@ public class Melt {
 	private static final int defaultrange = FreezeMelt.defaultrange;
 	private static final int defaultradius = FreezeMelt.defaultradius;
 	private static final int defaultevaporateradius = 3;
+	private static final int seaLevel = ConfigManager.seaLevel;
 
 	private static final byte full = 0x0;
 
@@ -38,7 +40,7 @@ public class Melt {
 		}
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
 			if (evaporate) {
-				if (block.getY() > 62)
+				if (block.getY() > seaLevel)
 					evaporate(block);
 			} else {
 				melt(block);
