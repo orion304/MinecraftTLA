@@ -592,20 +592,23 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onEntityDamage(EntityDamageByEntityEvent event) {
-		if (event.getDamager() instanceof Player)
+		if (Paralyze.isParalyzed(event.getDamager())) {
+			event.setCancelled(true);
+			return;
+		}
 
-			if (event.getDamager() instanceof Player
-					&& event.getEntity() instanceof Player) {
-				Player sourceplayer = (Player) event.getDamager();
-				Player targetplayer = (Player) event.getEntity();
-				if (Tools.isBender(sourceplayer.getName(),
-						BendingType.ChiBlocker)
-						&& (!Tools.isWeapon(sourceplayer.getItemInHand()
-								.getType()) || ConfigManager.useWeapon
-								.get("ChiBlocker"))) {
-					Tools.blockChi(targetplayer, System.currentTimeMillis());
-				}
+		boolean dodged = false;
+
+		if (event.getDamager() instanceof Player
+				&& event.getEntity() instanceof Player) {
+			Player sourceplayer = (Player) event.getDamager();
+			Player targetplayer = (Player) event.getEntity();
+			if (Tools.isBender(sourceplayer.getName(), BendingType.ChiBlocker)
+					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigManager.useWeapon
+							.get("ChiBlocker"))) {
+				Tools.blockChi(targetplayer, System.currentTimeMillis());
 			}
+		}
 		if (event.getEntity() instanceof Player) {
 			if ((event.getCause() == DamageCause.ENTITY_ATTACK
 					|| event.getCause() == DamageCause.ENTITY_EXPLOSION || event
@@ -621,15 +624,14 @@ public class BendingListener implements Listener {
 							.getWorld()
 							.playEffect(event.getEntity().getLocation(),
 									Effect.SMOKE, 1);
+					dodged = true;
 					event.setCancelled(true);
-				} else {
-					new Paralyze((Player) event.getDamager(), event.getEntity());
 				}
-			} else {
-				new Paralyze((Player) event.getDamager(), event.getEntity());
 			}
 		}
 		if (event.getDamager() instanceof Player) {
+			if (!dodged)
+				new Paralyze((Player) event.getDamager(), event.getEntity());
 			if (Tools.isBender(((Player) event.getDamager()).getName(),
 					BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.ENTITY_ATTACK

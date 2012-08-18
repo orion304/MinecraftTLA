@@ -46,7 +46,7 @@ public class RapidPunch {
 		target = t;
 		numpunches = 0;
 		instance.put(p, this);
-		Tools.verbose("PUNCH MOFO");
+		// Tools.verbose("PUNCH MOFO");
 	}
 
 	public void startPunch(Player p) {
@@ -56,7 +56,7 @@ public class RapidPunch {
 			LivingEntity lt = (LivingEntity) target;
 			Tools.damageEntity(p, target, damage);
 			lt.setNoDamageTicks(0);
-			Tools.verbose("PUNCHIN MOFO");
+			// Tools.verbose("PUNCHIN MOFO");
 		}
 		cooldowns.put(p.getName(), System.currentTimeMillis());
 		swing(p);
