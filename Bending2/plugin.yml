@@ -290,8 +290,7 @@ permissions:
     default: false
   bending.chiblocker.Paralyze:
     description: Allows the use of Paralyze
-#    default: true
-    default: false
+    default: true
     
 # ADMIN PERMISSIONS
   bending.AvatarState:

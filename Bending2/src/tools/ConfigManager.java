@@ -95,6 +95,10 @@ public class ConfigManager {
 	public static int jumpheight = 1;
 	public static long highJumpCooldown = 10000;
 
+	// Paralyze
+	public static long paralyzeCooldown = 15000;
+	public static long paralyzeDuration = 2000;
+
 	// RapidPunch
 	public static int rapidPunchDamage = 1;
 	public static int rapidPunchDistance = 4;
@@ -365,6 +369,12 @@ public class ConfigManager {
 				jumpheight);
 		highJumpCooldown = config.getLong(
 				"Properties.ChiBlocker.HighJump.Cooldown", highJumpCooldown);
+
+		// Paralyze
+		paralyzeCooldown = config.getLong(
+				"Properties.ChiBlocker.Paralyze.Cooldown", paralyzeCooldown);
+		paralyzeDuration = config.getLong(
+				"Properties.ChiBlocker.Paralyze.Duration", paralyzeDuration);
 
 		// RapidPunch
 		rapidPunchDamage = config.getInt(

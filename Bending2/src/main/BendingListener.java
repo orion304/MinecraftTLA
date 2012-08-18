@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,12 +27,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -70,6 +74,7 @@ import airbending.AirSwipe;
 import airbending.Speed;
 import airbending.Tornado;
 import chiblocking.HighJump;
+import chiblocking.Paralyze;
 import chiblocking.RapidPunch;
 import earthbending.Catapult;
 import earthbending.Collapse;
@@ -188,6 +193,22 @@ public class BendingListener implements Listener {
 	}
 
 	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		Player player = event.getPlayer();
+		if (Paralyze.isParalyzed(player) || Bloodbending.isBloodbended(player)) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onProjectileLaunch(EntityShootBowEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity)) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
 	public void onPlayerChangeVelocity(PlayerVelocityEvent event) {
 		Player player = event.getPlayer();
 		if (Tools.isBender(player.getName(), BendingType.Water)
@@ -236,7 +257,7 @@ public class BendingListener implements Listener {
 
 		Player player = event.getPlayer();
 
-		if (Bloodbending.isBloodbended(player)) {
+		if (Bloodbending.isBloodbended(player) || Paralyze.isParalyzed(player)) {
 			event.setCancelled(true);
 		}
 
@@ -508,6 +529,11 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDamage(EntityDamageEvent event) {
+		// Entity entity = event.getEntity();
+		// if (Paralyze.isParalyzed(entity)) {
+		// event.setCancelled(true);
+		// return;
+		// }
 		if (event.getEntity() instanceof Player) {
 			// Tools.verbose(event.getCause());
 			Player player = (Player) event.getEntity();
@@ -566,16 +592,20 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onEntityDamage(EntityDamageByEntityEvent event) {
-		if (event.getDamager() instanceof Player
-				&& event.getEntity() instanceof Player) {
-			Player sourceplayer = (Player) event.getDamager();
-			Player targetplayer = (Player) event.getEntity();
-			if (Tools.isBender(sourceplayer.getName(), BendingType.ChiBlocker)
-					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigManager.useWeapon
-							.get("ChiBlocker"))) {
-				Tools.blockChi(targetplayer, System.currentTimeMillis());
+		if (event.getDamager() instanceof Player)
+
+			if (event.getDamager() instanceof Player
+					&& event.getEntity() instanceof Player) {
+				Player sourceplayer = (Player) event.getDamager();
+				Player targetplayer = (Player) event.getEntity();
+				if (Tools.isBender(sourceplayer.getName(),
+						BendingType.ChiBlocker)
+						&& (!Tools.isWeapon(sourceplayer.getItemInHand()
+								.getType()) || ConfigManager.useWeapon
+								.get("ChiBlocker"))) {
+					Tools.blockChi(targetplayer, System.currentTimeMillis());
+				}
 			}
-		}
 		if (event.getEntity() instanceof Player) {
 			if ((event.getCause() == DamageCause.ENTITY_ATTACK
 					|| event.getCause() == DamageCause.ENTITY_EXPLOSION || event
@@ -585,13 +615,18 @@ public class BendingListener implements Listener {
 				double rand = Math.random();
 				// Tools.verbose(rand + " " + (ConfigManager.dodgechance) /
 				// 100.);
-				if (rand <= ConfigManager.dodgechance / 100.) {
+				if (rand <= ConfigManager.dodgechance / 100.
+						&& !Paralyze.isParalyzed(event.getEntity())) {
 					event.getEntity()
 							.getWorld()
 							.playEffect(event.getEntity().getLocation(),
 									Effect.SMOKE, 1);
 					event.setCancelled(true);
+				} else {
+					new Paralyze((Player) event.getDamager(), event.getEntity());
 				}
+			} else {
+				new Paralyze((Player) event.getDamager(), event.getEntity());
 			}
 		}
 		if (event.getDamager() instanceof Player) {
@@ -717,6 +752,11 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
+		Player player = event.getPlayer();
+		if (Paralyze.isParalyzed(player)) {
+			event.setCancelled(true);
+			return;
+		}
 		if (WaterSpout.instances.containsKey(event.getPlayer())
 				|| AirSpout.getPlayers().contains(event.getPlayer())) {
 			Vector vel = new Vector();
@@ -736,7 +776,6 @@ public class BendingListener implements Listener {
 				event.getPlayer().setVelocity(vel);
 			}
 		}
-		Player player = event.getPlayer();
 		if (Bloodbending.isBloodbended(player)) {
 			double distance1, distance2;
 			Location loc = Bloodbending.getBloodbendingLocation(player);
@@ -795,7 +834,15 @@ public class BendingListener implements Listener {
 
 	@EventHandler
 	public void onEntityTarget(EntityTargetEvent event) {
-		if (Bloodbending.isBloodbended(event.getEntity()))
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onEntityTargetLiving(EntityTargetLivingEntityEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
 			event.setCancelled(true);
 	}
 

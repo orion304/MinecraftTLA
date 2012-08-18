@@ -159,7 +159,66 @@ public class BendingCommand {
 	}
 
 	private static void who(Player player, String[] args) {
+		if (!hasPermission(player, "bending.command.who"))
+			return;
 
+		if (args.length > 2) {
+			printWhoUsage(player);
+			return;
+		}
+
+		if (args.length == 1) {
+			for (Player p : server.getOnlinePlayers()) {
+				ChatColor color = ChatColor.WHITE;
+				if (Tools.isBender(p.getName(), BendingType.Air))
+					color = Tools.getColor(ConfigManager.getColor("Air"));
+				if (Tools.isBender(p.getName(), BendingType.Water))
+					color = Tools.getColor(ConfigManager.getColor("Water"));
+				if (Tools.isBender(p.getName(), BendingType.Fire))
+					color = Tools.getColor(ConfigManager.getColor("Fire"));
+				if (Tools.isBender(p.getName(), BendingType.Earth))
+					color = Tools.getColor(ConfigManager.getColor("Earth"));
+				if (Tools.isBender(p.getName(), BendingType.ChiBlocker))
+					color = Tools
+							.getColor(ConfigManager.getColor("ChiBlocker"));
+				sendMessage(player, color + p.getName());
+			}
+		} else if (args.length == 2) {
+			Player p = server.getPlayer(args[1]);
+			if (p == null) {
+				sendMessage(player, args[1] + " is not on the server.");
+			} else {
+				sendMessage(player, p.getDisplayName());
+				if (!Tools.isBender(p.getName())) {
+					sendMessage(player, "-No bending");
+				} else {
+					if (Tools.isBender(p.getName(), BendingType.Air))
+						sendMessage(player,
+								Tools.getColor(ConfigManager.getColor("Air"))
+										+ "-Airbending");
+					if (Tools.isBender(p.getName(), BendingType.Water))
+						sendMessage(player,
+								Tools.getColor(ConfigManager.getColor("Water"))
+										+ "-Waterbending");
+					if (Tools.isBender(p.getName(), BendingType.Fire))
+						sendMessage(player,
+								Tools.getColor(ConfigManager.getColor("Fire"))
+										+ "-Firebending");
+					if (Tools.isBender(p.getName(), BendingType.Earth))
+						sendMessage(player,
+								Tools.getColor(ConfigManager.getColor("Earth"))
+										+ "-Earthbending");
+					if (Tools.isBender(p.getName(), BendingType.ChiBlocker))
+						sendMessage(
+								player,
+								Tools.getColor(ConfigManager
+										.getColor("ChiBlocker"))
+										+ "-Chiblocking");
+				}
+			}
+		} else {
+			printWhoUsage(player);
+		}
 	}
 
 	private static void printUsageMessage(Player player, String command,
@@ -1259,7 +1318,7 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
-				if (Tools.isBender(targetplayer.getName(), BendingType.Air)) {
+				if (Tools.isBender(targetplayer.getName(), BendingType.Fire)) {
 					sendMessage(player, targetplayer.getName()
 							+ " is already a firebender.");
 					return;
@@ -1277,7 +1336,7 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
-				if (Tools.isBender(targetplayer.getName(), BendingType.Air)) {
+				if (Tools.isBender(targetplayer.getName(), BendingType.Earth)) {
 					sendMessage(player, targetplayer.getName()
 							+ " is already an earthbender.");
 					return;
@@ -1295,7 +1354,7 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
-				if (Tools.isBender(targetplayer.getName(), BendingType.Air)) {
+				if (Tools.isBender(targetplayer.getName(), BendingType.Water)) {
 					sendMessage(player, targetplayer.getName()
 							+ " is already a waterbender.");
 					return;
@@ -1313,7 +1372,8 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
-				if (Tools.isBender(targetplayer.getName(), BendingType.Air)) {
+				if (Tools.isBender(targetplayer.getName(),
+						BendingType.ChiBlocker)) {
 					sendMessage(player, targetplayer.getName()
 							+ " is already a chiblocker.");
 					return;
