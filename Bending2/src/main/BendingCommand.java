@@ -32,6 +32,7 @@ import airbending.AirSuction;
 import airbending.AirSwipe;
 import airbending.Tornado;
 import chiblocking.HighJump;
+import chiblocking.Paralyze;
 import chiblocking.RapidPunch;
 import earthbending.Catapult;
 import earthbending.Collapse;
@@ -651,6 +652,9 @@ public class BendingCommand {
 						break;
 					case AirSpout:
 						sendMessage(player, cc + AirSpout.getDescription());
+						break;
+					case Paralyze:
+						sendMessage(player, cc + Paralyze.getDescription());
 						break;
 					}
 					return;
