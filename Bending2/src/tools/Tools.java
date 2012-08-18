@@ -46,6 +46,7 @@ import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirScooter;
 import airbending.AirSpout;
+import chiblocking.Paralyze;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
@@ -912,6 +913,8 @@ public class Tools {
 	}
 
 	public static boolean isChiBlocked(Player player) {
+		if (Paralyze.isParalyzed(player) && !AvatarState.isAvatarState(player))
+			return true;
 		if (blockedchis.containsKey(player)) {
 			long time = System.currentTimeMillis();
 			if (time > blockedchis.get(player) + ConfigManager.chiblockduration
