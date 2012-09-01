@@ -53,64 +53,70 @@ import firebending.WallOfFire;
 
 public class BendingCommand {
 
-	private static final String[] bindAliases = { "bind", "b" };
-	private static final String[] clearAliases = { "clear", "cl" };
-	private static final String[] chooseAliases = { "choose", "ch" };
-	private static final String[] addAliases = { "add", "a" };
-	private static final String[] removeAliases = { "remove", "r" };
-	private static final String[] permaremoveAliases = { "permaremove",
-			"premove", "pr", "p" };
-	private static final String[] toggleAliases = { "toggle", "t" };
-	private static final String[] displayAliases = { "display", "disp", "dis",
-			"d" };
-	private static final String[] reloadAliases = { "reload" };
-	private static final String[] helpAliases = { "help", "h" };
-	private static final String[] importAliases = { "import" };
-	private static final String[] whoAliases = { "who", "wh", "w" };
+	private final String[] bindAliases = { "bind", "b" };
+	private final String[] clearAliases = { "clear", "cl" };
+	private final String[] chooseAliases = { "choose", "ch" };
+	private final String[] addAliases = { "add", "a" };
+	private final String[] removeAliases = { "remove", "r" };
+	private final String[] permaremoveAliases = { "permaremove", "premove",
+			"pr", "p" };
+	private final String[] toggleAliases = { "toggle", "t" };
+	private final String[] displayAliases = { "display", "disp", "dis", "d" };
+	private final String[] reloadAliases = { "reload" };
+	private final String[] helpAliases = { "help", "h" };
+	private final String[] importAliases = { "import" };
+	private final String[] whoAliases = { "who", "wh", "w" };
 
-	private static final String[] airbendingAliases = { "air", "a",
-			"airbender", "airbending", "airbend" };
-	private static final String[] earthbendingAliases = { "earth", "e",
-			"earthbender", "earthbending", "earthbend" };
-	private static final String[] firebendingAliases = { "fire", "f",
-			"firebender", "firebending", "firebend" };
-	private static final String[] waterbendingAliases = { "water", "w",
-			"waterbender", "waterbending", "waterbend" };
-	private static final String[] chiblockingAliases = { "chi", "c",
-			"chiblock", "chiblocker", "chiblocking" };
+	private final String[] airbendingAliases = { "air", "a", "airbender",
+			"airbending", "airbend" };
+	private final String[] earthbendingAliases = { "earth", "e", "earthbender",
+			"earthbending", "earthbend" };
+	private final String[] firebendingAliases = { "fire", "f", "firebender",
+			"firebending", "firebend" };
+	private final String[] waterbendingAliases = { "water", "w", "waterbender",
+			"waterbending", "waterbend" };
+	private final String[] chiblockingAliases = { "chi", "c", "chiblock",
+			"chiblocker", "chiblocking" };
 
-	private static String[] waterbendingabilities = Abilities
+	private String[] waterbendingabilities = Abilities
 			.getWaterbendingAbilities();
-	private static String[] airbendingabilities = Abilities
-			.getAirbendingAbilities();
-	private static String[] earthbendingabilities = Abilities
+	private String[] airbendingabilities = Abilities.getAirbendingAbilities();
+	private String[] earthbendingabilities = Abilities
 			.getEarthbendingAbilities();
-	private static String[] firebendingabilities = Abilities
-			.getFirebendingAbilities();
-	private static String[] chiblockingabilities = Abilities
-			.getChiBlockingAbilities();
+	private String[] firebendingabilities = Abilities.getFirebendingAbilities();
+	private String[] chiblockingabilities = Abilities.getChiBlockingAbilities();
 
-	private static File dataFolder;
-	private static StorageManager config;
-	private static Server server;
+	private File dataFolder;
+	private StorageManager config;
+	private Server server;
+	private boolean verbose = true;
 
-	public static void handleCommand(Player player, String[] args,
-			File dataFolder, StorageManager config, Server server) {
+	public BendingCommand(Player player, String[] args, File dataFolder,
+			StorageManager config, Server server) {
 
-		// String arglist = "";
-		// for (String arg : args)
-		// arglist = arglist + arg + " ";
-		// Tools.verbose(arglist);
-
-		BendingCommand.dataFolder = dataFolder;
-		BendingCommand.config = config;
-		BendingCommand.server = server;
+		this.dataFolder = dataFolder;
+		this.config = config;
+		this.server = server;
 
 		for (int i = 0; i < args.length; i++) {
 			args[i] = args[i].toLowerCase();
 		}
 
 		if (args.length >= 1) {
+			if (args[args.length - 1].equalsIgnoreCase("&")) {
+				verbose = false;
+
+				String[] temp = new String[args.length - 1];
+				for (int i = 0; i < args.length - 1; i++) {
+					temp[i] = args[i];
+				}
+				args = temp;
+				// String arglist = "";
+				// for (String arg : args)
+				// arglist = arglist + arg + " ";
+				// Tools.verbose(arglist);
+			}
+
 			String arg = args[0];
 			if (Arrays.asList(bindAliases).contains(arg)) {
 				bind(player, args);
@@ -147,7 +153,7 @@ public class BendingCommand {
 
 	}
 
-	private static void printWhoUsage(Player player) {
+	private void printWhoUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.command.who")) {
 			sendNoCommandPermissionMessage(player, "who");
 			return;
@@ -159,7 +165,7 @@ public class BendingCommand {
 		sendMessage(player, "**This command does not yet work!**");
 	}
 
-	private static void who(Player player, String[] args) {
+	private void who(Player player, String[] args) {
 		if (!hasPermission(player, "bending.command.who"))
 			return;
 
@@ -222,7 +228,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void printUsageMessage(Player player, String command,
+	private void printUsageMessage(Player player, String command,
 			String description) {
 		ChatColor color = ChatColor.AQUA;
 		if (player == null) {
@@ -234,7 +240,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void printChooseUsage(Player player) {
+	private void printChooseUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.admin.choose")
 				&& !hasHelpPermission(player, "bending.admin.rechoose")
 				&& !hasHelpPermission(player, "bending.command.choose")) {
@@ -252,7 +258,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void choose(Player player, String[] args) {
+	private void choose(Player player, String[] args) {
 		if (args.length != 2 && args.length != 3) {
 			printChooseUsage(player);
 
@@ -436,7 +442,9 @@ public class BendingCommand {
 		}
 	}
 
-	private static void sendMessage(Player player, String message) {
+	private void sendMessage(Player player, String message) {
+		if (!verbose)
+			return;
 		if (player == null) {
 			Bending.log.info(message);
 		} else {
@@ -444,7 +452,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void printImportUsage(Player player) {
+	private void printImportUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.admin.import")) {
 			sendNoCommandPermissionMessage(player, "import");
 			return;
@@ -454,7 +462,7 @@ public class BendingCommand {
 
 	}
 
-	private static void importBending(Player player, String[] args) {
+	private void importBending(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.import"))
 			return;
 
@@ -512,13 +520,13 @@ public class BendingCommand {
 
 	}
 
-	private static void printNoPermissions(Player player) {
+	private void printNoPermissions(Player player) {
 		sendMessage(player, ChatColor.RED
 				+ "You do not have permission to execute that command.");
 
 	}
 
-	private static void help(Player player, String[] args) {
+	private void help(Player player, String[] args) {
 		// int pages = 0;
 		// int page = 1;
 		List<String> command = new ArrayList<String>();
@@ -773,7 +781,7 @@ public class BendingCommand {
 
 	}
 
-	private static void helpCommand(Player player, String[] args) {
+	private void helpCommand(Player player, String[] args) {
 		ChatColor color = ChatColor.AQUA;
 
 		String command = args[1];
@@ -914,7 +922,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void printReloadUsage(Player player) {
+	private void printReloadUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.admin.reload")) {
 			sendNoCommandPermissionMessage(player, "reload");
 			return;
@@ -924,7 +932,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void reload(Player player, String[] args) {
+	private void reload(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.reload"))
 			return;
 		Bending.configManager.load(new File(dataFolder, "config.yml"));
@@ -935,7 +943,7 @@ public class BendingCommand {
 
 	}
 
-	private static void printDisplayUsage(Player player) {
+	private void printDisplayUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.command.display")) {
 			sendNoCommandPermissionMessage(player, "display");
 			return;
@@ -947,7 +955,7 @@ public class BendingCommand {
 				"Displays all available abilites for <element>");
 	}
 
-	private static void display(Player player, String[] args) {
+	private void display(Player player, String[] args) {
 		if (!hasPermission(player, "bending.command.display"))
 			return;
 
@@ -1060,7 +1068,7 @@ public class BendingCommand {
 
 	}
 
-	private static void printToggleUsage(Player player) {
+	private void printToggleUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.command.toggle")) {
 			sendNoCommandPermissionMessage(player, "toggle");
 			return;
@@ -1069,7 +1077,7 @@ public class BendingCommand {
 				"Toggles your bending on or off. Passives will still work.");
 	}
 
-	private static void toggle(Player player, String[] args) {
+	private void toggle(Player player, String[] args) {
 		if (args.length == 1) {
 			if (!hasHelpPermission(player, "bending.command.toggle")
 					&& !hasHelpPermission(player, "bending.admin.toggle")) {
@@ -1129,12 +1137,12 @@ public class BendingCommand {
 
 	}
 
-	private static void printNotFromConsole() {
+	private void printNotFromConsole() {
 		Bending.log.info("This command cannot be used from the console.");
 
 	}
 
-	private static void printPermaremoveUsage(Player player) {
+	private void printPermaremoveUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.admin.permaremove")) {
 			sendMessage(player,
 					"You do not have the permission to use /bending permaremove");
@@ -1145,7 +1153,7 @@ public class BendingCommand {
 				"Permanently removes the bending of <player1> (optionally accepts a list of players) until someone with permissions chooses their bending.");
 	}
 
-	private static void permaremove(Player player, String[] args) {
+	private void permaremove(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.permaremove"))
 			return;
 		String playerlist = "";
@@ -1166,7 +1174,7 @@ public class BendingCommand {
 				+ playerlist);
 	}
 
-	private static void printRemoveUsage(Player player) {
+	private void printRemoveUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.admin.remove")) {
 			sendMessage(player,
 					"You do not have the permission to use /bending remove");
@@ -1180,7 +1188,7 @@ public class BendingCommand {
 				"Removes all of <player>'s bending.");
 	}
 
-	private static void remove(Player player, String[] args) {
+	private void remove(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.remove"))
 			return;
 		String playerlist = "";
@@ -1201,7 +1209,7 @@ public class BendingCommand {
 
 	}
 
-	private static void printAddUsage(Player player) {
+	private void printAddUsage(Player player) {
 		if (player != null)
 			printUsageMessage(player, "/bending add <element>",
 					"Add <element>, allowing you to use it along with what you already can do.");
@@ -1209,7 +1217,7 @@ public class BendingCommand {
 				"Adds <element> to <player>.");
 	}
 
-	private static void add(Player player, String[] args) {
+	private void add(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.add"))
 			return;
 		if (args.length != 2 && args.length != 3) {
@@ -1399,7 +1407,7 @@ public class BendingCommand {
 
 	}
 
-	private static void printClearUsage(Player player) {
+	private void printClearUsage(Player player) {
 		printUsageMessage(player, "/bending clear",
 				"Clears all abilities you have bound.");
 		if (!ConfigManager.bendToItem) {
@@ -1411,7 +1419,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void clear(Player player, String[] args) {
+	private void clear(Player player, String[] args) {
 		if (!hasPermission(player, "bending.command.clear"))
 			return;
 		if (player == null) {
@@ -1458,7 +1466,7 @@ public class BendingCommand {
 
 	}
 
-	private static void printBindUsage(Player player) {
+	private void printBindUsage(Player player) {
 		if (!ConfigManager.bendToItem) {
 			printUsageMessage(player, "/bending bind <ability>",
 					"This binds <ability> to the item you are holding.");
@@ -1472,7 +1480,7 @@ public class BendingCommand {
 		}
 	}
 
-	private static void bind(Player player, String[] args) {
+	private void bind(Player player, String[] args) {
 		if (!hasPermission(player, "bending.command.bind"))
 			return;
 		if (player == null) {
@@ -1645,7 +1653,7 @@ public class BendingCommand {
 
 	}
 
-	private static boolean hasPermission(Player player, String permission) {
+	private boolean hasPermission(Player player, String permission) {
 		if (player == null)
 			return true;
 		if (player.hasPermission(permission)) {
@@ -1655,7 +1663,7 @@ public class BendingCommand {
 		return false;
 	}
 
-	private static boolean hasHelpPermission(Player player, String permission) {
+	private boolean hasHelpPermission(Player player, String permission) {
 		if (player == null)
 			return true;
 		if (player.hasPermission(permission))
@@ -1663,7 +1671,7 @@ public class BendingCommand {
 		return false;
 	}
 
-	private static void printHelpDialogue(Player player) {
+	private void printHelpDialogue(Player player) {
 		if (player == null) {
 			Bending.log.info("Use /bending help to see a list of commands.");
 			Bending.log
@@ -1680,13 +1688,12 @@ public class BendingCommand {
 		}
 	}
 
-	private static void sendNoCommandPermissionMessage(Player player,
-			String command) {
+	private void sendNoCommandPermissionMessage(Player player, String command) {
 		sendMessage(player, "You do not have permission to use /bending "
 				+ command + ".");
 	}
 
-	private static void printCommands(Player player) {
+	private void printCommands(Player player) {
 		sendMessage(player, "Bending aliases: bending bend b mtla tla");
 		String slot = "slot#";
 		if (ConfigManager.bendToItem)

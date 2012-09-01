@@ -1,5 +1,6 @@
 package waterbending;
 
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
@@ -34,6 +35,8 @@ public class WaterManipulation {
 	private static double speed = ConfigManager.waterManipulationSpeed;
 	// private static double speed = 1.5;
 
+	private static HashSet<Byte> water = new HashSet<Byte>();
+
 	private static long interval = (long) (1000. / speed);
 
 	private Player player;
@@ -52,8 +55,14 @@ public class WaterManipulation {
 	private boolean displacing = false;
 	private long time;
 	private int damage = defaultdamage;
+	private int displrange;
 
 	public WaterManipulation(Player player) {
+		if (water.isEmpty()) {
+			water.add((byte) 0);
+			water.add((byte) 8);
+			water.add((byte) 9);
+		}
 		this.player = player;
 		if (prepare()) {
 			id = ID;
@@ -108,8 +117,10 @@ public class WaterManipulation {
 			if (sourceblock.getWorld() == player.getWorld()) {
 				Entity target = Tools.getTargettedEntity(player, range);
 				if (target == null || displacing) {
+					displrange = (int) player.getLocation().distance(
+							sourceblock.getLocation());
 					targetdestination = player.getTargetBlock(
-							Tools.getTransparentEarthbending(), (int) range)
+							Tools.getTransparentEarthbending(), displrange)
 							.getLocation();
 				} else {
 					// targetting = true;
@@ -128,8 +139,9 @@ public class WaterManipulation {
 							firstdestination).normalize();
 					targetdirection = getDirection(firstdestination,
 							targetdestination).normalize();
-					targetdestination = Tools.getPointOnLine(firstdestination,
-							targetdestination, range);
+					if (!displacing)
+						targetdestination = Tools.getPointOnLine(
+								firstdestination, targetdestination, range);
 					if (Tools.isPlant(sourceblock))
 						new Plantbending(sourceblock);
 					addWater(sourceblock);
@@ -256,15 +268,33 @@ public class WaterManipulation {
 					direction = targetdirection;
 				}
 
-				location = location.clone().add(direction);
-
-				Tools.removeSpouts(location, player);
-
 				Block block = location.getBlock();
-				if (block.getLocation().equals(sourceblock.getLocation())) {
+				if (displacing) {
+					Block targetblock = player.getTargetBlock(null, displrange);
+					direction = getDirection(location,
+							targetblock.getLocation()).normalize();
+					if (!location.getBlock().equals(targetblock.getLocation())) {
+						location = location.clone().add(direction);
+
+						block = location.getBlock();
+						if (block.getLocation().equals(
+								sourceblock.getLocation())) {
+							location = location.clone().add(direction);
+							block = location.getBlock();
+						}
+					}
+
+				} else {
+					Tools.removeSpouts(location, player);
 					location = location.clone().add(direction);
+
 					block = location.getBlock();
+					if (block.getLocation().equals(sourceblock.getLocation())) {
+						location = location.clone().add(direction);
+						block = location.getBlock();
+					}
 				}
+
 				if (Tools.isTransparentToEarthbending(block)
 						&& !block.isLiquid()) {
 					Tools.breakBlock(block);
@@ -304,7 +334,7 @@ public class WaterManipulation {
 				// }
 				sourceblock = block;
 
-				if (location.distance(targetdestination) <= 1) {
+				if (location.distance(targetdestination) <= 1 && !displacing) {
 
 					falling = true;
 					progressing = false;
@@ -333,6 +363,10 @@ public class WaterManipulation {
 	}
 
 	private void reduceWater(Block block) {
+		if (displacing) {
+			removeWater(block);
+			return;
+		}
 		if (affectedblocks.containsKey(block)) {
 			if (!Tools.adjacentToThreeOrMoreSources(block)
 					&& !Tools.adjacentToAnyWater(block)) {
@@ -355,6 +389,10 @@ public class WaterManipulation {
 	}
 
 	private void finalRemoveWater(Block block) {
+		if (displacing) {
+			removeWater(block);
+			return;
+		}
 		if (affectedblocks.containsKey(block)) {
 			if (!Tools.adjacentToThreeOrMoreSources(block)
 					&& !Tools.adjacentToAnyWater(block)) {
@@ -453,7 +491,9 @@ public class WaterManipulation {
 				+ "After you have selected an origin, simply left-click in any direction and you will "
 				+ "see your water spout off in that direction, slicing any creature in its path. "
 				+ "If you look towards a creature when you use this ability, it will target that creature. "
-				+ "A collision from Water Manipulation both knocks the target back and deals some damage.";
+				+ "A collision from Water Manipulation both knocks the target back and deals some damage. "
+				+ "Alternatively, if you have source selected and tap shift again, "
+				+ "you will be able to control the water more directly.";
 	}
 
 }
