@@ -132,7 +132,8 @@ public class AirBlast {
 				affectedlevers.add(block);
 			}
 		}
-		if (block.getType() != Material.AIR && !affectedlevers.contains(block)) {
+		if ((Tools.isSolid(block) || block.isLiquid())
+				&& !affectedlevers.contains(block)) {
 			if (block.getType() == Material.LAVA
 					|| block.getType() == Material.STATIONARY_LAVA) {
 				if (block.getData() == full) {

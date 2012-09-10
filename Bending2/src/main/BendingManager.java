@@ -53,6 +53,7 @@ import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
 import earthbending.Tremorsense;
 import firebending.FireBlast;
+import firebending.FireBurst;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
@@ -258,6 +259,8 @@ public class BendingManager implements Runnable {
 		Lightning.progressAll();
 
 		FireBlast.progressAll();
+
+		FireBurst.progressAll();
 
 		FireJet.progressAll();
 

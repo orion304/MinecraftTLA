@@ -1,4 +1,4 @@
-package airbending;
+package firebending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,19 +10,18 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.Tools;
 
-public class AirBurst {
-
-	private static ConcurrentHashMap<Player, AirBurst> instances = new ConcurrentHashMap<Player, AirBurst>();
+public class FireBurst {
+	private static ConcurrentHashMap<Player, FireBurst> instances = new ConcurrentHashMap<Player, FireBurst>();
 
 	private Player player;
 	private long starttime;
-	private double pushfactor = 4;
+	private int damage = 3;
 	private long chargetime = 2500;
 	private double deltheta = 10;
 	private double delphi = 10;
 	private boolean charged = false;
 
-	public AirBurst(Player player) {
+	public FireBurst(Player player) {
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();
@@ -54,8 +53,8 @@ public class AirBurst {
 					if (direction.angle(vector) <= angle) {
 						// Tools.verbose(direction.angle(vector));
 						// Tools.verbose(direction);
-						new AirBlast(location, direction.normalize(), player,
-								pushfactor);
+						new FireBlast(location, direction.normalize(), player,
+								damage);
 					}
 				}
 			}
@@ -78,8 +77,8 @@ public class AirBurst {
 					y = r * Math.sin(rphi) * Math.sin(rtheta);
 					z = r * Math.cos(rtheta);
 					Vector direction = new Vector(x, y, z);
-					new AirBlast(location, direction.normalize(), player,
-							pushfactor);
+					new FireBlast(location, direction.normalize(), player,
+							damage);
 				}
 			}
 		}
@@ -88,8 +87,8 @@ public class AirBurst {
 	}
 
 	private void progress() {
-		if (!Tools.canBend(player, Abilities.AirBurst)
-				|| Tools.getBendingAbility(player) != Abilities.AirBurst) {
+		if (!Tools.canBend(player, Abilities.FireBurst)
+				|| Tools.getBendingAbility(player) != Abilities.FireBurst) {
 			instances.remove(player);
 			return;
 		}
@@ -106,7 +105,8 @@ public class AirBurst {
 		} else if (charged) {
 			Location location = player.getEyeLocation();
 			// location = location.add(location.getDirection().normalize());
-			location.getWorld().playEffect(location, Effect.SMOKE, 4, 3);
+			location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES,
+					4, 3);
 		}
 	}
 

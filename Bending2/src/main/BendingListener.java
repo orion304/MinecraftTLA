@@ -91,6 +91,7 @@ import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
 import firebending.FireBlast;
+import firebending.FireBurst;
 import firebending.FireJet;
 import firebending.FireStream;
 import firebending.Fireball;
@@ -365,6 +366,10 @@ public class BendingListener implements Listener {
 					new WallOfFire(player);
 				}
 
+				if (Tools.getBendingAbility(player) == Abilities.FireBurst) {
+					FireBurst.coneBurst(player);
+				}
+
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
@@ -506,6 +511,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.Blaze) {
 				new RingOfFire(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.FireBurst) {
+				new FireBurst(player);
 			}
 
 		}

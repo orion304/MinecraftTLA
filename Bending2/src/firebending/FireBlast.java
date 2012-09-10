@@ -74,7 +74,7 @@ public class FireBlast {
 	}
 
 	public FireBlast(Location location, Vector direction, Player player,
-			double damage) {
+			int damage) {
 		if (location.getBlock().isLiquid()) {
 			return;
 		}
@@ -84,6 +84,7 @@ public class FireBlast {
 		this.location = location.clone();
 		origin = location.clone();
 		this.direction = direction.clone().normalize();
+		this.damage *= damage;
 		id = ID;
 		instances.put(id, this);
 		if (ID == Integer.MAX_VALUE)
