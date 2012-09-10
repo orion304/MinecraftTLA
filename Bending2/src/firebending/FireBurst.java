@@ -1,13 +1,16 @@
 package firebending;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.ConfigManager;
 import tools.Tools;
 
 public class FireBurst {
@@ -25,6 +28,9 @@ public class FireBurst {
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();
+		if (Tools.isDay(player.getWorld())) {
+			chargetime /= ConfigManager.dayFactor;
+		}
 		this.player = player;
 		instances.put(player, this);
 	}
@@ -37,11 +43,13 @@ public class FireBurst {
 	private void coneBurst() {
 		if (charged) {
 			Location location = player.getEyeLocation();
+			List<Block> safeblocks = Tools.getBlocksAroundPoint(
+					player.getLocation(), 2);
 			Vector vector = location.getDirection();
 			double angle = Math.toRadians(30);
 			double x, y, z;
 			double r = 1;
-			for (double theta = 0; theta < 180; theta += deltheta) {
+			for (double theta = 0; theta <= 180; theta += deltheta) {
 				double dphi = delphi / Math.sin(Math.toRadians(theta));
 				for (double phi = 0; phi < 360; phi += dphi) {
 					double rphi = Math.toRadians(phi);
@@ -54,7 +62,7 @@ public class FireBurst {
 						// Tools.verbose(direction.angle(vector));
 						// Tools.verbose(direction);
 						new FireBlast(location, direction.normalize(), player,
-								damage);
+								damage, safeblocks);
 					}
 				}
 			}
@@ -66,9 +74,11 @@ public class FireBurst {
 	private void sphereBurst() {
 		if (charged) {
 			Location location = player.getEyeLocation();
+			List<Block> safeblocks = Tools.getBlocksAroundPoint(
+					player.getLocation(), 2);
 			double x, y, z;
 			double r = 1;
-			for (double theta = 30; theta < 180; theta += deltheta) {
+			for (double theta = 0; theta <= 180; theta += deltheta) {
 				double dphi = delphi / Math.sin(Math.toRadians(theta));
 				for (double phi = 0; phi < 360; phi += dphi) {
 					double rphi = Math.toRadians(phi);
@@ -78,7 +88,7 @@ public class FireBurst {
 					z = r * Math.cos(rtheta);
 					Vector direction = new Vector(x, z, y);
 					new FireBlast(location, direction.normalize(), player,
-							damage);
+							damage, safeblocks);
 				}
 			}
 		}

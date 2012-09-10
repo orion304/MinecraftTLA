@@ -1,5 +1,7 @@
 package firebending;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
@@ -35,6 +37,7 @@ public class FireBlast {
 	public static byte full = 0x0;
 
 	private Location location;
+	private List<Block> safe = new ArrayList<Block>();
 	private Location origin;
 	private Vector direction;
 	private Player player;
@@ -74,10 +77,11 @@ public class FireBlast {
 	}
 
 	public FireBlast(Location location, Vector direction, Player player,
-			int damage) {
+			int damage, List<Block> safeblocks) {
 		if (location.getBlock().isLiquid()) {
 			return;
 		}
+		safe = safeblocks;
 		range = Tools.firebendingDayAugment(range, player.getWorld());
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
@@ -168,7 +172,7 @@ public class FireBlast {
 	private void ignite(Location location) {
 		for (Block block : Tools
 				.getBlocksAroundPoint(location, affectingradius)) {
-			if (FireStream.isIgnitable(block)) {
+			if (FireStream.isIgnitable(block) && !safe.contains(block)) {
 				block.setType(Material.FIRE);
 				if (dissipate) {
 					FireStream.ignitedblocks.put(block, player);

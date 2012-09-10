@@ -44,7 +44,7 @@ public class AirBurst {
 			double angle = Math.toRadians(30);
 			double x, y, z;
 			double r = 1;
-			for (double theta = 0; theta < 180; theta += deltheta) {
+			for (double theta = 0; theta <= 180; theta += deltheta) {
 				double dphi = delphi / Math.sin(Math.toRadians(theta));
 				for (double phi = 0; phi < 360; phi += dphi) {
 					double rphi = Math.toRadians(phi);
@@ -71,7 +71,7 @@ public class AirBurst {
 			Location location = player.getEyeLocation();
 			double x, y, z;
 			double r = 1;
-			for (double theta = 30; theta < 180; theta += deltheta) {
+			for (double theta = 0; theta <= 180; theta += deltheta) {
 				double dphi = delphi / Math.sin(Math.toRadians(theta));
 				for (double phi = 0; phi < 360; phi += dphi) {
 					double rphi = Math.toRadians(phi);
