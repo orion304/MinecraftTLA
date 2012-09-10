@@ -73,6 +73,24 @@ public class FireBlast {
 		timers.put(player, System.currentTimeMillis());
 	}
 
+	public FireBlast(Location location, Vector direction, Player player,
+			double damage) {
+		if (location.getBlock().isLiquid()) {
+			return;
+		}
+		range = Tools.firebendingDayAugment(range, player.getWorld());
+		timers.put(player, System.currentTimeMillis());
+		this.player = player;
+		this.location = location.clone();
+		origin = location.clone();
+		this.direction = direction.clone().normalize();
+		id = ID;
+		instances.put(id, this);
+		if (ID == Integer.MAX_VALUE)
+			ID = Integer.MIN_VALUE;
+		ID++;
+	}
+
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
 			instances.remove(id);

@@ -1,19 +1,118 @@
 package airbending;
 
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+
+import tools.Abilities;
+import tools.Tools;
 
 public class AirBurst {
 
-	public AirBurst(Player player) {
+	private static ConcurrentHashMap<Player, AirBurst> instances = new ConcurrentHashMap<Player, AirBurst>();
 
+	private Player player;
+	private long starttime;
+	private double pushfactor = 4;
+	private long chargetime = 2500;
+	private double deltheta = 10;
+	private double delphi = 10;
+	private boolean charged = false;
+
+	public AirBurst(Player player) {
+		if (instances.containsKey(player))
+			return;
+		starttime = System.currentTimeMillis();
+		this.player = player;
+		instances.put(player, this);
 	}
 
 	public static void coneBurst(Player player) {
+		if (instances.containsKey(player))
+			instances.get(player).coneBurst();
+	}
 
+	private void coneBurst() {
+		if (charged) {
+			Location location = player.getEyeLocation();
+			Vector vector = location.getDirection();
+			double angle = Math.toRadians(30);
+			double x, y, z;
+			double r = 1;
+			for (double theta = 0; theta < 180; theta += deltheta) {
+				double dphi = delphi / Math.sin(Math.toRadians(theta));
+				for (double phi = 0; phi < 360; phi += dphi) {
+					double rphi = Math.toRadians(phi);
+					double rtheta = Math.toRadians(theta);
+					x = r * Math.cos(rphi) * Math.sin(rtheta);
+					y = r * Math.sin(rphi) * Math.sin(rtheta);
+					z = r * Math.cos(rtheta);
+					Vector direction = new Vector(x, y, z);
+					if (direction.angle(vector) <= angle) {
+						// Tools.verbose(direction.angle(vector));
+						// Tools.verbose(direction);
+						new AirBlast(location, direction.normalize(), player,
+								pushfactor);
+					}
+				}
+			}
+		}
+		// Tools.verbose("--" + AirBlast.instances.size() + "--");
+		instances.remove(player);
+	}
+
+	private void sphereBurst() {
+		if (charged) {
+			Location location = player.getEyeLocation();
+			double x, y, z;
+			double r = 1;
+			for (double theta = 0; theta < 180; theta += deltheta) {
+				double dphi = delphi / Math.sin(Math.toRadians(theta));
+				for (double phi = 0; phi < 360; phi += dphi) {
+					double rphi = Math.toRadians(phi);
+					double rtheta = Math.toRadians(theta);
+					x = r * Math.cos(rphi) * Math.sin(rtheta);
+					y = r * Math.sin(rphi) * Math.sin(rtheta);
+					z = r * Math.cos(rtheta);
+					Vector direction = new Vector(x, y, z);
+					new AirBlast(location, direction.normalize(), player,
+							pushfactor);
+				}
+			}
+		}
+		// Tools.verbose("--" + AirBlast.instances.size() + "--");
+		instances.remove(player);
+	}
+
+	private void progress() {
+		if (!Tools.canBend(player, Abilities.AirBurst)
+				|| Tools.getBendingAbility(player) != Abilities.AirBurst) {
+			instances.remove(player);
+			return;
+		}
+		if (System.currentTimeMillis() > starttime + chargetime && !charged) {
+			charged = true;
+		}
+
+		if (!player.isSneaking()) {
+			if (charged) {
+				sphereBurst();
+			} else {
+				instances.remove(player);
+			}
+		} else if (charged) {
+			Location location = player.getEyeLocation();
+			// location = location.add(location.getDirection().normalize());
+			location.getWorld().playEffect(location, Effect.SMOKE, 4, 3);
+		}
 	}
 
 	public static void progressAll() {
-
+		for (Player player : instances.keySet())
+			instances.get(player).progress();
 	}
 
 	public static String getDescription() {

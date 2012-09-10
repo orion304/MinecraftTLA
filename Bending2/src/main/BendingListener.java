@@ -66,6 +66,7 @@ import waterbending.WaterWall;
 import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
+import airbending.AirBurst;
 import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSpout;
@@ -290,9 +291,9 @@ public class BendingListener implements Listener {
 					new AirSpout(player);
 				}
 
-				// if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
-				// AirBurst.coneBurst(player);
-				// }
+				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+					AirBurst.coneBurst(player);
+				}
 
 			}
 
@@ -450,9 +451,9 @@ public class BendingListener implements Listener {
 					new AirSuction(player);
 				}
 
-				// if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
-				// new AirBurst(player);
-				// }
+				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+					new AirBurst(player);
+				}
 			}
 
 			if (Tools.getBendingAbility(player) == Abilities.Tornado) {

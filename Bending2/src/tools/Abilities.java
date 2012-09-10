@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 public enum Abilities {
 
-	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirSpout,
-	// //
-	// AirBurst,
+	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirSpout, AirBurst,
 
 	Catapult, RaiseEarth, EarthGrab, EarthTunnel, EarthBlast, Collapse, Tremorsense, EarthArmor, // Shockwave,
 
-	HeatControl, Fireball, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, // FireBurst,
+	HeatControl, Fireball, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, FireBurst,
 
 	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, // Torrent,
 																											// //OctopusForm

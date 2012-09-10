@@ -30,9 +30,9 @@ public class AirBlast {
 	static final int maxticks = 10000;
 
 	public static double speed = ConfigManager.airBlastSpeed;
-	public static double range = ConfigManager.airBlastRange;
+	public static double defaultrange = ConfigManager.airBlastRange;
 	public static double affectingradius = ConfigManager.airBlastRadius;
-	public static double pushfactor = ConfigManager.airBlastPush;
+	public static double defaultpushfactor = ConfigManager.airBlastPush;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
 
@@ -42,6 +42,8 @@ public class AirBlast {
 	private Player player;
 	private int id;
 	private double speedfactor;
+	private double range = defaultrange;
+	private double pushfactor = defaultpushfactor;
 	private int ticks = 0;
 
 	private ArrayList<Block> affectedlevers = new ArrayList<Block>();
@@ -70,6 +72,24 @@ public class AirBlast {
 		ID++;
 		// time = System.currentTimeMillis();
 		timers.put(player, System.currentTimeMillis());
+	}
+
+	public AirBlast(Location location, Vector direction, Player player,
+			double factorpush) {
+		if (location.getBlock().isLiquid()) {
+			return;
+		}
+
+		this.player = player;
+		origin = location.clone();
+		this.direction = direction.clone();
+		this.location = location.clone();
+		id = ID;
+		pushfactor *= factorpush;
+		instances.put(id, this);
+		if (ID == Integer.MAX_VALUE)
+			ID = Integer.MIN_VALUE;
+		ID++;
 	}
 
 	public boolean progress() {
@@ -120,12 +140,14 @@ public class AirBlast {
 				} else {
 					block.setType(Material.COBBLESTONE);
 				}
-				instances.remove(id);
 			}
+			instances.remove(id);
 			return false;
 		}
 
+		// Tools.verbose(location.distance(origin));
 		if (location.distance(origin) > range) {
+			// Tools.verbose(id);
 			instances.remove(id);
 			return false;
 		}

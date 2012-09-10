@@ -111,7 +111,7 @@ public class AirSuction {
 
 	private void advanceLocation() {
 		location.getWorld().playEffect(location, Effect.SMOKE, 4,
-				(int) AirBlast.range);
+				(int) AirBlast.defaultrange);
 		location = location.add(direction.clone().multiply(speedfactor));
 	}
 

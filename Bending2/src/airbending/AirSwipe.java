@@ -137,7 +137,7 @@ public class AirSwipe {
 						}
 					} else {
 						location.getWorld().playEffect(location, Effect.SMOKE,
-								4, (int) AirBlast.range);
+								4, (int) AirBlast.defaultrange);
 						affectPeople(location, direction);
 					}
 				}

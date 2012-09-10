@@ -120,7 +120,7 @@ public class AirScooter {
 			double y = ((double) i) / 2 * scooterradius - scooterradius;
 			double z = Math.sin(Math.toRadians(angles.get(i))) * scooterradius;
 			player.getWorld().playEffect(origin.clone().add(x, y, z),
-					Effect.SMOKE, 4, (int) AirBlast.range);
+					Effect.SMOKE, 4, (int) AirBlast.defaultrange);
 		}
 		for (int i = 0; i < 5; i++) {
 			angles.set(i, angles.get(i) + 10);
