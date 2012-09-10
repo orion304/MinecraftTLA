@@ -25,6 +25,7 @@ import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import airbending.AirBlast;
 import airbending.AirBubble;
+import airbending.AirBurst;
 import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSpout;
@@ -45,6 +46,7 @@ import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
 import firebending.FireBlast;
+import firebending.FireBurst;
 import firebending.FireJet;
 import firebending.Fireball;
 import firebending.Illumination;
@@ -570,6 +572,9 @@ public class BendingCommand {
 					case AirSwipe:
 						sendMessage(player, cc + AirSwipe.getDescription());
 						break;
+					case AirBurst:
+						sendMessage(player, cc + AirBurst.getDescription());
+						break;
 					case Tornado:
 						sendMessage(player, cc + Tornado.getDescription());
 						break;
@@ -611,6 +616,9 @@ public class BendingCommand {
 						break;
 					case FireJet:
 						sendMessage(player, cc + FireJet.getDescription());
+						break;
+					case FireBurst:
+						sendMessage(player, cc + FireBurst.getDescription());
 						break;
 					case Illumination:
 						sendMessage(player, cc + Illumination.getDescription());

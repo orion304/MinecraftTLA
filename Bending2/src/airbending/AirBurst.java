@@ -14,12 +14,14 @@ public class AirBurst {
 
 	private static ConcurrentHashMap<Player, AirBurst> instances = new ConcurrentHashMap<Player, AirBurst>();
 
+	private static double threshold = 10;
+	private static double pushfactor = 4;
+	private static double deltheta = 10;
+	private static double delphi = 10;
+
 	private Player player;
 	private long starttime;
-	private double pushfactor = 4;
 	private long chargetime = 2500;
-	private double deltheta = 10;
-	private double delphi = 10;
 	private boolean charged = false;
 
 	public AirBurst(Player player) {
@@ -50,7 +52,7 @@ public class AirBurst {
 					x = r * Math.cos(rphi) * Math.sin(rtheta);
 					y = r * Math.sin(rphi) * Math.sin(rtheta);
 					z = r * Math.cos(rtheta);
-					Vector direction = new Vector(x, y, z);
+					Vector direction = new Vector(x, z, y);
 					if (direction.angle(vector) <= angle) {
 						// Tools.verbose(direction.angle(vector));
 						// Tools.verbose(direction);
@@ -77,7 +79,7 @@ public class AirBurst {
 					x = r * Math.cos(rphi) * Math.sin(rtheta);
 					y = r * Math.sin(rphi) * Math.sin(rtheta);
 					z = r * Math.cos(rtheta);
-					Vector direction = new Vector(x, y, z);
+					Vector direction = new Vector(x, z, y);
 					new AirBlast(location, direction.normalize(), player,
 							pushfactor);
 				}
@@ -85,6 +87,31 @@ public class AirBurst {
 		}
 		// Tools.verbose("--" + AirBlast.instances.size() + "--");
 		instances.remove(player);
+	}
+
+	public static void fallBurst(Player player) {
+		if (!Tools.canBend(player, Abilities.AirBurst)
+				|| Tools.getBendingAbility(player) != Abilities.AirBurst
+				|| instances.containsKey(player)
+				|| player.getFallDistance() < threshold) {
+			return;
+		}
+		Location location = player.getLocation();
+		double x, y, z;
+		double r = 1;
+		for (double theta = 75; theta < 105; theta += deltheta) {
+			double dphi = delphi / Math.sin(Math.toRadians(theta));
+			for (double phi = 0; phi < 360; phi += dphi) {
+				double rphi = Math.toRadians(phi);
+				double rtheta = Math.toRadians(theta);
+				x = r * Math.cos(rphi) * Math.sin(rtheta);
+				y = r * Math.sin(rphi) * Math.sin(rtheta);
+				z = r * Math.cos(rtheta);
+				Vector direction = new Vector(x, z, y);
+				new AirBlast(location, direction.normalize(), player,
+						pushfactor);
+			}
+		}
 	}
 
 	private void progress() {
