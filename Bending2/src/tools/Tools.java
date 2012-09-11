@@ -37,6 +37,7 @@ import org.bukkit.util.Vector;
 
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
+import waterbending.OctopusForm;
 import waterbending.Plantbending;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
@@ -664,6 +665,8 @@ public class Tools {
 		BendingManager.removeFlyers();
 		Plantbending.regrowAll();
 		AirSpout.removeAll();
+		OctopusForm.removeAll();
+		TempBlock.removeAll();
 		for (Block block : tempearthblocks.keySet()) {
 			removeEarthbendedBlock(block);
 		}
@@ -674,6 +677,7 @@ public class Tools {
 			block.setType(info.getType());
 			Tools.movedearth.remove(block);
 		}
+		TempBlock.removeAll();
 	}
 
 	public static boolean canBend(Player player, Abilities ability) {
@@ -976,6 +980,23 @@ public class Tools {
 
 	public static void removeSpouts(Location location, Player sourceplayer) {
 		removeSpouts(location, 1.5, sourceplayer);
+	}
+
+	public static Block getWaterSourceBlock(Player player, int range,
+			boolean plantbending) {
+		byte full = 0x0;
+		Block block = player.getTargetBlock(null, range);
+		if (isPlant(block) && canPlantbend(player) && plantbending) {
+			return block;
+		} else if ((block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
+				&& block.getData() == full) {
+			return block;
+		}
+		return null;
+	}
+
+	public static void playFocusWaterEffect(Block block) {
+		block.getWorld().playEffect(block.getLocation(), Effect.SMOKE, 4, 20);
 	}
 
 	static {

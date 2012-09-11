@@ -26,6 +26,7 @@ import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
+import waterbending.OctopusForm;
 import waterbending.Plantbending;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -308,6 +309,7 @@ public class BendingManager implements Runnable {
 
 		WaterPassive.handlePassive(plugin.getServer());
 		FastSwimming.HandleSwim(plugin.getServer());
+		OctopusForm.progressAll();
 
 		Plantbending.regrow();
 

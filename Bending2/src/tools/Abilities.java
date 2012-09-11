@@ -10,8 +10,7 @@ public enum Abilities {
 
 	HeatControl, Fireball, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, FireBurst,
 
-	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, // Torrent,
-																											// //OctopusForm
+	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, OctopusForm, // Torrent,
 
 	HighJump, RapidPunch, Paralyze,
 

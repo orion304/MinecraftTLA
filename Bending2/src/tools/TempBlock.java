@@ -87,8 +87,21 @@ public class TempBlock {
 		return false;
 	}
 
+	public static TempBlock get(Block block) {
+		if (isTempBlock(block))
+			return instances.get(block);
+		return null;
+	}
+
 	public Location getLocation() {
 		return block.getLocation();
+	}
+
+	public static void removeAll() {
+		for (Block block : instances.keySet()) {
+			revertBlock(block, Material.AIR);
+		}
+
 	}
 
 }

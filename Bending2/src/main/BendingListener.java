@@ -58,6 +58,7 @@ import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.IceSpike;
 import waterbending.Melt;
+import waterbending.OctopusForm;
 import waterbending.SpikeField;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -391,6 +392,10 @@ public class BendingListener implements Listener {
 					new WaterWall(player);
 				}
 
+				if (Tools.getBendingAbility(player) == Abilities.OctopusForm) {
+					new OctopusForm(player);
+				}
+
 				// if (Tools.getBendingAbility(player) == Abilities.Wave) {
 				// Wave.launch(player);
 				// }
@@ -491,6 +496,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.Surge) {
 				WaterWall.form(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.OctopusForm) {
+				OctopusForm.form(player);
 			}
 
 			// if (Tools.getBendingAbility(player) == Abilities.Wave) {

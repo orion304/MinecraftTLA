@@ -20,6 +20,7 @@ import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
+import waterbending.OctopusForm;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
@@ -647,6 +648,9 @@ public class BendingCommand {
 						break;
 					case WaterSpout:
 						sendMessage(player, cc + WaterSpout.getDescription());
+						break;
+					case OctopusForm:
+						sendMessage(player, cc + OctopusForm.getDescription());
 						break;
 					case Surge:
 						sendMessage(player, cc + WaterWall.getDescription());
