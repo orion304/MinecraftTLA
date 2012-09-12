@@ -1233,7 +1233,7 @@ public class BendingCommand {
 			return;
 		}
 		if (args.length == 2) {
-			printAddUsage(player);
+			// printAddUsage(player);
 			String choice = args[1].toLowerCase();
 			if (Arrays.asList(airbendingAliases).contains(choice)) {
 				if (Tools.isBender(player.getName(), BendingType.Air)) {
