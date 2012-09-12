@@ -57,7 +57,8 @@ public class FireBlast {
 				return;
 			}
 		}
-		if (player.getEyeLocation().getBlock().isLiquid()) {
+		if (player.getEyeLocation().getBlock().isLiquid()
+				|| Fireball.isCharging(player)) {
 			return;
 		}
 		range = Tools.firebendingDayAugment(range, player.getWorld());

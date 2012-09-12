@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -46,6 +47,8 @@ public class Fireball {
 		if (Tools.isDay(player.getWorld())) {
 			chargetime = (long) (chargetime / ConfigManager.dayFactor);
 		}
+		if (AvatarState.isAvatarState(player))
+			chargetime = 0;
 		range = Tools.firebendingDayAugment(range, player.getWorld());
 		if (!player.getEyeLocation().getBlock().isLiquid()) {
 			id = ID;
@@ -127,6 +130,15 @@ public class Fireball {
 				return;
 			}
 		}
+	}
+
+	public static boolean isCharging(Player player) {
+		for (int id : instances.keySet()) {
+			Fireball ball = instances.get(id);
+			if (ball.player == player && !ball.launched)
+				return true;
+		}
+		return false;
 	}
 
 	private void explode() {

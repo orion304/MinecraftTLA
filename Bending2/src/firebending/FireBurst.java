@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -31,6 +32,8 @@ public class FireBurst {
 		if (Tools.isDay(player.getWorld())) {
 			chargetime /= ConfigManager.dayFactor;
 		}
+		if (AvatarState.isAvatarState(player))
+			chargetime = 0;
 		this.player = player;
 		instances.put(player, this);
 	}

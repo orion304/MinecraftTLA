@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.Tools;
 
 public class AirBurst {
@@ -28,6 +29,8 @@ public class AirBurst {
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();
+		if (AvatarState.isAvatarState(player))
+			chargetime = 0;
 		this.player = player;
 		instances.put(player, this);
 	}
