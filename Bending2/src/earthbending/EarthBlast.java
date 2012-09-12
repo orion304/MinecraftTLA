@@ -325,4 +325,16 @@ public class EarthBlast {
 				+ "You cannot have multiple of these abilities flying at the same time.";
 	}
 
+	public static void removeAroundPoint(Location location, double radius) {
+
+		for (int id : instances.keySet()) {
+			EarthBlast blast = instances.get(id);
+			if (blast.location.getWorld().equals(location.getWorld()))
+				if (blast.location.distance(location) <= radius)
+					blast.breakBlock();
+
+		}
+
+	}
+
 }

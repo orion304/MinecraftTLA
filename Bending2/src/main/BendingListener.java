@@ -45,6 +45,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
@@ -78,6 +79,9 @@ import airbending.Tornado;
 import chiblocking.HighJump;
 import chiblocking.Paralyze;
 import chiblocking.RapidPunch;
+
+import com.nitnelave.CreeperHeal.CreeperHeal;
+
 import earthbending.Catapult;
 import earthbending.Collapse;
 import earthbending.CompactColumn;
@@ -94,6 +98,7 @@ import firebending.Extinguish;
 import firebending.FireBlast;
 import firebending.FireBurst;
 import firebending.FireJet;
+import firebending.FireShield;
 import firebending.FireStream;
 import firebending.Fireball;
 import firebending.Illumination;
@@ -343,10 +348,6 @@ public class BendingListener implements Listener {
 					new FireBlast(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Fireball) {
-					new Fireball(player);
-				}
-
 				if (Tools.getBendingAbility(player) == Abilities.HeatControl) {
 					new Extinguish(player);
 				}
@@ -369,6 +370,10 @@ public class BendingListener implements Listener {
 
 				if (Tools.getBendingAbility(player) == Abilities.FireBurst) {
 					FireBurst.coneBurst(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.FireShield) {
+					new FireShield(player);
 				}
 
 			}
@@ -524,6 +529,14 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.FireBurst) {
 				new FireBurst(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.FireBlast) {
+				new Fireball(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.FireShield) {
+				FireShield.shield(player);
 			}
 
 		}
@@ -831,6 +844,16 @@ public class BendingListener implements Listener {
 			}
 			if (Tools.tempearthblocks.contains(block)) {
 				Tools.removeEarthbendedBlockIndex(block);
+			}
+		}
+
+		if (event.getEntity() == null) {
+			Plugin ch = Bukkit.getPluginManager().getPlugin("CreeperHeal");
+			if (ch != null) {
+				CreeperHeal creeperheal = (CreeperHeal) Bukkit
+						.getPluginManager().getPlugin("CreeperHeal");
+				creeperheal
+						.recordBlocks(event.blockList(), event.getLocation());
 			}
 		}
 

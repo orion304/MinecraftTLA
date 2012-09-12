@@ -15,7 +15,7 @@ public class AirBurst {
 	private static ConcurrentHashMap<Player, AirBurst> instances = new ConcurrentHashMap<Player, AirBurst>();
 
 	private static double threshold = 10;
-	private static double pushfactor = 4;
+	private static double pushfactor = 1;
 	private static double deltheta = 10;
 	private static double delphi = 10;
 

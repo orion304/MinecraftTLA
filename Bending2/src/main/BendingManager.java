@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.server.EntityFireball;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
@@ -56,6 +54,7 @@ import earthbending.Tremorsense;
 import firebending.FireBlast;
 import firebending.FireBurst;
 import firebending.FireJet;
+import firebending.FireShield;
 import firebending.FireStream;
 import firebending.Fireball;
 import firebending.Illumination;
@@ -244,20 +243,15 @@ public class BendingManager implements Runnable {
 			}
 		}
 
-		for (EntityFireball entity : Fireball.fireballs.keySet()) {
-			if (System.currentTimeMillis() >= Fireball.fireballs.get(entity)
-					+ Fireball.duration) {
-				entity.die();
-			}
-			if (!entity.isAlive()) {
-				Fireball.fireballs.remove(entity);
-			}
-		}
+		Fireball.progressAll();
+
 		for (int ID : WallOfFire.instances.keySet()) {
 			WallOfFire.manageWallOfFire(ID);
 		}
 
 		Lightning.progressAll();
+
+		FireShield.progressAll();
 
 		FireBlast.progressAll();
 
@@ -521,7 +515,7 @@ public class BendingManager implements Runnable {
 		firestreams = FireStream.instances.size();
 
 		int fireballplayers = 0;
-		fireballs = Fireball.fireballs.size();
+		fireballs = Fireball.instances.size();
 
 		int firejetplayers = 0;
 		firejets = FireJet.instances.size();
@@ -596,7 +590,7 @@ public class BendingManager implements Runnable {
 
 			if (ability == Abilities.Blaze)
 				firestreamplayers++;
-			if (ability == Abilities.Fireball)
+			if (ability == Abilities.FireBlast)
 				fireballplayers++;
 			if (ability == Abilities.FireBlast)
 				fireblastplayers++;

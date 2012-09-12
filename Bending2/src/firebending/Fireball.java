@@ -2,85 +2,181 @@ package firebending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.server.EntityFireball;
-import net.minecraft.server.EntityLiving;
-
+import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.ConfigManager;
 import tools.Tools;
 
 public class Fireball {
 
-	public static ConcurrentHashMap<EntityFireball, Long> fireballs = new ConcurrentHashMap<EntityFireball, Long>();
-	public static final long duration = 5000;
+	public static ConcurrentHashMap<Integer, Fireball> instances = new ConcurrentHashMap<Integer, Fireball>();
 
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	public static final long soonesttime = ConfigManager.fireballCooldown;
-	private static final double speedfactor = ConfigManager.fireballSpeed;
+	private static long defaultchargetime = 2000;
+	private static long interval = 25;
+	private static double radius = 1.5;
+
+	private static int ID = Integer.MIN_VALUE;
+
+	private int id;
+	private double range = 20;
+	private Player player;
+	private Location origin;
+	private Location location;
+	private Vector direction;
+	private long starttime;
+	private long time;
+	private long chargetime = defaultchargetime;
+	private boolean charged = false;
+	private boolean launched = false;
 
 	public Fireball(Player player) {
-		if (player.getEyeLocation().getBlock().isLiquid())
+		if (instances.containsKey(player))
 			return;
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player)
-					+ (long) ((double) soonesttime / Tools
-							.getFirebendingDayAugment(player.getWorld()))) {
+		this.player = player;
+		time = System.currentTimeMillis();
+		starttime = time;
+		if (Tools.isDay(player.getWorld())) {
+			chargetime = (long) (chargetime / ConfigManager.dayFactor);
+		}
+		range = Tools.firebendingDayAugment(range, player.getWorld());
+		if (!player.getEyeLocation().getBlock().isLiquid()) {
+			id = ID;
+			instances.put(id, this);
+			if (ID == Integer.MAX_VALUE)
+				ID = Integer.MIN_VALUE;
+			ID++;
+		}
+
+	}
+
+	private void progress() {
+		if (!Tools.canBend(player, Abilities.FireBlast)
+				|| Tools.getBendingAbility(player) != Abilities.FireBlast) {
+			remove();
+			return;
+		}
+
+		if (System.currentTimeMillis() > starttime + chargetime) {
+			charged = true;
+		}
+
+		if (!player.isSneaking() && !charged) {
+			new FireBlast(player);
+			remove();
+			return;
+		}
+
+		if (!player.isSneaking() && !launched) {
+			launched = true;
+			location = player.getEyeLocation();
+			origin = location.clone();
+			direction = location.getDirection().normalize().multiply(radius);
+		}
+
+		if (System.currentTimeMillis() > time + interval) {
+			time = System.currentTimeMillis();
+
+			if (!launched && !charged)
+				return;
+			if (!launched) {
+				player.getWorld().playEffect(player.getEyeLocation(),
+						Effect.MOBSPAWNER_FLAMES, 0, 3);
+				return;
+			}
+
+			location = location.clone().add(direction);
+			if (location.distance(origin) > range) {
+				remove();
+				return;
+			}
+
+			if (Tools.isSolid(location.getBlock())) {
+				explode();
+				return;
+			} else if (location.getBlock().isLiquid()) {
+				remove();
+				return;
+			}
+
+			fireball();
+
+		}
+
+	}
+
+	private void fireball() {
+		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
+			block.getWorld().playEffect(block.getLocation(),
+					Effect.MOBSPAWNER_FLAMES, 0, 20);
+		}
+
+		for (Entity entity : Tools.getEntitiesAroundPoint(location, radius)) {
+			if (entity.getEntityId() == player.getEntityId())
+				continue;
+			entity.setFireTicks(120);
+			if (entity instanceof LivingEntity) {
+				explode();
 				return;
 			}
 		}
-
-		Location playerLoc = player.getEyeLocation();
-		Vector direction = player
-				.getEyeLocation()
-				.getDirection()
-				.clone()
-				.normalize()
-				.multiply(
-						Tools.firebendingDayAugment(speedfactor,
-								player.getWorld()));
-		double dx = direction.getX();
-		double dy = direction.getY();
-		double dz = direction.getZ();
-
-		CraftPlayer craftPlayer = (CraftPlayer) player;
-		EntityLiving playerEntity = craftPlayer.getHandle();
-		EntityFireball fireball = new EntityFireball(
-				((CraftWorld) player.getWorld()).getHandle(), playerEntity, dx,
-				dy, dz);
-
-		double distance = 2;
-		Vector aim = direction.clone();
-		fireball.locX = playerLoc.getX() + aim.getX() * distance;
-		fireball.locY = playerLoc.getY() + aim.getY() * distance;
-		fireball.locZ = playerLoc.getZ() + aim.getZ() * distance;
-
-		fireball.dirX = dx;
-		fireball.dirY = dy;
-		fireball.dirZ = dz;
-
-		((CraftWorld) player.getWorld()).getHandle().addEntity(fireball);
-		fireballs.put(fireball, System.currentTimeMillis());
-		timers.put(player, System.currentTimeMillis());
-		// ((Entity) fireball).setVelocity(aim);
-		// fireball.setDirection(dx, dy, dz);
-		// fireball.
 	}
 
-	public static void removeAllFireballs() {
-		for (EntityFireball fireball : fireballs.keySet()) {
-			fireball.die();
+	private void explode() {
+		// List<Block> blocks = Tools.getBlocksAroundPoint(location, 3);
+		// List<Block> blocks2 = new ArrayList<Block>();
+
+		Tools.verbose("Fireball Explode!");
+		location.getWorld().createExplosion(location, 1);
+
+		ignite(location);
+		remove();
+	}
+
+	private void ignite(Location location) {
+		for (Block block : Tools.getBlocksAroundPoint(location,
+				FireBlast.affectingradius)) {
+			if (FireStream.isIgnitable(block)) {
+				block.setType(Material.FIRE);
+				if (FireBlast.dissipate) {
+					FireStream.ignitedblocks.put(block, player);
+					FireStream.ignitedtimes.put(block,
+							System.currentTimeMillis());
+				}
+			}
 		}
 	}
 
-	public static String getDescription() {
-		return "To use, simply left-click in a direction. "
-				+ "A large ball of fire will launch from your fist, "
-				+ "exploding on contact and occasionally catching nearby things on fire, "
-				+ "as well as destroying parts of the environment.";
+	public static void progressAll() {
+		for (int id : instances.keySet())
+			instances.get(id).progress();
+	}
+
+	private void remove() {
+		instances.remove(id);
+	}
+
+	public static void removeAll() {
+		for (int id : instances.keySet())
+			instances.get(id).remove();
+	}
+
+	public static void removeFireballsAroundPoint(Location location,
+			double radius) {
+		for (int id : instances.keySet()) {
+			Location fireblastlocation = instances.get(id).location;
+			if (location.getWorld() == fireblastlocation.getWorld()) {
+				if (location.distance(fireblastlocation) <= radius)
+					instances.remove(id);
+			}
+		}
+
 	}
 }

@@ -200,4 +200,15 @@ public class FireStream {
 
 	}
 
+	public static void removeAroundPoint(Location location, double radius) {
+
+		for (int id : instances.keySet()) {
+			FireStream stream = instances.get(id);
+			if (stream.location.getWorld().equals(location.getWorld()))
+				if (stream.location.distance(location) <= radius)
+					instances.remove(id);
+		}
+
+	}
+
 }

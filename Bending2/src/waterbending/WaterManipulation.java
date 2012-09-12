@@ -480,6 +480,11 @@ public class WaterManipulation {
 		return true;
 	}
 
+	public static void removeAll() {
+		for (int id : instances.keySet())
+			instances.get(id).breakBlock();
+	}
+
 	public static boolean canBubbleWater(Block block) {
 		return canPhysicsChange(block);
 	}
@@ -494,6 +499,15 @@ public class WaterManipulation {
 				+ "A collision from Water Manipulation both knocks the target back and deals some damage. "
 				+ "Alternatively, if you have source selected and tap shift again, "
 				+ "you will be able to control the water more directly.";
+	}
+
+	public static void removeAroundPoint(Location location, double radius) {
+		for (int id : instances.keySet()) {
+			WaterManipulation manip = instances.get(id);
+			if (manip.location.getWorld().equals(location.getWorld()))
+				if (manip.location.distance(location) <= radius)
+					manip.breakBlock();
+		}
 	}
 
 }

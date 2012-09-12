@@ -24,7 +24,6 @@ import tools.Abilities;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Tools;
-import firebending.Fireball;
 
 public class Bending extends JavaPlugin {
 
@@ -52,7 +51,6 @@ public class Bending extends JavaPlugin {
 
 	public void onDisable() {
 
-		Fireball.removeAllFireballs();
 		Tools.stopAllBending();
 	}
 

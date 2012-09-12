@@ -656,6 +656,7 @@ public class Tools {
 		EarthPassive.removeAll();
 		FreezeMelt.removeAll();
 		// WalkOnWater.removeAll();
+		WaterManipulation.removeAll();
 		WaterSpout.removeAll();
 		WaterWall.removeAll();
 		Wave.removeAll();
@@ -715,8 +716,6 @@ public class Tools {
 			if (look) {
 				try {
 					int range = 20;
-					if (ability == Abilities.Fireball)
-						range = 100;
 					Block c = player.getTargetBlock(null, range);
 					if (!(wg.getGlobalRegionManager()
 							.get(c.getLocation().getWorld())
@@ -742,8 +741,6 @@ public class Tools {
 			if (look) {
 				try {
 					int range = 20;
-					if (ability == Abilities.Fireball)
-						range = 100;
 					Block c = player.getTargetBlock(null, range);
 					return ps.getForceFieldManager().hasSourceField(
 							c.getLocation(), FieldFlag.PREVENT_PVP);
@@ -986,7 +983,7 @@ public class Tools {
 			boolean plantbending) {
 		byte full = 0x0;
 		Block block = player.getTargetBlock(null, range);
-		if (isPlant(block) && canPlantbend(player) && plantbending) {
+		if (isWaterbendable(block, player) && (!isPlant(block) || plantbending)) {
 			return block;
 		} else if ((block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
 				&& block.getData() == full) {

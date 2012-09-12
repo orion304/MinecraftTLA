@@ -30,9 +30,9 @@ public class FireBlast {
 	static final int maxticks = 10000;
 
 	private static double speed = ConfigManager.fireBlastSpeed;
-	private static double affectingradius = ConfigManager.fireBlastRadius;
+	static double affectingradius = ConfigManager.fireBlastRadius;
 	private static double pushfactor = ConfigManager.fireBlastPush;
-	private static boolean dissipate = ConfigManager.fireBlastDissipate;
+	static boolean dissipate = ConfigManager.fireBlastDissipate;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
 
@@ -45,7 +45,7 @@ public class FireBlast {
 	private double speedfactor;
 	private int ticks = 0;
 	private int damage = ConfigManager.fireBlastDamage;
-	private double range = ConfigManager.fireBlastRange;
+	double range = ConfigManager.fireBlastRange;
 
 	// private ArrayList<Block> affectedlevers = new ArrayList<Block>();
 
@@ -220,6 +220,7 @@ public class FireBlast {
 					instances.remove(id);
 			}
 		}
+		Fireball.removeFireballsAroundPoint(location, radius);
 	}
 
 	public static void removeAll() {
@@ -233,7 +234,10 @@ public class FireBlast {
 				+ "To use, simply left-click in a direction. A blast of fire will be created at your fingertips. "
 				+ "If this blast contacts an enemy, it will dissipate and engulf them in flames, "
 				+ "doing additional damage and knocking them back slightly. "
-				+ "If the blast hits terrain, it will ignite the nearby area.";
+				+ "If the blast hits terrain, it will ignite the nearby area. "
+				+ "Additionally, if you hold sneak, you will charge up the fireblast. "
+				+ "If you release it when it's charged, it will instead launch a powerful "
+				+ "fireball that explodes on contact.";
 	}
 
 }
