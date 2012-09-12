@@ -59,11 +59,23 @@ public class AirSuction {
 		this.player = player;
 		if (origins.containsKey(player)) {
 			origin = origins.get(player);
+			location = Tools.getTargetedLocation(player, range);
+			origins.remove(player);
+			Entity entity = Tools.getTargettedEntity(player, range);
+			if (entity != null) {
+				direction = Tools.getDirection(entity.getLocation(), origin)
+						.normalize();
+			} else {
+				direction = Tools.getDirection(location, origin).normalize();
+			}
+
 		} else {
+			location = Tools.getTargetedLocation(player, originselectrange,
+					Tools.nonOpaque);
 			origin = player.getEyeLocation();
+			direction = player.getEyeLocation().getDirection().normalize()
+					.multiply(-1);
 		}
-		direction = origin.getDirection().clone().normalize().multiply(-1);
-		location = Tools.getTargetedLocation(player, (int) range);
 
 		id = ID;
 		instances.put(id, this);
@@ -152,8 +164,8 @@ public class AirSuction {
 			return;
 		}
 
-		if (Tools.getBendingAbility(player) != Abilities.AirBlast
-				|| !Tools.canBend(player, Abilities.AirBlast)) {
+		if (Tools.getBendingAbility(player) != Abilities.AirSuction
+				|| !Tools.canBend(player, Abilities.AirSuction)) {
 			origins.remove(player);
 			return;
 		}

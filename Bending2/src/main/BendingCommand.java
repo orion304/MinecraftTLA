@@ -49,6 +49,7 @@ import firebending.Extinguish;
 import firebending.FireBlast;
 import firebending.FireBurst;
 import firebending.FireJet;
+import firebending.FireShield;
 import firebending.Illumination;
 import firebending.Lightning;
 import firebending.WallOfFire;
@@ -622,6 +623,9 @@ public class BendingCommand {
 						break;
 					case Lightning:
 						sendMessage(player, cc + Lightning.getDescription());
+						break;
+					case FireShield:
+						sendMessage(player, cc + FireShield.getDescription());
 						break;
 					case WallOfFire:
 						sendMessage(player, cc + WallOfFire.getDescription());

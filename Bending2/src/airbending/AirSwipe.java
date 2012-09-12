@@ -84,6 +84,7 @@ public class AirSwipe {
 	}
 
 	private void launch() {
+		origin = player.getEyeLocation();
 		for (int i = -arc; i <= arc; i += stepsize) {
 			double angle = Math.toRadians((double) i);
 			Vector direction = player.getEyeLocation().getDirection().clone();
@@ -242,7 +243,7 @@ public class AirSwipe {
 	}
 
 	public static void charge(Player player) {
-
+		new AirSwipe(player, true);
 	}
 
 }

@@ -32,8 +32,10 @@ public class Catapult {
 	private Vector direction;
 	private int distance;
 	private boolean catapult = false;
-	private boolean launched = false;
+	private boolean moving = false;
+	private boolean flying = false;
 	private long time;
+	private long starttime;
 	private int ticks = 0;
 
 	public Catapult(Player player) {
@@ -69,6 +71,8 @@ public class Catapult {
 				catapult = true;
 			}
 			time = System.currentTimeMillis() - interval;
+			starttime = System.currentTimeMillis();
+			moving = true;
 			instances.put(player.getEntityId(), this);
 			timers.put(player, System.currentTimeMillis());
 		}
@@ -77,19 +81,23 @@ public class Catapult {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			instances.remove(player.getEntityId());
+			remove();
 			return false;
 		}
+
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
-			if (!moveEarth() && (!launched || !catapult)) {
-				remove();
-				return false;
-			}
+			if (moving)
+				if (!moveEarth()) {
+					moving = false;
+				}
 		}
 
-		if (launched)
+		if (flying)
 			fly();
+
+		if (!flying && !moving && System.currentTimeMillis() > starttime + 1000)
+			remove();
 		return true;
 	}
 
@@ -98,17 +106,26 @@ public class Catapult {
 			remove();
 			return;
 		}
+
+		// Tools.verbose(player.getLocation().distance(location));
+		if (player.getLocation().distance(location) < 3) {
+			if (!moving && System.currentTimeMillis() > starttime + 1000)
+				flying = false;
+			return;
+		}
+
 		for (Block block : Tools
 				.getBlocksAroundPoint(player.getLocation(), 1.5)) {
-			if (block.getLocation().distance(location) > 2
-					&& (!Tools.isSolid(block) || block.isLiquid())) {
-				launched = false;
+			if ((Tools.isSolid(block) || block.isLiquid())) {
+				// Tools.verbose("Catapulting stopped");
+				flying = false;
 				return;
 			}
 		}
 		Vector vector = direction.clone().multiply(push * distance / length);
 		vector.setY(player.getVelocity().getY());
 		player.setVelocity(vector);
+		// Tools.verbose("Fly!");
 	}
 
 	private void remove() {
@@ -134,6 +151,8 @@ public class Catapult {
 				for (Entity entity : Tools.getEntitiesAroundPoint(origin, 2)) {
 					if (entity instanceof Player) {
 						((Player) entity).setAllowFlight(true);
+						if (entity.getEntityId() == player.getEntityId())
+							flying = true;
 					}
 					entity.setVelocity(direction.clone().multiply(
 							push * distance / length));
@@ -149,7 +168,7 @@ public class Catapult {
 					if (entity instanceof Player) {
 						((Player) entity).setAllowFlight(true);
 						if (entity.getEntityId() == player.getEntityId())
-							launched = true;
+							flying = true;
 					}
 					entity.setVelocity(direction.clone().multiply(
 							push * distance / length));

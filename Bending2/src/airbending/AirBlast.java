@@ -64,14 +64,22 @@ public class AirBlast {
 		}
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
-		location = player.getEyeLocation();
 		if (origins.containsKey(player)) {
 			origin = origins.get(player);
+			origins.remove(player);
+			Entity entity = Tools.getTargettedEntity(player, range);
+			if (entity != null) {
+				direction = Tools.getDirection(origin, entity.getLocation())
+						.normalize();
+			} else {
+				direction = Tools.getDirection(origin,
+						Tools.getTargetedLocation(player, range)).normalize();
+			}
 		} else {
 			origin = player.getEyeLocation();
+			direction = player.getEyeLocation().getDirection().normalize();
 		}
-		direction = player.getEyeLocation().getDirection().normalize();
-		location = location.add(direction.clone());
+		location = origin.clone();
 		id = ID;
 		instances.put(id, this);
 		if (ID == Integer.MAX_VALUE)

@@ -53,8 +53,6 @@ import com.massivecraft.factions.listeners.FactionsBlockListener;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
@@ -66,7 +64,6 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
 import earthbending.Catapult;
 import earthbending.CompactColumn;
@@ -173,7 +170,7 @@ public class Tools {
 		}
 
 		Block block = player.getTargetBlock(trans, (int) originselectrange + 1);
-		double distance = block.getLocation().distance(origin) - 1;
+		double distance = block.getLocation().distance(origin) - 1.5;
 		Location location = origin.add(direction.multiply(distance));
 
 		return location;
@@ -540,7 +537,7 @@ public class Tools {
 
 	public static <T> void verbose(T something) {
 		if (something != null) {
-			Bending.log.info("[Bending]" + something.toString());
+			Bending.log.info("[Bending] " + something.toString());
 		}
 	}
 
@@ -808,22 +805,20 @@ public class Tools {
 					.getPlugin("WorldGuard");
 			// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 			// for (Block b: lb){
-			Block b = player.getLocation().getBlock();
 			if (!player.isOnline())
 				return true;
 			if (look) {
 				int range = 20;
 				Block c = player.getTargetBlock(null, range);
-				if (!(wg.getGlobalRegionManager()
-						.get(c.getLocation().getWorld())
-						.getApplicableRegions(c.getLocation())
-						.allows(DefaultFlag.BUILD))) {
+				if ((!(wg.getGlobalRegionManager().canBuild(player,
+						c.getLocation())) || !(wg.getGlobalRegionManager()
+						.canConstruct(player, c.getLocation())))) {
 					return true;
 				}
-			} else if (!(wg.getGlobalRegionManager()
-					.get(b.getLocation().getWorld())
-					.getApplicableRegions(b.getLocation())
-					.allows(DefaultFlag.BUILD))) {
+			} else if (!(wg.getGlobalRegionManager().canBuild(player,
+					player.getLocation()))
+					|| !(wg.getGlobalRegionManager().canConstruct(player,
+							player.getLocation()))) {
 				return true;
 			}
 		}
@@ -836,13 +831,19 @@ public class Tools {
 
 				int range = 20;
 				Block c = player.getTargetBlock(null, range);
-				return ps.getForceFieldManager().hasSourceField(
-						c.getLocation(), FieldFlag.PREVENT_PLACE);
+				if (ps.getForceFieldManager().hasSourceField(c.getLocation(),
+						FieldFlag.PREVENT_PLACE))
+					return true;
 
+			} else {
+				if (ps.getForceFieldManager().hasSourceField(
+						player.getLocation(), FieldFlag.PREVENT_PLACE))
+					return true;
 			}
 
-			return ps.getForceFieldManager().hasSourceField(b.getLocation(),
-					FieldFlag.PREVENT_PLACE);
+			if (ps.getForceFieldManager().hasSourceField(b.getLocation(),
+					FieldFlag.PREVENT_PLACE))
+				return true;
 		}
 
 		if (fcp != null && respectFactions) {
@@ -898,7 +899,7 @@ public class Tools {
 						try {
 							TownyWar.callAttackCellEvent(twn, player, block,
 									worldCoord);
-						} catch (TownyException e) {
+						} catch (Exception e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 						}
 
@@ -917,7 +918,7 @@ public class Tools {
 								cache.getBlockErrMsg());
 				}
 
-			} catch (NotRegisteredException e1) {
+			} catch (Exception e1) {
 				TownyMessaging.sendErrorMsg(player,
 						TownySettings.getLangString("msg_err_not_configured"));
 			}
