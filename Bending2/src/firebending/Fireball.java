@@ -183,7 +183,10 @@ public class Fireball {
 	public static void removeFireballsAroundPoint(Location location,
 			double radius) {
 		for (int id : instances.keySet()) {
-			Location fireblastlocation = instances.get(id).location;
+			Fireball fireball = instances.get(id);
+			if (!fireball.launched)
+				continue;
+			Location fireblastlocation = fireball.location;
 			if (location.getWorld() == fireblastlocation.getWorld()) {
 				if (location.distance(fireblastlocation) <= radius)
 					instances.remove(id);

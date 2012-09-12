@@ -459,15 +459,19 @@ public class BendingListener implements Listener {
 					|| ConfigManager.useWeapon.get("Air")) {
 
 				if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
-					new AirBlast(player);
+					AirBlast.setOrigin(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
-					new AirSuction(player);
+					AirSuction.setOrigin(player);
 				}
 
 				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
 					new AirBurst(player);
+				}
+
+				if (Tools.getBendingAbility(player) == Abilities.AirSwipe) {
+					AirSwipe.charge(player);
 				}
 			}
 

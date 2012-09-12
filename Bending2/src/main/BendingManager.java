@@ -113,17 +113,13 @@ public class BendingManager implements Runnable {
 		AirPassive.handlePassive(plugin.getServer());
 		AirBubble.handleBubbles(plugin.getServer());
 
-		for (int ID : AirBlast.instances.keySet()) {
-			AirBlast.progress(ID);
-		}
+		AirBlast.progressAll();
 
 		for (int ID : AirShield.instances.keySet()) {
 			AirShield.progress(ID);
 		}
 
-		for (int ID : AirSuction.instances.keySet()) {
-			AirSuction.progress(ID);
-		}
+		AirSuction.progressAll();
 
 		for (int ID : AirSwipe.instances.keySet()) {
 			AirSwipe.progress(ID);
@@ -321,6 +317,7 @@ public class BendingManager implements Runnable {
 		players.addAll(Tornado.getPlayers());
 		players.addAll(Speed.getPlayers());
 		players.addAll(FireJet.getPlayers());
+		players.addAll(Catapult.getPlayers());
 		avatarstateplayers = AvatarState.getPlayers();
 		airscooterplayers = AirScooter.getPlayers();
 		waterspoutplayers = WaterSpout.getPlayers();

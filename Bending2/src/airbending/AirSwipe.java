@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
@@ -28,14 +29,16 @@ public class AirSwipe {
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static int damage = ConfigManager.airdmg;
+	private static int defaultdamage = ConfigManager.airdmg;
 	private static double affectingradius = ConfigManager.airSwipeRadius;
-	private static double pushfactor = ConfigManager.airSwipePush;
+	private static double defaultpushfactor = ConfigManager.airSwipePush;
 	private static double range = ConfigManager.airSwipeRange;
 	private static int arc = ConfigManager.airSwipeArc;
 	private static int stepsize = 4;
 	private static double speed = ConfigManager.airSwipeSpeed;
 	private static byte full = AirBlast.full;
+	private static long maxchargetime = 3000;
+	private static double maxfactor = 3;
 
 	private double speedfactor;
 
@@ -44,11 +47,19 @@ public class AirSwipe {
 
 	private Location origin;
 	private Player player;
+	private boolean charging = false;
+	private long time;
+	private int damage = defaultdamage;
+	private double pushfactor = defaultpushfactor;
 	private int id;
 	private ConcurrentHashMap<Vector, Location> elements = new ConcurrentHashMap<Vector, Location>();
 	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
 
 	public AirSwipe(Player player) {
+		this(player, false);
+	}
+
+	public AirSwipe(Player player, boolean charging) {
 		if (timers.containsKey(player)) {
 			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
 				return;
@@ -58,9 +69,21 @@ public class AirSwipe {
 			return;
 		}
 		this.player = player;
+		this.charging = charging;
 		origin = player.getEyeLocation();
 		instances.put(id, this);
 
+		if (!charging)
+			launch();
+
+		if (ID == Integer.MAX_VALUE) {
+			ID = Integer.MIN_VALUE;
+		}
+		ID++;
+		timers.put(player, System.currentTimeMillis());
+	}
+
+	private void launch() {
 		for (int i = -arc; i <= arc; i += stepsize) {
 			double angle = Math.toRadians((double) i);
 			Vector direction = player.getEyeLocation().getDirection().clone();
@@ -77,12 +100,6 @@ public class AirSwipe {
 
 			elements.put(direction, origin);
 		}
-
-		if (ID == Integer.MAX_VALUE) {
-			ID = Integer.MIN_VALUE;
-		}
-		ID++;
-		timers.put(player, System.currentTimeMillis());
 	}
 
 	public boolean progress() {
@@ -91,12 +108,36 @@ public class AirSwipe {
 			return false;
 		}
 		speedfactor = speed * (Bending.time_step / 1000.);
-		if (elements.isEmpty()) {
-			instances.remove(id);
-			return false;
-		}
+		if (!charging) {
+			if (elements.isEmpty()) {
+				instances.remove(id);
+				return false;
+			}
 
-		advanceSwipe();
+			advanceSwipe();
+		} else {
+			if (Tools.getBendingAbility(player) != Abilities.AirSwipe
+					|| !Tools.canBend(player, Abilities.AirSwipe)) {
+				instances.remove(id);
+				return false;
+			}
+
+			if (!player.isSneaking()) {
+				double factor = 1;
+				if (System.currentTimeMillis() >= time + maxchargetime) {
+					factor = maxfactor;
+				} else {
+					factor = maxfactor
+							* (double) (System.currentTimeMillis() - time)
+							/ (double) maxchargetime;
+				}
+				charging = false;
+				launch();
+				damage *= factor;
+				pushfactor *= factor;
+				return true;
+			}
+		}
 		return true;
 	}
 
@@ -197,6 +238,10 @@ public class AirSwipe {
 				+ "Its damage is minimal, but it still sends the message. "
 				+ "This ability will extinguish fires, cool lava, and cut things like grass, "
 				+ "mushrooms and flowers.";
+	}
+
+	public static void charge(Player player) {
+
 	}
 
 }

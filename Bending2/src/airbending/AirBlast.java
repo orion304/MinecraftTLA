@@ -16,6 +16,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
@@ -23,6 +24,7 @@ import tools.Tools;
 public class AirBlast {
 
 	public static ConcurrentHashMap<Integer, AirBlast> instances = new ConcurrentHashMap<Integer, AirBlast>();
+	private static ConcurrentHashMap<Player, Location> origins = new ConcurrentHashMap<Player, Location>();
 	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
 	static final long soonesttime = Tools.timeinterval;
 
@@ -33,6 +35,7 @@ public class AirBlast {
 	public static double defaultrange = ConfigManager.airBlastRange;
 	public static double affectingradius = ConfigManager.airBlastRadius;
 	public static double defaultpushfactor = ConfigManager.airBlastPush;
+	private static double originselectrange = 10;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
 
@@ -62,7 +65,11 @@ public class AirBlast {
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		location = player.getEyeLocation();
-		origin = player.getEyeLocation();
+		if (origins.containsKey(player)) {
+			origin = origins.get(player);
+		} else {
+			origin = player.getEyeLocation();
+		}
 		direction = player.getEyeLocation().getDirection().normalize();
 		location = location.add(direction.clone());
 		id = ID;
@@ -90,6 +97,19 @@ public class AirBlast {
 		if (ID == Integer.MAX_VALUE)
 			ID = Integer.MIN_VALUE;
 		ID++;
+	}
+
+	public static void setOrigin(Player player) {
+		Location location = Tools.getTargetedLocation(player,
+				originselectrange, Tools.nonOpaque);
+		if (location.getBlock().isLiquid()
+				|| Tools.isSolid(location.getBlock()))
+			return;
+		if (origins.containsKey(player)) {
+			origins.replace(player, location);
+		} else {
+			origins.put(player, location);
+		}
 	}
 
 	public boolean progress() {
@@ -168,10 +188,6 @@ public class AirBlast {
 		location = location.add(direction.clone().multiply(speedfactor));
 	}
 
-	public static boolean progress(int ID) {
-		return instances.get(ID).progress();
-	}
-
 	private void affect(Entity entity) {
 		if (entity.getEntityId() != player.getEntityId()) {
 			Vector velocity = entity.getVelocity();
@@ -189,6 +205,38 @@ public class AirBlast {
 						Effect.EXTINGUISH, 0);
 			entity.setFireTicks(0);
 		}
+	}
+
+	public static void progressAll() {
+		for (int id : instances.keySet())
+			instances.get(id).progress();
+		for (Player player : origins.keySet()) {
+			playOriginEffect(player);
+		}
+	}
+
+	private static void playOriginEffect(Player player) {
+		if (!origins.containsKey(player))
+			return;
+		Location origin = origins.get(player);
+		if (!origin.getWorld().equals(player.getWorld())) {
+			origins.remove(player);
+			return;
+		}
+
+		if (Tools.getBendingAbility(player) != Abilities.AirBlast
+				|| !Tools.canBend(player, Abilities.AirBlast)) {
+			origins.remove(player);
+			return;
+		}
+
+		if (origin.distance(player.getEyeLocation()) > originselectrange) {
+			origins.remove(player);
+			return;
+		}
+
+		origin.getWorld().playEffect(origin, Effect.SMOKE, 4,
+				(int) originselectrange);
 	}
 
 	public static void removeAll() {

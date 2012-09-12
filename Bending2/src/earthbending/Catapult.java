@@ -1,5 +1,7 @@
 package earthbending;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
@@ -30,6 +32,7 @@ public class Catapult {
 	private Vector direction;
 	private int distance;
 	private boolean catapult = false;
+	private boolean launched = false;
 	private long time;
 	private int ticks = 0;
 
@@ -66,11 +69,6 @@ public class Catapult {
 				catapult = true;
 			}
 			time = System.currentTimeMillis() - interval;
-			// time = System.currentTimeMillis();
-			// if (!BendingManager.flyingplayers.contains(player)) {
-			// BendingManager.flyingplayers.add(player);
-			// player.setAllowFlight(true);
-			// }
 			instances.put(player.getEntityId(), this);
 			timers.put(player, System.currentTimeMillis());
 		}
@@ -83,14 +81,38 @@ public class Catapult {
 			return false;
 		}
 		if (System.currentTimeMillis() - time >= interval) {
-			// Tools.verbose("Catapult progressing");
 			time = System.currentTimeMillis();
-			if (!moveEarth()) {
-				instances.remove(player.getEntityId());
+			if (!moveEarth() && (!launched || !catapult)) {
+				remove();
 				return false;
 			}
 		}
+
+		if (launched)
+			fly();
 		return true;
+	}
+
+	private void fly() {
+		if (player.isDead() || !player.isOnline()) {
+			remove();
+			return;
+		}
+		for (Block block : Tools
+				.getBlocksAroundPoint(player.getLocation(), 1.5)) {
+			if (block.getLocation().distance(location) > 2
+					&& (!Tools.isSolid(block) || block.isLiquid())) {
+				launched = false;
+				return;
+			}
+		}
+		Vector vector = direction.clone().multiply(push * distance / length);
+		vector.setY(player.getVelocity().getY());
+		player.setVelocity(vector);
+	}
+
+	private void remove() {
+		instances.remove(player.getEntityId());
 	}
 
 	private boolean moveEarth() {
@@ -126,6 +148,8 @@ public class Catapult {
 				for (Entity entity : Tools.getEntitiesAroundPoint(location, 2)) {
 					if (entity instanceof Player) {
 						((Player) entity).setAllowFlight(true);
+						if (entity.getEntityId() == player.getEntityId())
+							launched = true;
 					}
 					entity.setVelocity(direction.clone().multiply(
 							push * distance / length));
@@ -142,6 +166,16 @@ public class Catapult {
 
 	public static boolean progress(int ID) {
 		return instances.get(ID).progress();
+	}
+
+	public static List<Player> getPlayers() {
+		List<Player> players = new ArrayList<Player>();
+		for (int id : instances.keySet()) {
+			Player player = instances.get(id).player;
+			if (!players.contains(player))
+				players.add(player);
+		}
+		return players;
 	}
 
 	public static void removeAll() {

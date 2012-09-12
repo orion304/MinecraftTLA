@@ -69,7 +69,7 @@ public class Tools {
 	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
 			30, 31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
 
-	private static Integer[] nonOpaque = { 0, 6, 8, 9, 10, 11, 27, 28, 30, 31,
+	public static Integer[] nonOpaque = { 0, 6, 8, 9, 10, 11, 27, 28, 30, 31,
 			32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
 			78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
 
@@ -119,26 +119,26 @@ public class Tools {
 	}
 
 	public static Location getTargetedLocation(Player player, int range) {
-		return getTargetedLocation(player, range, null);
+		return getTargetedLocation(player, range, 0);
 	}
 
-	public static Location getTargetedLocation(Player player, int range,
-			int... transparency) {
+	public static Location getTargetedLocation(Player player,
+			double originselectrange, Integer... nonOpaque2) {
 		Location origin = player.getEyeLocation();
 		Vector direction = origin.getDirection();
 
 		HashSet<Byte> trans = new HashSet<Byte>();
 		trans.add((byte) 0);
 
-		if (transparency == null) {
+		if (nonOpaque2 == null) {
 			trans = null;
 		} else {
-			for (int i : transparency) {
+			for (int i : nonOpaque2) {
 				trans.add((byte) i);
 			}
 		}
 
-		Block block = player.getTargetBlock(trans, (int) range + 1);
+		Block block = player.getTargetBlock(trans, (int) originselectrange + 1);
 		double distance = block.getLocation().distance(origin) - 1;
 		Location location = origin.add(direction.multiply(distance));
 

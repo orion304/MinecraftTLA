@@ -128,6 +128,7 @@ public class WaterManipulation {
 							.getEyeLocation();
 					targetdestination.setY(targetdestination.getY() - 1);
 				}
+
 				if (targetdestination.distance(location) <= 1) {
 					progressing = false;
 					targetdestination = null;
