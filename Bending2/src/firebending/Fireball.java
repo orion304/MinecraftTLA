@@ -145,7 +145,7 @@ public class Fireball {
 		// List<Block> blocks = Tools.getBlocksAroundPoint(location, 3);
 		// List<Block> blocks2 = new ArrayList<Block>();
 
-		Tools.verbose("Fireball Explode!");
+		// Tools.verbose("Fireball Explode!");
 		location.getWorld().createExplosion(location, 1);
 
 		ignite(location);
