@@ -578,12 +578,10 @@ public class Tools {
 				damage = AvatarState.getValue(damage);
 			}
 
-			new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM,
-					damage);
-
-			// ((LivingEntity) entity).damage(damage, player);
-			// ((LivingEntity) entity)
-			// .setLastDamageCause();
+			((LivingEntity) entity).damage(damage, player);
+			((LivingEntity) entity)
+					.setLastDamageCause(new EntityDamageByEntityEvent(player,
+							entity, DamageCause.CUSTOM, damage));
 		}
 	}
 

@@ -634,7 +634,7 @@ public class BendingListener implements Listener {
 			return;
 		}
 
-		Tools.verbose(event.getCause());
+		// Tools.verbose(event.getCause());
 
 		boolean dodged = false;
 
