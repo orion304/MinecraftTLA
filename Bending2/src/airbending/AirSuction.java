@@ -171,7 +171,9 @@ public class AirSuction {
 		return "To use, simply left-click in a direction. "
 				+ "A gust of wind will originate as far as it can in that direction"
 				+ " and flow towards you, sucking anything in its path harmlessly with it."
-				+ " Skilled benders can use this technique to pull items from precarious locations.";
+				+ " Skilled benders can use this technique to pull items from precarious locations. "
+				+ "Additionally, tapping sneak will change the origin of your next "
+				+ "AirSuction to your targeted location.";
 	}
 
 }

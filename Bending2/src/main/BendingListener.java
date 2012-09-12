@@ -634,6 +634,8 @@ public class BendingListener implements Listener {
 			return;
 		}
 
+		Tools.verbose(event.getCause());
+
 		boolean dodged = false;
 
 		if (event.getDamager() instanceof Player

@@ -38,7 +38,9 @@ public class Bloodbending {
 				if (entity instanceof LivingEntity) {
 					if (entity instanceof Player) {
 						if (AvatarState.isAvatarState((Player) entity)
-								|| entity.getEntityId() == player.getEntityId())
+								|| entity.getEntityId() == player.getEntityId()
+								|| Tools.canBend((Player) entity,
+										Abilities.Bloodbending))
 							continue;
 					}
 					Tools.damageEntity(player, entity, 0);
@@ -89,7 +91,9 @@ public class Bloodbending {
 					player.getLocation(), range)) {
 				if (entity instanceof Player) {
 					if (AvatarState.isAvatarState((Player) entity)
-							|| entity.getEntityId() == player.getEntityId())
+							|| entity.getEntityId() == player.getEntityId()
+							|| Tools.canBend((Player) entity,
+									Abilities.Bloodbending))
 						continue;
 				}
 				entities.add(entity);
@@ -122,7 +126,9 @@ public class Bloodbending {
 		} else {
 			for (Entity entity : targetentities.keySet()) {
 				if (entity instanceof Player) {
-					if (AvatarState.isAvatarState((Player) entity)) {
+					if (AvatarState.isAvatarState((Player) entity)
+							|| Tools.canBend((Player) entity,
+									Abilities.Bloodbending)) {
 						targetentities.remove(entity);
 						continue;
 					}
@@ -182,7 +188,8 @@ public class Bloodbending {
 				+ "targetting something and you will bloodbend that target. Bloodbent targets cannot move, "
 				+ "bend or attack. You are free to control their actions by looking elsewhere - they will "
 				+ "be forced to move in that direction. Additionally, clicking while bloodbending will "
-				+ "launch that target off in the direction you're looking.";
+				+ "launch that target off in the direction you're looking. "
+				+ "People who are capable of bloodbending are immune to your technique, and you are immune to theirs.";
 	}
 
 }

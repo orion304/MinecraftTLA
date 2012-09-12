@@ -1,6 +1,7 @@
 package tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public enum Abilities {
 
@@ -60,7 +61,9 @@ public enum Abilities {
 				list.add(a.name());
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		String[] abilities = list.toArray(new String[list.size()]);
+		Arrays.sort(abilities);
+		return abilities;
 	}
 
 	public static boolean isWaterbending(Abilities ability) {
@@ -78,7 +81,9 @@ public enum Abilities {
 				list.add(a.name());
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		String[] abilities = list.toArray(new String[list.size()]);
+		Arrays.sort(abilities);
+		return abilities;
 	}
 
 	public static boolean isEarthbending(Abilities ability) {
@@ -96,7 +101,9 @@ public enum Abilities {
 				list.add(a.name());
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		String[] abilities = list.toArray(new String[list.size()]);
+		Arrays.sort(abilities);
+		return abilities;
 	}
 
 	public static boolean isFirebending(Abilities ability) {
@@ -114,7 +121,9 @@ public enum Abilities {
 				list.add(a.name());
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		String[] abilities = list.toArray(new String[list.size()]);
+		Arrays.sort(abilities);
+		return abilities;
 	}
 
 	public static boolean isChiBlocking(Abilities ability) {
@@ -132,7 +141,9 @@ public enum Abilities {
 				list.add(a.name());
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		String[] abilities = list.toArray(new String[list.size()]);
+		Arrays.sort(abilities);
+		return abilities;
 	}
 
 }

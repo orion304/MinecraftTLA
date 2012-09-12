@@ -580,10 +580,13 @@ public class Tools {
 			if (AvatarState.isAvatarState(player)) {
 				damage = AvatarState.getValue(damage);
 			}
-			((LivingEntity) entity).damage(damage, player);
-			((LivingEntity) entity)
-					.setLastDamageCause(new EntityDamageByEntityEvent(player,
-							entity, DamageCause.CUSTOM, damage));
+
+			new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM,
+					damage);
+
+			// ((LivingEntity) entity).damage(damage, player);
+			// ((LivingEntity) entity)
+			// .setLastDamageCause();
 		}
 	}
 
