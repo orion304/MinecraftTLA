@@ -49,6 +49,22 @@ import airbending.AirScooter;
 import airbending.AirSpout;
 import chiblocking.Paralyze;
 
+import com.massivecraft.factions.listeners.FactionsBlockListener;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 
@@ -65,6 +81,18 @@ public class Tools {
 	private static StorageManager config;
 
 	private static final Map<String, ChatColor> colors;
+
+	private static Abilities[] harmlessAbilities = { Abilities.AirScooter,
+			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+			Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
+
+	private static Abilities[] localAbilities = { Abilities.AirScooter,
+			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+			Abilities.Illumination, Abilities.Tremorsense,
+			Abilities.WaterSpout, Abilities.AirBubble, Abilities.AirShield,
+			Abilities.AvatarState, Abilities.Catapult, Abilities.FireJet,
+			Abilities.FireShield, Abilities.OctopusForm, Abilities.Paralyze,
+			Abilities.RapidPunch, Abilities.WaterBubble };
 
 	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
 			30, 31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
@@ -83,6 +111,12 @@ public class Tools {
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
 	public static ConcurrentHashMap<Player, Player> tempflyers = new ConcurrentHashMap<Player, Player>();
 	public static List<Player> toggledBending = new ArrayList<Player>();
+
+	private static boolean allowharmless = true;
+	private static boolean respectWorldGuard = true;
+	private static boolean respectPreciousStones = true;
+	private static boolean respectFactions = true;
+	private static boolean respectTowny = true;
 
 	public Tools(StorageManager config2) {
 		config = config2;
@@ -687,12 +721,27 @@ public class Tools {
 		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player))
 				&& ability != Abilities.AvatarState)
 			return false;
+		if (allowharmless && Tools.isHarmlessAbility(ability)
+				&& !toggledBending(player))
+			return true;
 		if (hasPermission(player, ability)
-				&& !isRegionProtected(player, ability, true)
+				&& !isRegionProtected(player, ability, !isLocalAbility(ability))
 				&& !toggledBending(player))
 			return true;
 		return false;
 
+	}
+
+	public static boolean isHarmlessAbility(Abilities ability) {
+		return Arrays.asList(harmlessAbilities).contains(ability);
+	}
+
+	public static boolean isLocalAbility(Abilities ability) {
+		return Arrays.asList(localAbilities).contains(ability);
+	}
+
+	public static boolean isRangedAbility(Abilities ability) {
+		return !isLocalAbility(ability);
 	}
 
 	public static boolean toggledBending(Player player) {
@@ -703,55 +752,131 @@ public class Tools {
 
 	public static boolean isRegionProtected(Player player, Abilities ability,
 			boolean look) {
+
 		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
 		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
-		if (wgp != null) {
+		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
+		Plugin twnp = Bukkit.getPluginManager().getPlugin("Towny");
+
+		if (wgp != null && respectWorldGuard) {
 			WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
 					.getPlugin("WorldGuard");
 			// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
 			// for (Block b: lb){
 			Block b = player.getLocation().getBlock();
 			if (!player.isOnline())
-				return false;
+				return true;
 			if (look) {
-				try {
-					int range = 20;
-					Block c = player.getTargetBlock(null, range);
-					if (!(wg.getGlobalRegionManager()
-							.get(c.getLocation().getWorld())
-							.getApplicableRegions(c.getLocation())
-							.allows(DefaultFlag.PVP))) {
-						return true;
-					}
-				} catch (IllegalStateException e) {
-					return false;
+				int range = 20;
+				Block c = player.getTargetBlock(null, range);
+				if (!(wg.getGlobalRegionManager()
+						.get(c.getLocation().getWorld())
+						.getApplicableRegions(c.getLocation())
+						.allows(DefaultFlag.BUILD))) {
+					return true;
 				}
-			}
-			if (!(wg.getGlobalRegionManager().get(b.getLocation().getWorld())
+			} else if (!(wg.getGlobalRegionManager()
+					.get(b.getLocation().getWorld())
 					.getApplicableRegions(b.getLocation())
-					.allows(DefaultFlag.PVP))) {
+					.allows(DefaultFlag.BUILD))) {
 				return true;
 			}
 		}
 
-		if (psp != null) {
+		if (psp != null && respectPreciousStones) {
 			PreciousStones ps = (PreciousStones) psp;
 			Block b = player.getLocation().getBlock();
 
 			if (look) {
-				try {
-					int range = 20;
-					Block c = player.getTargetBlock(null, range);
-					return ps.getForceFieldManager().hasSourceField(
-							c.getLocation(), FieldFlag.PREVENT_PVP);
-				} catch (IllegalStateException e) {
-					return false;
-				}
+
+				int range = 20;
+				Block c = player.getTargetBlock(null, range);
+				return ps.getForceFieldManager().hasSourceField(
+						c.getLocation(), FieldFlag.PREVENT_PLACE);
 
 			}
 
 			return ps.getForceFieldManager().hasSourceField(b.getLocation(),
-					FieldFlag.PREVENT_PVP);
+					FieldFlag.PREVENT_PLACE);
+		}
+
+		if (fcp != null && respectFactions) {
+			if (isLocalAbility(ability)
+					&& !FactionsBlockListener.playerCanBuildDestroyBlock(
+							player, player.getLocation(), "build", false)) {
+				return true;
+			} else if (!isLocalAbility(ability)
+					&& !FactionsBlockListener.playerCanBuildDestroyBlock(
+							player, getTargetedLocation(player, 20), "build",
+							false)) {
+				return true;
+			}
+		}
+
+		if (twnp != null && respectTowny) {
+			Towny twn = (Towny) twnp;
+			Block block;
+			if (isLocalAbility(ability)) {
+				block = player.getLocation().getBlock();
+			} else {
+				block = player.getTargetBlock(null, 20);
+			}
+
+			WorldCoord worldCoord;
+
+			try {
+				TownyWorld world = TownyUniverse.getDataSource().getWorld(
+						block.getWorld().getName());
+				worldCoord = new WorldCoord(world.getName(),
+						Coord.parseCoord(block));
+
+				// Get build permissions (updates if none exist)
+				boolean bBuild = PlayerCacheUtil.getCachePermission(player,
+						block.getLocation(), 3, (byte) 0,
+						TownyPermission.ActionType.BUILD);
+
+				// Allow build if we are permitted
+				if (!bBuild) {
+
+					/*
+					 * Fetch the players cache
+					 */
+					PlayerCache cache = twn.getCache(player);
+					TownBlockStatus status = cache.getStatus();
+
+					/*
+					 * Flag war
+					 */
+					if (((status == TownBlockStatus.ENEMY) && TownyWarConfig
+							.isAllowingAttacks())) {
+
+						try {
+							TownyWar.callAttackCellEvent(twn, player, block,
+									worldCoord);
+						} catch (TownyException e) {
+							TownyMessaging.sendErrorMsg(player, e.getMessage());
+						}
+
+						return true;
+
+					} else if (status == TownBlockStatus.WARZONE) {
+					} else {
+						return true;
+					}
+
+					/*
+					 * display any error recorded for this plot
+					 */
+					if ((cache.hasBlockErrMsg()))
+						TownyMessaging.sendErrorMsg(player,
+								cache.getBlockErrMsg());
+				}
+
+			} catch (NotRegisteredException e1) {
+				TownyMessaging.sendErrorMsg(player,
+						TownySettings.getLangString("msg_err_not_configured"));
+			}
+
 		}
 
 		// EntityDamageByEntityEvent damageEvent = new
@@ -769,10 +894,12 @@ public class Tools {
 	}
 
 	public static boolean canBendPassive(Player player, BendingType type) {
-		if (isRegionProtected(player, null, false))
-			return false;
 		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player))
 				&& !AvatarState.isAvatarState(player))
+			return false;
+		if (allowharmless && type != BendingType.Earth)
+			return true;
+		if (isRegionProtected(player, null, false))
 			return false;
 		if (player.hasPermission("bending." + type + ".passive")) {
 			return true;
