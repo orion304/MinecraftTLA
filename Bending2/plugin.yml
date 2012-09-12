@@ -34,7 +34,6 @@ permissions:
       bending.fire: true
       bending.fire.Blaze: true
       bending.fire.HeatControl: true
-      bending.fire.Fireball: true
       bending.fire.FireJet: true
       bending.fire.FireBlast: true
       bending.fire.Passive: true
@@ -168,9 +167,6 @@ permissions:
     default: true
   bending.fire.HeatControl:
     description: Allows the use of ControlHeat.
-    default: true
-  bending.fire.Fireball:
-    description: Allows the use of Fireball.
     default: true
   bending.fire.FireJet:
     description: Allows the use of FireJet.
