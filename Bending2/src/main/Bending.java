@@ -87,7 +87,8 @@ public class Bending extends JavaPlugin {
 
 		removeFireballs();
 
-		log.info("Bending v" + this.getDescription().getVersion()
+		Tools.printHooks();
+		Tools.verbose("Bending v" + this.getDescription().getVersion()
 				+ " has been loaded.");
 
 		try {

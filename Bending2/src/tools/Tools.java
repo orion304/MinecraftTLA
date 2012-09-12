@@ -540,7 +540,7 @@ public class Tools {
 
 	public static <T> void verbose(T something) {
 		if (something != null) {
-			Bending.log.info(something.toString());
+			Bending.log.info("[Bending]" + something.toString());
 		}
 	}
 
@@ -751,6 +751,48 @@ public class Tools {
 		if (toggledBending.contains(player))
 			return true;
 		return false;
+	}
+
+	public static void printHooks() {
+		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
+		if (wgp != null) {
+			verbose("Recognized WorldGuard...");
+			if (respectWorldGuard) {
+				verbose("Bending is set to respect WorldGuard's build flags.");
+			} else {
+				verbose("But Bending is set to ignore WorldGuard's flags.");
+			}
+		}
+
+		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
+		if (psp != null) {
+			verbose("Recognized PreciousStones...");
+			if (respectPreciousStones) {
+				verbose("Bending is set to respect PreciousStones' build flags.");
+			} else {
+				verbose("But Bending is set to ignore PreciousStones' flags.");
+			}
+		}
+
+		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
+		if (fcp != null) {
+			verbose("Recognized Factions...");
+			if (respectFactions) {
+				verbose("Bending is set to respect Factions' claimed lands.");
+			} else {
+				verbose("But Bending is set to ignore Factions' claimed lands.");
+			}
+		}
+
+		Plugin twnp = Bukkit.getPluginManager().getPlugin("Towny");
+		if (twnp != null) {
+			verbose("Recognized Towny...");
+			if (respectTowny) {
+				verbose("Bending is set to respect Towny's towns.");
+			} else {
+				verbose("But Bending is set to ignore Towny.");
+			}
+		}
 	}
 
 	public static boolean isRegionProtected(Player player, Abilities ability,
