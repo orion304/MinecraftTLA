@@ -58,11 +58,20 @@ public class FireShield {
 	private void progress() {
 		if (((!player.isSneaking()) && shield)
 				|| !Tools.canBend(player, Abilities.FireShield)
-				|| !Tools.hasAbility(player, Abilities.FireShield))
+				|| !Tools.hasAbility(player, Abilities.FireShield)) {
 			remove();
+			return;
+		}
 
-		if (System.currentTimeMillis() > starttime + duration && !shield)
+		if (!player.isOnline() || player.isDead()) {
 			remove();
+			return;
+		}
+
+		if (System.currentTimeMillis() > starttime + duration && !shield) {
+			remove();
+			return;
+		}
 
 		if (System.currentTimeMillis() > time + interval) {
 			time = System.currentTimeMillis();

@@ -45,8 +45,10 @@ public class OctopusForm {
 
 	public OctopusForm(Player player) {
 		if (instances.containsKey(player)) {
-			instances.get(player).attack();
-			return;
+			if (instances.get(player).formed) {
+				instances.get(player).attack();
+				return;
+			}
 		}
 		this.player = player;
 		time = System.currentTimeMillis();
@@ -125,6 +127,12 @@ public class OctopusForm {
 		if (!Tools.canBend(player, Abilities.OctopusForm)
 				|| (!player.isSneaking() && !sourceselected)
 				|| !Tools.hasAbility(player, Abilities.OctopusForm)) {
+			remove();
+			return;
+		}
+
+		if (sourceblock.getLocation().distance(player.getLocation()) > range
+				&& sourceselected) {
 			remove();
 			return;
 		}

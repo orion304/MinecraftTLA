@@ -116,12 +116,14 @@ public class WaterManipulation {
 		if (sourceblock != null) {
 			if (sourceblock.getWorld() == player.getWorld()) {
 				Entity target = Tools.getTargettedEntity(player, range);
-				if (target == null || displacing) {
+				if (displacing) {
 					displrange = (int) player.getLocation().distance(
 							sourceblock.getLocation());
-					targetdestination = player.getTargetBlock(
-							Tools.getTransparentEarthbending(), displrange)
-							.getLocation();
+					targetdestination = Tools.getTargetedLocation(player,
+							displrange);
+				} else if (target == null) {
+					targetdestination = Tools
+							.getTargetedLocation(player, range);
 				} else {
 					// targetting = true;
 					targetdestination = ((LivingEntity) target)
@@ -132,13 +134,15 @@ public class WaterManipulation {
 				if (targetdestination.distance(location) <= 1) {
 					progressing = false;
 					targetdestination = null;
+					remove(id);
 				} else {
 					progressing = true;
 					settingup = true;
 					firstdestination = getToEyeLevel();
-					firstdirection = getDirection(sourceblock.getLocation(),
-							firstdestination).normalize();
-					targetdirection = getDirection(firstdestination,
+					firstdirection = Tools.getDirection(
+							sourceblock.getLocation(), firstdestination)
+							.normalize();
+					targetdirection = Tools.getDirection(firstdestination,
 							targetdestination).normalize();
 					if (!displacing)
 						targetdestination = Tools.getPointOnLine(
@@ -161,22 +165,6 @@ public class WaterManipulation {
 			loc.setY(targetdestination.getY() - 1);
 		}
 		return loc;
-	}
-
-	private Vector getDirection(Location location, Location destination) {
-		double x1, y1, z1;
-		double x0, y0, z0;
-
-		x1 = destination.getX();
-		y1 = destination.getY();
-		z1 = destination.getZ();
-
-		x0 = location.getX();
-		y0 = location.getY();
-		z0 = location.getZ();
-
-		return new Vector(x1 - x0, y1 - y0, z1 - z0);
-
 	}
 
 	private static void remove(int id) {
@@ -272,7 +260,7 @@ public class WaterManipulation {
 				Block block = location.getBlock();
 				if (displacing) {
 					Block targetblock = player.getTargetBlock(null, displrange);
-					direction = getDirection(location,
+					direction = Tools.getDirection(location,
 							targetblock.getLocation()).normalize();
 					if (!location.getBlock().equals(targetblock.getLocation())) {
 						location = location.clone().add(direction);
