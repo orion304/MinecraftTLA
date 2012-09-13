@@ -52,7 +52,7 @@ public class WaterManipulation {
 	private boolean falling = false;
 	private boolean settingup = false;
 	// private boolean targetting = false;
-	private boolean displacing = false;
+	private final boolean displacing = false;
 	private long time;
 	private int damage = defaultdamage;
 	private int displrange;
@@ -77,11 +77,11 @@ public class WaterManipulation {
 
 	public boolean prepare() {
 		Block block = player.getTargetBlock(null, (int) range);
-		if (prepared.containsKey(player)
-				&& !Tools.isWaterbendable(block, player)) {
-			instances.get(prepared.get(player)).displacing = true;
-			instances.get(prepared.get(player)).moveWater();
-		}
+		// if (prepared.containsKey(player)
+		// && !Tools.isWaterbendable(block, player)) {
+		// instances.get(prepared.get(player)).displacing = true;
+		// instances.get(prepared.get(player)).moveWater();
+		// }
 		cancelPrevious();
 		if (Tools.isWaterbendable(block, player)) {
 			sourceblock = block;
@@ -244,11 +244,11 @@ public class WaterManipulation {
 					settingup = false;
 				}
 
-				if (!player.isSneaking() && displacing) {
-					displacing = false;
-					breakBlock();
-					return false;
-				}
+				// if (!player.isSneaking() && displacing) {
+				// displacing = false;
+				// breakBlock();
+				// return false;
+				// }
 
 				Vector direction;
 				if (settingup) {
@@ -342,9 +342,9 @@ public class WaterManipulation {
 		if (!Tools.isSolid(sourceblock.getRelative(BlockFace.DOWN))
 				|| !displacing) {
 			finalRemoveWater(sourceblock);
-		} else {
-			sourceblock.setData(full);
-			affectedblocks.remove(sourceblock);
+			// } else {
+			// sourceblock.setData(full);
+			// affectedblocks.remove(sourceblock);
 		}
 
 		finalRemoveWater(sourceblock);
