@@ -46,6 +46,8 @@ public class FreezeMelt {
 	}
 
 	static void freeze(Block block) {
+		if (TempBlock.isTempBlock(block))
+			return;
 		byte data = block.getData();
 		block.setType(Material.ICE);
 		frozenblocks.put(block, data);
