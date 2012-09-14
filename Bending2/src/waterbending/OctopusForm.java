@@ -48,6 +48,8 @@ public class OctopusForm {
 			if (instances.get(player).formed) {
 				instances.get(player).attack();
 				return;
+			} else {
+				return;
 			}
 		}
 		this.player = player;
