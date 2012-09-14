@@ -71,6 +71,7 @@ public class AirSwipe {
 		this.player = player;
 		this.charging = charging;
 		origin = player.getEyeLocation();
+		time = System.currentTimeMillis();
 		instances.put(id, this);
 
 		if (!charging)
@@ -134,6 +135,8 @@ public class AirSwipe {
 				}
 				charging = false;
 				launch();
+				if (factor < 1)
+					factor = 1;
 				damage *= factor;
 				pushfactor *= factor;
 				return true;

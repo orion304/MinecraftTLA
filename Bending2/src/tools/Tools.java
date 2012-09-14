@@ -730,6 +730,19 @@ public class Tools {
 
 	}
 
+	public static boolean canBeBloodbent(Player player) {
+		if (AvatarState.isAvatarState(player))
+			return false;
+		if ((isChiBlocked(player)))
+			return true;
+		Abilities ability = Abilities.Bloodbending;
+		if (hasPermission(player, ability)
+				&& !isRegionProtected(player, ability, !isLocalAbility(ability))
+				&& !toggledBending(player))
+			return false;
+		return true;
+	}
+
 	public static boolean isHarmlessAbility(Abilities ability) {
 		return Arrays.asList(harmlessAbilities).contains(ability);
 	}

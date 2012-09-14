@@ -90,10 +90,7 @@ public class Bloodbending {
 			for (Entity entity : Tools.getEntitiesAroundPoint(
 					player.getLocation(), range)) {
 				if (entity instanceof Player) {
-					if (AvatarState.isAvatarState((Player) entity)
-							|| entity.getEntityId() == player.getEntityId()
-							|| Tools.canBend((Player) entity,
-									Abilities.Bloodbending))
+					if (!Tools.canBeBloodbent((Player) entity))
 						continue;
 				}
 				entities.add(entity);
@@ -126,9 +123,7 @@ public class Bloodbending {
 		} else {
 			for (Entity entity : targetentities.keySet()) {
 				if (entity instanceof Player) {
-					if (AvatarState.isAvatarState((Player) entity)
-							|| Tools.canBend((Player) entity,
-									Abilities.Bloodbending)) {
+					if (!Tools.canBeBloodbent((Player) entity)) {
 						targetentities.remove(entity);
 						continue;
 					}
@@ -168,8 +163,13 @@ public class Bloodbending {
 
 	public static boolean isBloodbended(Entity entity) {
 		for (Player player : instances.keySet()) {
-			if (instances.get(player).targetentities.containsKey(entity))
+			if (instances.get(player).targetentities.containsKey(entity)) {
+				if (entity instanceof Player) {
+					if (!Tools.canBeBloodbent((Player) entity))
+						return false;
+				}
 				return true;
+			}
 		}
 		return false;
 	}
