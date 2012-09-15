@@ -756,7 +756,9 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
-		if (WaterWall.wasBrokenFor(event.getPlayer(), block)) {
+		Player player = event.getPlayer();
+		if (WaterWall.wasBrokenFor(player, block)
+				|| OctopusForm.wasBrokenFor(player, block)) {
 			event.setCancelled(true);
 			return;
 		}

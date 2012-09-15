@@ -140,11 +140,11 @@ public class Wave {
 						targetdestination).normalize();
 				targetdestination = location.clone().add(
 						targetdirection.clone().multiply(range));
+				if (Tools.isPlant(sourceblock))
+					new Plantbending(sourceblock);
 				if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
 					sourceblock.setType(Material.AIR);
 				}
-				if (Tools.isPlant(sourceblock))
-					new Plantbending(sourceblock);
 				addWater(sourceblock);
 
 			}

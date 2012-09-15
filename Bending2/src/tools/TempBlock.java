@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 public class TempBlock {
 
@@ -87,6 +88,16 @@ public class TempBlock {
 		return false;
 	}
 
+	public static boolean isTouchingTempBlock(Block block) {
+		BlockFace[] faces = { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST,
+				BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
+		for (BlockFace face : faces) {
+			if (instances.containsKey(block.getRelative(face)))
+				return true;
+		}
+		return false;
+	}
+
 	public static TempBlock get(Block block) {
 		if (isTempBlock(block))
 			return instances.get(block);
@@ -102,6 +113,17 @@ public class TempBlock {
 			revertBlock(block, Material.AIR);
 		}
 
+	}
+
+	public void setType(Material material) {
+		setType(material, newdata);
+	}
+
+	public void setType(Material material, byte data) {
+		newtype = material;
+		newdata = data;
+		block.setType(material);
+		block.setData(data);
 	}
 
 }

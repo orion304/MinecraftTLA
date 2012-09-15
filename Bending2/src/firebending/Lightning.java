@@ -82,8 +82,11 @@ public class Lightning {
 
 		if (charged) {
 			if (player.isSneaking()) {
-				player.getWorld().playEffect(player.getEyeLocation(),
-						Effect.SMOKE, 4, distance);
+				player.getWorld().playEffect(
+						player.getEyeLocation(),
+						Effect.SMOKE,
+						Tools.getIntCardinalDirection(player.getEyeLocation()
+								.getDirection()), distance);
 			} else {
 				strike();
 			}

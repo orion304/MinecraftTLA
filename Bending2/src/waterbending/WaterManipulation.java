@@ -466,6 +466,8 @@ public class WaterManipulation {
 			return false;
 		if (TempBlock.isTempBlock(block))
 			return false;
+		if (TempBlock.isTouchingTempBlock(block))
+			return false;
 		return true;
 	}
 

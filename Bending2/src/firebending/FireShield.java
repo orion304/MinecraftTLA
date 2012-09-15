@@ -110,9 +110,9 @@ public class FireShield {
 				}
 
 				FireBlast.removeFireBlastsAroundPoint(location, radius);
-				WaterManipulation.removeAroundPoint(location, radius);
-				EarthBlast.removeAroundPoint(location, radius);
-				FireStream.removeAroundPoint(location, radius);
+				// WaterManipulation.removeAroundPoint(location, radius);
+				// EarthBlast.removeAroundPoint(location, radius);
+				// FireStream.removeAroundPoint(location, radius);
 
 			} else {
 

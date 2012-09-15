@@ -1180,6 +1180,62 @@ public class Tools {
 		block.getWorld().playEffect(block.getLocation(), Effect.SMOKE, 4, 20);
 	}
 
+	public static BlockFace getCardinalDirection(Vector vector) {
+		BlockFace[] faces = { BlockFace.NORTH, BlockFace.NORTH_EAST,
+				BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH,
+				BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
+		Vector n, ne, e, se, s, sw, w, nw;
+		w = new Vector(-1, 0, 0);
+		n = new Vector(0, 0, -1);
+		s = n.clone().multiply(-1);
+		e = w.clone().multiply(-1);
+		ne = n.clone().add(e.clone()).normalize();
+		se = s.clone().add(e.clone()).normalize();
+		nw = n.clone().add(w.clone()).normalize();
+		sw = s.clone().add(w.clone()).normalize();
+
+		Vector[] vectors = { n, ne, e, se, s, sw, w, nw };
+
+		double comp = 0;
+		int besti = 0;
+		for (int i = 0; i < vectors.length; i++) {
+			double dot = vector.dot(vectors[i]);
+			if (dot > comp) {
+				comp = dot;
+				besti = i;
+			}
+		}
+
+		return faces[besti];
+
+	}
+
+	public static int getIntCardinalDirection(Vector vector) {
+		BlockFace face = getCardinalDirection(vector);
+
+		switch (face) {
+		case SOUTH:
+			return 7;
+		case SOUTH_WEST:
+			return 6;
+		case WEST:
+			return 3;
+		case NORTH_WEST:
+			return 0;
+		case NORTH:
+			return 1;
+		case NORTH_EAST:
+			return 2;
+		case EAST:
+			return 5;
+		case SOUTH_EAST:
+			return 8;
+		}
+
+		return 4;
+
+	}
+
 	static {
 		Map<String, ChatColor> tmpMap = new HashMap<String, ChatColor>();
 		tmpMap.put("black", ChatColor.BLACK);

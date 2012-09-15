@@ -140,6 +140,12 @@ public class AirSwipe {
 				damage *= factor;
 				pushfactor *= factor;
 				return true;
+			} else if (System.currentTimeMillis() >= time + maxchargetime) {
+				player.getWorld().playEffect(
+						player.getEyeLocation(),
+						Effect.SMOKE,
+						Tools.getIntCardinalDirection(player.getEyeLocation()
+								.getDirection()), 3);
 			}
 		}
 		return true;

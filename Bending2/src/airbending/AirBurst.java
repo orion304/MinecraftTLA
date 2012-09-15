@@ -136,7 +136,11 @@ public class AirBurst {
 		} else if (charged) {
 			Location location = player.getEyeLocation();
 			// location = location.add(location.getDirection().normalize());
-			location.getWorld().playEffect(location, Effect.SMOKE, 4, 3);
+			location.getWorld().playEffect(
+					location,
+					Effect.SMOKE,
+					Tools.getIntCardinalDirection(player.getEyeLocation()
+							.getDirection()), 3);
 		}
 	}
 

@@ -21,7 +21,7 @@ public class OctopusForm {
 	private static ConcurrentHashMap<Player, OctopusForm> instances = new ConcurrentHashMap<Player, OctopusForm>();
 
 	private static int range = 10;
-	private static double radius = 3;
+	static double radius = 3;
 	private static final byte full = 0x0;
 	private static long interval = 50;
 	private static int damage = 5;
@@ -38,6 +38,7 @@ public class OctopusForm {
 	private double dta = 45;
 	private ArrayList<TempBlock> blocks = new ArrayList<TempBlock>();
 	private ArrayList<TempBlock> newblocks = new ArrayList<TempBlock>();
+	// private static ArrayList<TempBlock> water = new ArrayList<TempBlock>();
 	private boolean sourceselected = false;
 	private boolean settingup = false;
 	private boolean forming = false;
@@ -48,7 +49,7 @@ public class OctopusForm {
 			if (instances.get(player).formed) {
 				instances.get(player).attack();
 				return;
-			} else {
+			} else if (!instances.get(player).sourceselected) {
 				return;
 			}
 		}
@@ -123,6 +124,7 @@ public class OctopusForm {
 		for (Player player : instances.keySet()) {
 			instances.get(player).progress();
 		}
+		// replaceWater();
 	}
 
 	private void progress() {
@@ -300,15 +302,73 @@ public class OctopusForm {
 	}
 
 	private void addWater(Block block) {
+		clearNearbyWater(block);
 		if (TempBlock.isTempBlock(block)) {
 			TempBlock tblock = TempBlock.get(block);
 			if (!newblocks.contains(tblock)) {
+				if (!blocks.contains(tblock))
+					tblock.setType(Material.WATER, full);
 				newblocks.add(tblock);
 			}
-		} else if (!Tools.isSolid(block) && block.getType() != Material.LAVA
-				&& block.getType() != Material.STATIONARY_LAVA) {
+		} else if (Tools.isWaterbendable(block, player)
+				|| block.getType() == Material.FIRE
+				|| block.getType() == Material.AIR) {
 			newblocks.add(new TempBlock(block, Material.WATER, full));
 		}
+	}
+
+	// private static void replaceWater() {
+	// boolean replace = true;
+	// ArrayList<TempBlock> newwater = new ArrayList<TempBlock>();
+	// for (TempBlock block : water) {
+	// for (Player player : instances.keySet()) {
+	// if (block.getLocation().distance(player.getLocation()) < 5) {
+	// replace = false;
+	// break;
+	// }
+	// }
+	// if (replace) {
+	// block.revertBlock();
+	// } else {
+	// newwater.add(block);
+	// }
+	// }
+	// water.clear();
+	// water.addAll(newwater);
+	// }
+
+	private void clearNearbyWater(Block block) {
+		BlockFace[] faces = { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST,
+				BlockFace.WEST, BlockFace.DOWN };
+		for (BlockFace face : faces) {
+			Block rel = block.getRelative(face);
+			if (Tools.isWater(rel) && !TempBlock.isTempBlock(rel)) {
+				FreezeMelt.freeze(rel);
+				// water.add(new TempBlock(rel, Material.AIR, (byte) 0));
+			}
+		}
+	}
+
+	// private static boolean blockIsTouchingWater(Block block) {
+	// BlockFace[] faces = { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST,
+	// BlockFace.WEST, BlockFace.DOWN };
+	// for (BlockFace face : faces) {
+	// Block rel = block.getRelative(face);
+	// if (Tools.isWater(rel) && !TempBlock.isTempBlock(rel))
+	// return true;
+	// }
+	// return false;
+	// }
+
+	public static boolean wasBrokenFor(Player player, Block block) {
+		if (instances.containsKey(player)) {
+			OctopusForm form = instances.get(player);
+			if (form.sourceblock == null)
+				return false;
+			if (form.sourceblock.equals(block))
+				return true;
+		}
+		return false;
 	}
 
 	private void remove() {
@@ -323,6 +383,9 @@ public class OctopusForm {
 		for (Player player : instances.keySet()) {
 			instances.get(player).remove();
 		}
+
+		// for (TempBlock block : water)
+		// block.revertBlock();
 	}
 
 	public static String getDescription() {

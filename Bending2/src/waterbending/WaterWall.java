@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
+import tools.TempBlock;
 import tools.Tools;
 import firebending.FireBlast;
 
@@ -26,7 +27,7 @@ public class WaterWall {
 	public static ConcurrentHashMap<Block, Player> wallblocks = new ConcurrentHashMap<Block, Player>();
 
 	private static final byte full = 0x0;
-	private static final byte half = 0x4;
+	// private static final byte half = 0x4;
 
 	private static double range = ConfigManager.waterWallRange;
 	private static final double defaultradius = ConfigManager.waterWallRadius;
@@ -101,7 +102,7 @@ public class WaterWall {
 		frozen = true;
 		for (Block block : wallblocks.keySet()) {
 			if (wallblocks.get(block) == player) {
-				block.setType(Material.ICE);
+				new TempBlock(block, Material.ICE, (byte) 0);
 			}
 		}
 	}
@@ -110,8 +111,7 @@ public class WaterWall {
 		frozen = false;
 		for (Block block : wallblocks.keySet()) {
 			if (wallblocks.get(block) == player) {
-				block.setType(Material.WATER);
-				block.setData(full);
+				new TempBlock(block, Material.WATER, full);
 			}
 		}
 	}
@@ -164,11 +164,14 @@ public class WaterWall {
 				settingup = true;
 				firstdestination = getToEyeLevel();
 				firstdirection = getDirection(sourceblock.getLocation(),
-						firstdestination).normalize();
+						firstdestination);
 				targetdirection = getDirection(firstdestination,
-						targetdestination).normalize();
+						targetdestination);
 				if (Tools.isPlant(sourceblock))
 					new Plantbending(sourceblock);
+				if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
+					sourceblock.setType(Material.AIR);
+				}
 				addWater(sourceblock);
 			}
 
@@ -251,15 +254,17 @@ public class WaterWall {
 						if (wallblocks.containsKey(block)) {
 							blocks.add(block);
 						} else if (!blocks.contains(block)
-								&& (block.getType() == Material.AIR || block
-										.getType() == Material.FIRE)) {
+								&& (block.getType() == Material.AIR
+										|| block.getType() == Material.FIRE || Tools
+											.isWaterbendable(block, player))) {
 							wallblocks.put(block, player);
-							if (frozen) {
-								block.setType(Material.ICE);
-							} else {
-								block.setType(Material.WATER);
-								block.setData(full);
-							}
+							addWallBlock(block);
+							// if (frozen) {
+							// block.setType(Material.ICE);
+							// } else {
+							// block.setType(Material.WATER);
+							// block.setData(full);
+							// }
 							// block.setType(Material.GLASS);
 							blocks.add(block);
 							FireBlast.removeFireBlastsAroundPoint(
@@ -279,7 +284,8 @@ public class WaterWall {
 				return true;
 			}
 
-			if (sourceblock.getLocation().distance(firstdestination) < .5) {
+			if (sourceblock.getLocation().distance(firstdestination) < .5
+					&& settingup) {
 				settingup = false;
 			}
 
@@ -308,7 +314,7 @@ public class WaterWall {
 			}
 
 			addWater(block);
-			reduceWater(sourceblock);
+			removeWater(sourceblock);
 			sourceblock = block;
 
 			if (location.distance(targetdestination) < 1) {
@@ -325,6 +331,14 @@ public class WaterWall {
 
 	}
 
+	private void addWallBlock(Block block) {
+		if (frozen) {
+			new TempBlock(block, Material.ICE, (byte) 0);
+		} else {
+			new TempBlock(block, Material.WATER, full);
+		}
+	}
+
 	private void breakBlock() {
 		finalRemoveWater(sourceblock);
 		for (Block block : wallblocks.keySet()) {
@@ -335,21 +349,21 @@ public class WaterWall {
 		instances.remove(player.getEntityId());
 	}
 
-	private void reduceWater(Block block) {
-		if (affectedblocks.containsKey(block)) {
-			if (!Tools.adjacentToThreeOrMoreSources(block)) {
-				block.setType(Material.WATER);
-				block.setData(half);
-			}
-			oldwater = block;
-		}
-	}
+	// private void reduceWater(Block block) {
+	// if (affectedblocks.containsKey(block)) {
+	// if (!Tools.adjacentToThreeOrMoreSources(block)) {
+	// block.setType(Material.WATER);
+	// block.setData(half);
+	// }
+	// oldwater = block;
+	// }
+	// }
 
 	private void removeWater(Block block) {
 		if (block != null) {
 			if (affectedblocks.containsKey(block)) {
 				if (!Tools.adjacentToThreeOrMoreSources(block)) {
-					block.setType(Material.AIR);
+					TempBlock.revertBlock(block, Material.AIR);
 				}
 				affectedblocks.remove(block);
 			}
@@ -360,18 +374,20 @@ public class WaterWall {
 		if (affectedblocks.containsKey(block)) {
 			// block.setType(Material.WATER);
 			// block.setData(half);
-			if (!Tools.adjacentToThreeOrMoreSources(block)) {
-				block.setType(Material.AIR);
-			}
+			// if (!Tools.adjacentToThreeOrMoreSources(block)) {
+			// block.setType(Material.AIR);
+			// }
+			TempBlock.revertBlock(block, Material.AIR);
 			affectedblocks.remove(block);
 		}
 
 		if (wallblocks.containsKey(block)) {
-			if (block.getType() == Material.ICE
-					|| block.getType() == Material.WATER
-					|| block.getType() == Material.STATIONARY_WATER) {
-				block.setType(Material.AIR);
-			}
+			// if (block.getType() == Material.ICE
+			// || block.getType() == Material.WATER
+			// || block.getType() == Material.STATIONARY_WATER) {
+			// block.setType(Material.AIR);
+			// }
+			TempBlock.revertBlock(block, Material.AIR);
 			wallblocks.remove(block);
 			// block.setType(Material.WATER);
 			// block.setData(half);
@@ -379,13 +395,20 @@ public class WaterWall {
 	}
 
 	private void addWater(Block block) {
-		if (!affectedblocks.containsKey(block)) {
+
+		if (!TempBlock.isTempBlock(block)) {
+			new TempBlock(block, Material.WATER, full);
+			// new TempBlock(block, Material.ICE, (byte) 0);
 			affectedblocks.put(block, block);
 		}
-		if (FreezeMelt.frozenblocks.containsKey(block))
-			FreezeMelt.frozenblocks.remove(block);
-		block.setType(Material.WATER);
-		block.setData(full);
+
+		// if (!affectedblocks.containsKey(block)) {
+		// affectedblocks.put(block, block);
+		// }
+		// if (FreezeMelt.frozenblocks.containsKey(block))
+		// FreezeMelt.frozenblocks.remove(block);
+		// block.setType(Material.WATER);
+		// block.setData(full);
 	}
 
 	public static void moveWater(Player player) {
@@ -415,20 +438,12 @@ public class WaterWall {
 
 	public static void removeAll() {
 		for (Block block : affectedblocks.keySet()) {
-			if (block.getType() == Material.ICE
-					|| block.getType() == Material.WATER
-					|| block.getType() == Material.STATIONARY_WATER) {
-				block.setType(Material.AIR);
-			}
+			TempBlock.revertBlock(block, Material.AIR);
 			affectedblocks.remove(block);
 			wallblocks.remove(block);
 		}
 		for (Block block : wallblocks.keySet()) {
-			if (block.getType() == Material.ICE
-					|| block.getType() == Material.WATER
-					|| block.getType() == Material.STATIONARY_WATER) {
-				block.setType(Material.AIR);
-			}
+			TempBlock.revertBlock(block, Material.AIR);
 			affectedblocks.remove(block);
 			wallblocks.remove(block);
 		}

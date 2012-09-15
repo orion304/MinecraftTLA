@@ -72,6 +72,10 @@ public class FreezeMelt {
 	public static boolean canThaw(Block block) {
 		if (frozenblocks.containsKey(block)) {
 			for (Player player : block.getWorld().getPlayers()) {
+				if (Tools.getBendingAbility(player) == Abilities.OctopusForm) {
+					if (block.getLocation().distance(player.getLocation()) <= OctopusForm.radius + 2)
+						return false;
+				}
 				if (Tools.hasAbility(player, Abilities.PhaseChange)
 						&& Tools.canBend(player, Abilities.PhaseChange)) {
 					double range = Tools.waterbendingNightAugment(defaultrange,
