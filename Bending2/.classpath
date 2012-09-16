@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/TagAPI.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/CreeperHeal.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/Towny.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/Factions.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/Factions.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

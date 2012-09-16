@@ -178,19 +178,18 @@ public class WaterManipulation {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
-			remove(id);
+			breakBlock();
 			return false;
 		}
 		if (System.currentTimeMillis() - time >= interval) {
+			removeWater(oldwater);
 			if (Tools.isRegionProtectedFromBuild(player,
 					Abilities.WaterManipulation, location)) {
-				remove(id);
+				breakBlock();
 				return false;
 			}
 
 			time = System.currentTimeMillis();
-
-			removeWater(oldwater);
 
 			if (!progressing
 					&& !falling

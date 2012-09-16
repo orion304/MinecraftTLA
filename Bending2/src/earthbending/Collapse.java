@@ -26,6 +26,7 @@ public class Collapse {
 	public Collapse(Player player) {
 		// if (AvatarState.isAvatarState(player))
 		// radius = AvatarState.getValue(defaultradius);
+		this.player = player;
 		Location location = player.getTargetBlock(
 				Tools.getTransparentEarthbending(), range).getLocation();
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
@@ -35,8 +36,6 @@ public class Collapse {
 				getAffectedBlocks(block);
 			}
 		}
-
-		this.player = player;
 
 		for (Block block : baseblocks.keySet()) {
 			new CompactColumn(player, block.getLocation());

@@ -38,7 +38,7 @@ public class Lightning {
 	private void strike() {
 		Location targetlocation = getTargetLocation();
 		if (!Tools.isRegionProtectedFromBuild(player, Abilities.Lightning,
-				player.getLocation()))
+				targetlocation))
 			player.getWorld().strikeLightning(targetlocation);
 		instances.remove(player);
 	}

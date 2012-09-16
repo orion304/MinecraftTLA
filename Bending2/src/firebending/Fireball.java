@@ -146,7 +146,15 @@ public class Fireball {
 		// List<Block> blocks2 = new ArrayList<Block>();
 
 		// Tools.verbose("Fireball Explode!");
-		if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze, location))
+		boolean explode = true;
+		for (Block block : Tools.getBlocksAroundPoint(location, 3)) {
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.FireBlast,
+					block.getLocation())) {
+				explode = false;
+				break;
+			}
+		}
+		if (explode)
 			location.getWorld().createExplosion(location, 1);
 
 		ignite(location);

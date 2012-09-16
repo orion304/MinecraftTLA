@@ -231,15 +231,19 @@ public class EarthBlast {
 					location = location.clone().add(direction);
 					block = location.getBlock();
 				}
+
 				if (Tools.isTransparentToEarthbending(player, block)
 						&& !block.isLiquid()) {
 					Tools.breakBlock(block);
-				} else if (block.getType() != Material.AIR) {
+				} else {
 					breakBlock();
 					return false;
 				}
 
 				for (Entity entity : Tools.getEntitiesAroundPoint(location, 3)) {
+					if (Tools.isRegionProtectedFromBuild(player,
+							Abilities.EarthBlast, entity.getLocation()))
+						continue;
 					if (entity instanceof LivingEntity
 							&& (entity.getEntityId() != player.getEntityId() || hitself)) {
 						entity.setVelocity(entity.getVelocity().clone()

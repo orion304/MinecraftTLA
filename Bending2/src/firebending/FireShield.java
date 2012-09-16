@@ -78,12 +78,6 @@ public class FireShield {
 
 			if (shield) {
 
-				if (Tools.isRegionProtectedFromBuild(player,
-						Abilities.FireShield, player.getLocation())) {
-					remove();
-					return;
-				}
-
 				ArrayList<Block> blocks = new ArrayList<Block>();
 				Location location = player.getEyeLocation().clone();
 
@@ -104,12 +98,17 @@ public class FireShield {
 				}
 
 				for (Block block : blocks) {
-					block.getWorld().playEffect(block.getLocation(),
-							Effect.MOBSPAWNER_FLAMES, 0, 20);
+					if (!Tools.isRegionProtectedFromBuild(player,
+							Abilities.FireShield, block.getLocation()))
+						block.getWorld().playEffect(block.getLocation(),
+								Effect.MOBSPAWNER_FLAMES, 0, 20);
 				}
 
 				for (Entity entity : Tools.getEntitiesAroundPoint(location,
 						radius)) {
+					if (Tools.isRegionProtectedFromBuild(player,
+							Abilities.FireShield, entity.getLocation()))
+						continue;
 					if (player.getEntityId() != entity.getEntityId() && ignite) {
 						entity.setFireTicks(120);
 					}
@@ -145,12 +144,17 @@ public class FireShield {
 				}
 
 				for (Block block : blocks) {
-					block.getWorld().playEffect(block.getLocation(),
-							Effect.MOBSPAWNER_FLAMES, 0, 20);
+					if (!Tools.isRegionProtectedFromBuild(player,
+							Abilities.FireShield, block.getLocation()))
+						block.getWorld().playEffect(block.getLocation(),
+								Effect.MOBSPAWNER_FLAMES, 0, 20);
 				}
 
 				for (Entity entity : Tools.getEntitiesAroundPoint(location,
 						discradius)) {
+					if (Tools.isRegionProtectedFromBuild(player,
+							Abilities.FireShield, entity.getLocation()))
+						continue;
 					if (player.getEntityId() != entity.getEntityId() && ignite) {
 						entity.setFireTicks(120);
 						if (!(entity instanceof LivingEntity)) {

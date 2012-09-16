@@ -96,11 +96,10 @@ public class AirShield {
 			z = origin.getZ() + radius * Math.sin(angle);
 
 			Location effect = new Location(origin.getWorld(), x, y, z);
-			if (Tools.isRegionProtectedFromBuild(player, Abilities.AirShield,
+			if (!Tools.isRegionProtectedFromBuild(player, Abilities.AirShield,
 					effect))
-				continue;
-			origin.getWorld().playEffect(effect, Effect.SMOKE, 4,
-					(int) AirBlast.defaultrange);
+				origin.getWorld().playEffect(effect, Effect.SMOKE, 4,
+						(int) AirBlast.defaultrange);
 
 			angles.put(i, angles.get(i) + (int) (10 * speedfactor));
 		}

@@ -954,6 +954,7 @@ public class BendingCommand {
 		Bending.configManager.load(new File(dataFolder, "config.yml"));
 		config.initialize(dataFolder);
 		String append = StorageManager.useMySQL ? " Database" : "Players file";
+		Tools.stopAllBending();
 		sendMessage(player, ChatColor.AQUA + "Config and Bending" + append
 				+ " was reloaded");
 

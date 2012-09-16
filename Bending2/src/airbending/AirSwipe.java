@@ -209,6 +209,9 @@ public class AirSwipe {
 		Tools.removeSpouts(location, player);
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.AirSwipe,
+					entity.getLocation()))
+				continue;
 			if (entity.getEntityId() != player.getEntityId()) {
 				if (AvatarState.isAvatarState(player)) {
 					entity.setVelocity(direction.multiply(AvatarState

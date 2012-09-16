@@ -251,6 +251,9 @@ public class WaterWall {
 						// loc.getBlock().setType(Material.GLOWSTONE);
 						vec = Tools.getOrthogonalVector(dir.clone(), angle, i);
 						block = loc.clone().add(vec).getBlock();
+						if (Tools.isRegionProtectedFromBuild(player,
+								Abilities.Surge, block.getLocation()))
+							continue;
 						if (wallblocks.containsKey(block)) {
 							blocks.add(block);
 						} else if (!blocks.contains(block)

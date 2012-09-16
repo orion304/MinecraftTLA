@@ -61,6 +61,7 @@ public class CompactColumn {
 	public CompactColumn(Player player, Location origin) {
 		// Tools.verbose("New compact column");
 		this.origin = origin;
+		this.player = player;
 		block = origin.getBlock();
 		// Tools.verbose(block);
 		// Tools.verbose(origin);
