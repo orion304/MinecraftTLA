@@ -7,7 +7,6 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,6 +32,7 @@ public class WaterManipulation {
 	private static double range = ConfigManager.waterManipulationRange;
 	private static int defaultdamage = ConfigManager.waterdmg;
 	private static double speed = ConfigManager.waterManipulationSpeed;
+	private static final double deflectrange = 3;
 	// private static double speed = 1.5;
 
 	private static HashSet<Byte> water = new HashSet<Byte>();
@@ -83,6 +83,7 @@ public class WaterManipulation {
 		// instances.get(prepared.get(player)).moveWater();
 		// }
 		cancelPrevious();
+		block(player);
 		if (Tools.isWaterbendable(block, player)) {
 			sourceblock = block;
 			focusBlock();
@@ -115,21 +116,7 @@ public class WaterManipulation {
 	public void moveWater() {
 		if (sourceblock != null) {
 			if (sourceblock.getWorld() == player.getWorld()) {
-				Entity target = Tools.getTargettedEntity(player, range);
-				if (displacing) {
-					displrange = (int) player.getLocation().distance(
-							sourceblock.getLocation());
-					targetdestination = Tools.getTargetedLocation(player,
-							displrange);
-				} else if (target == null) {
-					targetdestination = Tools
-							.getTargetedLocation(player, range);
-				} else {
-					// targetting = true;
-					targetdestination = ((LivingEntity) target)
-							.getEyeLocation();
-					targetdestination.setY(targetdestination.getY() - 1);
-				}
+				targetdestination = getTargetLocation(player);
 
 				if (targetdestination.distance(location) <= 1) {
 					progressing = false;
@@ -156,6 +143,20 @@ public class WaterManipulation {
 		}
 	}
 
+	private static Location getTargetLocation(Player player) {
+		Entity target = Tools.getTargettedEntity(player, range);
+		Location location;
+		if (target == null) {
+			location = Tools.getTargetedLocation(player, range,
+					Tools.transparentEarthbending);
+		} else {
+			// targetting = true;
+			location = ((LivingEntity) target).getEyeLocation();
+			location.setY(location.getY() - 1);
+		}
+		return location;
+	}
+
 	private Location getToEyeLevel() {
 		Location loc = sourceblock.getLocation().clone();
 		double dy = targetdestination.getY() - sourceblock.getY();
@@ -174,6 +175,16 @@ public class WaterManipulation {
 				prepared.remove(player);
 		}
 		instances.remove(id);
+	}
+
+	private void redirect(Player player, Location targetlocation) {
+		if (progressing && !settingup) {
+			if (location.distance(player.getLocation()) <= range)
+				targetdirection = Tools.getDirection(location, targetlocation)
+						.normalize();
+			targetdestination = targetlocation;
+			this.player = player;
+		}
 	}
 
 	public boolean progress() {
@@ -328,7 +339,8 @@ public class WaterManipulation {
 				// }
 				sourceblock = block;
 
-				if (location.distance(targetdestination) <= 1 && !displacing) {
+				if (location.distance(targetdestination) <= 1
+						|| location.distance(firstdestination) > range) {
 
 					falling = true;
 					progressing = false;
@@ -344,14 +356,7 @@ public class WaterManipulation {
 
 	private void breakBlock() {
 
-		if (!Tools.isSolid(sourceblock.getRelative(BlockFace.DOWN))
-				|| !displacing) {
-			finalRemoveWater(sourceblock);
-			// } else {
-			// sourceblock.setData(full);
-			// affectedblocks.remove(sourceblock);
-		}
-
+		removeWater(oldwater);
 		finalRemoveWater(sourceblock);
 		remove(id);
 	}
@@ -412,6 +417,58 @@ public class WaterManipulation {
 		if (prepared.containsKey(player)) {
 			instances.get(prepared.get(player)).moveWater();
 			prepared.remove(player);
+		}
+
+		redirectTargettedBlasts(player);
+	}
+
+	private static void redirectTargettedBlasts(Player player) {
+		for (int id : instances.keySet()) {
+			WaterManipulation manip = instances.get(id);
+
+			if (!manip.progressing)
+				continue;
+
+			if (manip.player.equals(player))
+				manip.redirect(player, getTargetLocation(player));
+
+			Location location = player.getEyeLocation();
+			Vector vector = location.getDirection();
+			Location mloc = manip.location;
+			if (mloc.distance(location) <= range
+					&& Tools.getDistanceFromLine(vector, location,
+							manip.location) < deflectrange
+					&& mloc.distance(location.clone().add(vector)) < mloc
+							.distance(location.clone().add(
+									vector.clone().multiply(-1)))) {
+				manip.redirect(player, getTargetLocation(player));
+			}
+
+		}
+	}
+
+	private static void block(Player player) {
+		for (int id : instances.keySet()) {
+			WaterManipulation manip = instances.get(id);
+
+			if (manip.player.equals(player))
+				continue;
+
+			if (!manip.progressing)
+				continue;
+
+			Location location = player.getEyeLocation();
+			Vector vector = location.getDirection();
+			Location mloc = manip.location;
+			if (mloc.distance(location) <= range
+					&& Tools.getDistanceFromLine(vector, location,
+							manip.location) < deflectrange
+					&& mloc.distance(location.clone().add(vector)) < mloc
+							.distance(location.clone().add(
+									vector.clone().multiply(-1)))) {
+				manip.breakBlock();
+			}
+
 		}
 	}
 

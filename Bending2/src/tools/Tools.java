@@ -90,8 +90,8 @@ public class Tools {
 			Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
 			Abilities.Paralyze, Abilities.RapidPunch };
 
-	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
-			30, 31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
+	public static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11, 30,
+			31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
 
 	public static Integer[] nonOpaque = { 0, 6, 8, 9, 10, 11, 27, 28, 30, 31,
 			32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
