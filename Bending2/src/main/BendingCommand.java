@@ -43,6 +43,7 @@ import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthGrab;
 import earthbending.EarthTunnel;
+import earthbending.Shockwave;
 import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
@@ -581,6 +582,9 @@ public class BendingCommand {
 						break;
 					case AirScooter:
 						sendMessage(player, cc + AirScooter.getDescription());
+						break;
+					case Shockwave:
+						sendMessage(player, cc + Shockwave.getDescription());
 						break;
 					case Catapult:
 						sendMessage(player, cc + Catapult.getDescription());

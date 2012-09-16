@@ -92,6 +92,7 @@ import earthbending.EarthGrab;
 import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
 import earthbending.EarthWall;
+import earthbending.Shockwave;
 import earthbending.Tremorsense;
 import firebending.ArcOfFire;
 import firebending.Extinguish;
@@ -339,6 +340,10 @@ public class BendingListener implements Listener {
 					new EarthArmor(player);
 				}
 
+				if (Tools.getBendingAbility(player) == Abilities.Shockwave) {
+					Shockwave.coneShockwave(player);
+				}
+
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
@@ -483,6 +488,10 @@ public class BendingListener implements Listener {
 				new EarthBlast(player);
 			}
 
+			if (Tools.getBendingAbility(player) == Abilities.Shockwave) {
+				new Shockwave(player);
+			}
+
 			if (Tools.getBendingAbility(player) == Abilities.Collapse) {
 				new Collapse(player);
 			}
@@ -573,6 +582,10 @@ public class BendingListener implements Listener {
 		if (event.getEntity() instanceof Player) {
 			// Tools.verbose(event.getCause());
 			Player player = (Player) event.getEntity();
+
+			if (Tools.isBender(player.getName(), BendingType.Earth)
+					&& event.getCause() == DamageCause.FALL)
+				Shockwave.fallShockwave(player);
 
 			if (Tools.isBender(player.getName(), BendingType.Air)
 					&& event.getCause() == DamageCause.FALL

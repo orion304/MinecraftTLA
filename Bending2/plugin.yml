@@ -71,7 +71,7 @@ permissions:
       bending.earth.Passive: true
       bending.earth.Tremorsense: true
       bending.earth.EarthArmor: true
-#      bending.earth.Shockwave: false
+      bending.earth.Shockwave: true
   bending.chiblocking.*:
     description: Allows all chiblocking abilities.
     children:
@@ -265,8 +265,7 @@ permissions:
     default: true 
   bending.earth.Shockwave:
     description: Allows the use of Shockwave.
-#    default: true
-    default: false
+    default: true
   bending.earth.EarthArmor:
     description: Allows the use of EarthArmor
     default: true

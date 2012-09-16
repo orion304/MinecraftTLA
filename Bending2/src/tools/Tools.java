@@ -263,7 +263,7 @@ public class Tools {
 		moveEarth(block, direction, chainlength, true);
 	}
 
-	public static void moveEarth(Block block, Vector direction,
+	public static boolean moveEarth(Block block, Vector direction,
 			int chainlength, boolean throwplayer) {
 		// verbose("Moving earth");
 		// verbose(direction);
@@ -281,7 +281,7 @@ public class Tools {
 				EarthPassive.revertSand(block);
 			}
 			if (affectedblock == null)
-				return;
+				return false;
 			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(affectedblock)) {
 				if (throwplayer) {
@@ -316,7 +316,7 @@ public class Tools {
 						EarthPassive.revertSand(affectedblock);
 					}
 					if (block == null)
-						return;
+						return false;
 					block.setType(affectedblock.getType());
 					block.setData(affectedblock.getData());
 					addTempEarthBlock(affectedblock, block);
@@ -330,10 +330,13 @@ public class Tools {
 					block.setData(full);
 				}
 			} else {
+				return false;
 				// block.setType(Material.COBBLESTONE);
 				// affectedblock.setType(Material.GLASS);
 			}
+			return true;
 		}
+		return false;
 	}
 
 	public static void addTempEarthBlock(Block targetblock, Block sourceblock) {
@@ -558,13 +561,18 @@ public class Tools {
 		double longestr = range + 1;
 		Entity target = null;
 		Location origin = player.getEyeLocation();
-		Vector direction = player.getEyeLocation().getDirection();
+		Vector direction = player.getEyeLocation().getDirection().normalize();
 		for (Entity entity : origin.getWorld().getEntities()) {
 			if (entity.getLocation().distance(origin) < longestr
 					&& getDistanceFromLine(direction, origin,
 							entity.getLocation()) < 2
 					&& (entity instanceof LivingEntity)
-					&& entity.getEntityId() != player.getEntityId()) {
+					&& entity.getEntityId() != player.getEntityId()
+					&& entity.getLocation().distance(
+							origin.clone().add(direction)) < entity
+							.getLocation().distance(
+									origin.clone().add(
+											direction.clone().multiply(-1)))) {
 				target = entity;
 				longestr = entity.getLocation().distance(origin);
 			}

@@ -50,6 +50,7 @@ import earthbending.EarthBlast;
 import earthbending.EarthColumn;
 import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
+import earthbending.Shockwave;
 import earthbending.Tremorsense;
 import firebending.FireBlast;
 import firebending.FireBurst;
@@ -166,6 +167,8 @@ public class BendingManager implements Runnable {
 			EarthArmor.moveArmor(player);
 		}
 		EarthPassive.revertSands();
+
+		Shockwave.progressAll();
 
 		Tremorsense.manage(plugin.getServer());
 
