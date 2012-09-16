@@ -145,6 +145,9 @@ public class WaterSpout {
 		Block blocki;
 		for (int i = 0; i < maxheight; i++) {
 			blocki = location.clone().add(0, -i, 0).getBlock();
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.WaterSpout,
+					blocki.getLocation()))
+				return -1;
 			if (!affectedblocks.contains(blocki)) {
 				if (blocki.getType() == Material.WATER
 						|| blocki.getType() == Material.STATIONARY_WATER) {
@@ -171,9 +174,8 @@ public class WaterSpout {
 						return height;
 					return i;
 				}
-				if (blocki.getType() != Material.AIR
-						&& (!Tools.isPlant(blocki) || !Tools
-								.canPlantbend(player))) {
+				if ((blocki.getType() != Material.AIR && (!Tools
+						.isPlant(blocki) || !Tools.canPlantbend(player)))) {
 					revertBaseBlock(player);
 					return -1;
 				}

@@ -11,6 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -90,6 +91,10 @@ public class FireStream {
 	}
 
 	public boolean progress() {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze, location)) {
+			remove();
+			return false;
+		}
 		if (System.currentTimeMillis() - time >= interval) {
 			location = location.clone().add(direction);
 			time = System.currentTimeMillis();
@@ -98,14 +103,14 @@ public class FireStream {
 				return false;
 			}
 			Block block = location.getBlock();
-			if (isIgnitable(block)) {
+			if (isIgnitable(player, block)) {
 				ignite(block);
 				return true;
-			} else if (isIgnitable(block.getRelative(BlockFace.DOWN))) {
+			} else if (isIgnitable(player, block.getRelative(BlockFace.DOWN))) {
 				ignite(block.getRelative(BlockFace.DOWN));
 				location = block.getRelative(BlockFace.DOWN).getLocation();
 				return true;
-			} else if (isIgnitable(block.getRelative(BlockFace.UP))) {
+			} else if (isIgnitable(player, block.getRelative(BlockFace.UP))) {
 				ignite(block.getRelative(BlockFace.UP));
 				location = block.getRelative(BlockFace.UP).getLocation();
 				return true;
@@ -124,7 +129,11 @@ public class FireStream {
 		ignitedtimes.put(block, System.currentTimeMillis());
 	}
 
-	public static boolean isIgnitable(Block block) {
+	public static boolean isIgnitable(Player player, Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze,
+				block.getLocation()))
+			return false;
+
 		Material[] overwriteable = { Material.SAPLING, Material.LONG_GRASS,
 				Material.DEAD_BUSH, Material.YELLOW_FLOWER, Material.RED_ROSE,
 				Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.FIRE,

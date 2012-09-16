@@ -33,8 +33,8 @@ public class Tremorsense {
 			if (System.currentTimeMillis() < timers.get(player) + cooldown)
 				return;
 		}
-		if (Tools.isEarthbendable(player.getLocation().getBlock()
-				.getRelative(BlockFace.DOWN))) {
+		if (Tools.isEarthbendable(player, Abilities.Tremorsense, player
+				.getLocation().getBlock().getRelative(BlockFace.DOWN))) {
 			this.player = player;
 			timers.put(player, System.currentTimeMillis());
 			activate();
@@ -58,13 +58,20 @@ public class Tremorsense {
 					Block blocki = block.getRelative(BlockFace.EAST, i)
 							.getRelative(BlockFace.NORTH, j)
 							.getRelative(BlockFace.DOWN, k);
-					if (Tools.isEarthbendable(blocki) && !earth) {
+					if (Tools.isRegionProtectedFromBuild(player,
+							Abilities.RaiseEarth, blocki.getLocation()))
+						continue;
+					if (Tools.isEarthbendable(player, Abilities.Tremorsense,
+							blocki) && !earth) {
 						earth = true;
 						smokeblock = blocki;
-					} else if (!Tools.isEarthbendable(blocki) && earth) {
+					} else if (!Tools.isEarthbendable(player,
+							Abilities.Tremorsense, blocki) && earth) {
 						foundair = true;
 						break;
-					} else if (!Tools.isEarthbendable(blocki) && !earth
+					} else if (!Tools.isEarthbendable(player,
+							Abilities.Tremorsense, blocki)
+							&& !earth
 							&& blocki.getType() != Material.AIR) {
 						break;
 					}
@@ -83,12 +90,13 @@ public class Tremorsense {
 		Block standblock = player.getLocation().getBlock()
 				.getRelative(BlockFace.DOWN);
 
-		if (Tools.isEarthbendable(standblock) && block == null) {
+		if (Tools.isEarthbendable(player, Abilities.Tremorsense, standblock)
+				&& block == null) {
 			block = standblock;
 			player.sendBlockChange(block.getLocation(), 89, (byte) 1);
 			instances.put(player, this);
-		} else if (Tools.isEarthbendable(standblock)
-				&& !block.equals(standblock)) {
+		} else if (Tools.isEarthbendable(player, Abilities.Tremorsense,
+				standblock) && !block.equals(standblock)) {
 			revert();
 			block = standblock;
 			player.sendBlockChange(block.getLocation(), 89, (byte) 1);
@@ -97,7 +105,8 @@ public class Tremorsense {
 			return;
 		} else if (player.getWorld() != block.getWorld()) {
 			revert();
-		} else if (!Tools.isEarthbendable(standblock)) {
+		} else if (!Tools.isEarthbendable(player, Abilities.Tremorsense,
+				standblock)) {
 			revert();
 		}
 	}

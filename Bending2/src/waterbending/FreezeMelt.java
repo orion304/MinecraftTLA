@@ -31,12 +31,15 @@ public class FreezeMelt {
 		}
 		Location location = Tools.getTargetedLocation(player, range);
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
-			if (isFreezable(block))
-				freeze(block);
+			if (isFreezable(player, block))
+				freeze(player, block);
 		}
 	}
 
-	private static boolean isFreezable(Block block) {
+	private static boolean isFreezable(Player player, Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.PhaseChange,
+				block.getLocation()))
+			return false;
 		if (block.getType() == Material.WATER
 				|| block.getType() == Material.STATIONARY_WATER)
 			if (WaterManipulation.canPhysicsChange(block)
@@ -45,7 +48,10 @@ public class FreezeMelt {
 		return false;
 	}
 
-	static void freeze(Block block) {
+	static void freeze(Player player, Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.PhaseChange,
+				block.getLocation()))
+			return;
 		if (TempBlock.isTempBlock(block))
 			return;
 		byte data = block.getData();

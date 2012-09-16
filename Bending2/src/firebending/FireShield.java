@@ -78,6 +78,12 @@ public class FireShield {
 
 			if (shield) {
 
+				if (Tools.isRegionProtectedFromBuild(player,
+						Abilities.FireShield, player.getLocation())) {
+					remove();
+					return;
+				}
+
 				ArrayList<Block> blocks = new ArrayList<Block>();
 				Location location = player.getEyeLocation().clone();
 
@@ -120,6 +126,12 @@ public class FireShield {
 				Location location = player.getEyeLocation().clone();
 				Vector direction = location.getDirection();
 				location = location.clone().add(direction.multiply(radius));
+
+				if (Tools.isRegionProtectedFromBuild(player,
+						Abilities.FireShield, location)) {
+					remove();
+					return;
+				}
 
 				for (double theta = 0; theta < 360; theta += 20) {
 					Vector vector = Tools.getOrthogonalVector(direction, theta,

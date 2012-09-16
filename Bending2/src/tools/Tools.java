@@ -87,10 +87,8 @@ public class Tools {
 	private static Abilities[] localAbilities = { Abilities.AirScooter,
 			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
 			Abilities.Illumination, Abilities.Tremorsense,
-			Abilities.WaterSpout, Abilities.AirBubble, Abilities.AirShield,
-			Abilities.AvatarState, Abilities.Catapult, Abilities.FireJet,
-			Abilities.FireShield, Abilities.OctopusForm, Abilities.Paralyze,
-			Abilities.RapidPunch, Abilities.WaterBubble };
+			Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
+			Abilities.Paralyze, Abilities.RapidPunch };
 
 	private static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11,
 			30, 31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
@@ -128,7 +126,15 @@ public class Tools {
 		return set;
 	}
 
-	public static boolean isTransparentToEarthbending(Block block) {
+	public static boolean isTransparentToEarthbending(Player player, Block block) {
+		return isTransparentToEarthbending(player, Abilities.RaiseEarth, block);
+	}
+
+	public static boolean isTransparentToEarthbending(Player player,
+			Abilities ability, Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.RaiseEarth,
+				block.getLocation()))
+			return false;
 		if (Arrays.asList(transparentEarthbending).contains(block.getTypeId()))
 			return true;
 		return false;
@@ -218,9 +224,9 @@ public class Tools {
 		return blocks;
 	}
 
-	public static void moveEarth(Location location, Vector direction,
-			int chainlength) {
-		moveEarth(location, direction, chainlength, true);
+	public static void moveEarth(Player player, Location location,
+			Vector direction, int chainlength) {
+		moveEarth(player, location, direction, chainlength, true);
 		// if (isEarthbendable(block)) {
 		// Vector norm = direction.clone().normalize();
 		// Vector negnorm = norm.clone().multiply(-1);
@@ -254,22 +260,25 @@ public class Tools {
 		// }
 	}
 
-	public static void moveEarth(Location location, Vector direction,
-			int chainlength, boolean throwplayer) {
+	public static void moveEarth(Player player, Location location,
+			Vector direction, int chainlength, boolean throwplayer) {
 		Block block = location.getBlock();
-		moveEarth(block, direction, chainlength, throwplayer);
+		moveEarth(player, block, direction, chainlength, throwplayer);
 	}
 
-	public static void moveEarth(Block block, Vector direction, int chainlength) {
-		moveEarth(block, direction, chainlength, true);
+	public static void moveEarth(Player player, Block block, Vector direction,
+			int chainlength) {
+		moveEarth(player, block, direction, chainlength, true);
 	}
 
-	public static boolean moveEarth(Block block, Vector direction,
-			int chainlength, boolean throwplayer) {
+	public static boolean moveEarth(Player player, Block block,
+			Vector direction, int chainlength, boolean throwplayer) {
 		// verbose("Moving earth");
 		// verbose(direction);
 		// verbose(isEarthbendable(block));
-		if (isEarthbendable(block)) {
+		if (isEarthbendable(player, block)
+				&& !isRegionProtectedFromBuild(player, Abilities.RaiseEarth,
+						block.getLocation())) {
 			Vector norm = direction.clone().normalize();
 			Vector negnorm = norm.clone().multiply(-1);
 
@@ -284,7 +293,7 @@ public class Tools {
 			if (affectedblock == null)
 				return false;
 			// verbose(isTransparentToEarthbending(affectedblock));
-			if (isTransparentToEarthbending(affectedblock)) {
+			if (isTransparentToEarthbending(player, affectedblock)) {
 				if (throwplayer) {
 					for (Entity entity : getEntitiesAroundPoint(
 							affectedblock.getLocation(), 1.75)) {
@@ -303,7 +312,7 @@ public class Tools {
 							.clone()
 							.add(negnorm.getX() * i, negnorm.getY() * i,
 									negnorm.getZ() * i).getBlock();
-					if (!isEarthbendable(affectedblock)) {
+					if (!isEarthbendable(player, affectedblock)) {
 						if (!Tools.adjacentToThreeOrMoreSources(block)
 								&& Tools.isWater(block)) {
 							block.setType(Material.AIR);
@@ -390,21 +399,32 @@ public class Tools {
 		return false;
 	}
 
-	public static int getEarthbendableBlocksLength(Block block,
+	public static int getEarthbendableBlocksLength(Player player, Block block,
 			Vector direction, int maxlength) {
 		Location location = block.getLocation();
 		direction = direction.normalize();
 		double j;
 		for (int i = 0; i <= maxlength; i++) {
 			j = (double) i;
-			if (!isEarthbendable(location.add(direction.multiply(j)).getBlock())) {
+			if (!isEarthbendable(player, location.add(direction.multiply(j))
+					.getBlock())) {
 				return i;
 			}
 		}
 		return maxlength;
 	}
 
-	public static boolean isEarthbendable(Block block) {
+	public static boolean isEarthbendable(Player player, Block block) {
+
+		return isEarthbendable(player, Abilities.RaiseEarth, block);
+
+	}
+
+	public static boolean isEarthbendable(Player player, Abilities ability,
+			Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, ability,
+				block.getLocation()))
+			return false;
 		Material material = block.getType();
 
 		// if ((material == Material.STONE) || (material == Material.CLAY)
@@ -432,7 +452,6 @@ public class Tools {
 
 		}
 		return false;
-
 	}
 
 	public static boolean isWeapon(Material mat) {
@@ -733,7 +752,8 @@ public class Tools {
 				&& !toggledBending(player))
 			return true;
 		if (hasPermission(player, ability)
-				&& !isRegionProtected(player, ability, !isLocalAbility(ability))
+				&& (!isLocalAbility(ability) || !isRegionProtectedFromBuild(
+						player, Abilities.AirBlast, player.getLocation()))
 				&& !toggledBending(player))
 			return true;
 		return false;
@@ -746,9 +766,7 @@ public class Tools {
 		if ((isChiBlocked(player)))
 			return true;
 		Abilities ability = Abilities.Bloodbending;
-		if (hasPermission(player, ability)
-				&& !isRegionProtected(player, ability, !isLocalAbility(ability))
-				&& !toggledBending(player))
+		if (hasPermission(player, ability) && !toggledBending(player))
 			return false;
 		return true;
 	}
@@ -813,9 +831,13 @@ public class Tools {
 		}
 	}
 
-	public static boolean isRegionProtected(Player player, Abilities ability,
-			boolean look) {
+	public static boolean isRegionProtectedFromBuild(Player player,
+			Abilities ability, Location location) {
 
+		if (ability == null && allowharmless)
+			return false;
+		if (isHarmlessAbility(ability) && allowharmless)
+			return false;
 		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
 		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
 		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
@@ -824,102 +846,55 @@ public class Tools {
 		if (wgp != null && respectWorldGuard) {
 			WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
 					.getPlugin("WorldGuard");
-			// List<Block> lb = getBlocksAroundPoint(player.getLocation(), 20);
-			// for (Block b: lb){
 			if (!player.isOnline())
 				return true;
-			if (look) {
-				int range = 20;
-				Block c = player.getTargetBlock(null, range);
-				if ((!(wg.getGlobalRegionManager().canBuild(player,
-						c.getLocation())) || !(wg.getGlobalRegionManager()
-						.canConstruct(player, c.getLocation())))) {
-					return true;
-				}
-			} else if (!(wg.getGlobalRegionManager().canBuild(player,
-					player.getLocation()))
-					|| !(wg.getGlobalRegionManager().canConstruct(player,
-							player.getLocation()))) {
+
+			if ((!(wg.getGlobalRegionManager().canBuild(player, location)) || !(wg
+					.getGlobalRegionManager().canConstruct(player, location)))) {
 				return true;
 			}
 		}
 
 		if (psp != null && respectPreciousStones) {
 			PreciousStones ps = (PreciousStones) psp;
-			Block b = player.getLocation().getBlock();
 
-			if (look) {
-
-				int range = 20;
-				Block c = player.getTargetBlock(null, range);
-				if (ps.getForceFieldManager().hasSourceField(c.getLocation(),
-						FieldFlag.PREVENT_PLACE))
-					return true;
-
-			} else {
-				if (ps.getForceFieldManager().hasSourceField(
-						player.getLocation(), FieldFlag.PREVENT_PLACE))
-					return true;
-			}
-
-			if (ps.getForceFieldManager().hasSourceField(b.getLocation(),
+			if (ps.getForceFieldManager().hasSourceField(location,
 					FieldFlag.PREVENT_PLACE))
 				return true;
 		}
 
 		if (fcp != null && respectFactions) {
-			if (isLocalAbility(ability)
-					&& !FactionsBlockListener.playerCanBuildDestroyBlock(
-							player, player.getLocation(), "build", false)) {
-				return true;
-			} else if (!isLocalAbility(ability)
-					&& !FactionsBlockListener.playerCanBuildDestroyBlock(
-							player, getTargetedLocation(player, 20), "build",
-							false)) {
+			if (!FactionsBlockListener.playerCanBuildDestroyBlock(player,
+					location, "build", true)) {
 				return true;
 			}
 		}
 
 		if (twnp != null && respectTowny) {
 			Towny twn = (Towny) twnp;
-			Block block;
-			if (isLocalAbility(ability)) {
-				block = player.getLocation().getBlock();
-			} else {
-				block = player.getTargetBlock(null, 20);
-			}
 
 			WorldCoord worldCoord;
 
 			try {
 				TownyWorld world = TownyUniverse.getDataSource().getWorld(
-						block.getWorld().getName());
+						location.getWorld().getName());
 				worldCoord = new WorldCoord(world.getName(),
-						Coord.parseCoord(block));
+						Coord.parseCoord(location));
 
-				// Get build permissions (updates if none exist)
-				boolean bBuild = PlayerCacheUtil.getCachePermission(player,
-						block.getLocation(), 3, (byte) 0,
-						TownyPermission.ActionType.BUILD);
+				boolean bBuild = PlayerCacheUtil
+						.getCachePermission(player, location, 3, (byte) 0,
+								TownyPermission.ActionType.BUILD);
 
-				// Allow build if we are permitted
 				if (!bBuild) {
-
-					/*
-					 * Fetch the players cache
-					 */
 					PlayerCache cache = twn.getCache(player);
 					TownBlockStatus status = cache.getStatus();
 
-					/*
-					 * Flag war
-					 */
 					if (((status == TownBlockStatus.ENEMY) && TownyWarConfig
 							.isAllowingAttacks())) {
 
 						try {
-							TownyWar.callAttackCellEvent(twn, player, block,
-									worldCoord);
+							TownyWar.callAttackCellEvent(twn, player,
+									location.getBlock(), worldCoord);
 						} catch (Exception e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 						}
@@ -931,9 +906,6 @@ public class Tools {
 						return true;
 					}
 
-					/*
-					 * display any error recorded for this plot
-					 */
 					if ((cache.hasBlockErrMsg()))
 						TownyMessaging.sendErrorMsg(player,
 								cache.getBlockErrMsg());
@@ -946,19 +918,153 @@ public class Tools {
 
 		}
 
-		// EntityDamageByEntityEvent damageEvent = new
-		// EntityDamageByEntityEvent(player, player,
-		// EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
-		// Bukkit.getServer().getPluginManager().callEvent(damageEvent);
-
-		// if (damageEvent.isCancelled())
-		// {
-		// return true;
-		// }
-		// }
-
 		return false;
 	}
+
+	// public static boolean isRegionProtected(Player player, Abilities ability,
+	// boolean look) {
+	//
+	// Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
+	// Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
+	// Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
+	// Plugin twnp = Bukkit.getPluginManager().getPlugin("Towny");
+	//
+	// if (wgp != null && respectWorldGuard) {
+	// WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
+	// .getPlugin("WorldGuard");
+	// if (!player.isOnline())
+	// return true;
+	// if (look) {
+	// int range = 20;
+	// Block c = player.getTargetBlock(null, range);
+	// if ((!(wg.getGlobalRegionManager().canBuild(player,
+	// c.getLocation())) || !(wg.getGlobalRegionManager()
+	// .canConstruct(player, c.getLocation())))) {
+	// return true;
+	// }
+	// } else if (!(wg.getGlobalRegionManager().canBuild(player,
+	// player.getLocation()))
+	// || !(wg.getGlobalRegionManager().canConstruct(player,
+	// player.getLocation()))) {
+	// return true;
+	// }
+	// }
+	//
+	// if (psp != null && respectPreciousStones) {
+	// PreciousStones ps = (PreciousStones) psp;
+	// Block b = player.getLocation().getBlock();
+	//
+	// if (look) {
+	//
+	// int range = 20;
+	// Block c = player.getTargetBlock(null, range);
+	// if (ps.getForceFieldManager().hasSourceField(c.getLocation(),
+	// FieldFlag.PREVENT_PLACE))
+	// return true;
+	//
+	// } else {
+	// if (ps.getForceFieldManager().hasSourceField(
+	// player.getLocation(), FieldFlag.PREVENT_PLACE))
+	// return true;
+	// }
+	//
+	// if (ps.getForceFieldManager().hasSourceField(b.getLocation(),
+	// FieldFlag.PREVENT_PLACE))
+	// return true;
+	// }
+	//
+	// if (fcp != null && respectFactions) {
+	// if (isLocalAbility(ability)
+	// && !FactionsBlockListener.playerCanBuildDestroyBlock(
+	// player, player.getLocation(), "build", false)) {
+	// return true;
+	// } else if (!isLocalAbility(ability)
+	// && !FactionsBlockListener.playerCanBuildDestroyBlock(
+	// player, getTargetedLocation(player, 20), "build",
+	// false)) {
+	// return true;
+	// }
+	// }
+	//
+	// if (twnp != null && respectTowny) {
+	// Towny twn = (Towny) twnp;
+	// Block block;
+	// if (isLocalAbility(ability)) {
+	// block = player.getLocation().getBlock();
+	// } else {
+	// block = player.getTargetBlock(null, 20);
+	// }
+	//
+	// WorldCoord worldCoord;
+	//
+	// try {
+	// TownyWorld world = TownyUniverse.getDataSource().getWorld(
+	// block.getWorld().getName());
+	// worldCoord = new WorldCoord(world.getName(),
+	// Coord.parseCoord(block));
+	//
+	// // Get build permissions (updates if none exist)
+	// boolean bBuild = PlayerCacheUtil.getCachePermission(player,
+	// block.getLocation(), 3, (byte) 0,
+	// TownyPermission.ActionType.BUILD);
+	//
+	// // Allow build if we are permitted
+	// if (!bBuild) {
+	//
+	// /*
+	// * Fetch the players cache
+	// */
+	// PlayerCache cache = twn.getCache(player);
+	// TownBlockStatus status = cache.getStatus();
+	//
+	// /*
+	// * Flag war
+	// */
+	// if (((status == TownBlockStatus.ENEMY) && TownyWarConfig
+	// .isAllowingAttacks())) {
+	//
+	// try {
+	// TownyWar.callAttackCellEvent(twn, player, block,
+	// worldCoord);
+	// } catch (Exception e) {
+	// TownyMessaging.sendErrorMsg(player, e.getMessage());
+	// }
+	//
+	// return true;
+	//
+	// } else if (status == TownBlockStatus.WARZONE) {
+	// } else {
+	// return true;
+	// }
+	//
+	// /*
+	// * display any error recorded for this plot
+	// */
+	// if ((cache.hasBlockErrMsg()))
+	// TownyMessaging.sendErrorMsg(player,
+	// cache.getBlockErrMsg());
+	// }
+	//
+	// } catch (Exception e1) {
+	// TownyMessaging.sendErrorMsg(player,
+	// TownySettings.getLangString("msg_err_not_configured"));
+	// }
+	//
+	// }
+	//
+	// // EntityDamageByEntityEvent damageEvent = new
+	// // EntityDamageByEntityEvent(player, player,
+	// // EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
+	// // Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+	//
+	// // if (damageEvent.isCancelled())
+	// // {
+	// // return true;
+	// // }
+	// // }
+	//
+	// return false;
+	// }
 
 	public static boolean canBendPassive(Player player, BendingType type) {
 		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player))
@@ -966,7 +1072,7 @@ public class Tools {
 			return false;
 		if (allowharmless && type != BendingType.Earth)
 			return true;
-		if (isRegionProtected(player, null, false))
+		if (isRegionProtectedFromBuild(player, null, player.getLocation()))
 			return false;
 		if (player.hasPermission("bending." + type + ".passive")) {
 			return true;

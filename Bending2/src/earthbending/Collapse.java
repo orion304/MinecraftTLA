@@ -21,20 +21,25 @@ public class Collapse {
 	private ConcurrentHashMap<Block, Integer> baseblocks = new ConcurrentHashMap<Block, Integer>();
 	private double radius = defaultradius;
 
+	private Player player;
+
 	public Collapse(Player player) {
 		// if (AvatarState.isAvatarState(player))
 		// radius = AvatarState.getValue(defaultradius);
 		Location location = player.getTargetBlock(
 				Tools.getTransparentEarthbending(), range).getLocation();
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
-			if (Tools.isEarthbendable(block) && !blocks.containsKey(block)
+			if (Tools.isEarthbendable(player, block)
+					&& !blocks.containsKey(block)
 					&& block.getY() >= location.getBlockY()) {
 				getAffectedBlocks(block);
 			}
 		}
 
+		this.player = player;
+
 		for (Block block : baseblocks.keySet()) {
-			new CompactColumn(block.getLocation());
+			new CompactColumn(player, block.getLocation());
 		}
 	}
 
@@ -45,7 +50,7 @@ public class Collapse {
 		bendableblocks.add(block);
 		for (int i = 1; i <= height; i++) {
 			Block blocki = block.getRelative(BlockFace.DOWN, i);
-			if (Tools.isEarthbendable(blocki)) {
+			if (Tools.isEarthbendable(player, blocki)) {
 				baseblock = blocki;
 				bendableblocks.add(blocki);
 				tall++;

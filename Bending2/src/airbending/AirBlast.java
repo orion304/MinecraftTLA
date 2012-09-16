@@ -126,6 +126,12 @@ public class AirBlast {
 			return false;
 		}
 
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.AirBlast,
+				location)) {
+			instances.remove(id);
+			return false;
+		}
+
 		speedfactor = speed * (Bending.time_step / 1000.);
 
 		ticks++;

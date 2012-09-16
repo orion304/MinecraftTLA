@@ -30,6 +30,7 @@ public class EarthColumn {
 	private Location location;
 	private Block block;
 	private int distance;
+	private Player player;
 	private int id;
 	private long time;
 	private int height = standardheight;
@@ -41,12 +42,14 @@ public class EarthColumn {
 					(int) range);
 			origin = block.getLocation();
 			location = origin.clone();
-			distance = Tools.getEarthbendableBlocksLength(block, direction
-					.clone().multiply(-1), height);
+			distance = Tools.getEarthbendableBlocksLength(player, block,
+					direction.clone().multiply(-1), height);
 		} catch (IllegalStateException e) {
 			return;
 		}
 
+		this.player = player;
+
 		loadAffectedBlocks();
 
 		if (distance != 0) {
@@ -62,12 +65,13 @@ public class EarthColumn {
 		}
 	}
 
-	public EarthColumn(Location origin) {
+	public EarthColumn(Player player, Location origin) {
 		this.origin = origin;
 		location = origin.clone();
 		block = location.getBlock();
-		distance = Tools.getEarthbendableBlocksLength(block, direction.clone(),
-				height);
+		this.player = player;
+		distance = Tools.getEarthbendableBlocksLength(player, block,
+				direction.clone(), height);
 
 		loadAffectedBlocks();
 
@@ -84,13 +88,14 @@ public class EarthColumn {
 		}
 	}
 
-	public EarthColumn(Location origin, int height) {
+	public EarthColumn(Player player, Location origin, int height) {
 		this.height = height;
 		this.origin = origin;
 		location = origin.clone();
 		block = location.getBlock();
-		distance = Tools.getEarthbendableBlocksLength(block, direction.clone(),
-				height);
+		this.player = player;
+		distance = Tools.getEarthbendableBlocksLength(player, block,
+				direction.clone(), height);
 
 		loadAffectedBlocks();
 
@@ -175,7 +180,7 @@ public class EarthColumn {
 	private boolean moveEarth() {
 		Block block = location.getBlock();
 		location = location.add(direction);
-		Tools.moveEarth(block, direction, distance);
+		Tools.moveEarth(player, block, direction, distance);
 		loadAffectedBlocks();
 
 		if (location.distance(origin) >= distance) {

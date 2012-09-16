@@ -56,7 +56,7 @@ public class EarthBlast {
 		cancelPrevious();
 		Block block = player.getTargetBlock(Tools.getTransparentEarthbending(),
 				(int) preparerange);
-		if (Tools.isEarthbendable(block)) {
+		if (Tools.isEarthbendable(player, block)) {
 			sourceblock = block;
 			focusBlock();
 			return true;
@@ -231,7 +231,7 @@ public class EarthBlast {
 					location = location.clone().add(direction);
 					block = location.getBlock();
 				}
-				if (Tools.isTransparentToEarthbending(block)
+				if (Tools.isTransparentToEarthbending(player, block)
 						&& !block.isLiquid()) {
 					Tools.breakBlock(block);
 				} else if (block.getType() != Material.AIR) {

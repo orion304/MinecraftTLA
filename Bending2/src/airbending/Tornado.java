@@ -74,6 +74,11 @@ public class Tornado {
 			instances.remove(player.getEntityId());
 			return false;
 		}
+		if (Tools
+				.isRegionProtectedFromBuild(player, Abilities.AirBlast, origin)) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
 		rotateTornado();
 		return true;
 	}
@@ -84,6 +89,9 @@ public class Tornado {
 			origin.setY(origin.getY() - 1. / 10. * height);
 
 			for (Entity entity : Tools.getEntitiesAroundPoint(origin, height)) {
+				if (Tools.isRegionProtectedFromBuild(player,
+						Abilities.AirBlast, entity.getLocation()))
+					continue;
 				double y = entity.getLocation().getY();
 				double factor;
 				if (y > origin.getY() && y < origin.getY() + height) {
@@ -140,6 +148,9 @@ public class Tornado {
 				z = origin.getZ() + factor * radius * Math.sin(angle);
 
 				Location effect = new Location(origin.getWorld(), x, y, z);
+				if (Tools.isRegionProtectedFromBuild(player,
+						Abilities.AirBlast, effect))
+					continue;
 				origin.getWorld().playEffect(effect, Effect.SMOKE, 4,
 						(int) AirBlast.defaultrange);
 

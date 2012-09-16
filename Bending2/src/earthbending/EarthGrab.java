@@ -55,9 +55,9 @@ public class EarthGrab {
 						factor2 * Math.sin(Math.toRadians(angle)));
 				for (int y = 0; y < EarthColumn.standardheight - height1; y++) {
 					testloc = testloc.clone().add(0, -1, 0);
-					if (Tools.isEarthbendable(testloc.getBlock())) {
+					if (Tools.isEarthbendable(player, testloc.getBlock())) {
 						if (!blocks.contains(testloc.getBlock())) {
-							new EarthColumn(testloc, height1 + y - 1);
+							new EarthColumn(player, testloc, height1 + y - 1);
 						}
 						blocks.add(testloc.getBlock());
 						break;
@@ -65,9 +65,9 @@ public class EarthGrab {
 				}
 				for (int y = 0; y < EarthColumn.standardheight - height2; y++) {
 					testloc2 = testloc2.clone().add(0, -1, 0);
-					if (Tools.isEarthbendable(testloc2.getBlock())) {
+					if (Tools.isEarthbendable(player, testloc2.getBlock())) {
 						if (!blocks.contains(testloc2.getBlock())) {
-							new EarthColumn(testloc2, height2 + y - 1);
+							new EarthColumn(player, testloc2, height2 + y - 1);
 						}
 						blocks.add(testloc2.getBlock());
 						break;

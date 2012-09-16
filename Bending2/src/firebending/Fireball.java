@@ -146,7 +146,8 @@ public class Fireball {
 		// List<Block> blocks2 = new ArrayList<Block>();
 
 		// Tools.verbose("Fireball Explode!");
-		location.getWorld().createExplosion(location, 1);
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze, location))
+			location.getWorld().createExplosion(location, 1);
 
 		ignite(location);
 		remove();
@@ -155,7 +156,7 @@ public class Fireball {
 	private void ignite(Location location) {
 		for (Block block : Tools.getBlocksAroundPoint(location,
 				FireBlast.affectingradius)) {
-			if (FireStream.isIgnitable(block)) {
+			if (FireStream.isIgnitable(player, block)) {
 				block.setType(Material.FIRE);
 				if (FireBlast.dissipate) {
 					FireStream.ignitedblocks.put(block, player);

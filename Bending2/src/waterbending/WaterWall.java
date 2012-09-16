@@ -396,6 +396,10 @@ public class WaterWall {
 
 	private void addWater(Block block) {
 
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.Surge,
+				block.getLocation()))
+			return;
+
 		if (!TempBlock.isTempBlock(block)) {
 			new TempBlock(block, Material.WATER, full);
 			// new TempBlock(block, Material.ICE, (byte) 0);

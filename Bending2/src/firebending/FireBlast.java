@@ -16,6 +16,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
@@ -103,6 +104,11 @@ public class FireBlast {
 			return false;
 		}
 
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze, location)) {
+			instances.remove(id);
+			return false;
+		}
+
 		speedfactor = speed * (Bending.time_step / 1000.);
 
 		ticks++;
@@ -138,7 +144,7 @@ public class FireBlast {
 		// }
 		// }
 		if (Tools.isSolid(block) || block.isLiquid()) {
-			if (FireStream.isIgnitable(block.getRelative(BlockFace.UP))) {
+			if (FireStream.isIgnitable(player, block.getRelative(BlockFace.UP))) {
 				ignite(location);
 			}
 			instances.remove(id);
@@ -173,7 +179,7 @@ public class FireBlast {
 	private void ignite(Location location) {
 		for (Block block : Tools
 				.getBlocksAroundPoint(location, affectingradius)) {
-			if (FireStream.isIgnitable(block) && !safe.contains(block)) {
+			if (FireStream.isIgnitable(player, block) && !safe.contains(block)) {
 				block.setType(Material.FIRE);
 				if (dissipate) {
 					FireStream.ignitedblocks.put(block, player);

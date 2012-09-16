@@ -40,8 +40,8 @@ public class Shockwave {
 				|| Tools.getBendingAbility(player) != Abilities.Shockwave
 				|| instances.containsKey(player)
 				|| player.getFallDistance() < threshold
-				|| !Tools.isEarthbendable(player.getLocation().add(0, -1, 0)
-						.getBlock())) {
+				|| !Tools.isEarthbendable(player,
+						player.getLocation().add(0, -1, 0).getBlock())) {
 			return;
 		}
 		areaShockwave(player);

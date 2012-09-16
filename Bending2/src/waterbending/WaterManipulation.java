@@ -182,6 +182,12 @@ public class WaterManipulation {
 			return false;
 		}
 		if (System.currentTimeMillis() - time >= interval) {
+			if (Tools.isRegionProtectedFromBuild(player,
+					Abilities.WaterManipulation, location)) {
+				remove(id);
+				return false;
+			}
+
 			time = System.currentTimeMillis();
 
 			removeWater(oldwater);
@@ -284,7 +290,7 @@ public class WaterManipulation {
 					}
 				}
 
-				if (Tools.isTransparentToEarthbending(block)
+				if (Tools.isTransparentToEarthbending(player, block)
 						&& !block.isLiquid()) {
 					Tools.breakBlock(block);
 				} else if (block.getType() != Material.AIR) {

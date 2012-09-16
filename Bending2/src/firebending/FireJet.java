@@ -42,7 +42,8 @@ public class FireJet {
 		}
 		factor = Tools.firebendingDayAugment(defaultfactor, player.getWorld());
 		Block block = player.getLocation().getBlock();
-		if (FireStream.isIgnitable(block) || block.getType() == Material.AIR
+		if (FireStream.isIgnitable(player, block)
+				|| block.getType() == Material.AIR
 				|| AvatarState.isAvatarState(player)) {
 			player.setVelocity(player.getEyeLocation().getDirection().clone()
 					.normalize().multiply(factor));

@@ -15,11 +15,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.ConfigManager;
 import tools.Tools;
 
 public class IceSpike {
-	
+
 	public static ConcurrentHashMap<Integer, IceSpike> instances = new ConcurrentHashMap<Integer, IceSpike>();
 	public ConcurrentHashMap<Player, Long> removeTimers = new ConcurrentHashMap<Player, Long>();
 	public static Map<Player, Long> cooldowns = new HashMap<Player, Long>();
@@ -53,39 +54,40 @@ public class IceSpike {
 
 	public IceSpike(Player player) {
 		if (cooldowns.containsKey(player))
-				if (cooldowns.get(player) + cooldown >= System.currentTimeMillis())
-					return;
+			if (cooldowns.get(player) + cooldown >= System.currentTimeMillis())
+				return;
 		try {
 			this.player = player;
-			
-			
+
 			double lowestdistance = range + 1;
 			Entity closestentity = null;
-			for (Entity entity : Tools.getEntitiesAroundPoint(player.getLocation(), range)) {
-				if (Tools.getDistanceFromLine(player.getLocation().getDirection(), player.getLocation(),
-						entity.getLocation()) <= 2
+			for (Entity entity : Tools.getEntitiesAroundPoint(
+					player.getLocation(), range)) {
+				if (Tools.getDistanceFromLine(player.getLocation()
+						.getDirection(), player.getLocation(), entity
+						.getLocation()) <= 2
 						&& (entity instanceof LivingEntity)
 						&& (entity.getEntityId() != player.getEntityId())) {
-					double distance = player.getLocation().distance(entity.getLocation());
+					double distance = player.getLocation().distance(
+							entity.getLocation());
 					if (distance < lowestdistance) {
 						closestentity = entity;
 						lowestdistance = distance;
 					}
 				}
 			}
-			if (closestentity != null){
-					Block temptestingblock = closestentity.getLocation().getBlock().getRelative(BlockFace.DOWN, 1);
-					//if (temptestingblock.getType() == Material.ICE){
-						this.block = temptestingblock;
-					//}
-				} else {
-					this.block = player.getTargetBlock(null,
-							(int) range);
-				}
+			if (closestentity != null) {
+				Block temptestingblock = closestentity.getLocation().getBlock()
+						.getRelative(BlockFace.DOWN, 1);
+				// if (temptestingblock.getType() == Material.ICE){
+				this.block = temptestingblock;
+				// }
+			} else {
+				this.block = player.getTargetBlock(null, (int) range);
+			}
 			origin = block.getLocation();
 			location = origin.clone();
 
-			
 		} catch (IllegalStateException e) {
 			return;
 		}
@@ -106,7 +108,8 @@ public class IceSpike {
 		}
 	}
 
-	public IceSpike(Player player, Location origin, int damage, Vector throwing, long aoecooldown) {
+	public IceSpike(Player player, Location origin, int damage,
+			Vector throwing, long aoecooldown) {
 		this.cooldown = aoecooldown;
 		this.player = player;
 		this.origin = origin;
@@ -163,15 +166,16 @@ public class IceSpike {
 		}
 	}
 
-	private boolean canInstantiate() {	
+	private boolean canInstantiate() {
 		if (block.getType() != Material.ICE)
 			return false;
 		for (Block block : affectedblocks.keySet()) {
 			if (blockInAllAffectedBlocks(block)
 					|| alreadydoneblocks.containsKey(block)
 					|| block.getType() != Material.AIR
-					|| (block.getX() == player.getEyeLocation().getBlock().getX() &&
-					block.getZ() == player.getEyeLocation().getBlock().getZ())){
+					|| (block.getX() == player.getEyeLocation().getBlock()
+							.getX() && block.getZ() == player.getEyeLocation()
+							.getBlock().getZ())) {
 				return false;
 			}
 		}
@@ -181,17 +185,18 @@ public class IceSpike {
 	public boolean progress() {
 		if (System.currentTimeMillis() - time >= interval) {
 			time = System.currentTimeMillis();
-			if (progress < height){
+			if (progress < height) {
 				moveEarth();
 				removeTimers.put(player, System.currentTimeMillis());
 			} else {
-				if (removeTimers.get(player) + removeTimer <= System.currentTimeMillis()){
+				if (removeTimers.get(player) + removeTimer <= System
+						.currentTimeMillis()) {
 					baseblocks.put(
 							location.clone()
-								.add(direction.clone().multiply(
-										-1 * (height))).getBlock(),
-										(height - 1));
-					if (!revertblocks()){
+									.add(direction.clone().multiply(
+											-1 * (height))).getBlock(),
+							(height - 1));
+					if (!revertblocks()) {
 						instances.remove(id);
 					}
 				}
@@ -206,15 +211,17 @@ public class IceSpike {
 		progress++;
 		Block affectedblock = location.clone().add(direction).getBlock();
 		location = location.add(direction);
-		for (Entity en : Tools.getEntitiesAroundPoint(location, 1.4)){
-			if (en instanceof LivingEntity 
-					&& en != player
-					&& !damaged.contains(((LivingEntity)en))){
-				LivingEntity le = (LivingEntity)en;
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.IceSpike,
+				location))
+			return false;
+		for (Entity en : Tools.getEntitiesAroundPoint(location, 1.4)) {
+			if (en instanceof LivingEntity && en != player
+					&& !damaged.contains(((LivingEntity) en))) {
+				LivingEntity le = (LivingEntity) en;
 				le.setVelocity(thrown);
 				le.damage(damage);
 				damaged.add(le);
-				//Tools.verbose(damage + " Hp:" + le.getHealth());
+				// Tools.verbose(damage + " Hp:" + le.getHealth());
 			}
 		}
 		affectedblock.setType(Material.ICE);
@@ -250,20 +257,21 @@ public class IceSpike {
 			instances.remove(ID);
 		}
 	}
-	
-	public boolean revertblocks(){
-			Vector direction = new Vector(0, -1, 0);
-			location.getBlock().setType(Material.AIR);//.clone().add(direction).getBlock().setType(Material.AIR);
-			location.add(direction);
-			if (blockIsBase(location.getBlock()))
-				return false;
-			return true;
+
+	public boolean revertblocks() {
+		Vector direction = new Vector(0, -1, 0);
+		location.getBlock().setType(Material.AIR);// .clone().add(direction).getBlock().setType(Material.AIR);
+		location.add(direction);
+		if (blockIsBase(location.getBlock()))
+			return false;
+		return true;
 	}
 
 	public static String getDescription() {
 		return "To use, target an entity or target an ice block in range. "
 				+ "An ice spike will quickly raise to damage nearby entities as well as knocking them up. "
-				+ "Alternatively, you can sneak to use a similar ability that will raise " + SpikeField.numofspikes
+				+ "Alternatively, you can sneak to use a similar ability that will raise "
+				+ SpikeField.numofspikes
 				+ " spikes that will look similar to the default point and click ability. "
 				+ " But it will act differently throwing entities a different heigth and dealing "
 				+ " a different amount of damage. This ability is really useful to skilled bender "

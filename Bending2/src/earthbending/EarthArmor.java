@@ -43,8 +43,8 @@ public class EarthArmor {
 
 		this.player = player;
 		headblock = player.getTargetBlock(null, range);
-		if (Tools.getEarthbendableBlocksLength(headblock, new Vector(0, -1, 0),
-				2) >= 2) {
+		if (Tools.getEarthbendableBlocksLength(player, headblock, new Vector(0,
+				-1, 0), 2) >= 2) {
 			legsblock = headblock.getRelative(BlockFace.DOWN);
 			headtype = headblock.getType();
 			legstype = legsblock.getType();
@@ -95,9 +95,9 @@ public class EarthArmor {
 			newlegsblock = legsblocklocation.getBlock();
 		}
 
-		if ((!Tools.isEarthbendable(newlegsblock) && !newlegsblock.isLiquid() && newlegsblock
-				.getType() != Material.AIR)
-				|| (!Tools.isEarthbendable(newheadblock)
+		if ((!Tools.isEarthbendable(player, newlegsblock)
+				&& !newlegsblock.isLiquid() && newlegsblock.getType() != Material.AIR)
+				|| (!Tools.isEarthbendable(player, newheadblock)
 						&& !newheadblock.isLiquid() && newheadblock.getType() != Material.AIR)) {
 			cancel();
 			return false;

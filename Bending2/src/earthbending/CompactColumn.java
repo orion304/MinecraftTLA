@@ -28,6 +28,7 @@ public class CompactColumn {
 	private Location origin;
 	private Location location;
 	private Block block;
+	private Player player;
 	private int distance;
 	private int id;
 	private long time;
@@ -38,8 +39,9 @@ public class CompactColumn {
 				(int) range);
 		origin = block.getLocation();
 		location = origin.clone();
-		distance = Tools.getEarthbendableBlocksLength(block, direction.clone()
-				.multiply(-1), height);
+		this.player = player;
+		distance = Tools.getEarthbendableBlocksLength(player, block, direction
+				.clone().multiply(-1), height);
 
 		loadAffectedBlocks();
 
@@ -56,15 +58,15 @@ public class CompactColumn {
 		}
 	}
 
-	public CompactColumn(Location origin) {
+	public CompactColumn(Player player, Location origin) {
 		// Tools.verbose("New compact column");
 		this.origin = origin;
 		block = origin.getBlock();
 		// Tools.verbose(block);
 		// Tools.verbose(origin);
 		location = origin.clone();
-		distance = Tools.getEarthbendableBlocksLength(block, direction.clone()
-				.multiply(-1), height);
+		distance = Tools.getEarthbendableBlocksLength(player, block, direction
+				.clone().multiply(-1), height);
 
 		loadAffectedBlocks();
 
@@ -152,7 +154,7 @@ public class CompactColumn {
 		if (block == null || location == null || distance == 0) {
 			return false;
 		}
-		Tools.moveEarth(block, direction, distance);
+		Tools.moveEarth(player, block, direction, distance);
 		loadAffectedBlocks();
 
 		if (location.distance(origin) >= distance) {

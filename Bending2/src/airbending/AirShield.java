@@ -54,6 +54,9 @@ public class AirShield {
 		FireBlast.removeFireBlastsAroundPoint(origin, radius);
 
 		for (Entity entity : Tools.getEntitiesAroundPoint(origin, radius)) {
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.AirShield,
+					entity.getLocation()))
+				continue;
 			if (origin.distance(entity.getLocation()) > 2) {
 				double x, z, vx, vz, mag;
 				double angle = 50;
@@ -93,6 +96,9 @@ public class AirShield {
 			z = origin.getZ() + radius * Math.sin(angle);
 
 			Location effect = new Location(origin.getWorld(), x, y, z);
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.AirShield,
+					effect))
+				continue;
 			origin.getWorld().playEffect(effect, Effect.SMOKE, 4,
 					(int) AirBlast.defaultrange);
 
@@ -103,6 +109,11 @@ public class AirShield {
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player.getEntityId());
+			return false;
+		}
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.AirShield,
+				player.getLocation())) {
 			instances.remove(player.getEntityId());
 			return false;
 		}

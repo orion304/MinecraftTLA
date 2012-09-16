@@ -63,9 +63,9 @@ public class EarthTunnel {
 				instances.remove(player);
 				return false;
 			} else {
-				while (!Tools.isEarthbendable(block)) {
+				while (!Tools.isEarthbendable(player, block)) {
 					// Tools.verbose("going");
-					if (!Tools.isTransparentToEarthbending(block)) {
+					if (!Tools.isTransparentToEarthbending(player, block)) {
 						// Tools.verbose("false! at" + angle + " " + radius +
 						// " "
 						// + depth);

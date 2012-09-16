@@ -70,6 +70,12 @@ public class AirScooter {
 			remove();
 			return;
 		}
+
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.AirScooter,
+				player.getLocation())) {
+			remove();
+			return;
+		}
 		// if (Tools
 		// .isSolid(player
 		// .getEyeLocation()

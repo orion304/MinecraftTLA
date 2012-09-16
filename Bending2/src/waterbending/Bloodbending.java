@@ -37,7 +37,9 @@ public class Bloodbending {
 					player.getLocation(), range)) {
 				if (entity instanceof LivingEntity) {
 					if (entity instanceof Player) {
-						if (AvatarState.isAvatarState((Player) entity)
+						if (Tools.isRegionProtectedFromBuild(player,
+								Abilities.Bloodbending, entity.getLocation())
+								|| AvatarState.isAvatarState((Player) entity)
 								|| entity.getEntityId() == player.getEntityId()
 								|| Tools.canBend((Player) entity,
 										Abilities.Bloodbending))
@@ -50,6 +52,10 @@ public class Bloodbending {
 		} else {
 			Entity target = Tools.getTargettedEntity(player, range);
 			if (target == null)
+				return;
+			if (!(target instanceof LivingEntity)
+					|| Tools.isRegionProtectedFromBuild(player,
+							Abilities.Bloodbending, target.getLocation()))
 				return;
 			Tools.damageEntity(player, target, 0);
 			targetentities.put(target, target.getLocation().clone());
@@ -89,6 +95,9 @@ public class Bloodbending {
 			ArrayList<Entity> entities = new ArrayList<Entity>();
 			for (Entity entity : Tools.getEntitiesAroundPoint(
 					player.getLocation(), range)) {
+				if (Tools.isRegionProtectedFromBuild(player,
+						Abilities.Bloodbending, entity.getLocation()))
+					continue;
 				if (entity instanceof Player) {
 					if (!Tools.canBeBloodbent((Player) entity))
 						continue;

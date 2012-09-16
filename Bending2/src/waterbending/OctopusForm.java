@@ -112,6 +112,9 @@ public class OctopusForm {
 		for (Entity entity : Tools.getEntitiesAroundPoint(location, 2.5)) {
 			if (entity.getEntityId() == player.getEntityId())
 				continue;
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.OctopusForm,
+					entity.getLocation()))
+				continue;
 			entity.setVelocity(Tools
 					.getDirection(player.getLocation(), location).normalize()
 					.multiply(1.75));
@@ -303,6 +306,9 @@ public class OctopusForm {
 
 	private void addWater(Block block) {
 		clearNearbyWater(block);
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.OctopusForm,
+				block.getLocation()))
+			return;
 		if (TempBlock.isTempBlock(block)) {
 			TempBlock tblock = TempBlock.get(block);
 			if (!newblocks.contains(tblock)) {
@@ -343,7 +349,7 @@ public class OctopusForm {
 		for (BlockFace face : faces) {
 			Block rel = block.getRelative(face);
 			if (Tools.isWater(rel) && !TempBlock.isTempBlock(rel)) {
-				FreezeMelt.freeze(rel);
+				FreezeMelt.freeze(player, rel);
 				// water.add(new TempBlock(rel, Material.AIR, (byte) 0));
 			}
 		}

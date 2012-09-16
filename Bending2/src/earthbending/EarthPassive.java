@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import tools.Abilities;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -19,10 +20,11 @@ public class EarthPassive {
 	public static boolean softenLanding(Player player) {
 		Block block = player.getLocation().getBlock()
 				.getRelative(BlockFace.DOWN);
-		if (Tools.isEarthbendable(block)
-				|| Tools.isTransparentToEarthbending(block)) {
+		if (Tools.isEarthbendable(player, Abilities.RaiseEarth, block)
+				|| Tools.isTransparentToEarthbending(player,
+						Abilities.RaiseEarth, block)) {
 
-			if (!Tools.isTransparentToEarthbending(block)) {
+			if (!Tools.isTransparentToEarthbending(player, block)) {
 				Material type = block.getType();
 				if (Tools.isSolid(block.getRelative(BlockFace.DOWN))) {
 					block.setType(Material.SAND);
@@ -36,7 +38,7 @@ public class EarthPassive {
 
 			for (Block affectedblock : Tools.getBlocksAroundPoint(
 					block.getLocation(), 2)) {
-				if (Tools.isEarthbendable(affectedblock)) {
+				if (Tools.isEarthbendable(player, affectedblock)) {
 					if (Tools
 							.isSolid(affectedblock.getRelative(BlockFace.DOWN))) {
 						Material type = affectedblock.getType();

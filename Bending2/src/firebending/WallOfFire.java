@@ -17,9 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
 
-import firebending.FireBlast;
-import firebending.FireStream;
-
+import tools.Abilities;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -46,8 +44,6 @@ public class WallOfFire {
 	private static Map<Entity, Long> damaged = new HashMap<Entity, Long>();
 	private static long damageinterval = 1000;
 
-
-	
 	public WallOfFire(Player player) {
 		if (ID >= Integer.MAX_VALUE) {
 			ID = Integer.MIN_VALUE;
@@ -94,7 +90,7 @@ public class WallOfFire {
 		locations.put(p, loc);
 		playerlocations.put(p, p.getLocation());
 		cooldowns.put(p, System.currentTimeMillis());
-		if (!tblock.isEmpty() || !FireStream.isIgnitable(tblock)) {
+		if (!tblock.isEmpty() || !FireStream.isIgnitable(player, tblock)) {
 			instances.remove(p);
 			durations.remove(p);
 		}
@@ -134,13 +130,16 @@ public class WallOfFire {
 										loc.clone().add(
 												orth.clone().multiply(
 														(double) i)));
-								if (FireStream.isIgnitable(block))
+								if (FireStream.isIgnitable(p, block))
 									block.setType(Material.AIR);
 								for (int y = block.getY(); y <= block.getY()
 										+ height; y++) {
 									Location loca = new Location(
 											block.getWorld(), block.getX(),
 											(int) y, block.getZ());
+									if (Tools.isRegionProtectedFromBuild(p,
+											Abilities.WallOfFire, loca))
+										continue;
 									blocks.add(loca);
 									block.getWorld().playEffect(loca,
 											Effect.MOBSPAWNER_FLAMES, 1, 20);

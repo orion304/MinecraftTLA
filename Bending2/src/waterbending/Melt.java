@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.TempBlock;
@@ -41,14 +42,17 @@ public class Melt {
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
 			if (evaporate) {
 				if (block.getY() > seaLevel)
-					evaporate(block);
+					evaporate(player, block);
 			} else {
-				melt(block);
+				melt(player, block);
 			}
 		}
 	}
 
-	public static void melt(Block block) {
+	public static void melt(Player player, Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.PhaseChange,
+				block.getLocation()))
+			return;
 		if (Tools.isMeltable(block) && !TempBlock.isTempBlock(block)
 				&& WaterManipulation.canPhysicsChange(block)) {
 			if (block.getType() == Material.SNOW) {
@@ -66,7 +70,10 @@ public class Melt {
 		}
 	}
 
-	public static void evaporate(Block block) {
+	public static void evaporate(Player player, Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.PhaseChange,
+				block.getLocation()))
+			return;
 		if (Tools.isWater(block) && !TempBlock.isTempBlock(block)
 				&& WaterManipulation.canPhysicsChange(block)) {
 			block.setType(Material.AIR);

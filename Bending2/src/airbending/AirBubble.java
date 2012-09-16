@@ -50,6 +50,9 @@ public class AirBubble {
 		Location location = player.getLocation();
 
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.AirBubble,
+					block.getLocation()))
+				continue;
 			if (block.getType() == Material.STATIONARY_WATER
 					|| block.getType() == Material.WATER) {
 				if (WaterManipulation.canBubbleWater(block)) {
@@ -64,7 +67,8 @@ public class AirBubble {
 
 		for (Block block : waterorigins.keySet()) {
 			if (block.getWorld() != location.getWorld()) {
-				byte data = waterorigins.get(block);
+				// byte data = waterorigins.get(block);
+				byte data = 0x0;
 				block = block.getLocation().getBlock();
 				if (block.getType() == Material.AIR) {
 					block.setType(Material.WATER);
@@ -72,7 +76,8 @@ public class AirBubble {
 				}
 				waterorigins.remove(block);
 			} else if (block.getLocation().distance(location) > radius) {
-				byte data = waterorigins.get(block);
+				// byte data = waterorigins.get(block);
+				byte data = 0x0;
 				block = block.getLocation().getBlock();
 				if (block.getType() == Material.AIR) {
 					block.setType(Material.WATER);
@@ -124,7 +129,8 @@ public class AirBubble {
 
 	private void removeBubble() {
 		for (Block block : waterorigins.keySet()) {
-			byte data = waterorigins.get(block);
+			// byte data = waterorigins.get(block);
+			byte data = 0x0;
 			block = block.getLocation().getBlock();
 			if (block.getType() == Material.AIR) {
 				block.setType(Material.WATER);

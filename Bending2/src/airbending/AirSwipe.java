@@ -160,7 +160,9 @@ public class AirSwipe {
 						direction.clone().multiply(speedfactor));
 				elements.replace(direction, location);
 
-				if (location.distance(origin) > range) {
+				if (location.distance(origin) > range
+						|| Tools.isRegionProtectedFromBuild(player,
+								Abilities.AirSwipe, location)) {
 					elements.remove(direction);
 				} else {
 					Block block = location.getBlock();

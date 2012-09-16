@@ -47,25 +47,26 @@ public class EarthWall {
 			if (block.getType() == Material.AIR || block.isLiquid()) {
 				for (int j = 1; j < height; j++) {
 					block = block.getRelative(BlockFace.DOWN);
-					if (Tools.isEarthbendable(block)) {
-						new EarthColumn(block.getLocation(), height);
+					if (Tools.isEarthbendable(player, block)) {
+						new EarthColumn(player, block.getLocation(), height);
 					} else if (block.getType() != Material.AIR
 							&& !block.isLiquid()) {
 						break;
 					}
 				}
-			} else if (Tools.isEarthbendable(block.getRelative(BlockFace.UP))) {
+			} else if (Tools.isEarthbendable(player,
+					block.getRelative(BlockFace.UP))) {
 				for (int j = 1; j < height; j++) {
 					block = block.getRelative(BlockFace.UP);
 					if (block.getType() == Material.AIR || block.isLiquid()) {
-						new EarthColumn(block.getRelative(BlockFace.DOWN)
-								.getLocation(), height);
-					} else if (!Tools.isEarthbendable(block)) {
+						new EarthColumn(player, block.getRelative(
+								BlockFace.DOWN).getLocation(), height);
+					} else if (!Tools.isEarthbendable(player, block)) {
 						break;
 					}
 				}
-			} else if (Tools.isEarthbendable(block)) {
-				new EarthColumn(block.getLocation());
+			} else if (Tools.isEarthbendable(player, block)) {
+				new EarthColumn(player, block.getLocation());
 			}
 		}
 	}

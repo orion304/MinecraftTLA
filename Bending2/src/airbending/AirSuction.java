@@ -104,6 +104,11 @@ public class AirSuction {
 			instances.remove(id);
 			return false;
 		}
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.AirSuction,
+				location)) {
+			instances.remove(id);
+			return false;
+		}
 		speedfactor = speed * (Bending.time_step / 1000.);
 
 		ticks++;

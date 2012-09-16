@@ -62,8 +62,10 @@ public class HealingWaters {
 	}
 
 	private static void applyHealing(Player player) {
-		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
-				70, 1));
+		if (!Tools.isRegionProtectedFromBuild(player, Abilities.HealingWaters,
+				player.getLocation()))
+			player.addPotionEffect(new PotionEffect(
+					PotionEffectType.REGENERATION, 70, 1));
 	}
 
 	public static String getDescription() {

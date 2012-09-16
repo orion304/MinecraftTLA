@@ -216,11 +216,14 @@ public class Wave {
 
 				ArrayList<Block> blocks = new ArrayList<Block>();
 
-				if (((blockl.getType() == Material.AIR
-						|| blockl.getType() == Material.FIRE
-						|| Tools.isPlant(blockl) || Tools.isWater(blockl) || Tools
-							.isWaterbendable(blockl, player)))
-						&& blockl.getType() != Material.LEAVES) {
+				if (!Tools.isRegionProtectedFromBuild(player, Abilities.Surge,
+						location)
+						&& (((blockl.getType() == Material.AIR
+								|| blockl.getType() == Material.FIRE
+								|| Tools.isPlant(blockl)
+								|| Tools.isWater(blockl) || Tools
+									.isWaterbendable(blockl, player))) && blockl
+								.getType() != Material.LEAVES)) {
 
 					for (double i = 0; i <= radius; i += .5) {
 						for (double angle = 0; angle < 360; angle += 10) {
@@ -336,6 +339,9 @@ public class Wave {
 	}
 
 	private void addWater(Block block) {
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.Surge,
+				block.getLocation()))
+			return;
 		if (!TempBlock.isTempBlock(block)) {
 			new TempBlock(block, Material.WATER, full);
 			// new TempBlock(block, Material.ICE, (byte) 0);
@@ -404,7 +410,7 @@ public class Wave {
 				frozenblocks.put(block, block);
 			}
 			if (Tools.isWater(block)) {
-				FreezeMelt.freeze(block);
+				FreezeMelt.freeze(player, block);
 			}
 			if (Tools.isPlant(block) && block.getType() != Material.LEAVES) {
 				block.breakNaturally();

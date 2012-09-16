@@ -54,12 +54,12 @@ public class Catapult {
 		for (int i = 0; i <= length; i++) {
 			location = origin.clone().add(neg.clone().multiply((double) i));
 			block = location.getBlock();
-			if (Tools.isEarthbendable(block)) {
+			if (Tools.isEarthbendable(player, block)) {
 				// block.setType(Material.SANDSTONE);
-				distance = Tools.getEarthbendableBlocksLength(block, neg,
-						length - i);
+				distance = Tools.getEarthbendableBlocksLength(player, block,
+						neg, length - i);
 				break;
-			} else if (!Tools.isTransparentToEarthbending(block)) {
+			} else if (!Tools.isTransparentToEarthbending(player, block)) {
 				break;
 			}
 		}
@@ -142,7 +142,7 @@ public class Catapult {
 			ticks++;
 		}
 
-		Tools.moveEarth(location, direction, distance, false);
+		Tools.moveEarth(player, location, direction, distance, false);
 		location = location.clone().add(direction);
 
 		if (catapult) {

@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
@@ -36,7 +37,9 @@ public class Lightning {
 
 	private void strike() {
 		Location targetlocation = getTargetLocation();
-		player.getWorld().strikeLightning(targetlocation);
+		if (!Tools.isRegionProtectedFromBuild(player, Abilities.Lightning,
+				player.getLocation()))
+			player.getWorld().strikeLightning(targetlocation);
 		instances.remove(player);
 	}
 
