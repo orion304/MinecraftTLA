@@ -27,6 +27,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -287,7 +288,8 @@ public class Tools {
 				if (throwplayer) {
 					for (Entity entity : getEntitiesAroundPoint(
 							affectedblock.getLocation(), 1.75)) {
-						entity.setVelocity(norm.clone().multiply(.75));
+						if (!(entity instanceof FallingBlock))
+							entity.setVelocity(norm.clone().multiply(.75));
 					}
 				}
 

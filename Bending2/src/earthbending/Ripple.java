@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -179,6 +180,7 @@ public class Ripple {
 				Block topblock = loc.getBlock();
 				Block botblock = loc.clone().add(0, -1, 0).getBlock();
 				if (Tools.isTransparentToEarthbending(topblock)
+						&& !topblock.isLiquid()
 						&& Tools.isEarthbendable(botblock)) {
 					location = loc.clone().add(0, -1, 0);
 					locations.add(location);
@@ -221,7 +223,8 @@ public class Ripple {
 					.getLocation().clone().add(0, 1, 0), 2)) {
 				if (entity.getEntityId() != player.getEntityId()
 						&& !entities.contains(entity)) {
-					entities.add(entity);
+					if (!(entity instanceof FallingBlock))
+						entities.add(entity);
 				}
 			}
 			return true;
