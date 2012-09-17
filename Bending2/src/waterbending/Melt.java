@@ -53,6 +53,10 @@ public class Melt {
 		if (Tools.isRegionProtectedFromBuild(player, Abilities.PhaseChange,
 				block.getLocation()))
 			return;
+		if (!Wave.canThaw(block)) {
+			Wave.thaw(block);
+			return;
+		}
 		if (Tools.isMeltable(block) && !TempBlock.isTempBlock(block)
 				&& WaterManipulation.canPhysicsChange(block)) {
 			if (block.getType() == Material.SNOW) {
@@ -61,8 +65,6 @@ public class Melt {
 			}
 			if (FreezeMelt.frozenblocks.containsKey(block)) {
 				FreezeMelt.thaw(block);
-			} else if (!Wave.canThaw(block)) {
-				Wave.thaw(block);
 			} else {
 				block.setType(Material.WATER);
 				block.setData(full);

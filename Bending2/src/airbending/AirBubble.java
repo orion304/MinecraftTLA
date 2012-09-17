@@ -23,6 +23,8 @@ public class AirBubble {
 	private static double defaultWaterRadius = ConfigManager.waterBubbleRadius;
 	// private static byte full = AirBlast.full;
 
+	private static final byte full = 0x0;
+
 	private Player player;
 	private double radius;
 	private ConcurrentHashMap<Block, Byte> waterorigins;
@@ -56,8 +58,8 @@ public class AirBubble {
 			if (block.getType() == Material.STATIONARY_WATER
 					|| block.getType() == Material.WATER) {
 				if (WaterManipulation.canBubbleWater(block)) {
-
-					waterorigins.put(block, block.getData());
+					if (block.getData() == full)
+						waterorigins.put(block, block.getData());
 
 					block.setType(Material.AIR);
 				}
@@ -68,7 +70,7 @@ public class AirBubble {
 		for (Block block : waterorigins.keySet()) {
 			if (block.getWorld() != location.getWorld()) {
 				// byte data = waterorigins.get(block);
-				byte data = 0x0;
+				byte data = full;
 				block = block.getLocation().getBlock();
 				if (block.getType() == Material.AIR) {
 					block.setType(Material.WATER);
@@ -77,7 +79,7 @@ public class AirBubble {
 				waterorigins.remove(block);
 			} else if (block.getLocation().distance(location) > radius) {
 				// byte data = waterorigins.get(block);
-				byte data = 0x0;
+				byte data = full;
 				block = block.getLocation().getBlock();
 				if (block.getType() == Material.AIR) {
 					block.setType(Material.WATER);

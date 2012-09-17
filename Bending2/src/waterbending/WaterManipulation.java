@@ -27,7 +27,7 @@ public class WaterManipulation {
 	private static int ID = Integer.MIN_VALUE;
 
 	private static final byte full = 0x0;
-	private static final byte half = 0x4;
+	// private static final byte half = 0x4;
 
 	private static double range = ConfigManager.waterManipulationRange;
 	private static int defaultdamage = ConfigManager.waterdmg;
@@ -367,10 +367,11 @@ public class WaterManipulation {
 			return;
 		}
 		if (affectedblocks.containsKey(block)) {
-			if (!Tools.adjacentToThreeOrMoreSources(block)
-					&& !Tools.adjacentToAnyWater(block)) {
-				block.setType(Material.WATER);
-				block.setData(half);
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				// && !Tools.adjacentToAnyWater(block)) {
+				block.setType(Material.AIR);
+				// block.setType(Material.WATER);
+				// block.setData(half);
 			}
 			oldwater = block;
 		}
@@ -393,11 +394,11 @@ public class WaterManipulation {
 			return;
 		}
 		if (affectedblocks.containsKey(block)) {
-			if (!Tools.adjacentToThreeOrMoreSources(block)
-					&& !Tools.adjacentToAnyWater(block)) {
-				block.setType(Material.WATER);
-				block.setData(half);
-				// block.setType(Material.AIR);
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				// && !Tools.adjacentToAnyWater(block)) {
+				block.setType(Material.AIR);
+				// block.setType(Material.WATER);
+				// block.setData(half);
 			}
 			affectedblocks.remove(block);
 		}

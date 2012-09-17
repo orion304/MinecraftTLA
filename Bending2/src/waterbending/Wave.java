@@ -404,9 +404,12 @@ public class Wave {
 
 		for (Block block : Tools.getBlocksAroundPoint(frozenlocation,
 				freezeradius)) {
+			if (TempBlock.isTempBlock(block))
+				continue;
 			if (block.getType() == Material.AIR
 					|| block.getType() == Material.SNOW) {
-				block.setType(Material.ICE);
+				// block.setType(Material.ICE);
+				new TempBlock(block, Material.ICE, (byte) 0);
 				frozenblocks.put(block, block);
 			}
 			if (Tools.isWater(block)) {
@@ -414,7 +417,8 @@ public class Wave {
 			}
 			if (Tools.isPlant(block) && block.getType() != Material.LEAVES) {
 				block.breakNaturally();
-				block.setType(Material.ICE);
+				// block.setType(Material.ICE);
+				new TempBlock(block, Material.ICE, (byte) 0);
 				frozenblocks.put(block, block);
 			}
 		}
@@ -422,11 +426,12 @@ public class Wave {
 
 	private void thaw() {
 		for (Block block : frozenblocks.keySet()) {
-			if (block.getType() == Material.ICE) {
-				// block.setType(Material.WATER);
-				// block.setData((byte) 0x7);
-				block.setType(Material.AIR);
-			}
+			// if (block.getType() == Material.ICE) {
+			// // block.setType(Material.WATER);
+			// // block.setData((byte) 0x7);
+			// block.setType(Material.AIR);
+			// }
+			TempBlock.revertBlock(block, Material.AIR);
 			frozenblocks.remove(block);
 		}
 	}
@@ -434,11 +439,12 @@ public class Wave {
 	public static void thaw(Block block) {
 		for (int id : instances.keySet()) {
 			if (instances.get(id).frozenblocks.containsKey(block)) {
-				if (block.getType() == Material.ICE) {
-					// block.setType(Material.WATER);
-					// block.setData((byte) 0x7);
-					block.setType(Material.AIR);
-				}
+				// if (block.getType() == Material.ICE) {
+				// // block.setType(Material.WATER);
+				// // block.setData((byte) 0x7);
+				// block.setType(Material.AIR);
+				// }
+				TempBlock.revertBlock(block, Material.AIR);
 				instances.get(id).frozenblocks.remove(block);
 			}
 		}
@@ -446,7 +452,7 @@ public class Wave {
 
 	public static boolean canThaw(Block block) {
 		for (int id : instances.keySet()) {
-			if (instances.get(id).frozenblocks.contains(block)) {
+			if (instances.get(id).frozenblocks.containsKey(block)) {
 				return false;
 			}
 		}

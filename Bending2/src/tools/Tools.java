@@ -698,7 +698,7 @@ public class Tools {
 
 	public static boolean adjacentToAnyWater(Block block) {
 		BlockFace[] faces = { BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH,
-				BlockFace.SOUTH };
+				BlockFace.SOUTH, BlockFace.UP, BlockFace.DOWN };
 		for (BlockFace face : faces) {
 			Block blocki = block.getRelative(face);
 			if (isWater(blocki))
