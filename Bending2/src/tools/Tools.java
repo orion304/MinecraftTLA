@@ -745,8 +745,9 @@ public class Tools {
 	public static boolean canBend(Player player, Abilities ability) {
 		if (ability == null)
 			return false;
-		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player))
-				&& ability != Abilities.AvatarState)
+		if (hasPermission(player, ability) && ability == Abilities.AvatarState)
+			return true;
+		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player)))
 			return false;
 		if (allowharmless && Tools.isHarmlessAbility(ability)
 				&& !toggledBending(player))
