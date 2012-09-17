@@ -374,6 +374,9 @@ public class EarthBlast {
 			if (!blast.progressing)
 				continue;
 
+			if (!blast.location.getWorld().equals(player.getWorld()))
+				continue;
+
 			if (blast.player.equals(player))
 				blast.redirect(player, getTargetLocation(player));
 
@@ -406,9 +409,6 @@ public class EarthBlast {
 			EarthBlast blast = instances.get(id);
 
 			if (blast.player.equals(player))
-				continue;
-
-			if (!blast.location.getWorld().equals(player.getWorld()))
 				continue;
 
 			if (!blast.location.getWorld().equals(player.getWorld()))
