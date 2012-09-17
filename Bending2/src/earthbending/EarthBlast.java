@@ -408,6 +408,12 @@ public class EarthBlast {
 			if (blast.player.equals(player))
 				continue;
 
+			if (!blast.location.getWorld().equals(player.getWorld()))
+				continue;
+
+			if (!blast.location.getWorld().equals(player.getWorld()))
+				continue;
+
 			if (!blast.progressing)
 				continue;
 

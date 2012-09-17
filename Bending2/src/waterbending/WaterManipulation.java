@@ -429,6 +429,9 @@ public class WaterManipulation {
 			if (!manip.progressing)
 				continue;
 
+			if (!manip.location.getWorld().equals(player.getWorld()))
+				continue;
+
 			if (manip.player.equals(player))
 				manip.redirect(player, getTargetLocation(player));
 
@@ -452,6 +455,9 @@ public class WaterManipulation {
 			WaterManipulation manip = instances.get(id);
 
 			if (manip.player.equals(player))
+				continue;
+
+			if (!manip.location.getWorld().equals(player.getWorld()))
 				continue;
 
 			if (!manip.progressing)
