@@ -138,6 +138,11 @@ public class OctopusForm {
 			return;
 		}
 
+		if (!sourceblock.getWorld().equals(player.getWorld())) {
+			remove();
+			return;
+		}
+
 		if (sourceblock.getLocation().distance(player.getLocation()) > range
 				&& sourceselected) {
 			remove();
