@@ -166,7 +166,7 @@ public class ConfigManager {
 
 	// Extinguish
 	public static double extinguishRange = 20;
-	public static double extinguishRadius = 20;
+	public static double extinguishRadius = 7;
 
 	// Fireball
 	public static long fireballCooldown = 2000;

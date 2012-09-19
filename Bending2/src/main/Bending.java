@@ -32,6 +32,7 @@ public class Bending extends JavaPlugin {
 
 	public final BendingManager manager = new BendingManager(this);
 	public final BendingListener listener = new BendingListener(this);
+	private final RevertChecker revertChecker = new RevertChecker(this);
 	public final TagAPIListener Taglistener = new TagAPIListener();
 
 	static Map<String, String> commands = new HashMap<String, String>();
@@ -84,6 +85,9 @@ public class Bending extends JavaPlugin {
 
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, manager, 0,
 				1);
+
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+				revertChecker, 0, 40);
 
 		removeFireballs();
 

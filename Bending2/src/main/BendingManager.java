@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -17,7 +16,6 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
-import tools.Information;
 import tools.Tools;
 import waterbending.Bloodbending;
 import waterbending.FastSwimming;
@@ -68,9 +66,9 @@ public class BendingManager implements Runnable {
 
 	public static ArrayList<Player> flyingplayers = new ArrayList<Player>();
 
-	private static boolean safeRevert = ConfigManager.safeRevert;
+	// private static boolean safeRevert = ConfigManager.safeRevert;
 
-	private boolean verbose = true;
+	private boolean verbose = false;
 	private long verbosetime;
 	private long verboseinterval = 3 * 60 * 1000;
 
@@ -172,60 +170,14 @@ public class BendingManager implements Runnable {
 
 		Tremorsense.manage(plugin.getServer());
 
-		if (ConfigManager.reverseearthbending
-				&& time > reverttime + ConfigManager.revertchecktime) {
+		for (Block block : RevertChecker.revertQueue.keySet()) {
+			Tools.removeEarthbendedBlock(block);
+			RevertChecker.revertQueue.remove(block);
+		}
 
-			ArrayList<Chunk> chunks = new ArrayList<Chunk>();
-
-			for (Player player : plugin.getServer().getOnlinePlayers()) {
-				Chunk chunk = player.getLocation().getChunk();
-				if (!chunks.contains(chunk))
-					chunks.add(chunk);
-			}
-
-			Tools.writeToLog("Removing up to " + Tools.tempearthblocks.size()
-					+ " blocks...");
-			reverttime = time;
-			for (Block block : Tools.tempearthblocks.keySet()) {
-				boolean remove = true;
-
-				Block index = Tools.tempearthblocks.get(block);
-				if (Tools.movedearth.containsKey(index)) {
-					Information info = Tools.movedearth.get(index);
-					if (time < info.getTime() + ConfigManager.revertchecktime
-							|| (chunks.contains(index.getChunk()) && safeRevert)) {
-						remove = false;
-					}
-				}
-
-				// for (Player player : block.getWorld().getPlayers()) {
-				//
-				// if ((Tools.isBender(player, BendingType.Earth) && player
-				// .getLocation().distance(block.getLocation()) < 25)
-				// || player.getLocation().distance(
-				// block.getLocation()) < 3) {
-				// remove = false;
-				// break;
-				// }
-				// }
-
-				if (remove)
-					Tools.removeEarthbendedBlock(block);
-
-			}
-
-			for (Block block : Tools.movedearth.keySet()) {
-				Information info = Tools.movedearth.get(block);
-				if (time >= info.getTime() + ConfigManager.revertchecktime) {
-					if (Tools.tempearthblocks.containsKey(info.getBlock()))
-						Tools.verbose("PROBLEM!");
-					block.setType(info.getType());
-					Tools.movedearth.remove(block);
-				}
-			}
-
-			Tools.writeToLog("Still " + Tools.tempearthblocks.size()
-					+ " remaining.");
+		for (Block block : RevertChecker.movedEarthQueue.keySet()) {
+			block.setType(RevertChecker.movedEarthQueue.get(block));
+			RevertChecker.movedEarthQueue.remove(block);
 		}
 
 	}
@@ -454,7 +406,7 @@ public class BendingManager implements Runnable {
 		verbosetime = System.currentTimeMillis();
 
 		int airblasts, airbubbles, airscooters, airshields, airsuctions, airswipes, tornados; // ,airbursts,
-																								// airspouts;
+		// airspouts;
 
 		int airblastplayers = 0;
 		airblasts = AirBlast.instances.size();
@@ -670,4 +622,5 @@ public class BendingManager implements Runnable {
 		Tools.writeToLog(name + ": " + instances + " instances for " + players
 				+ " players.");
 	}
+
 }
