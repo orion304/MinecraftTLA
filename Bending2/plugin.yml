@@ -107,6 +107,7 @@ permissions:
       bending.command.toggle: true
       bending.command.who: true
       bending.admin.toggle: true
+      bending.command.language: true
       
   bending.command:
     description: Allows all user commands.
@@ -119,6 +120,7 @@ permissions:
       bending.command.help: true
       bending.command.toggle: true
       bending.command.who: true
+      bending.command.language: true
 
 # AIRBENDING PERMISSIONS
   bending.air:
@@ -321,6 +323,9 @@ permissions:
     default: op
     
 # COMMAND PERMISSIONS
+  bending.command.language:
+    description: Allows the use of /bending language
+    default: true
   bending.command.displayelement: 
     description: Allows the use of /bending display <element>
     default: true

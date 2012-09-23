@@ -303,14 +303,9 @@ public class Tools {
 				}
 
 				if (isPlant(affectedblock)) {
-					if (isSolid(affectedblock.getRelative(BlockFace.UP))) {
-						breakBlock(affectedblock);
-					} else {
-						affectedblock.getRelative(BlockFace.UP).setType(
-								affectedblock.getType());
-						affectedblock.getRelative(BlockFace.UP).setData(
-								affectedblock.getData());
-					}
+
+					breakBlock(affectedblock);
+
 				}
 
 				affectedblock.setType(block.getType());
@@ -1346,6 +1341,54 @@ public class Tools {
 
 		return faces[besti];
 
+	}
+
+	public static String getSupportedLanguages() {
+		String languages = "";
+		List<String> suplangs = Bending.language.getSupportedLanguages();
+		for (int i = 0; i < suplangs.size(); i++) {
+			String string = suplangs.get(i);
+			if (i != suplangs.size() - 1) {
+				string = string + ", ";
+			}
+			languages = languages + string;
+		}
+		return languages;
+	}
+
+	public static String getDefaultLanguage() {
+		return Bending.language.getDefaultLanguage();
+	}
+
+	public static void sendMessage(Player player, String key) {
+		sendMessage(player, ChatColor.WHITE, key);
+	}
+
+	public static void sendMessage(Player player, ChatColor color, String key) {
+		String message = getMessage(player, key);
+		if (player == null) {
+			verbose(color + message);
+		} else {
+			player.sendMessage(color + message);
+		}
+	}
+
+	public static String getMessage(Player player, String key) {
+		String language = getLanguage(player);
+		String message = Bending.language.getMessage(language, key);
+		return message;
+	}
+
+	public static String getLanguage(Player player) {
+		String language = getDefaultLanguage();
+		if (player != null)
+			language = config.getLanguage(player);
+		return language;
+	}
+
+	public static boolean isLanguageSupported(String language) {
+		return (Bending.language.getSupportedLanguages().contains(language
+				.toLowerCase()));
 	}
 
 	public static int getIntCardinalDirection(Vector vector) {

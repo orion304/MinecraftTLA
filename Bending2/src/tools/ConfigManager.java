@@ -720,9 +720,247 @@ public class ConfigManager {
 				Integer.parseInt(dbPort));
 		dbPort = dbPortint.toString();
 
+		// set defaults
+		config.set("Chat.Enabled", enabled);
+		config.set("Chat.Colors", colors);
+		config.set("Chat.Compatibility", compatibility);
+		// Prefix
+		config.set("Chat.Prefix.Air", prefixes.get("Air"));
+		config.set("Chat.Prefix.Fire", prefixes.get("Fire"));
+		config.set("Chat.Prefix.Avatar", prefixes.get("Avatar"));
+		config.set("Chat.Prefix.Water", prefixes.get("Water"));
+		config.set("Chat.Prefix.Earth", prefixes.get("Earth"));
+		config.set("Chat.Prefix.ChiBlocker", prefixes.get("ChiBlocker"));
+		// Color
+		config.set("Chat.Color.Avatar", color.get("Avatar"));
+		config.set("Chat.Color.Air", color.get("Air"));
+		config.set("Chat.Color.Fire", color.get("Fire"));
+		config.set("Chat.Color.Earth", color.get("Earth"));
+		config.set("Chat.Color.Water", color.get("Water"));
+		config.set("Chat.Color.ChiBlocker", color.get("ChiBlocker"));
+		// Bending
+		// Damage
+		config.set("Bending.Damage.AirSwipe", airdmg);
+		config.set("Bending.Damage.EarthBlast", earthdmg);
+		config.set("Bending.Damage.WaterManipulation", waterdmg);
+		// Option
+
+		config.set("Bending.Option.Bend-To-Item", bendToItem);
+		config.set("Bending.Option.Use-TagAPI", useTagAPI);
+		config.set("Bending.Option.Reverse-Earthbending", reverseearthbending);
+		config.set("Bending.Option.Reverse-Earthbending-Check-Time",
+				revertchecktime);
+		config.set("Bending.Option.Firebending-Dissipate-Time", dissipateAfter);
+		config.set("Bending.Option.Sea-Level", seaLevel);
+		// Properties
+		// ChiBlocker
+		config.set("Properties.ChiBlocker.ChiBlock-Duration", chiblockduration);
+		config.set("Properties.ChiBlocker.Dodge-Chance", dodgechance);
+		config.set("Properties.ChiBlocker.Punch-Damage", punchdamage);
+		config.set("Properties.ChiBlocker.Fall-Damage-Reduction",
+				falldamagereduction);
+		config.set("Properties.GlobalCooldown", globalCooldown);
+		// HighJump
+		config.set("Properties.ChiBlocker.HighJump.Height", jumpheight);
+		config.set("Properties.ChiBlocker.HighJump.Cooldown", highJumpCooldown);
+		// Paralyze
+		config.set("Properties.ChiBlocker.Paralyze.Cooldown", paralyzeCooldown);
+		config.set("Properties.ChiBlocker.Paralyze.Duration", paralyzeDuration);
+		// RapidPunch
+		config.set("Properties.ChiBlocker.RapidPunch.Damage", rapidPunchDamage);
+		config.set("Properties.ChiBlocker.RapidPunch.Distance",
+				rapidPunchDistance);
+		config.set("Properties.ChiBlocker.RapidPunch.Cooldown",
+				rapidPunchCooldown);
+		config.set("Properties.ChiBlocker.RapidPunch.Punches",
+				rapidPunchPunches);
+		// Air
+		// AirBlast
+		config.set("Properties.Air.AirBlast.Speed", airBlastSpeed);
+		config.set("Properties.Air.AirBlast.Range", airBlastRange);
+		config.set("Properties.Air.AirBlast.Affecting-Radius", airBlastRadius);
+		config.set("Properties.Air.AirBlast.Push-Factor", airBlastPush);
+		// AirBubble
+		config.set("Properties.Air.AirBubble.Radius", airBubbleRadius);
+		// AirPassive
+		config.set("Properties.Air.Passive.Factor", airPassiveFactor);
+		// AirShield
+		config.set("Properties.Air.AirShield.Radius", airShieldRadius);
+		// AirSuction
+		config.set("Properties.Air.AirSuction.Speed", airSuctionSpeed);
+		config.set("Properties.Air.AirSuction.Range", airSuctionRange);
+		config.set("Properties.Air.AirSuction.Affecting-Radius",
+				airSuctionRadius);
+		config.set("Properties.Air.AirSuction.Push-Factor", airSuctionPush);
+		// AirSwipe
+		config.set("Properties.Air.AirSwipe.Range", airSwipeRange);
+		config.set("Properties.Air.AirSwipe.Arc", airSwipeArc);
+		config.set("Properties.Air.AirSwipe.Speed", airSwipeSpeed);
+		config.set("Properties.Air.AirSwipe.Affecting-Radius", airSwipeRadius);
+		config.set("Properties.Air.AirSwipe.Push-Factor", airSwipePush);
+		config.set("Properties.Air.AirSwipe.Cooldown", airSwipeCooldown);
+		// Tornado
+		config.set("Properties.Air.Tornado.Radius", tornadoRadius);
+		config.set("Properties.Air.Tornado.Height", tornadoHeight);
+		config.set("Properties.Air.Tornado.Range", tornadoRange);
+		config.set("Properties.Air.Tornado.Mob-Push-Factor", tornadoMobPush);
+		config.set("Properties.Air.Tornado.Player-Push-Factor",
+				tornadoPlayerPush);
+		// Air Scooter
+		config.set("Properties.Air.AirScooter.Speed", airScooterSpeed);
+		// Air Spout
+		config.set("Properties.Air.AirSpout.Height", airSpoutHeight);
+		// Earth
+		// Catapult
+		config.set("Properties.Earth.Catapult.Length", catapultLength);
+		config.set("Properties.Earth.Catapult.Speed", catapultSpeed);
+		config.set("Properties.Earth.Catapult.Push", catapultPush);
+		// CompactColumn
+		config.set("Properties.Earth.CompactColumn.Range", compactColumnRange);
+		config.set("Properties.Earth.CompactColumn.Speed", compactColumnSpeed);
+		// EarthBlast
+		config.set("Properties.Earth.EarthBlast.Hit-Self", earthBlastHitSelf);
+		config.set("Properties.Earth.EarthBlast.Prepare-Range",
+				earthBlastPrepareRange);
+		config.set("Properties.Earth.EarthBlast.Range", earthBlastRange);
+		config.set("Properties.Earth.EarthBlast.Speed", earthBlastSpeed);
+		config.set("Properties.Earth.EarthBlast.Revert", earthBlastRevert);
+		// EarthColumn
+		config.set("Properties.Earth.EarthColumn.Height", earthColumnHeight);
+		// EarthGrab
+		config.set("Properties.Earth.EarthGrab.Range", earthGrabRange);
+		// EarthPassive
+		config.set("Properties.Earth.EarthPassive.Wait-Before-Reverse-Changes",
+				earthPassive);
+		// EarthTunnel
+		// EarthTunnel
+		config.set("Properties.Earth.EarthTunnel.Max-Radius",
+				earthTunnelMaxRadius);
+		config.set("Properties.Earth.EarthTunnel.Range", earthTunnelRange);
+		config.set("Properties.Earth.EarthTunnel.Radius", earthTunnelRadius);
+		config.set("Properties.Earth.EarthTunnel.Interval", earthTunnelInterval);
+		config.set("Properties.Earth.EarthTunnel.Revert", earthTunnelRevert);
+		// EarthWall
+		config.set("Properties.Earth.EarthWall.Range", earthWallRange);
+		config.set("Properties.Earth.EarthWall.Height", earthWallHeight);
+		config.set("Properties.Earth.EarthWall.Width", earthWallWidth);
+		// Collapse
+		config.set("Properties.Earth.Collapse.Range", collapseRange);
+		config.set("Properties.Earth.Collapse.Radius", collapseRadius);
+		// Tremorsense
+		config.set("Properties.Earth.Tremorsense.Cooldown", tremorsenseCooldown);
+		config.set("Properties.Earth.Tremorsense.Max-Depth",
+				tremorsenseMaxDepth);
+		config.set("Properties.Earth.Tremorsense.Radius", tremorsenseRadius);
+		config.set("Properties.Earth.Tremorsense.Light-Threshold",
+				tremorsenseLightThreshold);
+		// EarthArmor
+		config.set("Properties.Earth.EarthArmor.Duration", eartharmorduration);
+		config.set("Properties.Earth.EarthArmor.Strength", eartharmorstrength);
+		config.set("Properties.Earth.EarthArmor.Cooldown", eartharmorcooldown);
+		// Fire
+		// FireBlast
+		config.set("Properties.Fire.FireBlast.Range", fireBlastRange);
+		config.set("Properties.Fire.FireBlast.Speed", fireBlastSpeed);
+		config.set("Properties.Fire.FireBlast.Push", fireBlastPush);
+		config.set("Properties.Fire.FireBlast.Radius", fireBlastRadius);
+		config.set("Properties.Fire.FireBlast.Cooldown", fireBlastCooldown);
+		config.set("Properties.Fire.FireBlast.Damage", fireBlastDamage);
+		config.set("Properties.Fire.FireBlast.Dissipates", fireBlastDissipate);
+		// ArcOfFire
+		config.set("Properties.Fire.ArcOfFire.Arc", arcOfFireArc);
+		config.set("Properties.Fire.ArcOfFire.Range", arcOfFireRange);
+		// RingOfFire
+		config.set("Properties.Fire.RingOfFire.Range", ringOfFireRange);
+		// Extinguish
+		config.set("Properties.Fire.Extinguish.Range", extinguishRange);
+		config.set("Properties.Fire.Extinguish.Radius", extinguishRadius);
+		// Fireball
+		config.set("Properties.Fire.Fireball.Cooldown", fireballCooldown);
+		config.set("Properties.Fire.Fireball.Speed", fireballSpeed);
+		// FireJet
+		config.set("Properties.Fire.FireJet.Speed", fireJetSpeed);
+		config.set("Properties.Fire.FireJet.Duration", fireJetDuration);
+		config.set("Properties.Fire.FireJet.CoolDown", fireJetCooldown);
+		// FireStream
+		config.set("Properties.Fire.FireStream.Speed", fireStreamSpeed);
+		// WallOfFire
+		config.set("Properties.Fire.WallOfFire.Range", wallOfFireRange);
+		config.set("Properties.Fire.WallOfFire.Height", wallOfFireHeight);
+		config.set("Properties.Fire.WallOfFire.Width", wallOfFireWidth);
+		config.set("Properties.Fire.WallOfFire.Duration", wallOfFireDuration);
+		config.set("Properties.Fire.WallOfFire.Damage", wallOfFireDamage);
+		config.set("Properties.Fire.WallOfFire.Interval", wallOfFireInterval);
+		config.set("Properties.Fire.WallOfFire.Cooldown", wallOfFireCooldown);
+		// HeatMelt
+		config.set("Properties.Fire.HeatMelt.Range", heatMeltRange);
+		config.set("Properties.Fire.HeatMelt.Radius", heatMeltRadius);
+		// Illumination
+		config.set("Properties.Fire.Illumination.Range", illuminationRange);
+		// Lightning
+		config.set("Properties.Fire.Lightning.Warmup", lightningwarmup);
+		config.set("Properties.Fire.Lightning.Range", lightningrange);
+		config.set("Properties.Fire.Lightning.Miss-Chance", lightningmisschance);
+		// Day
+		config.set("Properties.Fire.Day-Power-Factor", dayFactor);
+		// Water
+		// Bloodbending
+		config.set("Properties.Water.Bloodbending.Throw-Factor",
+				bloodbendingThrowFactor);
+		config.set("Properties.Water.Bloodbending.Range", bloodbendingRange);
+		// FreezeMelt
+		config.set("Properties.Water.FreezeMelt.Range", freezeMeltRange);
+		config.set("Properties.Water.FreezeMelt.Radius", freezeMeltRadius);
+		// HealingWaters
+		config.set("Properties.Water.HealingWaters.Radius", healingWatersRadius);
+		config.set("Properties.Water.HealingWaters.Interval",
+				healingWatersInterval);
+		// Plantbending
+		config.set("Properties.Water.Plantbending.Regrow-Time",
+				plantbendingRegrowTime);
+		// WaterManipulation
+		config.set("Properties.Water.WaterManipulation.Range",
+				waterManipulationRange);
+		config.set("Properties.Water.WaterManipulation.Speed",
+				waterManipulationSpeed);
+		// WaterSpout
+		config.set("Properties.Water.WaterSpout.Height", waterSpoutHeight);
+		// WaterWall
+		config.set("Properties.Water.WaterWall.Range", waterWallRange);
+		config.set("Properties.Water.WaterWall.Radius", waterWallRadius);
+		// Wave
+		config.set("Properties.Water.Wave.Radius", waveRadius);
+		config.set("Properties.Water.Wave.Horizontal-Push-Force",
+				waveHorizontalPush);
+		config.set("Properties.Water.Wave.Vertical-Push-Force",
+				waveVerticalPush);
+		// Fast Swimming
+		config.set("Properties.Water.FastSwimming.Factor", fastSwimmingFactor);
+		// IceSpike
+		config.set("Properties.Water.IceSpike.Cooldown", icespikecooldown);
+		config.set("Properties.Water.IceSpike.Damage", icespikedamage);
+		config.set("Properties.Water.IceSpike.Range", icespikerange);
+		config.set("Properties.Water.IceSpike.ThrowingMult",
+				icespikethrowingmult);
+		config.set("Properties.Water.IceSpike.AreaCooldown",
+				icespikeareacooldown);
+		config.set("Properties.Water.IceSpike.AreaDamage", icespikeareadamage);
+		config.set("Properties.Water.IceSpike.AreaRadius", icespikearearadius);
+		config.set("Properties.Water.IceSpike.AreaThrowingMult",
+				icespikeareathrowingmult);
+		// Night
+		config.set("Properties.Water.Night-Power-Factor", nightFactor);
+		// MySQL
+		config.set("MySQL.Use-MySQL", useMySQL);
+		config.set("MySQL.MySQL-host", dbHost);
+		config.set("MySQL.User", dbUser);
+		config.set("MySQL.Password", dbPass);
+		config.set("MySQL.Database", dbDB);
+		config.set("MySQL.MySQL-portnumber", Integer.parseInt(dbPort));
+
 		try {
-			config.setDefaults(config);
-			config.options().copyDefaults(true);
+			// config.setDefaults(config);
+			// config.options().copyDefaults(true);
 			config.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();

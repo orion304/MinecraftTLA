@@ -41,6 +41,7 @@ public class Bending extends JavaPlugin {
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
 	public static ConfigManager configManager = new ConfigManager();
+	public static Language language = new Language();
 	public StorageManager config;
 	public Tools tools;
 
@@ -58,6 +59,7 @@ public class Bending extends JavaPlugin {
 	public void onEnable() {
 
 		configManager.load(new File(getDataFolder(), "config.yml"));
+		language.load(new File(getDataFolder(), "language.yml"));
 
 		config = new StorageManager(getDataFolder());
 

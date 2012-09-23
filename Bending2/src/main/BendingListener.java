@@ -594,6 +594,7 @@ public class BendingListener implements Listener {
 					player.setAllowFlight(true);
 					BendingManager.flyingplayers.add(player);
 				}
+				player.setFallDistance(0);
 				AirBurst.fallBurst(player);
 				event.setDamage(0);
 				event.setCancelled(true);
@@ -605,6 +606,7 @@ public class BendingListener implements Listener {
 						player.setAllowFlight(true);
 						BendingManager.flyingplayers.add(player);
 					}
+					player.setFallDistance(0);
 					event.setDamage(0);
 					event.setCancelled(true);
 				}
@@ -616,6 +618,7 @@ public class BendingListener implements Listener {
 						player.setAllowFlight(true);
 						BendingManager.flyingplayers.add(player);
 					}
+					player.setFallDistance(0);
 					event.setDamage(0);
 					event.setCancelled(true);
 
