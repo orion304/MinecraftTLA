@@ -118,8 +118,10 @@ public class WaterWall {
 
 	public boolean prepare() {
 		cancelPrevious();
-		Block block = player.getTargetBlock(null, (int) range);
-		if (Tools.isWaterbendable(block, player)) {
+		// Block block = player.getTargetBlock(null, (int) range);
+		Block block = Tools.getWaterSourceBlock(player, range,
+				Tools.canPlantbend(player));
+		if (block != null) {
 			sourceblock = block;
 			focusBlock();
 			return true;

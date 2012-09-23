@@ -67,7 +67,7 @@ public class BendingCommand {
 	private final String[] toggleAliases = { "toggle", "t" };
 	private final String[] displayAliases = { "display", "disp", "dis", "d" };
 	private final String[] reloadAliases = { "reload" };
-	private final String[] helpAliases = { "help", "h" };
+	private final String[] helpAliases = { "help", "h", "?" };
 	private final String[] importAliases = { "import" };
 	private final String[] whoAliases = { "who", "wh", "w" };
 
@@ -94,6 +94,78 @@ public class BendingCommand {
 	private StorageManager config;
 	private Server server;
 	private boolean verbose = true;
+
+	static final String usage = "Usage";
+	static final String the_server = "The server";
+	static final String who_usage = "Displays a list of users online, along with their bending types.";
+	static final String who_not_on_server = "is not on the server.";
+	static final String who_player_usage = "Displays which bending types that player has.";
+	static final String choose_usage = "Choose your <element> (Options: air, water, earth, fire, chiblocker).";
+	static final String choose_player_usage = "Choose <element> for <player>.";
+	static final String no_perms_air = "You do not have permission to be an airbender.";
+	static final String no_perms_fire = "You do not have permission to be a firebender.";
+	static final String no_perms_earth = "You do not have permission to be an earthbender.";
+	static final String no_perms_water = "You do not have permission to be a waterbender.";
+	static final String no_perms_chi = "You do not have permission to be a chiblocker.";
+	static final String other_no_perms_air = "They do not have permission to be an airbender.";
+	static final String other_no_perms_fire = "They do not have permission to be a firebender.";
+	static final String other_no_perms_earth = "They do not have permission to be an earthbender.";
+	static final String other_no_perms_water = "They do not have permission to be a waterbender.";
+	static final String other_no_perms_chi = "They do not have permission to be a chiblocker.";
+	static final String choosen_air = "You are now an airbender!";
+	static final String choosen_fire = "You are now a firebender!";
+	static final String choosen_earth = "You are now an earthbender!";
+	static final String choosen_water = "You are now a waterbender!";
+	static final String choosen_chi = "You are now a chiblocker!";
+	static final String you_changed = "You have changed";
+	static final String changed_you = "has changed your bending.";
+	static final String import_usage = "Imports data from your bendingPlayers.yml file to your MySQL database.";
+	static final String import_noSQL = "MySQL needs to be enabled to import bendingPlayers";
+	static final String import_success = "Imported BendingPlayers to MySQL.";
+	static final String no_execute_perms = "You do not have permission to execute that command.";
+	static final String no_bind_perms = "You do not have permissions to bind";
+	static final String no_use_perms = "You do not have permissions to use";
+	static final String reload_success = "was reloaded.";
+	static final String display_usage = "Displays all the abilities you have bound.";
+	static final String display_element_usage = "Displays all available abilites for <element>";
+	static final String slot = "Slot";
+	static final String display_no_abilities = "You have no abilities bound.";
+	static final String toggle_usage = "Toggles your bending on or off. Passives will still work.";
+	static final String toggle_off = "You toggled your bending. You now can't use bending until you use that command again.";
+	static final String toggle_on = "You toggled your bending back. You can now use them freely again!";
+	static final String admin_toggle_off = "has toggled your bending. You now can't use bending until you use /bending toggle.";
+	static final String admin_toggle_on = "has toggled your bending back. You can now use them freely again!";
+	static final String admin_toggle = "You have toggled the bending of: ";
+	static final String not_from_console = "This command cannot be used from the console.";
+	static final String permaremove_message = "Permanently removes the bending of <player1> (optionally accepts a list of players) until someone with permissions chooses their bending.";
+	static final String you_permaremove = "You have permanently removed the bending of: ";
+	static final String permaremove_you = "has removed your bending permanently.";
+	static final String remove_usage = "Removes all of <player>'s bending.";
+	static final String remove_you = "has removed your bending.";
+	static final String you_remove = "You have removed the bending of: ";
+	static final String add_self = "Add <element>, allowing you to use it along with what you already can do.";
+	static final String add_other = "Adds <element> to <player>.";
+	static final String clear_all = "Clears all abilities you have bound.";
+	static final String clear_slot = "Clears the ability bound to <slot#>";
+	static final String clear_item = "Clears the ability bound to <item>";
+	static final String cleared_message = "Your abilities have been cleared.";
+	static final String slot_item_cleared = "has been cleared.";
+	static final String bind_slot = "This binds <ability> to the item you are holding.";
+	static final String bind_to_slot = "This binds <ability> to <slot#>.";
+	static final String bind_item = "This binds <ability> to your current item.";
+	static final String bind_to_item = "This binds <ability> to <item>.";
+	static final String not_air = "You are not an airbender.";
+	static final String not_earth = "You are not an earthbender.";
+	static final String not_fire = "You are not a firebender.";
+	static final String not_water = "You are not a waterbender.";
+	static final String not_chi = "You are not a chiblocker.";
+	static final String bound_to = "bound to";
+	static final String bound_to_slot = "bound to slot";
+	static final String help_list = "Use /bending help to see a list of commands.";
+	static final String command_list = "Use /bending help <command> to see how to use that command.";
+	static final String ability_list = "Use /bending help <ability> to get help with that ability.";
+	static final String player = "player";
+	static final String element = "element";
 
 	public BendingCommand(Player player, String[] args, File dataFolder,
 			StorageManager config, Server server) {
@@ -166,7 +238,6 @@ public class BendingCommand {
 				"Displays a list of users online, along with their bending types.");
 		printUsageMessage(player, "/bending who <player>",
 				"Displays which bending types that player has.");
-		sendMessage(player, "**This command does not yet work!**");
 	}
 
 	private void who(Player player, String[] args) {
@@ -1161,8 +1232,8 @@ public class BendingCommand {
 
 	private void printPermaremoveUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.admin.permaremove")) {
-			sendMessage(player,
-					"You do not have the permission to use /bending permaremove");
+			sendNoCommandPermissionMessage(player, "permaremove");
+			return;
 		}
 		printUsageMessage(
 				player,
@@ -1193,13 +1264,8 @@ public class BendingCommand {
 
 	private void printRemoveUsage(Player player) {
 		if (!hasHelpPermission(player, "bending.admin.remove")) {
-			sendMessage(player,
-					"You do not have the permission to use /bending remove");
+			sendNoCommandPermissionMessage(player, "remove");
 			return;
-		}
-		if (player != null) {
-			printUsageMessage(player, "/bending remove",
-					"Removes all your bending.");
 		}
 		printUsageMessage(player, "/bending remove <player>",
 				"Removes all of <player>'s bending.");

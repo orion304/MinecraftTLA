@@ -25,6 +25,7 @@ public class AirSuction {
 
 	private static int ID = Integer.MIN_VALUE;
 	private static final int maxticks = AirBlast.maxticks;
+	static final double maxspeed = 4;
 
 	private static double speed = ConfigManager.airSuctionSpeed;
 	private static double range = ConfigManager.airSuctionRange;
@@ -131,12 +132,39 @@ public class AirSuction {
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
 			if (entity.getEntityId() != player.getEntityId()) {
+				Vector velocity = entity.getVelocity();
+				double mag = velocity.length();
+				double max = maxspeed;
 				if (AvatarState.isAvatarState(player)) {
-					entity.setVelocity(direction.clone().multiply(
-							AvatarState.getValue(pushfactor)));
+					max = AvatarState.getValue(maxspeed);
+					velocity = velocity.clone().add(
+							direction.clone().multiply(
+									AvatarState.getValue(pushfactor)));
+					double newmag = velocity.length();
+					if (newmag > mag) {
+						if (mag > max) {
+							velocity = velocity.clone().normalize()
+									.multiply(mag);
+						} else if (newmag > max) {
+							velocity = velocity.clone().normalize()
+									.multiply(max);
+						}
+					}
 				} else {
-					entity.setVelocity(direction.clone().multiply(pushfactor));
+					velocity = velocity.clone().add(
+							direction.clone().multiply(pushfactor));
+					double newmag = velocity.length();
+					if (newmag > mag) {
+						if (mag > max) {
+							velocity = velocity.clone().normalize()
+									.multiply(mag);
+						} else if (newmag > max) {
+							velocity = velocity.clone().normalize()
+									.multiply(max);
+						}
+					}
 				}
+				entity.setVelocity(velocity);
 				entity.setFallDistance(0);
 			}
 		}

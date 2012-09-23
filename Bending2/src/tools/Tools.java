@@ -302,6 +302,17 @@ public class Tools {
 					}
 				}
 
+				if (isPlant(affectedblock)) {
+					if (isSolid(affectedblock.getRelative(BlockFace.UP))) {
+						breakBlock(affectedblock);
+					} else {
+						affectedblock.getRelative(BlockFace.UP).setType(
+								affectedblock.getType());
+						affectedblock.getRelative(BlockFace.UP).setData(
+								affectedblock.getData());
+					}
+				}
+
 				affectedblock.setType(block.getType());
 				affectedblock.setData(block.getData());
 
@@ -1280,15 +1291,25 @@ public class Tools {
 		removeSpouts(location, 1.5, sourceplayer);
 	}
 
-	public static Block getWaterSourceBlock(Player player, int range,
+	public static Block getWaterSourceBlock(Player player, double range,
 			boolean plantbending) {
 		byte full = 0x0;
-		Block block = player.getTargetBlock(null, range);
-		if (isWaterbendable(block, player) && (!isPlant(block) || plantbending)) {
-			return block;
-		} else if ((block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
-				&& block.getData() == full) {
-			return block;
+		// Block block = player.getTargetBlock(null, range);
+		Location location = player.getEyeLocation();
+		Vector vector = location.getDirection().clone().normalize();
+		for (double i = 0; i <= range; i++) {
+			Block block = location.clone().add(vector.clone().multiply(i))
+					.getBlock();
+			if (isRegionProtectedFromBuild(player, Abilities.WaterManipulation,
+					location))
+				continue;
+			if (isWaterbendable(block, player)
+					&& (!isPlant(block) || plantbending)) {
+				return block;
+			} else if ((block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
+					&& block.getData() == full) {
+				return block;
+			}
 		}
 		return null;
 	}

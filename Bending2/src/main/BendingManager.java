@@ -79,6 +79,11 @@ public class BendingManager implements Runnable {
 	ConcurrentHashMap<World, Boolean> nights = new ConcurrentHashMap<World, Boolean>();
 	ConcurrentHashMap<World, Boolean> days = new ConcurrentHashMap<World, Boolean>();
 
+	static final String defaultsunrisemessage = "You feel the strength of the rising sun empowering your firebending.";
+	static final String defaultsunsetmessage = "You feel the empowering of your firebending subside as the sun sets.";
+	static final String defaultmoonrisemessage = "You feel the strength of the rising moon empowering your waterbending.";
+	static final String defaultmoonsetmessage = "You feel the empowering of your waterbending subside as the moon sets.";
+
 	public BendingManager(Bending bending) {
 		plugin = bending;
 		time = System.currentTimeMillis();

@@ -30,6 +30,7 @@ public class AirBlast {
 
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
+	static final double maxspeed = 4;
 
 	public static double speed = ConfigManager.airBlastSpeed;
 	public static double defaultrange = ConfigManager.airBlastRange;
@@ -205,14 +206,34 @@ public class AirBlast {
 	private void affect(Entity entity) {
 		if (entity.getEntityId() != player.getEntityId()) {
 			Vector velocity = entity.getVelocity();
+			double mag = velocity.length();
+			double max = maxspeed;
 			if (AvatarState.isAvatarState(player)) {
-				entity.setVelocity(velocity.clone().add(
+				max = AvatarState.getValue(maxspeed);
+				velocity = velocity.clone().add(
 						direction.clone().multiply(
-								AvatarState.getValue(pushfactor))));
+								AvatarState.getValue(pushfactor)));
+				double newmag = velocity.length();
+				if (newmag > mag) {
+					if (mag > max) {
+						velocity = velocity.clone().normalize().multiply(mag);
+					} else if (newmag > max) {
+						velocity = velocity.clone().normalize().multiply(max);
+					}
+				}
 			} else {
-				entity.setVelocity(velocity.add(direction.clone().multiply(
-						pushfactor)));
+				velocity = velocity.clone().add(
+						direction.clone().multiply(pushfactor));
+				double newmag = velocity.length();
+				if (newmag > mag) {
+					if (mag > max) {
+						velocity = velocity.clone().normalize().multiply(mag);
+					} else if (newmag > max) {
+						velocity = velocity.clone().normalize().multiply(max);
+					}
+				}
 			}
+			entity.setVelocity(velocity);
 			entity.setFallDistance(0);
 			if (entity.getFireTicks() > 0)
 				entity.getWorld().playEffect(entity.getLocation(),

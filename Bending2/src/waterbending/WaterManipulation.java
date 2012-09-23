@@ -76,7 +76,9 @@ public class WaterManipulation {
 	}
 
 	public boolean prepare() {
-		Block block = player.getTargetBlock(null, (int) range);
+		// Block block = player.getTargetBlock(null, (int) range);
+		Block block = Tools.getWaterSourceBlock(player, range,
+				Tools.canPlantbend(player));
 		// if (prepared.containsKey(player)
 		// && !Tools.isWaterbendable(block, player)) {
 		// instances.get(prepared.get(player)).displacing = true;
@@ -84,7 +86,7 @@ public class WaterManipulation {
 		// }
 		cancelPrevious();
 		block(player);
-		if (Tools.isWaterbendable(block, player)) {
+		if (block != null) {
 			sourceblock = block;
 			focusBlock();
 			return true;

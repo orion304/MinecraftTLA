@@ -128,6 +128,7 @@ public class WaterSpout {
 			if (player.getLocation().getBlockY() > block.getY()) {
 				player.setFlying(false);
 			} else {
+				player.setAllowFlight(true);
 				player.setFlying(true);
 			}
 		} else {

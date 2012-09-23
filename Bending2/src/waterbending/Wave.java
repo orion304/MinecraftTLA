@@ -82,8 +82,10 @@ public class Wave {
 
 	public boolean prepare() {
 		cancelPrevious();
-		Block block = player.getTargetBlock(null, (int) range);
-		if (Tools.isWaterbendable(block, player)) {
+		// Block block = player.getTargetBlock(null, (int) range);
+		Block block = Tools.getWaterSourceBlock(player, range,
+				Tools.canPlantbend(player));
+		if (block != null) {
 			sourceblock = block;
 			focusBlock();
 			return true;
@@ -293,6 +295,10 @@ public class Wave {
 										Tools.waterbendingNightAugment(factor,
 												player.getWorld()))));
 						entity.setFallDistance(0);
+						if (entity.getFireTicks() > 0)
+							entity.getWorld().playEffect(entity.getLocation(),
+									Effect.EXTINGUISH, 0);
+						entity.setFireTicks(0);
 					}
 
 				}
