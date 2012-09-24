@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.Tools;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
@@ -91,7 +92,8 @@ public class Language {
 				"FireBlast", "FireBurst", "FireJet", "FireShield",
 				"Illumination", "Lightning", "WallOfFire", "Bloodbending",
 				"PhaseChange", "HealingWaters", "IceSpike", "OctopusForm",
-				"WaterBubble", "WaterManipulation", "WaterSpout", "Surge" };
+				"WaterBubble", "WaterManipulation", "WaterSpout", "Surge",
+				"AvatarState" };
 
 		defaultdescriptions.put("AirBlast", AirBlast.getDescription());
 		defaultdescriptions.put("AirBubble", AirBubble.getDescription());
@@ -139,6 +141,7 @@ public class Language {
 		defaultdescriptions.put("WaterSpout", WaterSpout.getDescription());
 		defaultdescriptions.put("Surge", WaterWall.getDescription());
 		defaultdescriptions.put("WaterChoose", StorageManager.on_water_choose);
+		defaultdescriptions.put("AvatarState", AvatarState.getDescription());
 
 		for (String language : supportedlanguages) {
 			HashMap<String, String> langdescriptions = new HashMap<String, String>();

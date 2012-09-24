@@ -728,7 +728,7 @@ public class BendingCommand {
 						Tools.sendMessage(player, cc, element + ".Catapult");
 						break;
 					case RaiseEarth:
-						Tools.sendMessage(player, cc, element + ".EarthColumn");
+						Tools.sendMessage(player, cc, element + ".RaiseEarth");
 						break;
 					case EarthGrab:
 						Tools.sendMessage(player, cc, element + ".EarthGrab");
@@ -746,10 +746,10 @@ public class BendingCommand {
 						Tools.sendMessage(player, cc, element + ".Tremorsense");
 						break;
 					case Blaze:
-						Tools.sendMessage(player, cc, element + ".ArcOfFire");
+						Tools.sendMessage(player, cc, element + ".Blaze");
 						break;
 					case HeatControl:
-						Tools.sendMessage(player, cc, element + ".Extinguish");
+						Tools.sendMessage(player, cc, element + ".HeatControl");
 						break;
 					case FireBlast:
 						Tools.sendMessage(player, cc, element + ".FireBlast");
@@ -776,10 +776,10 @@ public class BendingCommand {
 						Tools.sendMessage(player, cc, element + ".Bloodbending");
 						break;
 					case WaterBubble:
-						Tools.sendMessage(player, cc, element + ".AirBubble");
+						Tools.sendMessage(player, cc, element + ".WaterBubble");
 						break;
 					case PhaseChange:
-						Tools.sendMessage(player, cc, element + ".FreezeMelt");
+						Tools.sendMessage(player, cc, element + ".PhaseChange");
 						break;
 					case HealingWaters:
 						Tools.sendMessage(player, cc, element
@@ -796,7 +796,7 @@ public class BendingCommand {
 						Tools.sendMessage(player, cc, element + ".OctopusForm");
 						break;
 					case Surge:
-						Tools.sendMessage(player, cc, element + ".WaterWall");
+						Tools.sendMessage(player, cc, element + ".Surge");
 						break;
 					case AvatarState:
 						Tools.sendMessage(player, cc, element + ".AvatarState");

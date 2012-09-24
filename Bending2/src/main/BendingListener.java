@@ -594,8 +594,8 @@ public class BendingListener implements Listener {
 					player.setAllowFlight(true);
 					BendingManager.flyingplayers.add(player);
 				}
-				player.setFallDistance(0);
 				AirBurst.fallBurst(player);
+				player.setFallDistance(0);
 				event.setDamage(0);
 				event.setCancelled(true);
 			} else if (Tools.isBender(player.getName(), BendingType.Water)

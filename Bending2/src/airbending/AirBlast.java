@@ -30,7 +30,7 @@ public class AirBlast {
 
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
-	static final double maxspeed = 4;
+	static final double maxspeed = 1;
 
 	public static double speed = ConfigManager.airBlastSpeed;
 	public static double defaultrange = ConfigManager.airBlastRange;
@@ -206,30 +206,30 @@ public class AirBlast {
 	private void affect(Entity entity) {
 		if (entity.getEntityId() != player.getEntityId()) {
 			Vector velocity = entity.getVelocity();
-			double mag = velocity.length();
+			double mag = Math.abs(velocity.getY());
 			double max = maxspeed;
 			if (AvatarState.isAvatarState(player)) {
 				max = AvatarState.getValue(maxspeed);
 				velocity = velocity.clone().add(
 						direction.clone().multiply(
 								AvatarState.getValue(pushfactor)));
-				double newmag = velocity.length();
+				double newmag = Math.abs(velocity.getY());
 				if (newmag > mag) {
 					if (mag > max) {
-						velocity = velocity.clone().normalize().multiply(mag);
+						velocity = velocity.clone().multiply(mag / newmag);
 					} else if (newmag > max) {
-						velocity = velocity.clone().normalize().multiply(max);
+						velocity = velocity.clone().multiply(max / newmag);
 					}
 				}
 			} else {
 				velocity = velocity.clone().add(
 						direction.clone().multiply(pushfactor));
-				double newmag = velocity.length();
+				double newmag = Math.abs(velocity.getY());
 				if (newmag > mag) {
 					if (mag > max) {
-						velocity = velocity.clone().normalize().multiply(mag);
+						velocity = velocity.clone().multiply(mag / newmag);
 					} else if (newmag > max) {
-						velocity = velocity.clone().normalize().multiply(max);
+						velocity = velocity.clone().multiply(max / newmag);
 					}
 				}
 			}
