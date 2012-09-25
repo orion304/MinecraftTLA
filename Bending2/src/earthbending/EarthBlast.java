@@ -18,7 +18,8 @@ import tools.Tools;
 public class EarthBlast {
 
 	public static ConcurrentHashMap<Integer, EarthBlast> instances = new ConcurrentHashMap<Integer, EarthBlast>();
-	private static ConcurrentHashMap<Player, EarthBlast> prepared = new ConcurrentHashMap<Player, EarthBlast>();
+	// private static ConcurrentHashMap<Player, EarthBlast> prepared = new
+	// ConcurrentHashMap<Player, EarthBlast>();
 
 	private static boolean hitself = ConfigManager.earthBlastHitSelf;
 	private static double preparerange = ConfigManager.earthBlastPrepareRange;
@@ -55,7 +56,7 @@ public class EarthBlast {
 			if (ID >= Integer.MAX_VALUE)
 				ID = Integer.MIN_VALUE;
 			instances.put(id, this);
-			prepared.put(player, this);
+			// prepared.put(player, this);
 			time = System.currentTimeMillis();
 		}
 
@@ -94,20 +95,19 @@ public class EarthBlast {
 	}
 
 	private void cancelPrevious() {
-		if (prepared.containsKey(player)) {
-			EarthBlast old = prepared.get(player);
-			if (!old.progressing) {
-				old.cancel();
-			}
-		}
-		// if (instances.containsKey(player.getEntityId())) {
-		// EarthBlast old = instances.get(player.getEntityId());
-		// if (old.progressing) {
-		// old.breakBlock();
-		// } else {
+		// if (prepared.containsKey(player)) {
+		// EarthBlast old = prepared.get(player);
+		// if (!old.progressing) {
 		// old.cancel();
 		// }
 		// }
+
+		for (int id : instances.keySet()) {
+			EarthBlast blast = instances.get(id);
+			if (blast.player == player && !blast.progressing)
+				blast.cancel();
+		}
+
 	}
 
 	public void cancel() {
@@ -306,11 +306,15 @@ public class EarthBlast {
 				}
 
 				if (revert) {
-					Tools.addTempEarthBlock(sourceblock, block);
+					// Tools.addTempEarthBlock(sourceblock, block);
+					Tools.moveEarthBlock(sourceblock, block);
+				} else {
+					block.setType(sourceblock.getType());
+					sourceblock.setType(Material.AIR);
 				}
 
-				block.setType(sourceblock.getType());
-				sourceblock.setType(Material.AIR);
+				// block.setType(sourceblock.getType());
+				// sourceblock.setType(Material.AIR);
 				// if (block.getType() != Material.AIR) {
 				// block.setType(Material.GLOWSTONE);
 				// } else {
@@ -349,9 +353,16 @@ public class EarthBlast {
 	}
 
 	public static void throwEarth(Player player) {
-		if (prepared.containsKey(player)) {
-			prepared.get(player).throwEarth();
-			prepared.remove(player);
+		// if (prepared.containsKey(player)) {
+		// prepared.get(player).throwEarth();
+		// prepared.remove(player);
+		// }
+
+		for (int id : instances.keySet()) {
+			EarthBlast blast = instances.get(id);
+			if (blast.player == player && !blast.progressing) {
+				blast.throwEarth();
+			}
 		}
 
 		redirectTargettedBlasts(player);

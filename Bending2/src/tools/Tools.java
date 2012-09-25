@@ -227,37 +227,6 @@ public class Tools {
 	public static void moveEarth(Player player, Location location,
 			Vector direction, int chainlength) {
 		moveEarth(player, location, direction, chainlength, true);
-		// if (isEarthbendable(block)) {
-		// Vector norm = direction.clone().normalize();
-		// Vector negnorm = norm.clone().multiply(-1);
-		//
-		// Block affectedblock = location.clone().add(norm).getBlock();
-		// // verbose(isTransparentToEarthbending(affectedblock));
-		// if (isTransparentToEarthbending(affectedblock)) {
-		// for (Entity entity : getEntitiesAroundPoint(
-		// affectedblock.getLocation(), 2)) {
-		// entity.setVelocity(norm.clone().multiply(.75));
-		// }
-		// affectedblock.setType(block.getType());
-		//
-		// for (double i = 1; i < chainlength; i++) {
-		// affectedblock = location
-		// .clone()
-		// .add(negnorm.getX() * i, negnorm.getY() * i,
-		// negnorm.getZ() * i).getBlock();
-		// if (!isEarthbendable(affectedblock)) {
-		// block.setType(Material.AIR);
-		// break;
-		// }
-		// block.setType(affectedblock.getType());
-		// block = affectedblock;
-		// }
-		// block.setType(Material.AIR);
-		// } else {
-		// // block.setType(Material.COBBLESTONE);
-		// // affectedblock.setType(Material.GLASS);
-		// }
-		// }
 	}
 
 	public static void moveEarth(Player player, Location location,
@@ -273,9 +242,6 @@ public class Tools {
 
 	public static boolean moveEarth(Player player, Block block,
 			Vector direction, int chainlength, boolean throwplayer) {
-		// verbose("Moving earth");
-		// verbose(direction);
-		// verbose(isEarthbendable(block));
 		if (isEarthbendable(player, block)
 				&& !isRegionProtectedFromBuild(player, Abilities.RaiseEarth,
 						block.getLocation())) {
@@ -285,33 +251,33 @@ public class Tools {
 			Location location = block.getLocation();
 
 			Block affectedblock = location.clone().add(norm).getBlock();
-			block.getWorld().playEffect(block.getLocation(),
-					Effect.GHAST_SHOOT, 0, 4);
 			if (EarthPassive.isPassiveSand(block)) {
 				EarthPassive.revertSand(block);
 			}
 			if (affectedblock == null)
 				return false;
-			// verbose(isTransparentToEarthbending(affectedblock));
 			if (isTransparentToEarthbending(player, affectedblock)) {
 				if (throwplayer) {
 					for (Entity entity : getEntitiesAroundPoint(
 							affectedblock.getLocation(), 1.75)) {
-						if (!(entity instanceof FallingBlock))
-							entity.setVelocity(norm.clone().multiply(.75));
+						if (entity.getLocation().getBlockX() == affectedblock
+								.getX()
+								&& entity.getLocation().getBlockZ() == affectedblock
+										.getZ())
+							if (!(entity instanceof FallingBlock))
+								entity.setVelocity(norm.clone().multiply(.75));
 					}
 				}
 
-				if (isPlant(affectedblock)) {
+				breakBlock(affectedblock);
 
-					breakBlock(affectedblock);
-
-				}
-
-				affectedblock.setType(block.getType());
-				affectedblock.setData(block.getData());
-
-				addTempEarthBlock(block, affectedblock);
+				// affectedblock.setType(block.getType());
+				// affectedblock.setData(block.getData());
+				//
+				// addTempEarthBlock(block, affectedblock);
+				moveEarthBlock(block, affectedblock);
+				block.getWorld().playEffect(block.getLocation(),
+						Effect.GHAST_SHOOT, 0, 4);
 
 				for (double i = 1; i < chainlength; i++) {
 					affectedblock = location
@@ -319,14 +285,14 @@ public class Tools {
 							.add(negnorm.getX() * i, negnorm.getY() * i,
 									negnorm.getZ() * i).getBlock();
 					if (!isEarthbendable(player, affectedblock)) {
-						if (!Tools.adjacentToThreeOrMoreSources(block)
-								&& Tools.isWater(block)) {
-							block.setType(Material.AIR);
-						} else {
-							byte full = 0x0;
-							block.setType(Material.WATER);
-							block.setData(full);
-						}
+						// if (!Tools.adjacentToThreeOrMoreSources(block)
+						// && Tools.isWater(block)) {
+						// block.setType(Material.AIR);
+						// } else {
+						// byte full = 0x0;
+						// block.setType(Material.WATER);
+						// block.setData(full);
+						// }
 						break;
 					}
 					if (EarthPassive.isPassiveSand(affectedblock)) {
@@ -334,49 +300,82 @@ public class Tools {
 					}
 					if (block == null)
 						return false;
-					block.setType(affectedblock.getType());
-					block.setData(affectedblock.getData());
-					addTempEarthBlock(affectedblock, block);
+					// block.setType(affectedblock.getType());
+					// block.setData(affectedblock.getData());
+					// addTempEarthBlock(affectedblock, block);
+					moveEarthBlock(affectedblock, block);
 					block = affectedblock;
 				}
-				if (!Tools.adjacentToThreeOrMoreSources(block)) {
-					block.setType(Material.AIR);
-				} else {
-					byte full = 0x0;
-					block.setType(Material.WATER);
-					block.setData(full);
-				}
+				// if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				// block.setType(Material.AIR);
+				// } else {
+				// byte full = 0x0;
+				// block.setType(Material.WATER);
+				// block.setData(full);
+				// }
 			} else {
 				return false;
-				// block.setType(Material.COBBLESTONE);
-				// affectedblock.setType(Material.GLASS);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public static void addTempEarthBlock(Block targetblock, Block sourceblock) {
-		if (tempearthblocks.containsKey(targetblock)) {
-			Block index = tempearthblocks.get(targetblock);
-			tempearthblocks.remove(targetblock);
-			tempearthblocks.put(sourceblock, index);
+	public static void moveEarthBlock(Block source, Block target) {
+		if (tempearthblocks.containsKey(source)) {
+			Block index = tempearthblocks.get(source);
+			tempearthblocks.remove(source);
+			tempearthblocks.put(target, index);
+			// if (movedearth.containsKey(index)) {
 			Information info = movedearth.get(index);
-			if (info != null) {
-				info.setBlock(sourceblock);
-				info.setTime(System.currentTimeMillis());
-				movedearth.replace(index, info);
-			}
-		} else {
-			tempearthblocks.put(sourceblock, targetblock);
-			Information info = new Information();
-			info.setBlock(sourceblock);
-			info.setType(targetblock.getType());
-			info.setData(targetblock.getData());
+			info.setBlock(target);
 			info.setTime(System.currentTimeMillis());
-			movedearth.put(targetblock, info);
+			movedearth.replace(index, info);
+			// } else {
+			// verbose("Moved earth not in keys.");
+			// }
+		} else {
+			tempearthblocks.put(target, source);
+			Information info = new Information();
+			info.setBlock(target);
+			info.setType(source.getType());
+			info.setData(source.getData());
+			info.setTime(System.currentTimeMillis());
+			movedearth.put(source, info);
+		}
+
+		target.setType(source.getType());
+		target.setData(source.getData());
+		if (!Tools.adjacentToThreeOrMoreSources(source)) {
+			source.setType(Material.AIR);
+		} else {
+			byte full = 0x0;
+			source.setType(Material.WATER);
+			source.setData(full);
 		}
 	}
+
+	// public static void addTempEarthBlock(Block source, Block target) {
+	// if (tempearthblocks.containsKey(source)) {
+	// Block index = tempearthblocks.get(source);
+	// tempearthblocks.remove(source);
+	// tempearthblocks.put(target, index);
+	// Information info = movedearth.get(index);
+	// if (info != null) {
+	// info.setBlock(source);
+	// info.setTime(System.currentTimeMillis());
+	// movedearth.replace(index, info);
+	// }
+	// } else {
+	// tempearthblocks.put(target, source);
+	// Information info = new Information();
+	// info.setBlock(source);
+	// info.setType(source.getType());
+	// info.setData(source.getData());
+	// info.setTime(System.currentTimeMillis());
+	// movedearth.put(source, info);
+	// }
+	// }
 
 	public static void addTempAirBlock(Block block) {
 		if (tempearthblocks.containsKey(block)) {
@@ -397,6 +396,128 @@ public class Tools {
 			block.setType(Material.AIR);
 		}
 	}
+
+	// public static void removeEarthbendedBlock(Block block) {
+	// if (tempearthblocks.containsKey(block)) {
+	// Block index = Tools.tempearthblocks.get(block);
+	// if (!Tools.adjacentToThreeOrMoreSources(block)) {
+	// block.setType(Material.AIR);
+	// } else {
+	// byte full = 0x0;
+	// block.setType(Material.WATER);
+	// block.setData(full);
+	// }
+	// if (movedearth.containsKey(index)) {
+	// Information info = movedearth.get(index);
+	// index.setType(info.getType());
+	// index.setData(info.getData());
+	// movedearth.remove(index);
+	// } else {
+	// verbose("Tried reverting a block that didn't have an index...");
+	// }
+	// tempearthblocks.remove(block);
+	// if (EarthColumn.blockInAllAffectedBlocks(block)) {
+	// EarthColumn.revertBlock(block);
+	// }
+	// if (EarthColumn.blockInAllAffectedBlocks(index)) {
+	// EarthColumn.revertBlock(index);
+	// }
+	// EarthColumn.resetBlock(block);
+	// EarthColumn.resetBlock(index);
+	// }
+	// }
+
+	public static void removeEarthbendedBlockByIndex(Block index) {
+		if (movedearth.containsKey(index)) {
+			Information info = movedearth.get(index);
+			Block block = info.getBlock();
+			if (!Tools.adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.AIR);
+			} else {
+				byte full = 0x0;
+				block.setType(Material.WATER);
+				block.setData(full);
+			}
+			if (index.getType() == Material.AIR || index.isLiquid()) {
+				index.setType(info.getType());
+				index.setData(info.getData());
+			} else {
+				block.getWorld().dropItem(block.getLocation(),
+						new ItemStack(info.getType()));
+			}
+			movedearth.remove(index);
+			tempearthblocks.remove(block);
+			if (EarthColumn.blockInAllAffectedBlocks(block)) {
+				EarthColumn.revertBlock(block);
+			}
+			if (EarthColumn.blockInAllAffectedBlocks(index)) {
+				EarthColumn.revertBlock(index);
+			}
+			EarthColumn.resetBlock(block);
+			EarthColumn.resetBlock(index);
+		} else {
+			verbose("Index not in movedearth.");
+		}
+	}
+
+	public static void removeEarthbendedBlockIndex(Block block) {
+		if (tempearthblocks.containsKey(block)) {
+			Block index = tempearthblocks.get(block);
+			tempearthblocks.remove(block);
+			movedearth.remove(index);
+		}
+	}
+
+	public static void removeAllEarthbendedBlocks() {
+		for (Block block : movedearth.keySet()) {
+			// block.setType(Material.GLASS);
+			// movedearth.remove(block);
+			removeEarthbendedBlockByIndex(block);
+		}
+	}
+
+	// public static void addTempEarthBlock(Block targetblock, Block
+	// sourceblock) {
+	// if (tempearthblocks.containsKey(targetblock)) {
+	// Block index = tempearthblocks.get(targetblock);
+	// tempearthblocks.remove(targetblock);
+	// tempearthblocks.put(sourceblock, index);
+	// Information info = movedearth.get(index);
+	// if (info != null) {
+	// info.setBlock(sourceblock);
+	// info.setTime(System.currentTimeMillis());
+	// movedearth.replace(index, info);
+	// }
+	// } else {
+	// tempearthblocks.put(sourceblock, targetblock);
+	// Information info = new Information();
+	// info.setBlock(sourceblock);
+	// info.setType(targetblock.getType());
+	// info.setData(targetblock.getData());
+	// info.setTime(System.currentTimeMillis());
+	// movedearth.put(targetblock, info);
+	// }
+	// }
+
+	// public static void addTempAirBlock(Block block) {
+	// if (tempearthblocks.containsKey(block)) {
+	// Block index = tempearthblocks.get(block);
+	// tempearthblocks.remove(block);
+	// Information info = movedearth.get(index);
+	// if (info != null) {
+	// info.setTime(System.currentTimeMillis());
+	// movedearth.replace(index, info);
+	// }
+	// block.setType(Material.AIR);
+	// } else {
+	// Information info = new Information();
+	// info.setBlock(block);
+	// info.setType(block.getType());
+	// info.setTime(System.currentTimeMillis());
+	// movedearth.put(block, info);
+	// block.setType(Material.AIR);
+	// }
+	// }
 
 	public static boolean isWater(Block block) {
 		if (block.getType() == Material.WATER
@@ -735,16 +856,7 @@ public class Tools {
 		AirSpout.removeAll();
 		OctopusForm.removeAll();
 		TempBlock.removeAll();
-		for (Block block : tempearthblocks.keySet()) {
-			removeEarthbendedBlock(block);
-		}
-		for (Block block : Tools.movedearth.keySet()) {
-			Information info = Tools.movedearth.get(block);
-			// if (Tools.tempearthblocks.containsKey(info.getBlock()))
-			// Tools.verbose("PROBLEM!");
-			block.setType(info.getType());
-			Tools.movedearth.remove(block);
-		}
+		removeAllEarthbendedBlocks();
 		TempBlock.removeAll();
 	}
 
@@ -1174,42 +1286,6 @@ public class Tools {
 		if (Arrays.asList(nonOpaque).contains(block.getTypeId()))
 			return false;
 		return true;
-	}
-
-	public static void removeEarthbendedBlock(Block block) {
-		if (tempearthblocks.containsKey(block)) {
-			Block index = Tools.tempearthblocks.get(block);
-			if (!Tools.adjacentToThreeOrMoreSources(block)) {
-				block.setType(Material.AIR);
-			} else {
-				byte full = 0x0;
-				block.setType(Material.WATER);
-				block.setData(full);
-			}
-			if (movedearth.containsKey(index)) {
-				Information info = movedearth.get(index);
-				index.setType(info.getType());
-				index.setData(info.getData());
-				movedearth.remove(index);
-			}
-			Tools.tempearthblocks.remove(block);
-			if (EarthColumn.blockInAllAffectedBlocks(block)) {
-				EarthColumn.revertBlock(block);
-			}
-			if (EarthColumn.blockInAllAffectedBlocks(index)) {
-				EarthColumn.revertBlock(index);
-			}
-			EarthColumn.resetBlock(block);
-			EarthColumn.resetBlock(index);
-		}
-	}
-
-	public static void removeEarthbendedBlockIndex(Block block) {
-		if (tempearthblocks.containsKey(block)) {
-			Block index = tempearthblocks.get(block);
-			tempearthblocks.remove(block);
-			movedearth.remove(index);
-		}
 	}
 
 	public static void blockChi(Player player, long time) {

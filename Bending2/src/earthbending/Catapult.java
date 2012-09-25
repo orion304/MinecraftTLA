@@ -142,7 +142,7 @@ public class Catapult {
 			ticks++;
 		}
 
-		Tools.moveEarth(player, location, direction, distance, false);
+		// Tools.moveEarth(player, location, direction, distance, false);
 		location = location.clone().add(direction);
 
 		if (catapult) {
@@ -178,6 +178,7 @@ public class Catapult {
 				return false;
 			}
 		}
+		Tools.moveEarth(player, location, direction, distance, false);
 		// Tools.moveEarth(location, direction, distance);
 		// location = location.clone().add(direction);
 		return true;

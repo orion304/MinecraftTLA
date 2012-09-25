@@ -50,6 +50,7 @@ import earthbending.EarthPassive;
 import earthbending.EarthTunnel;
 import earthbending.Shockwave;
 import earthbending.Tremorsense;
+import firebending.Cook;
 import firebending.FireBlast;
 import firebending.FireBurst;
 import firebending.FireJet;
@@ -176,14 +177,14 @@ public class BendingManager implements Runnable {
 		Tremorsense.manage(plugin.getServer());
 
 		for (Block block : RevertChecker.revertQueue.keySet()) {
-			Tools.removeEarthbendedBlock(block);
+			Tools.removeEarthbendedBlockByIndex(block);
 			RevertChecker.revertQueue.remove(block);
 		}
 
-		for (Block block : RevertChecker.movedEarthQueue.keySet()) {
-			block.setType(RevertChecker.movedEarthQueue.get(block));
-			RevertChecker.movedEarthQueue.remove(block);
-		}
+		// for (Block block : RevertChecker.movedEarthQueue.keySet()) {
+		// block.setType(RevertChecker.movedEarthQueue.get(block));
+		// RevertChecker.movedEarthQueue.remove(block);
+		// }
 
 	}
 
@@ -216,6 +217,8 @@ public class BendingManager implements Runnable {
 		FireJet.progressAll();
 
 		FireStream.dissipateAll();
+
+		Cook.progressAll();
 
 		Illumination.manage(plugin.getServer());
 

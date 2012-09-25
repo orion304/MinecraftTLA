@@ -32,8 +32,6 @@ public class RevertChecker implements Runnable {
 
 		if (ConfigManager.reverseearthbending) {
 
-			// Tools.verbose("Reverting earthbending now!");
-
 			ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 
 			for (Player player : plugin.getServer().getOnlinePlayers()) {
@@ -42,37 +40,51 @@ public class RevertChecker implements Runnable {
 					chunks.add(chunk);
 			}
 
-			for (Block block : Tools.tempearthblocks.keySet()) {
+			for (Block block : Tools.movedearth.keySet()) {
 				if (revertQueue.containsKey(block))
 					continue;
 				boolean remove = true;
-
-				Block index = Tools.tempearthblocks.get(block);
-				if (Tools.movedearth.containsKey(index)) {
-					Information info = Tools.movedearth.get(index);
-					if (time < info.getTime() + ConfigManager.revertchecktime
-							|| (chunks.contains(index.getChunk()) && safeRevert)) {
-						remove = false;
-					}
-				}
-
-				if (remove)
-					addToRevertQueue(block);
-
-			}
-
-			for (Block block : Tools.movedearth.keySet()) {
-				if (movedEarthQueue.containsKey(block))
-					continue;
 				Information info = Tools.movedearth.get(block);
-				if (time >= info.getTime() + ConfigManager.revertchecktime) {
-					// if (Tools.tempearthblocks.containsKey(info.getBlock()))
-					// Tools.verbose("PROBLEM!");
-					// block.setType(info.getType());
-					// Tools.movedearth.remove(block);
-					addToMovedEarthQueue(block, info.getType());
+				if (time < info.getTime() + ConfigManager.revertchecktime
+						|| (chunks.contains(block.getChunk()) && safeRevert)) {
+					remove = false;
+				}
+				if (remove) {
+					addToRevertQueue(block);
 				}
 			}
+
+			// for (Block block : Tools.tempearthblocks.keySet()) {
+			// if (revertQueue.containsKey(block))
+			// continue;
+			// boolean remove = true;
+			//
+			// Block index = Tools.tempearthblocks.get(block);
+			// if (Tools.movedearth.containsKey(index)) {
+			// Information info = Tools.movedearth.get(index);
+			// if (time < info.getTime() + ConfigManager.revertchecktime
+			// || (chunks.contains(index.getChunk()) && safeRevert)) {
+			// remove = false;
+			// }
+			// }
+			//
+			// if (remove)
+			// addToRevertQueue(block);
+			//
+			// }
+
+			// for (Block block : Tools.movedearth.keySet()) {
+			// if (movedEarthQueue.containsKey(block))
+			// continue;
+			// Information info = Tools.movedearth.get(block);
+			// if (time >= info.getTime() + ConfigManager.revertchecktime) {
+			// // if (Tools.tempearthblocks.containsKey(info.getBlock()))
+			// // Tools.verbose("PROBLEM!");
+			// // block.setType(info.getType());
+			// // Tools.movedearth.remove(block);
+			// addToMovedEarthQueue(block, info.getType());
+			// }
+			// }
 
 			// Tools.writeToLog("Still " + Tools.tempearthblocks.size()
 			// + " remaining.");

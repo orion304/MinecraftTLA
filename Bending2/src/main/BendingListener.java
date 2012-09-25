@@ -95,6 +95,7 @@ import earthbending.EarthWall;
 import earthbending.Shockwave;
 import earthbending.Tremorsense;
 import firebending.ArcOfFire;
+import firebending.Cook;
 import firebending.Extinguish;
 import firebending.FireBlast;
 import firebending.FireBurst;
@@ -550,6 +551,10 @@ public class BendingListener implements Listener {
 
 			if (Tools.getBendingAbility(player) == Abilities.FireShield) {
 				FireShield.shield(player);
+			}
+
+			if (Tools.getBendingAbility(player) == Abilities.HeatControl) {
+				new Cook(player);
 			}
 
 		}
