@@ -37,8 +37,8 @@ public class AirShield {
 		}
 		this.player = player;
 		int angle = 0;
-		for (int i = -(int) radius; i <= (int) radius; i += (int) radius * 2
-				/ numberOfStreams) {
+		int di = (int) (radius * 2 / numberOfStreams);
+		for (int i = -(int) radius + di; i < (int) radius; i += di) {
 			angles.put(i, angle);
 			angle += 90;
 			if (angle == 360)
@@ -92,8 +92,12 @@ public class AirShield {
 
 			y = origin.getY() + (double) i;
 
-			x = origin.getX() + radius * Math.cos(angle);
-			z = origin.getZ() + radius * Math.sin(angle);
+			// double theta = Math.asin(y/radius);
+			double f = Math.sqrt(1 - ((double) i / radius)
+					* ((double) i / radius));
+
+			x = origin.getX() + radius * Math.cos(angle) * f;
+			z = origin.getZ() + radius * Math.sin(angle) * f;
 
 			Location effect = new Location(origin.getWorld(), x, y, z);
 			if (!Tools.isRegionProtectedFromBuild(player, Abilities.AirShield,

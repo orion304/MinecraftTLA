@@ -326,14 +326,14 @@ public class Tools {
 			Block index = tempearthblocks.get(source);
 			tempearthblocks.remove(source);
 			tempearthblocks.put(target, index);
-			// if (movedearth.containsKey(index)) {
-			Information info = movedearth.get(index);
-			info.setBlock(target);
-			info.setTime(System.currentTimeMillis());
-			movedearth.replace(index, info);
-			// } else {
-			// verbose("Moved earth not in keys.");
-			// }
+			if (movedearth.containsKey(index)) {
+				Information info = movedearth.get(index);
+				info.setBlock(target);
+				info.setTime(System.currentTimeMillis());
+				movedearth.replace(index, info);
+			} else {
+				verbose("Moved earth not in keys.");
+			}
 		} else {
 			tempearthblocks.put(target, source);
 			Information info = new Information();

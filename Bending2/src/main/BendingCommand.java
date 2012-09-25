@@ -1637,7 +1637,7 @@ public class BendingCommand {
 					config.removeAbility(player, mat.getId());
 				}
 			}
-			Tools.sendMessage(player, "General.clear_message");
+			Tools.sendMessage(player, "General.cleared_message");
 		} else if (args.length == 2) {
 			if (!ConfigManager.bendToItem) {
 				if (Integer.parseInt(args[1]) > 0
