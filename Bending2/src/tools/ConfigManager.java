@@ -958,6 +958,9 @@ public class ConfigManager {
 		config.set("MySQL.Database", dbDB);
 		config.set("MySQL.MySQL-portnumber", Integer.parseInt(dbPort));
 
+		// Option
+		config.set("Bending.Option.EarthBendable", earthbendable);
+
 		try {
 			// config.setDefaults(config);
 			// config.options().copyDefaults(true);

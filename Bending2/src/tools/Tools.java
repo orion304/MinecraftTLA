@@ -442,8 +442,9 @@ public class Tools {
 				index.setType(info.getType());
 				index.setData(info.getData());
 			} else {
-				block.getWorld().dropItem(block.getLocation(),
-						new ItemStack(info.getType()));
+				if (info.getType() != Material.AIR)
+					block.getWorld().dropItem(block.getLocation(),
+							new ItemStack(info.getType()));
 			}
 			movedearth.remove(index);
 			tempearthblocks.remove(block);

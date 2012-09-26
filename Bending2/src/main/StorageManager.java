@@ -310,8 +310,12 @@ public class StorageManager {
 				e.printStackTrace();
 			}
 		}
-		Tools.sendMessage(player, ChatColor.GOLD, bendingstring + "."
-				+ bendingstring + "Choose");
+		if (bendingstring == "Chi") {
+			Tools.sendMessage(player, ChatColor.GOLD, "Chiblocker.ChiChoose");
+		} else {
+			Tools.sendMessage(player, ChatColor.GOLD, bendingstring + "."
+					+ bendingstring + "Choose");
+		}
 		// player.sendMessage(ChatColor.GOLD + bendingstring);
 		// player.sendMessage(ChatColor.GOLD
 		// + "Use '/bending help' if you need assistance.");

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UnknownFormatConversionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -254,8 +255,16 @@ public class BendingListener implements Listener {
 							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
 			}
-			event.setFormat("<" + color + player.getDisplayName()
-					+ ChatColor.WHITE + "> " + event.getMessage());
+
+			try {
+				event.setFormat("<" + color + player.getDisplayName()
+						+ ChatColor.WHITE + "> " + event.getMessage());
+				// event.setFormat(format);
+				// // event.setMessage(message + "Test");
+				// Tools.verbose(event.getFormat());
+			} catch (UnknownFormatConversionException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

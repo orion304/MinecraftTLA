@@ -1640,20 +1640,26 @@ public class BendingCommand {
 			Tools.sendMessage(player, "General.cleared_message");
 		} else if (args.length == 2) {
 			if (!ConfigManager.bendToItem) {
-				if (Integer.parseInt(args[1]) > 0
-						&& Integer.parseInt(args[1]) < 10) {
-					config.removeAbility(player, Integer.parseInt(args[1]) - 1);
-					sendMessage(
-							player,
-							Tools.getMessage(player, "General.slot")
-									+ " "
-									+ args[1]
-									+ " "
-									+ Tools.getMessage(player,
-											"General.slot_item_cleared"));
+				try {
+					int slot = Integer.parseInt(args[1]);
+
+					if (slot > 0 && slot < 10) {
+						config.removeAbility(player, slot - 1);
+						sendMessage(
+								player,
+								Tools.getMessage(player, "General.slot")
+										+ " "
+										+ args[1]
+										+ " "
+										+ Tools.getMessage(player,
+												"General.slot_item_cleared"));
+						return;
+					}
+					printClearUsage(player);
+				} catch (NumberFormatException e) {
+					printClearUsage(player);
 					return;
 				}
-				printClearUsage(player);
 			} else {
 				if (Material.matchMaterial(args[1]) != null) {
 					config.removeAbility(player,
@@ -1724,12 +1730,18 @@ public class BendingCommand {
 				return;
 			}
 		} else if (args.length == 3) {
-			slot = Integer.parseInt(args[2]);
-			if (slot <= 0 || slot >= 10) {
-				printNoPermissions(player);
+			try {
+				slot = Integer.parseInt(args[2]);
+
+				if (slot <= 0 || slot >= 10) {
+					printNoPermissions(player);
+					return;
+				}
+				slot--;
+			} catch (NumberFormatException e) {
+				printBindUsage(player);
 				return;
 			}
-			slot--;
 		}
 
 		ChatColor color = ChatColor.WHITE;
