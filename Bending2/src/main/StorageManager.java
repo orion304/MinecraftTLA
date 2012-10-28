@@ -10,6 +10,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.kitteh.tag.TagAPI;
@@ -59,7 +60,7 @@ public class StorageManager {
 		tapi = Bukkit.getPluginManager().getPlugin("TagAPI");
 	}
 
-	public void removeBending(Player player) {
+	public void removeBending(OfflinePlayer player) {
 		if (StorageManager.useFlatFile) {
 			if (config.checkKeys(player.getName())) {
 				for (int i = 0; i <= 8; i++) {
@@ -69,7 +70,8 @@ public class StorageManager {
 					removeAbility(player, mat);
 				}
 				config.setKey(player.getName(), "");
-				player.setDisplayName(player.getName());
+				if (player instanceof Player)
+					((Player) player).setDisplayName(player.getName());
 			}
 		} else if (StorageManager.useMySQL) {
 			String removeEle = "DELETE FROM bending_element WHERE player ='"
@@ -80,11 +82,12 @@ public class StorageManager {
 			this.MySql.delete(removeBind);
 			// MySql Query
 		}
-		List<BendingType> templist = new ArrayList<BendingType>();
-		Bending.benders.put(player.getName(), templist);
+		// List<BendingType> templist = new ArrayList<BendingType>();
+		// Bending.benders.put(player.getName(), templist);
 		if (tapi != null && ConfigManager.useTagAPI) {
 			try {
-				TagAPI.refreshPlayer(player);
+				if (player instanceof Player)
+					TagAPI.refreshPlayer((Player) player);
 			} catch (Exception e) {
 
 			}
@@ -211,7 +214,7 @@ public class StorageManager {
 		return false;
 	}
 
-	public String getLanguage(Player player) {
+	public String getLanguage(OfflinePlayer player) {
 		String language = Tools.getDefaultLanguage();
 		if (StorageManager.useFlatFile) {
 			String key = player.getName() + "<Language>";
@@ -235,7 +238,7 @@ public class StorageManager {
 		return language;
 	}
 
-	public void setLanguage(Player player, String language) {
+	public void setLanguage(OfflinePlayer player, String language) {
 		language = language.toLowerCase();
 		if (StorageManager.useFlatFile) {
 			config.setKey(player.getName() + "<Language>", language);
@@ -263,7 +266,7 @@ public class StorageManager {
 		}
 	}
 
-	public void setBending(Player player, BendingType type) {
+	public void setBending(OfflinePlayer player, BendingType type) {
 		String bending = "";
 		String bendingstring = "";
 		if (type == BendingType.Air) {
@@ -283,7 +286,8 @@ public class StorageManager {
 			bendingstring = "Chi";
 		} else {
 			bending = "s";
-			player.setDisplayName(player.getName());
+			if (player instanceof Player)
+				((Player) player).setDisplayName(player.getName());
 			return;
 		}
 		if (StorageManager.useFlatFile) {
@@ -310,12 +314,15 @@ public class StorageManager {
 				e.printStackTrace();
 			}
 		}
-		if (bendingstring == "Chi") {
-			Tools.sendMessage(player, ChatColor.GOLD, "Chiblocker.ChiChoose");
-		} else {
-			Tools.sendMessage(player, ChatColor.GOLD, bendingstring + "."
-					+ bendingstring + "Choose");
-		}
+		if (player instanceof Player)
+			if (bendingstring == "Chi") {
+
+				Tools.sendMessage((Player) player, ChatColor.GOLD,
+						"Chiblocker.ChiChoose");
+			} else {
+				Tools.sendMessage((Player) player, ChatColor.GOLD,
+						bendingstring + "." + bendingstring + "Choose");
+			}
 		// player.sendMessage(ChatColor.GOLD + bendingstring);
 		// player.sendMessage(ChatColor.GOLD
 		// + "Use '/bending help' if you need assistance.");
@@ -336,7 +343,9 @@ public class StorageManager {
 					append = ConfigManager.getPrefix("ChiBlocker");
 				}
 				if (!(ConfigManager.compatibility))
-					player.setDisplayName(append + player.getName());
+					if (player instanceof Player)
+						((Player) player).setDisplayName(append
+								+ player.getName());
 			}
 			if ((ConfigManager.compatibility) && (ConfigManager.enabled)) {
 				ChatColor color = ChatColor.WHITE;
@@ -357,17 +366,19 @@ public class StorageManager {
 						color = Tools.getColor(ConfigManager
 								.getColor("ChiBlocker"));
 					}
-					player.setDisplayName("<" + color + append
-							+ player.getName() + ChatColor.WHITE + ">");
+					if (player instanceof Player)
+						((Player) player).setDisplayName("<" + color + append
+								+ player.getName() + ChatColor.WHITE + ">");
 				}
 			}
 		}
 		List<BendingType> templist = new ArrayList<BendingType>();
 		templist.add(type);
-		Bending.benders.put(player.getName(), templist);
+		// Bending.benders.put(player.getName(), templist);
 		if (tapi != null && ConfigManager.useTagAPI) {
 			try {
-				TagAPI.refreshPlayer(player);
+				if (player instanceof Player)
+					TagAPI.refreshPlayer((Player) player);
 			} catch (Exception e) {
 
 			}
@@ -437,15 +448,15 @@ public class StorageManager {
 				e.printStackTrace();
 			}
 		}
-		List<BendingType> templist;
-		if (Bending.benders.containsKey(player.getName())) {
-			templist = Bending.benders.get(player.getName());
-			templist.add(type);
-		} else {
-			templist = new ArrayList<BendingType>();
-			templist.add(type);
-		}
-		Bending.benders.put(player.getName(), templist);
+		// List<BendingType> templist;
+		// if (Bending.benders.containsKey(player.getName())) {
+		// templist = Bending.benders.get(player.getName());
+		// templist.add(type);
+		// } else {
+		// templist = new ArrayList<BendingType>();
+		// templist.add(type);
+		// }
+		// Bending.benders.put(player.getName(), templist);
 		if (tapi != null && ConfigManager.useTagAPI) {
 			try {
 				TagAPI.refreshPlayer(player);
@@ -514,15 +525,15 @@ public class StorageManager {
 				e.printStackTrace();
 			}
 		}
-		List<BendingType> templist;
-		if (Bending.benders.containsKey(player)) {
-			templist = Bending.benders.get(player);
-			templist.add(type);
-		} else {
-			templist = new ArrayList<BendingType>();
-			templist.add(type);
-		}
-		Bending.benders.put(player, templist);
+		// List<BendingType> templist;
+		// if (Bending.benders.containsKey(player)) {
+		// templist = Bending.benders.get(player);
+		// templist.add(type);
+		// } else {
+		// templist = new ArrayList<BendingType>();
+		// templist.add(type);
+		// }
+		// Bending.benders.put(player, templist);
 	}
 
 	public void addBending(String player, String type) {
@@ -732,13 +743,18 @@ public class StorageManager {
 		}
 	}
 
-	public Abilities getAbility(Player player) {
-		if (ConfigManager.bendToItem == false)
-			return getAbility(player, player.getInventory().getHeldItemSlot());
-		return getAbility(player, player.getItemInHand().getType());
+	public Abilities getAbility(OfflinePlayer player) {
+		if (player instanceof Player) {
+			if (ConfigManager.bendToItem == false)
+				return getAbility(player, ((Player) player).getInventory()
+						.getHeldItemSlot());
+			return getAbility(player, ((Player) player).getItemInHand()
+					.getType());
+		}
+		return null;
 	}
 
-	public Abilities getAbility(Player player, int slot) {
+	public Abilities getAbility(OfflinePlayer player, int slot) {
 		String ability = "";
 		String setter = player.getName() + "<Bind" + slot + ">";
 		if (StorageManager.useFlatFile) {
@@ -766,7 +782,7 @@ public class StorageManager {
 
 	// Bind to item
 
-	public Abilities getAbility(Player player, Material mat) {
+	public Abilities getAbility(OfflinePlayer player, Material mat) {
 		String ability = "";
 		String setter = player.getName() + "<Bind" + mat.name() + ">";
 		if (StorageManager.useFlatFile) {
@@ -824,7 +840,7 @@ public class StorageManager {
 		return list;
 	}
 
-	public void removeAbility(Player player, int slot) {
+	public void removeAbility(OfflinePlayer player, int slot) {
 		if (StorageManager.useFlatFile) {
 			String setter = player.getName() + "<Bind" + slot + ">";
 			config.setKey(setter, null);
@@ -837,14 +853,14 @@ public class StorageManager {
 
 	}
 
-	public void removeAbility(Player player, Material mat) {
+	public void removeAbility(OfflinePlayer player, Material mat) {
 		if (StorageManager.useFlatFile) {
 			String setter = player.getName() + "<Bind" + mat.name() + ">";
 			config.setKey(setter, null);
 		}
 	}
 
-	public void permaRemoveBending(Player player) {
+	public void permaRemoveBending(OfflinePlayer player) {
 		removeBending(player);
 		BendingType type = null;
 		setBending(player, type);

@@ -98,7 +98,7 @@ import firebending.WallOfFire;
 
 public class Tools {
 
-	private static StorageManager config;
+	public static StorageManager config;
 
 	private static final Map<String, ChatColor> colors;
 
@@ -868,7 +868,8 @@ public class Tools {
 	}
 
 	public static boolean hasAbility(Player player, Abilities ability) {
-		return config.hasAbility(player, ability);
+		// return config.hasAbility(player, ability);
+		return canBend(player, ability);
 	}
 
 	public static boolean isPlant(Block block) {
@@ -885,26 +886,42 @@ public class Tools {
 	public static boolean isBender(String player, BendingType type) {
 		// return config.isBender(player, type);
 		// if (Bending.benders.contains(player))
-		if (Bending.benders.containsKey(player))
-			return Bending.benders.get(player).contains(type);
-		return false;
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+		if (bPlayer == null)
+			return false;
+		return bPlayer.isBender(type);
+		// if (Bending.benders.containsKey(player))
+		// return Bending.benders.get(player).contains(type);
+		// return false;
 	}
 
 	public static boolean isBender(String player) {
 		// return config.isBender(player, type);
-		if (Bending.benders.containsKey(player)) {
-			if (Bending.benders.get(player).size() > 0)
-				return true;
-		}
-		return false;
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+		if (bPlayer == null)
+			return false;
+		return bPlayer.isBender();
+		// if (Bending.benders.containsKey(player)) {
+		// if (Bending.benders.get(player).size() > 0)
+		// return true;
+		// }
+		// return false;
 	}
 
 	public static Abilities getBendingAbility(Player player) {
-		return config.getAbility(player);
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+		if (bPlayer == null)
+			return null;
+		return bPlayer.getAbility();
+		// return config.getAbility(player);
 	}
 
 	public static List<BendingType> getBendingTypes(Player player) {
-		return config.getBendingTypes(player);
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+		if (bPlayer == null)
+			return null;
+		return bPlayer.getBendingTypes();
+		// return config.getBendingTypes(player);
 	}
 
 	public static double getDistanceFromLine(Vector line, Location pointonline,
@@ -1133,6 +1150,32 @@ public class Tools {
 			return true;
 		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player)))
 			return false;
+
+		if (Abilities.isAirbending(ability)
+				&& !isBender(player.getName(), BendingType.Air)) {
+			return false;
+		}
+
+		if (Abilities.isChiBlocking(ability)
+				&& !isBender(player.getName(), BendingType.ChiBlocker)) {
+			return false;
+		}
+
+		if (Abilities.isEarthbending(ability)
+				&& !isBender(player.getName(), BendingType.Earth)) {
+			return false;
+		}
+
+		if (Abilities.isFirebending(ability)
+				&& !isBender(player.getName(), BendingType.Fire)) {
+			return false;
+		}
+
+		if (Abilities.isWaterbending(ability)
+				&& !isBender(player.getName(), BendingType.Water)) {
+			return false;
+		}
+
 		if (allowharmless && Tools.isHarmlessAbility(ability)
 				&& !toggledBending(player))
 			return true;

@@ -3,9 +3,7 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import main.Metrics.Graph;
@@ -31,13 +29,17 @@ public class Bending extends JavaPlugin {
 	public static long time_step = 1; // in ms
 	public static Logger log = Logger.getLogger("Minecraft");
 
+	public static Bending plugin;
+
 	public final BendingManager manager = new BendingManager(this);
 	public final BendingListener listener = new BendingListener(this);
 	private final RevertChecker revertChecker = new RevertChecker(this);
+	private final PlayerStorageWriter playerStorageWriter = new PlayerStorageWriter();
 	public final TagAPIListener Taglistener = new TagAPIListener();
 
 	static Map<String, String> commands = new HashMap<String, String>();
-	public static ConcurrentHashMap<String, List<BendingType>> benders = new ConcurrentHashMap<String, List<BendingType>>();
+	// public static ConcurrentHashMap<String, List<BendingType>> benders = new
+	// ConcurrentHashMap<String, List<BendingType>>();
 
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
@@ -59,6 +61,8 @@ public class Bending extends JavaPlugin {
 
 	public void onEnable() {
 
+		plugin = this;
+
 		configManager.load(new File(getDataFolder(), "config.yml"));
 		language.load(new File(getDataFolder(), "language.yml"));
 
@@ -67,12 +71,10 @@ public class Bending extends JavaPlugin {
 
 		tools = new Tools(config);
 
-		tools = new Tools(config);
-
-		for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-			benders.put(player.getName(),
-					config.getBendingTypes(player.getName()));
-		}
+		// for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+		// benders.put(player.getName(),
+		// config.getBendingTypes(player.getName()));
+		// }
 
 		waterbendingabilities = Abilities.getWaterbendingAbilities();
 		airbendingabilities = Abilities.getAirbendingAbilities();
@@ -92,6 +94,9 @@ public class Bending extends JavaPlugin {
 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
 				revertChecker, 0, 40);
+
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+				playerStorageWriter, 0, 40);
 
 		removeFireballs();
 
@@ -179,28 +184,28 @@ public class Bending extends JavaPlugin {
 
 			});
 
-			bending.addPlotter(new Metrics.Plotter("Non-Bender") {
+			// bending.addPlotter(new Metrics.Plotter("Non-Bender") {
+			//
+			// @Override
+			// public int getValue() {
+			// int i = 0;
+			// for (OfflinePlayer p : Bukkit.getServer()
+			// .getOfflinePlayers()) {
+			//
+			// if (!Tools.isBender(p.getName(), BendingType.ChiBlocker)
+			// && !Tools.isBender(p.getName(), BendingType.Air)
+			// && !Tools.isBender(p.getName(),
+			// BendingType.Fire)
+			// && !Tools.isBender(p.getName(),
+			// BendingType.Water)
+			// && !Tools.isBender(p.getName(),
+			// BendingType.Earth))
+			// i++;
+			// }
+			// return i;
+			// }
 
-				@Override
-				public int getValue() {
-					int i = 0;
-					for (OfflinePlayer p : Bukkit.getServer()
-							.getOfflinePlayers()) {
-
-						if (!Tools.isBender(p.getName(), BendingType.ChiBlocker)
-								&& !Tools.isBender(p.getName(), BendingType.Air)
-								&& !Tools.isBender(p.getName(),
-										BendingType.Fire)
-								&& !Tools.isBender(p.getName(),
-										BendingType.Water)
-								&& !Tools.isBender(p.getName(),
-										BendingType.Earth))
-							i++;
-					}
-					return i;
-				}
-
-			});
+			// });
 
 			metrics.start();
 			log.info("Bending is sending data for Plugin Metrics.");

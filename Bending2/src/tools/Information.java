@@ -15,9 +15,18 @@ public class Information {
 	private int integer;
 	private double value;
 	private byte data;
+	private String string;
 
 	public Information() {
 
+	}
+
+	public void setString(String string) {
+		this.string = string;
+	}
+
+	public String getString() {
+		return string;
 	}
 
 	public void setPlayer(Player player) {
