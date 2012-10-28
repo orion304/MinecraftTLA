@@ -187,4 +187,8 @@ public class FireShield {
 				+ "Creatures that contact this fire are ignited.";
 	}
 
+	public static void removeAll() {
+		instances.clear();
+
+	}
 }

@@ -38,6 +38,7 @@ public class AirSuction {
 	private Location origin;
 	private Vector direction;
 	private Player player;
+	private boolean otherorigin = false;
 	private int id;
 	private int ticks = 0;
 	// private long time;
@@ -60,12 +61,15 @@ public class AirSuction {
 		this.player = player;
 		if (origins.containsKey(player)) {
 			origin = origins.get(player);
+			otherorigin = true;
 			location = Tools.getTargetedLocation(player, range);
 			origins.remove(player);
 			Entity entity = Tools.getTargettedEntity(player, range);
 			if (entity != null) {
 				direction = Tools.getDirection(entity.getLocation(), origin)
 						.normalize();
+				location = origin.clone().add(
+						direction.clone().multiply(-range));
 			} else {
 				direction = Tools.getDirection(location, origin).normalize();
 			}
@@ -76,6 +80,13 @@ public class AirSuction {
 			origin = player.getEyeLocation();
 			direction = player.getEyeLocation().getDirection().normalize()
 					.multiply(-1);
+			Entity entity = Tools.getTargettedEntity(player, range);
+			if (entity != null) {
+				direction = Tools.getDirection(entity.getLocation(), origin)
+						.normalize();
+				location = origin.clone().add(
+						direction.clone().multiply(-range));
+			}
 		}
 
 		id = ID;
@@ -131,7 +142,7 @@ public class AirSuction {
 
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
-			if (entity.getEntityId() != player.getEntityId()) {
+			if (entity.getEntityId() != player.getEntityId() || otherorigin) {
 				Vector velocity = entity.getVelocity();
 				double mag = Math.abs(velocity.getY());
 				double max = maxspeed;

@@ -54,6 +54,10 @@ public class EarthPassive {
 			}
 			return true;
 		}
+
+		if (Tools.isEarthbendable(player, null, block)
+				|| Tools.isTransparentToEarthbending(player, null, block))
+			return true;
 		return false;
 	}
 

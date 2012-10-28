@@ -141,7 +141,8 @@ public class EarthBlast {
 			if (sourceblock.getWorld() == player.getWorld()) {
 				if (Tools.tempearthblocks.contains(sourceblock)) {
 					if (!revert)
-						Tools.removeEarthbendedBlockIndex(sourceblock);
+						Tools.removeRevertIndex(sourceblock);
+					// Tools.removeEarthbendedBlockIndex(sourceblock);
 				}
 				Entity target = Tools.getTargettedEntity(player, range);
 				if (target == null) {

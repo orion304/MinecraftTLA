@@ -267,4 +267,13 @@ public class Ripple {
 		blocks.clear();
 	}
 
+	public static boolean canFall(Block block) {
+		return !hasAnyMoved(block);
+	}
+
+	public static void removeAll() {
+		instances.clear();
+
+	}
+
 }

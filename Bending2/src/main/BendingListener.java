@@ -751,6 +751,10 @@ public class BendingListener implements Listener {
 			event.setCancelled(!WaterManipulation.canFlowFromTo(fromblock,
 					toblock));
 		}
+		if (!event.isCancelled()) {
+			if (Illumination.blocks.containsKey(toblock))
+				toblock.setType(Material.AIR);
+		}
 	}
 
 	@EventHandler
@@ -780,7 +784,8 @@ public class BendingListener implements Listener {
 		event.setCancelled(!WaterManipulation.canPhysicsChange(block));
 		if (!event.isCancelled())
 			event.setCancelled(Illumination.blocks.containsKey(block));
-
+		if (!event.isCancelled())
+			event.setCancelled(Tools.tempnophysics.contains(block));
 	}
 
 	@EventHandler
@@ -809,8 +814,9 @@ public class BendingListener implements Listener {
 			Wave.thaw(block);
 			event.setCancelled(true);
 			// event.setCancelled(true);
-		} else if (Tools.tempearthblocks.containsKey(block)) {
-			Tools.removeEarthbendedBlockIndex(block);
+		} else if (Tools.movedearth.containsKey(block)) {
+			// Tools.removeEarthbendedBlockIndex(block);
+			Tools.removeRevertIndex(block);
 		}
 	}
 
@@ -881,7 +887,8 @@ public class BendingListener implements Listener {
 				Wave.thaw(block);
 			}
 			if (Tools.tempearthblocks.contains(block)) {
-				Tools.removeEarthbendedBlockIndex(block);
+				// Tools.removeEarthbendedBlockIndex(block);
+				Tools.removeRevertIndex(block);
 			}
 		}
 

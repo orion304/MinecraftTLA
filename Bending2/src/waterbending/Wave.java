@@ -173,6 +173,7 @@ public class Wave {
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
 			breakBlock();
+			thaw();
 			// instances.remove(player.getEntityId());
 			return false;
 		}

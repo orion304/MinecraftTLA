@@ -116,4 +116,10 @@ public class Shockwave {
 				+ "Lastly, if you fall from a great enough height with this ability selected, you will automatically create a shockwave.";
 	}
 
+	public static void removeAll() {
+		instances.clear();
+		Ripple.removeAll();
+
+	}
+
 }

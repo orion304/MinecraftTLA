@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -94,23 +95,34 @@ public class BendingManager implements Runnable {
 
 	public void run() {
 
-		interval = System.currentTimeMillis() - time;
-		time = System.currentTimeMillis();
-		Bending.time_step = interval;
+		try {
 
-		manageAirbending();
-		manageEarthbending();
-		manageFirebending();
-		manageWaterbending();
-		manageChiBlocking();
-		// manageMessages();
-		AvatarState.manageAvatarStates();
-		handleFlying();
-		handleDayNight();
+			interval = System.currentTimeMillis() - time;
+			time = System.currentTimeMillis();
+			Bending.time_step = interval;
 
-		if (verbose
-				&& System.currentTimeMillis() > verbosetime + verboseinterval)
-			handleVerbosity();
+			manageAirbending();
+			manageEarthbending();
+			manageFirebending();
+			manageWaterbending();
+			manageChiBlocking();
+			// manageMessages();
+			AvatarState.manageAvatarStates();
+			handleFlying();
+			handleDayNight();
+
+			if (verbose
+					&& System.currentTimeMillis() > verbosetime
+							+ verboseinterval)
+				handleVerbosity();
+
+		} catch (Exception e) {
+			Tools.stopAllBending();
+			Tools.writeToLog("Bending broke!");
+			Tools.writeToLog(ExceptionUtils.getStackTrace(e));
+			Tools.verbose("Bending just broke! It seems to have saved itself. The cause was reported in bending.log, and is repeated here for your convenience:");
+			e.printStackTrace();
+		}
 
 	}
 
@@ -177,8 +189,9 @@ public class BendingManager implements Runnable {
 		Tremorsense.manage(plugin.getServer());
 
 		for (Block block : RevertChecker.revertQueue.keySet()) {
-			Tools.removeEarthbendedBlockByIndex(block);
-			RevertChecker.revertQueue.remove(block);
+			// Tools.removeEarthbendedBlockByIndex(block);
+			if (Tools.revertBlock(block))
+				RevertChecker.revertQueue.remove(block);
 		}
 
 		// for (Block block : RevertChecker.movedEarthQueue.keySet()) {

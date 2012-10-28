@@ -108,6 +108,11 @@ public class Catapult {
 		}
 
 		// Tools.verbose(player.getLocation().distance(location));
+		if (player.getWorld() != location.getWorld()) {
+			remove();
+			return;
+		}
+
 		if (player.getLocation().distance(location) < 3) {
 			if (!moving && System.currentTimeMillis() > starttime + 1000)
 				flying = false;

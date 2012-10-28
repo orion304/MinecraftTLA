@@ -157,4 +157,9 @@ public class AirBurst {
 				+ "Additionally, having this ability selected when you land on the ground from a "
 				+ "large enough fall will create a burst of air around you.";
 	}
+
+	public static void removeAll() {
+		instances.clear();
+
+	}
 }

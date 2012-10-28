@@ -116,4 +116,8 @@ public class Cook {
 		}
 	}
 
+	public static void removeAll() {
+		instances.clear();
+	}
+
 }

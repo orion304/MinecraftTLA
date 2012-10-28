@@ -48,6 +48,7 @@ public class AirBlast {
 	private double speedfactor;
 	private double range = defaultrange;
 	private double pushfactor = defaultpushfactor;
+	private boolean otherorigin = false;
 	private int ticks = 0;
 
 	private ArrayList<Block> affectedlevers = new ArrayList<Block>();
@@ -66,6 +67,7 @@ public class AirBlast {
 		timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		if (origins.containsKey(player)) {
+			otherorigin = true;
 			origin = origins.get(player);
 			origins.remove(player);
 			Entity entity = Tools.getTargettedEntity(player, range);
@@ -204,7 +206,7 @@ public class AirBlast {
 	}
 
 	private void affect(Entity entity) {
-		if (entity.getEntityId() != player.getEntityId()) {
+		if (entity.getEntityId() != player.getEntityId() || otherorigin) {
 			Vector velocity = entity.getVelocity();
 			double mag = Math.abs(velocity.getY());
 			double max = maxspeed;
