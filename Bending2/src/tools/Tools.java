@@ -334,7 +334,8 @@ public class Tools {
 					Block topblock = affectedblock.getRelative(BlockFace.UP);
 					if (topblock.getType() != Material.AIR) {
 						breakBlock(affectedblock);
-					} else if (!affectedblock.isLiquid()) {
+					} else if (!affectedblock.isLiquid()
+							&& affectedblock.getType() != Material.AIR) {
 						// affectedblock.setType(Material.GLASS);
 						moveEarthBlock(affectedblock, topblock);
 					}
@@ -359,7 +360,9 @@ public class Tools {
 						// verbose(affectedblock.getType());
 						if (down) {
 							if (isTransparentToEarthbending(player,
-									affectedblock) && !affectedblock.isLiquid()) {
+									affectedblock)
+									&& !affectedblock.isLiquid()
+									&& affectedblock.getType() != Material.AIR) {
 								moveEarthBlock(affectedblock, block);
 							}
 						}
@@ -614,10 +617,11 @@ public class Tools {
 	// }
 
 	public static boolean revertBlock(Block block) {
-		return revertBlock(block, false);
+		return revertBlock(block, null, true);
 	}
 
-	public static boolean revertBlock(Block block, boolean force) {
+	public static boolean revertBlock(Block block, Block startblock,
+			boolean force) {
 		byte full = 0x0;
 		if (movedearth.containsKey(block)) {
 			Information info = movedearth.get(block);
@@ -634,11 +638,35 @@ public class Tools {
 					EarthColumn.revertBlock(block);
 				movedearth.remove(block);
 				return true;
-			} else if (movedearth.containsKey(sourceblock)) {
-				if (force) {
-					revertBlock(sourceblock, true);
-				} else
-					return false;
+			}
+
+			if (movedearth.containsKey(sourceblock)) {
+				// verbose("Block: " + block);
+				// verbose("Sourceblock: " + sourceblock);
+				// verbose("StartBlock: " + startblock);
+				if (startblock != null) {
+					if (startblock.equals(sourceblock)) {
+						sourceblock.setType(info.getType());
+						sourceblock.setData(info.getData());
+						if (adjacentToThreeOrMoreSources(block)) {
+							block.setType(Material.WATER);
+							block.setData(full);
+						} else {
+							block.setType(Material.AIR);
+						}
+						movedearth.get(startblock).setInteger(10);
+						if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
+							EarthColumn.revertBlock(sourceblock);
+						if (EarthColumn.blockInAllAffectedBlocks(block))
+							EarthColumn.revertBlock(block);
+						movedearth.remove(block);
+						return true;
+					}
+
+				} else {
+					startblock = block;
+				}
+				revertBlock(sourceblock, startblock, true);
 			}
 
 			if (sourceblock.getType() == Material.AIR || sourceblock.isLiquid()) {
@@ -653,11 +681,13 @@ public class Tools {
 				}
 			}
 
-			if (adjacentToThreeOrMoreSources(block)) {
-				block.setType(Material.WATER);
-				block.setData(full);
-			} else {
-				block.setType(Material.AIR);
+			if (info.getInteger() != 10) {
+				if (adjacentToThreeOrMoreSources(block)) {
+					block.setType(Material.WATER);
+					block.setData(full);
+				} else {
+					block.setType(Material.AIR);
+				}
 			}
 
 			if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
@@ -684,7 +714,7 @@ public class Tools {
 			// block.setType(Material.GLASS);
 			// movedearth.remove(block);
 			// removeEarthbendedBlockByIndex(block);
-			revertBlock(block, true);
+			revertBlock(block, null, true);
 		}
 	}
 

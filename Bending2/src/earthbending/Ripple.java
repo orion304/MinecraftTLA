@@ -90,13 +90,33 @@ public class Ripple {
 			Block block = location.getBlock();
 			location = newlocation.clone();
 			if (!newlocation.getBlock().equals(block)) {
-				if (block2 != null)
-					block1 = block2;
-				if (block3 != null)
-					block2 = block3;
-				if (block4 != null)
-					block3 = block4;
+				// if (block2 != null)
+				// block1 = block2;
+				// if (block3 != null)
+				// block2 = block3;
+				// if (block4 != null)
+				// block3 = block4;
+				block1 = block2;
+				block2 = block3;
+				block3 = block4;
 				block4 = newlocation.getBlock();
+
+				if (block1 != null)
+					if (hasAnyMoved(block1)) {
+						block1 = null;
+					}
+				if (block2 != null)
+					if (hasAnyMoved(block2)) {
+						block2 = null;
+					}
+				if (block3 != null)
+					if (hasAnyMoved(block3)) {
+						block3 = null;
+					}
+				if (block4 != null)
+					if (hasAnyMoved(block4)) {
+						block4 = null;
+					}
 
 				if (step == 0) {
 
@@ -262,13 +282,9 @@ public class Ripple {
 	}
 
 	public static void progressAll() {
+		blocks.clear();
 		for (int id : instances.keySet())
 			instances.get(id).progress();
-		blocks.clear();
-	}
-
-	public static boolean canFall(Block block) {
-		return !hasAnyMoved(block);
 	}
 
 	public static void removeAll() {

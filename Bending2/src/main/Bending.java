@@ -23,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tools.Abilities;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.Cooldowns;
 import tools.Tools;
 
 public class Bending extends JavaPlugin {
@@ -62,6 +63,7 @@ public class Bending extends JavaPlugin {
 		language.load(new File(getDataFolder(), "language.yml"));
 
 		config = new StorageManager(getDataFolder());
+		Cooldowns.initialize();
 
 		tools = new Tools(config);
 

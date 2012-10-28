@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import tools.Abilities;
 import tools.BendingType;
 import tools.Tools;
 
@@ -32,7 +33,8 @@ public class Speed {
 		// && !AirScooter.getPlayers().contains(player)
 		// && !AvatarState.isAvatarState(player))
 		// player.setFlying(false);
-		if (player.isSprinting() && Tools.isBender(player.getName(), BendingType.Air)
+		if (player.isSprinting()
+				&& Tools.isBender(player.getName(), BendingType.Air)
 				&& Tools.canBendPassive(player, BendingType.Air)) {
 			applySpeed();
 			return true;
@@ -56,8 +58,9 @@ public class Speed {
 		int jumpfactor = factor + 1;
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70,
 				factor));
-		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70,
-				jumpfactor));
+		if (Tools.getBendingAbility(player) != Abilities.AirScooter)
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70,
+					jumpfactor));
 	}
 
 	public static boolean progress(int ID) {

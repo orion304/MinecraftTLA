@@ -3,6 +3,7 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UnknownFormatConversionException;
 
@@ -53,6 +54,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.Cooldowns;
 import tools.TempBlock;
 import tools.Tools;
 import waterbending.Bloodbending;
@@ -278,34 +280,45 @@ public class BendingListener implements Listener {
 
 		// Tools.verbose(Tools.getBendingAbility(player));
 
+		Abilities[] sourceabilities = { Abilities.OctopusForm, Abilities.Surge };
+
 		AirScooter.check(player);
 
-		if (Tools.canBend(player, Tools.getBendingAbility(player))) {
+		Abilities ability = Tools.getBendingAbility(player);
+		if (ability == null)
+			return;
+
+		if (Tools.canBend(player, ability)) {
+
+			if (!Arrays.asList(sourceabilities).contains(ability)) {
+				if (!Cooldowns.canUseAbility(player, ability))
+					return;
+			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Air")) {
 
-				if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
+				if (ability == Abilities.AirBlast) {
 					new AirBlast(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
+				if (ability == Abilities.AirSuction) {
 					new AirSuction(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirSwipe) {
+				if (ability == Abilities.AirSwipe) {
 					new AirSwipe(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirScooter) {
+				if (ability == Abilities.AirScooter) {
 					new AirScooter(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirSpout) {
+				if (ability == Abilities.AirSpout) {
 					new AirSpout(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+				if (ability == Abilities.AirBurst) {
 					AirBurst.coneBurst(player);
 				}
 
@@ -314,39 +327,39 @@ public class BendingListener implements Listener {
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Earth")) {
 
-				if (Tools.getBendingAbility(player) == Abilities.Catapult) {
+				if (ability == Abilities.Catapult) {
 					new Catapult(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.RaiseEarth) {
+				if (ability == Abilities.RaiseEarth) {
 					new EarthColumn(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Collapse) {
+				if (ability == Abilities.Collapse) {
 					new CompactColumn(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.EarthGrab) {
+				if (ability == Abilities.EarthGrab) {
 					new EarthGrab(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
+				if (ability == Abilities.EarthBlast) {
 					EarthBlast.throwEarth(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Tremorsense) {
+				if (ability == Abilities.Tremorsense) {
 					new Tremorsense(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.EarthArmor) {
+				if (ability == Abilities.EarthArmor) {
 					new EarthArmor(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.EarthArmor) {
+				if (ability == Abilities.EarthArmor) {
 					new EarthArmor(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Shockwave) {
+				if (ability == Abilities.Shockwave) {
 					Shockwave.coneShockwave(player);
 				}
 
@@ -355,35 +368,35 @@ public class BendingListener implements Listener {
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Fire")) {
 
-				if (Tools.getBendingAbility(player) == Abilities.FireBlast) {
+				if (ability == Abilities.FireBlast) {
 					new FireBlast(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.HeatControl) {
+				if (ability == Abilities.HeatControl) {
 					new Extinguish(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Blaze) {
+				if (ability == Abilities.Blaze) {
 					new ArcOfFire(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.FireJet) {
+				if (ability == Abilities.FireJet) {
 					new FireJet(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Illumination) {
+				if (ability == Abilities.Illumination) {
 					new Illumination(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.WallOfFire) {
+				if (ability == Abilities.WallOfFire) {
 					new WallOfFire(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.FireBurst) {
+				if (ability == Abilities.FireBurst) {
 					FireBurst.coneBurst(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.FireShield) {
+				if (ability == Abilities.FireShield) {
 					new FireShield(player);
 				}
 
@@ -392,58 +405,58 @@ public class BendingListener implements Listener {
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Water")) {
 
-				if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
+				if (ability == Abilities.WaterManipulation) {
 					WaterManipulation.moveWater(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.IceSpike) {
+				if (ability == Abilities.IceSpike) {
 					new IceSpike(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.PhaseChange) {
+				if (ability == Abilities.PhaseChange) {
 					new FreezeMelt(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Surge) {
+				if (ability == Abilities.Surge) {
 					new WaterWall(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.OctopusForm) {
+				if (ability == Abilities.OctopusForm) {
 					new OctopusForm(player);
 				}
 
-				// if (Tools.getBendingAbility(player) == Abilities.Wave) {
+				// if (ability == Abilities.Wave) {
 				// Wave.launch(player);
 				// }
 
-				// if (Tools.getBendingAbility(player) ==
+				// if (ability ==
 				// Abilities.Plantbending) {
 				// new Plantbending(player);
 				// }
 
-				if (Tools.getBendingAbility(player) == Abilities.WaterSpout) {
+				if (ability == Abilities.WaterSpout) {
 					new WaterSpout(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.Bloodbending) {
+				if (ability == Abilities.Bloodbending) {
 					Bloodbending.launch(player);
 				}
 
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.AvatarState) {
+			if (ability == Abilities.AvatarState) {
 				new AvatarState(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.HighJump) {
+			if (ability == Abilities.HighJump) {
 				new HighJump(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.RapidPunch) {
+			if (ability == Abilities.RapidPunch) {
 				new RapidPunch(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Paralyze) {
+			if (ability == Abilities.Paralyze) {
 				// new Paralyze(player);
 			}
 
@@ -457,108 +470,120 @@ public class BendingListener implements Listener {
 		Player player = event.getPlayer();
 		// Tools.verbose(Tools.getBendingAbility(player));
 
+		Abilities[] sourceabilities = { Abilities.AirBlast,
+				Abilities.AirSuction, Abilities.EarthBlast,
+				Abilities.WaterManipulation, Abilities.Surge };
+
 		AirScooter.check(player);
 
-		if (!player.isSneaking()
-				&& Tools.canBend(player, Tools.getBendingAbility(player))) {
+		Abilities ability = Tools.getBendingAbility(player);
+		if (ability == null)
+			return;
 
-			if (Tools.getBendingAbility(player) == Abilities.AirShield) {
+		if (!player.isSneaking() && Tools.canBend(player, ability)) {
+
+			if (!Arrays.asList(sourceabilities).contains(ability)) {
+				if (!Cooldowns.canUseAbility(player, ability))
+					return;
+			}
+
+			if (ability == Abilities.AirShield) {
 				new AirShield(player);
 			}
 
 			if (!(Tools.isWeapon(player.getItemInHand().getType()))
 					|| ConfigManager.useWeapon.get("Air")) {
 
-				if (Tools.getBendingAbility(player) == Abilities.AirBlast) {
+				if (ability == Abilities.AirBlast) {
 					AirBlast.setOrigin(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirSuction) {
+				if (ability == Abilities.AirSuction) {
 					AirSuction.setOrigin(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirBurst) {
+				if (ability == Abilities.AirBurst) {
 					new AirBurst(player);
 				}
 
-				if (Tools.getBendingAbility(player) == Abilities.AirSwipe) {
+				if (ability == Abilities.AirSwipe) {
 					AirSwipe.charge(player);
 				}
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Tornado) {
+			if (ability == Abilities.Tornado) {
 				new Tornado(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.EarthBlast) {
+			if (ability == Abilities.EarthBlast) {
 				new EarthBlast(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Shockwave) {
+			if (ability == Abilities.Shockwave) {
 				new Shockwave(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Collapse) {
+			if (ability == Abilities.Collapse) {
 				new Collapse(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.WaterManipulation) {
+			if (ability == Abilities.WaterManipulation) {
 				new WaterManipulation(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.IceSpike) {
+			if (ability == Abilities.IceSpike) {
 				new SpikeField(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.EarthTunnel) {
+			if (ability == Abilities.EarthTunnel) {
 				new EarthTunnel(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.RaiseEarth) {
+			if (ability == Abilities.RaiseEarth) {
 				new EarthWall(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Surge) {
+			if (ability == Abilities.Surge) {
 				WaterWall.form(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.OctopusForm) {
+			if (ability == Abilities.OctopusForm) {
 				OctopusForm.form(player);
 			}
 
-			// if (Tools.getBendingAbility(player) == Abilities.Wave) {
+			// if (ability == Abilities.Wave) {
 			// new Wave(player);
 			// }
 
-			if (Tools.getBendingAbility(player) == Abilities.Bloodbending) {
+			if (ability == Abilities.Bloodbending) {
 				new Bloodbending(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.PhaseChange) {
+			if (ability == Abilities.PhaseChange) {
 				new Melt(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Lightning) {
+			if (ability == Abilities.Lightning) {
 				new Lightning(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.Blaze) {
+			if (ability == Abilities.Blaze) {
 				new RingOfFire(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.FireBurst) {
+			if (ability == Abilities.FireBurst) {
 				new FireBurst(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.FireBlast) {
+			if (ability == Abilities.FireBlast) {
 				new Fireball(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.FireShield) {
+			if (ability == Abilities.FireShield) {
 				FireShield.shield(player);
 			}
 
-			if (Tools.getBendingAbility(player) == Abilities.HeatControl) {
+			if (ability == Abilities.HeatControl) {
 				new Cook(player);
 			}
 

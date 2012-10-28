@@ -404,7 +404,7 @@ public class BendingCommand {
 					Tools.sendMessage(player, "General.no_perms_air");
 					return;
 				}
-				sendMessage(player, "General.choosen_air");
+				Tools.sendMessage(player, "General.choosen_air");
 				config.removeBending(player);
 				config.setBending(player, "air");
 				return;
