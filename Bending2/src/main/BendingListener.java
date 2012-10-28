@@ -46,7 +46,6 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
@@ -80,9 +79,6 @@ import airbending.Tornado;
 import chiblocking.HighJump;
 import chiblocking.Paralyze;
 import chiblocking.RapidPunch;
-
-import com.nitnelave.CreeperHeal.CreeperHeal;
-
 import earthbending.Catapult;
 import earthbending.Collapse;
 import earthbending.CompactColumn;
@@ -892,15 +888,15 @@ public class BendingListener implements Listener {
 			}
 		}
 
-		if (event.getEntity() == null) {
-			Plugin ch = Bukkit.getPluginManager().getPlugin("CreeperHeal");
-			if (ch != null) {
-				CreeperHeal creeperheal = (CreeperHeal) Bukkit
-						.getPluginManager().getPlugin("CreeperHeal");
-				creeperheal
-						.recordBlocks(event.blockList(), event.getLocation());
-			}
-		}
+		// if (event.getEntity() == null) {
+		// Plugin ch = Bukkit.getPluginManager().getPlugin("CreeperHeal");
+		// if (ch != null) {
+		// CreeperHeal creeperheal = (CreeperHeal) Bukkit
+		// .getPluginManager().getPlugin("CreeperHeal");
+		// creeperheal
+		// .recordBlocks(event.blockList(), event.getLocation());
+		// }
+		// }
 
 	}
 

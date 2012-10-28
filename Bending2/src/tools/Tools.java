@@ -171,7 +171,9 @@ public class Tools {
 		List<Entity> list = location.getWorld().getEntities();
 
 		for (Entity entity : entities) {
-			if (entity.getLocation().distance(location) > radius) {
+			if (entity.getWorld() != location.getWorld()) {
+				list.remove(entity);
+			} else if (entity.getLocation().distance(location) > radius) {
 				list.remove(entity);
 			}
 		}
@@ -424,6 +426,7 @@ public class Tools {
 		if (movedearth.containsKey(source)) {
 			// verbose("Moving something already moved.");
 			info = movedearth.get(source);
+			info.setTime(System.currentTimeMillis());
 			movedearth.remove(source);
 			movedearth.put(target, info);
 		} else {
@@ -507,6 +510,9 @@ public class Tools {
 	public static void addTempAirBlock(Block block) {
 		if (movedearth.containsKey(block)) {
 			block.setType(Material.AIR);
+			Information info = movedearth.get(block);
+			info.setTime(System.currentTimeMillis());
+			movedearth.replace(block, info);
 		} else {
 			Information info = new Information();
 			info.setBlock(block);

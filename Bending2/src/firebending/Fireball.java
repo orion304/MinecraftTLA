@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -154,8 +155,12 @@ public class Fireball {
 				break;
 			}
 		}
-		if (explode)
-			location.getWorld().createExplosion(location, 1);
+		if (explode) {
+			Entity tnt = player.getWorld().spawn(location, TNTPrimed.class);
+			((TNTPrimed) tnt).setFuseTicks(0);
+			((TNTPrimed) tnt).setYield(1);
+		}
+		// location.getWorld().createExplosion(location, 1);
 
 		ignite(location);
 		remove();
