@@ -171,7 +171,8 @@ public class BendingCommand {
 		this.config = config;
 		this.server = server;
 
-		bPlayer = BendingPlayer.getBendingPlayer(player);
+		if (player != null)
+			bPlayer = BendingPlayer.getBendingPlayer(player);
 
 		for (int i = 0; i < args.length; i++) {
 			args[i] = args[i].toLowerCase();
@@ -193,6 +194,12 @@ public class BendingCommand {
 			}
 
 			String arg = args[0];
+
+			// if (arg.equalsIgnoreCase("test")) {
+			// sendMessage(player, BendingPlayer.getBendingPlayer(args[1])
+			// .toString());
+			// }
+
 			if (Arrays.asList(bindAliases).contains(arg)) {
 				bind(player, args);
 			} else if (Arrays.asList(clearAliases).contains(arg)) {
@@ -421,7 +428,7 @@ public class BendingCommand {
 					Tools.sendMessage(player, "General.no_perms_fire");
 					return;
 				}
-				sendMessage(player, "General.choosen_fire");
+				Tools.sendMessage(player, "General.choosen_fire");
 				// config.removeBending(player);
 				// config.setBending(player, "fire");
 				PlayerStorageWriter.removeBending(player);
@@ -433,7 +440,7 @@ public class BendingCommand {
 					Tools.sendMessage(player, "General.no_perms_earth");
 					return;
 				}
-				sendMessage(player, "General.choosen_earth");
+				Tools.sendMessage(player, "General.choosen_earth");
 				// config.removeBending(player);
 				// config.setBending(player, "earth");
 				PlayerStorageWriter.removeBending(player);
@@ -445,7 +452,7 @@ public class BendingCommand {
 					Tools.sendMessage(player, "General.no_perms_water");
 					return;
 				}
-				sendMessage(player, "General.choosen_water");
+				Tools.sendMessage(player, "General.choosen_water");
 				// config.removeBending(player);
 				// config.setBending(player, "water");
 				PlayerStorageWriter.removeBending(player);
@@ -457,7 +464,7 @@ public class BendingCommand {
 					Tools.sendMessage(player, "General.no_perms_chiblocking");
 					return;
 				}
-				sendMessage(player, "General.choosen_chi");
+				Tools.sendMessage(player, "General.choosen_chi");
 				// config.removeBending(player);
 				// config.setBending(player, "chiblocker");
 				PlayerStorageWriter.removeBending(player);

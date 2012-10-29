@@ -491,19 +491,28 @@ public class StorageManager {
 				e.printStackTrace();
 			}
 		}
-		if (!Tools.isBender(player, type)) {
-			if (type == BendingType.Air) {
+		// if (!Tools.isBender(player, type)) {
+		if (type == BendingType.Air) {
+			if (!bending.contains("a"))
 				bending += "a";
-			} else if (type == BendingType.Earth) {
-				bending += "e";
-			} else if (type == BendingType.Water) {
-				bending += "w";
-			} else if (type == BendingType.Fire) {
-				bending += "f";
-			} else if (type == BendingType.ChiBlocker) {
-				bending += "c";
-			}
 		}
+		if (type == BendingType.Earth) {
+			if (!bending.contains("e"))
+				bending += "e";
+		}
+		if (type == BendingType.Water) {
+			if (!bending.contains("w"))
+				bending += "w";
+		}
+		if (type == BendingType.Fire) {
+			if (!bending.contains("f"))
+				bending += "f";
+		}
+		if (type == BendingType.ChiBlocker) {
+			if (!bending.contains("c"))
+				bending += "c";
+		}
+		// }
 		if (StorageManager.useFlatFile)
 			config.setKey(player, bending);
 		else if (StorageManager.useMySQL) {
@@ -891,6 +900,17 @@ public class StorageManager {
 			this.config = new BendingPlayers(file);
 		}
 		// Tools.verbose(StorageManager.useFlatFile ? "Flat" : "MySQL");
+	}
+
+	public void close() {
+		if (useMySQL) {
+			dataFolder = null;
+			MySql.close();
+			MySql = null;
+		} else {
+			config.close();
+			config = null;
+		}
 	}
 
 }

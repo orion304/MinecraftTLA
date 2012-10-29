@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Cooldowns;
@@ -57,6 +58,8 @@ public class Bending extends JavaPlugin {
 	public void onDisable() {
 
 		Tools.stopAllBending();
+		PlayerStorageWriter.finish();
+
 	}
 
 	public void onEnable() {
@@ -71,10 +74,11 @@ public class Bending extends JavaPlugin {
 
 		tools = new Tools(config);
 
-		// for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-		// benders.put(player.getName(),
-		// config.getBendingTypes(player.getName()));
-		// }
+		for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+			// benders.put(player.getName(),
+			// config.getBendingTypes(player.getName()));
+			BendingPlayer.getBendingPlayer(player);
+		}
 
 		waterbendingabilities = Abilities.getWaterbendingAbilities();
 		airbendingabilities = Abilities.getAirbendingAbilities();

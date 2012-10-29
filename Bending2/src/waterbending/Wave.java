@@ -193,6 +193,7 @@ public class Wave {
 			}
 
 			if (location.getWorld() != player.getWorld()) {
+				thaw();
 				breakBlock();
 				return false;
 			}

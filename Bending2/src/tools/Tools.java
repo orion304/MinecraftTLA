@@ -622,81 +622,89 @@ public class Tools {
 
 	public static boolean revertBlock(Block block, Block startblock,
 			boolean force) {
-		byte full = 0x0;
-		if (movedearth.containsKey(block)) {
-			Information info = movedearth.get(block);
-			Block sourceblock = info.getBlock();
+		try {
 
-			if (block.equals(sourceblock)) {
-				// verbose("Equals!");
-				if (block.getType() == Material.SANDSTONE
-						&& info.getType() == Material.SAND)
-					block.setType(Material.SAND);
+			byte full = 0x0;
+			if (movedearth.containsKey(block)) {
+				Information info = movedearth.get(block);
+				Block sourceblock = info.getBlock();
+
+				if (block.equals(sourceblock)) {
+					// verbose("Equals!");
+					if (block.getType() == Material.SANDSTONE
+							&& info.getType() == Material.SAND)
+						block.setType(Material.SAND);
+					if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
+						EarthColumn.revertBlock(sourceblock);
+					if (EarthColumn.blockInAllAffectedBlocks(block))
+						EarthColumn.revertBlock(block);
+					movedearth.remove(block);
+					return true;
+				}
+
+				if (movedearth.containsKey(sourceblock)) {
+					// verbose("Block: " + block);
+					// verbose("Sourceblock: " + sourceblock);
+					// verbose("StartBlock: " + startblock);
+					if (startblock != null) {
+						if (startblock.equals(sourceblock)) {
+							sourceblock.setType(info.getType());
+							sourceblock.setData(info.getData());
+							if (adjacentToThreeOrMoreSources(block)) {
+								block.setType(Material.WATER);
+								block.setData(full);
+							} else {
+								block.setType(Material.AIR);
+							}
+							movedearth.get(startblock).setInteger(10);
+							if (EarthColumn
+									.blockInAllAffectedBlocks(sourceblock))
+								EarthColumn.revertBlock(sourceblock);
+							if (EarthColumn.blockInAllAffectedBlocks(block))
+								EarthColumn.revertBlock(block);
+							movedearth.remove(block);
+							return true;
+						}
+
+					} else {
+						startblock = block;
+					}
+					revertBlock(sourceblock, startblock, true);
+				}
+
+				if (sourceblock.getType() == Material.AIR
+						|| sourceblock.isLiquid()) {
+					sourceblock.setType(info.getType());
+					sourceblock.setData(info.getData());
+				} else {
+					if (info.getType() != Material.AIR) {
+						ItemStack item = new ItemStack(info.getType());
+						item.setData(new MaterialData(info.getType(), info
+								.getData()));
+						block.getWorld().dropItem(block.getLocation(), item);
+					}
+				}
+
+				if (info.getInteger() != 10) {
+					if (adjacentToThreeOrMoreSources(block)) {
+						block.setType(Material.WATER);
+						block.setData(full);
+					} else {
+						block.setType(Material.AIR);
+					}
+				}
+
 				if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
 					EarthColumn.revertBlock(sourceblock);
 				if (EarthColumn.blockInAllAffectedBlocks(block))
 					EarthColumn.revertBlock(block);
 				movedearth.remove(block);
-				return true;
 			}
-
-			if (movedearth.containsKey(sourceblock)) {
-				// verbose("Block: " + block);
-				// verbose("Sourceblock: " + sourceblock);
-				// verbose("StartBlock: " + startblock);
-				if (startblock != null) {
-					if (startblock.equals(sourceblock)) {
-						sourceblock.setType(info.getType());
-						sourceblock.setData(info.getData());
-						if (adjacentToThreeOrMoreSources(block)) {
-							block.setType(Material.WATER);
-							block.setData(full);
-						} else {
-							block.setType(Material.AIR);
-						}
-						movedearth.get(startblock).setInteger(10);
-						if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
-							EarthColumn.revertBlock(sourceblock);
-						if (EarthColumn.blockInAllAffectedBlocks(block))
-							EarthColumn.revertBlock(block);
-						movedearth.remove(block);
-						return true;
-					}
-
-				} else {
-					startblock = block;
-				}
-				revertBlock(sourceblock, startblock, true);
-			}
-
-			if (sourceblock.getType() == Material.AIR || sourceblock.isLiquid()) {
-				sourceblock.setType(info.getType());
-				sourceblock.setData(info.getData());
-			} else {
-				if (info.getType() != Material.AIR) {
-					ItemStack item = new ItemStack(info.getType());
-					item.setData(new MaterialData(info.getType(), info
-							.getData()));
-					block.getWorld().dropItem(block.getLocation(), item);
-				}
-			}
-
-			if (info.getInteger() != 10) {
-				if (adjacentToThreeOrMoreSources(block)) {
-					block.setType(Material.WATER);
-					block.setData(full);
-				} else {
-					block.setType(Material.AIR);
-				}
-			}
-
-			if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
-				EarthColumn.revertBlock(sourceblock);
-			if (EarthColumn.blockInAllAffectedBlocks(block))
-				EarthColumn.revertBlock(block);
+			return true;
+		} catch (StackOverflowError e) {
 			movedearth.remove(block);
+			return false;
 		}
-		return true;
 	}
 
 	public static void removeRevertIndex(Block block) {

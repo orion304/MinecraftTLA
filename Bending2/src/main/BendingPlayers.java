@@ -50,6 +50,10 @@ public class BendingPlayers {
 		if (!(bendingPlayers == null))
 			bendingPlayers.set(key, field);
 		save();
+		// if (bendingPlayers == null)
+		// Tools.verbose("Uh oh?");
+		// Tools.verbose(key);
+		// Tools.verbose(field);
 	}
 
 	public void reload() {
@@ -76,6 +80,12 @@ public class BendingPlayers {
 			Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE,
 					"Could not save config to " + bendingPlayersFile, ex);
 		}
+	}
+
+	public void close() {
+		save();
+		bendingPlayers = null;
+		bendingPlayersFile = null;
 	}
 
 }

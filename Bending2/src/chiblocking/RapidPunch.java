@@ -55,6 +55,8 @@ public class RapidPunch {
 		if (target instanceof LivingEntity && target != null) {
 			LivingEntity lt = (LivingEntity) target;
 			Tools.damageEntity(p, target, damage);
+			if (target instanceof Player)
+				Tools.blockChi((Player) target, System.currentTimeMillis());
 			lt.setNoDamageTicks(0);
 			// Tools.verbose("PUNCHIN MOFO");
 		}

@@ -52,6 +52,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Cooldowns;
@@ -118,6 +119,7 @@ public class BendingListener implements Listener {
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
+		BendingPlayer.getBendingPlayer(player);
 		String append = "";
 		if ((player.hasPermission("bending.avatar")) && ConfigManager.enabled) {
 			append = ConfigManager.getPrefix("Avatar");
@@ -694,6 +696,8 @@ public class BendingListener implements Listener {
 			Player sourceplayer = (Player) event.getDamager();
 			Player targetplayer = (Player) event.getEntity();
 			if (Tools.isBender(sourceplayer.getName(), BendingType.ChiBlocker)
+					&& event.getCause() == DamageCause.ENTITY_ATTACK
+					&& event.getDamage() == 1
 					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigManager.useWeapon
 							.get("ChiBlocker"))) {
 				Tools.blockChi(targetplayer, System.currentTimeMillis());

@@ -27,7 +27,7 @@ public class BendingPlayer {
 
 	public BendingPlayer(OfflinePlayer player) {
 		if (players.containsKey(player)) {
-			return;
+			players.remove(player);
 		}
 
 		language = config.getLanguage(player);
@@ -57,8 +57,12 @@ public class BendingPlayer {
 	}
 
 	public static BendingPlayer getBendingPlayer(OfflinePlayer player) {
-		if (players.containsKey(player))
-			return players.get(player);
+		if (players.containsKey(player)) {
+			BendingPlayer bPlayer = players.get(player);
+			bPlayer.player = Bending.plugin.getServer().getOfflinePlayer(
+					player.getName());
+			return bPlayer;
+		}
 		return new BendingPlayer(player);
 	}
 
@@ -99,8 +103,11 @@ public class BendingPlayer {
 	}
 
 	public Abilities getAbility() {
-		if (!(player instanceof Player))
+		if (!(player instanceof Player)) {
+			// Tools.verbose(this);
+			// Tools.verbose("Player isn't online??");
 			return null;
+		}
 		Player pPlayer = (Player) player;
 		if (ConfigManager.bendToItem) {
 			Material item = pPlayer.getItemInHand().getType();
@@ -176,8 +183,21 @@ public class BendingPlayer {
 		return language;
 	}
 
-	public void permaRemoveBending() {
-
+	public String toString() {
+		String string = "BendingPlayer{";
+		string += "Player=" + player;
+		string += ", ";
+		string += "BendingType=" + bendingType;
+		string += ", ";
+		string += "Language=" + language;
+		string += ", ";
+		if (ConfigManager.bendToItem) {
+			string += "Binds=" + itemAbilities;
+		} else {
+			string += "Binds=" + slotAbilities;
+		}
+		string += "}";
+		return string;
 	}
 
 }
