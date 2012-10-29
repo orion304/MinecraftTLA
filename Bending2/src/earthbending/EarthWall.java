@@ -1,7 +1,6 @@
 package earthbending;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -23,7 +22,7 @@ public class EarthWall {
 
 	public EarthWall(Player player) {
 		if (AvatarState.isAvatarState(player)) {
-			// height = AvatarState.getValue(height);
+			height = (int) (2. / 5. * (double) AvatarState.getValue(height));
 			halfwidth = AvatarState.getValue(halfwidth);
 		}
 
@@ -44,13 +43,16 @@ public class EarthWall {
 		for (int i = -halfwidth; i <= halfwidth; i++) {
 			Block block = world.getBlockAt(origin.clone().add(
 					orth.clone().multiply((double) i)));
-			if (block.getType() == Material.AIR || block.isLiquid()) {
+			// if (block.getType() == Material.AIR || block.isLiquid()) {
+			if (Tools.isTransparentToEarthbending(player, block)) {
 				for (int j = 1; j < height; j++) {
 					block = block.getRelative(BlockFace.DOWN);
 					if (Tools.isEarthbendable(player, block)) {
 						new EarthColumn(player, block.getLocation(), height);
-					} else if (block.getType() != Material.AIR
-							&& !block.isLiquid()) {
+						// } else if (block.getType() != Material.AIR
+						// && !block.isLiquid()) {
+					} else if (!Tools
+							.isTransparentToEarthbending(player, block)) {
 						break;
 					}
 				}
@@ -58,7 +60,9 @@ public class EarthWall {
 					block.getRelative(BlockFace.UP))) {
 				for (int j = 1; j < height; j++) {
 					block = block.getRelative(BlockFace.UP);
-					if (block.getType() == Material.AIR || block.isLiquid()) {
+					// if (block.getType() == Material.AIR || block.isLiquid())
+					// {
+					if (Tools.isTransparentToEarthbending(player, block)) {
 						new EarthColumn(player, block.getRelative(
 								BlockFace.DOWN).getLocation(), height);
 					} else if (!Tools.isEarthbendable(player, block)) {
@@ -66,7 +70,7 @@ public class EarthWall {
 					}
 				}
 			} else if (Tools.isEarthbendable(player, block)) {
-				new EarthColumn(player, block.getLocation());
+				new EarthColumn(player, block.getLocation(), height);
 			}
 		}
 	}

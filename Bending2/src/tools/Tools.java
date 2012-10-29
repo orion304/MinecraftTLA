@@ -638,6 +638,8 @@ public class Tools {
 						EarthColumn.revertBlock(sourceblock);
 					if (EarthColumn.blockInAllAffectedBlocks(block))
 						EarthColumn.revertBlock(block);
+					EarthColumn.resetBlock(sourceblock);
+					EarthColumn.resetBlock(block);
 					movedearth.remove(block);
 					return true;
 				}
@@ -662,6 +664,8 @@ public class Tools {
 								EarthColumn.revertBlock(sourceblock);
 							if (EarthColumn.blockInAllAffectedBlocks(block))
 								EarthColumn.revertBlock(block);
+							EarthColumn.resetBlock(sourceblock);
+							EarthColumn.resetBlock(block);
 							movedearth.remove(block);
 							return true;
 						}
@@ -698,10 +702,13 @@ public class Tools {
 					EarthColumn.revertBlock(sourceblock);
 				if (EarthColumn.blockInAllAffectedBlocks(block))
 					EarthColumn.revertBlock(block);
+				EarthColumn.resetBlock(sourceblock);
+				EarthColumn.resetBlock(block);
 				movedearth.remove(block);
 			}
 			return true;
 		} catch (StackOverflowError e) {
+			e.printStackTrace();
 			movedearth.remove(block);
 			return false;
 		}
@@ -713,6 +720,8 @@ public class Tools {
 			if (block.getType() == Material.SANDSTONE
 					&& info.getType() == Material.SAND)
 				block.setType(Material.SAND);
+			if (EarthColumn.blockInAllAffectedBlocks(block))
+				EarthColumn.revertBlock(block);
 			movedearth.remove(block);
 		}
 	}
@@ -783,8 +792,8 @@ public class Tools {
 		double j;
 		for (int i = 0; i <= maxlength; i++) {
 			j = (double) i;
-			if (!isEarthbendable(player, location.add(direction.multiply(j))
-					.getBlock())) {
+			if (!isEarthbendable(player,
+					location.clone().add(direction.multiply(j)).getBlock())) {
 				return i;
 			}
 		}

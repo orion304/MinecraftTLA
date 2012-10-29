@@ -91,11 +91,11 @@ public class RevertChecker implements Runnable {
 		}
 	}
 
-	void addToMovedEarthQueue(Block block, Material type) {
-		if (!movedEarthQueue.containsKey(block))
-			movedEarthQueue.put(block, type);
-
-	}
+	// void addToMovedEarthQueue(Block block, Material type) {
+	// if (!movedEarthQueue.containsKey(block))
+	// movedEarthQueue.put(block, type);
+	//
+	// }
 
 	void addToRevertQueue(Block block) {
 		if (!revertQueue.containsKey(block))

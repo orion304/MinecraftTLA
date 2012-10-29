@@ -1141,7 +1141,7 @@ public class BendingCommand {
 		String append = StorageManager.useMySQL ? " Database "
 				: "Players file ";
 		Tools.stopAllBending();
-		sendMessage(player, ChatColor.AQUA + "Config and Bending" + append
+		sendMessage(player, ChatColor.AQUA + "Config and Bending " + append
 				+ Tools.getMessage(player, "General.reload_success"));
 
 	}

@@ -18,6 +18,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -90,10 +91,14 @@ public class WallOfFire {
 		locations.put(p, loc);
 		playerlocations.put(p, p.getLocation());
 		cooldowns.put(p, System.currentTimeMillis());
-		if (!tblock.isEmpty() || !FireStream.isIgnitable(player, tblock)) {
+		if (tblock.getType() != Material.AIR
+				&& !FireStream.isIgnitable(player, tblock)) {
 			instances.remove(p);
 			durations.remove(p);
+			cooldowns.remove(p);
 		}
+		if (cooldowns.containsKey(p) && AvatarState.isAvatarState(p))
+			cooldowns.remove(p);
 	}
 
 	public static void manageWallOfFire(int ID) {

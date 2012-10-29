@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.ConfigManager;
 import tools.Tools;
+import waterbending.Plantbending;
 
 public class FireStream {
 
@@ -124,6 +125,9 @@ public class FireStream {
 	}
 
 	private void ignite(Block block) {
+		if (Tools.isPlant(block)) {
+			new Plantbending(block);
+		}
 		block.setType(Material.FIRE);
 		ignitedblocks.put(block, this.player);
 		ignitedtimes.put(block, System.currentTimeMillis());

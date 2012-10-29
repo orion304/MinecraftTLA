@@ -20,6 +20,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
+import waterbending.Plantbending;
 
 public class FireBlast {
 
@@ -180,6 +181,8 @@ public class FireBlast {
 		for (Block block : Tools
 				.getBlocksAroundPoint(location, affectingradius)) {
 			if (FireStream.isIgnitable(player, block) && !safe.contains(block)) {
+				if (Tools.isPlant(block))
+					new Plantbending(block);
 				block.setType(Material.FIRE);
 				if (dissipate) {
 					FireStream.ignitedblocks.put(block, player);

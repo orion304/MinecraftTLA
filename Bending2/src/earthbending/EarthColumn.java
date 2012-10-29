@@ -70,8 +70,8 @@ public class EarthColumn {
 		location = origin.clone();
 		block = location.getBlock();
 		this.player = player;
-		distance = Tools.getEarthbendableBlocksLength(player, block,
-				direction.clone(), height);
+		distance = Tools.getEarthbendableBlocksLength(player, block, direction
+				.clone().multiply(-1), height);
 
 		loadAffectedBlocks();
 
@@ -94,8 +94,8 @@ public class EarthColumn {
 		location = origin.clone();
 		block = location.getBlock();
 		this.player = player;
-		distance = Tools.getEarthbendableBlocksLength(player, block,
-				direction.clone(), height);
+		distance = Tools.getEarthbendableBlocksLength(player, block, direction
+				.clone().multiply(-1), height);
 
 		loadAffectedBlocks();
 

@@ -150,7 +150,7 @@ public class ConfigManager {
 
 	// EarthWall
 	public static int earthWallRange = 15;
-	public static int earthWallHeight = 8;
+	public static int earthWallHeight = 6;
 	public static int earthWallWidth = 6;
 
 	// Tremorsense
@@ -206,7 +206,7 @@ public class ConfigManager {
 	public static int ringOfFireRange = 7;
 
 	// WallOfFire
-	public static int wallOfFireRange = 20;
+	public static int wallOfFireRange = 10;
 	public static int wallOfFireHeight = 3;
 	public static int wallOfFireWidth = 6;
 	public static long wallOfFireDuration = 5000;
