@@ -202,12 +202,20 @@ public class Wave {
 				if (location.distance(player.getLocation()) > range) {
 					progressing = false;
 					thaw();
+					breakBlock();
 					return false;
 				}
 				if (!Tools.hasAbility(player, Abilities.PhaseChange)
 						&& Tools.getBendingAbility(player) != Abilities.Surge) {
 					progressing = false;
 					thaw();
+					breakBlock();
+					return false;
+				}
+				if (!Tools.canBend(player, Abilities.Surge)) {
+					progressing = false;
+					thaw();
+					breakBlock();
 					return false;
 				}
 

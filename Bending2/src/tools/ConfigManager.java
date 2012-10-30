@@ -1007,5 +1007,7 @@ public class ConfigManager {
 
 		defaultearthbendable.add("GLOWING_REDSTONE_ORE");
 
+		defaultearthbendable.add("MYCEL");
+
 	}
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -15,7 +14,8 @@ import tools.Tools;
 public class RevertChecker implements Runnable {
 
 	static ConcurrentHashMap<Block, Block> revertQueue = new ConcurrentHashMap<Block, Block>();
-	static ConcurrentHashMap<Block, Material> movedEarthQueue = new ConcurrentHashMap<Block, Material>();
+	// static ConcurrentHashMap<Block, Material> movedEarthQueue = new
+	// ConcurrentHashMap<Block, Material>();
 
 	private Bending plugin;
 

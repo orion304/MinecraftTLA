@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 
@@ -156,48 +157,56 @@ public class PlayerStorageWriter implements Runnable {
 	@Override
 	public void run() {
 
-		if (queue.isEmpty()) {
-			ID = Integer.MIN_VALUE;
-			// Tools.verbose("Queue empty.");
-			return;
-		}
+		try {
 
-		ArrayList<Integer> index = new ArrayList<Integer>(new TreeSet<Integer>(
-				queue.keySet()));
-
-		// for (int i : queue.keySet()) {
-		for (int i = 0; i < index.size(); i++) {
-			if (run) {
-				Queue item = queue.get(index.get(i));
-				// Tools.verbose(item);
-
-				if (item.addBending) {
-					Tools.config.addBending(item.player.getName(), item.type);
-				} else if (item.removeBending) {
-					Tools.config.removeBending(item.player);
-				} else if (item.setBending) {
-					Tools.config.setBending(item.player, item.type);
-				} else if (item.bindSlot) {
-					Tools.config.setAbility(item.player.getName(),
-							item.ability, item.slot);
-				} else if (item.bindItem) {
-					Tools.config.setAbility(item.player.getName(),
-							item.ability, item.item);
-				} else if (item.removeSlot) {
-					Tools.config.removeAbility(item.player, item.slot);
-				} else if (item.removeItem) {
-					Tools.config.removeAbility(item.player, item.item);
-				} else if (item.permaRemoveBending) {
-					Tools.config.permaRemoveBending(item.player);
-				} else if (item.setLanguage) {
-					Tools.config.setLanguage(item.player, item.language);
-				}
-
-				queue.remove(index.get(i));
-
-			} else {
-				break;
+			if (queue.isEmpty()) {
+				ID = Integer.MIN_VALUE;
+				// Tools.verbose("Queue empty.");
+				return;
 			}
+
+			ArrayList<Integer> index = new ArrayList<Integer>(
+					new TreeSet<Integer>(queue.keySet()));
+
+			// for (int i : queue.keySet()) {
+			for (int i = 0; i < index.size(); i++) {
+				if (run) {
+					Queue item = queue.get(index.get(i));
+					// Tools.verbose(item);
+
+					if (item.addBending) {
+						Tools.config.addBending(item.player.getName(),
+								item.type);
+					} else if (item.removeBending) {
+						Tools.config.removeBending(item.player);
+					} else if (item.setBending) {
+						Tools.config.setBending(item.player, item.type);
+					} else if (item.bindSlot) {
+						Tools.config.setAbility(item.player.getName(),
+								item.ability, item.slot);
+					} else if (item.bindItem) {
+						Tools.config.setAbility(item.player.getName(),
+								item.ability, item.item);
+					} else if (item.removeSlot) {
+						Tools.config.removeAbility(item.player, item.slot);
+					} else if (item.removeItem) {
+						Tools.config.removeAbility(item.player, item.item);
+					} else if (item.permaRemoveBending) {
+						Tools.config.permaRemoveBending(item.player);
+					} else if (item.setLanguage) {
+						Tools.config.setLanguage(item.player, item.language);
+					}
+
+					queue.remove(index.get(i));
+
+				} else {
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			Tools.writeToLog(ExceptionUtils.getStackTrace(e));
+			e.printStackTrace();
 		}
 
 	}

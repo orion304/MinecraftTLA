@@ -17,6 +17,7 @@ import main.StorageManager;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -709,6 +710,7 @@ public class Tools {
 			return true;
 		} catch (StackOverflowError e) {
 			e.printStackTrace();
+			Tools.writeToLog(ExceptionUtils.getStackTrace(e));
 			movedearth.remove(block);
 			return false;
 		}
