@@ -62,8 +62,13 @@ public class Fireball {
 	}
 
 	private void progress() {
-		if (!Tools.canBend(player, Abilities.FireBlast)
-				|| Tools.getBendingAbility(player) != Abilities.FireBlast) {
+		if ((!Tools.canBend(player, Abilities.FireBlast) || Tools
+				.getBendingAbility(player) != Abilities.FireBlast) && !launched) {
+			remove();
+			return;
+		}
+
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze, location)) {
 			remove();
 			return;
 		}
