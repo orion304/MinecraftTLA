@@ -911,7 +911,7 @@ public class BendingListener implements Listener {
 			if (!Wave.canThaw(block)) {
 				Wave.thaw(block);
 			}
-			if (Tools.tempearthblocks.contains(block)) {
+			if (Tools.movedearth.containsKey(block)) {
 				// Tools.removeEarthbendedBlockIndex(block);
 				Tools.removeRevertIndex(block);
 			}

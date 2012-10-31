@@ -195,6 +195,11 @@ public class BendingManager implements Runnable {
 			RevertChecker.revertQueue.remove(block);
 		}
 
+		for (Block block : RevertChecker.airRevertQueue.keySet()) {
+			Tools.revertAirBlock(block);
+			RevertChecker.airRevertQueue.remove(block);
+		}
+
 		// for (Block block : RevertChecker.movedEarthQueue.keySet()) {
 		// block.setType(RevertChecker.movedEarthQueue.get(block));
 		// RevertChecker.movedEarthQueue.remove(block);

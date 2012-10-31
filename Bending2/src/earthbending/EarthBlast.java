@@ -139,7 +139,7 @@ public class EarthBlast {
 	public void throwEarth() {
 		if (sourceblock != null) {
 			if (sourceblock.getWorld() == player.getWorld()) {
-				if (Tools.tempearthblocks.contains(sourceblock)) {
+				if (Tools.movedearth.containsKey(sourceblock)) {
 					if (!revert)
 						Tools.removeRevertIndex(sourceblock);
 					// Tools.removeEarthbendedBlockIndex(sourceblock);

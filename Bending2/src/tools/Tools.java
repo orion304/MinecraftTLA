@@ -126,7 +126,9 @@ public class Tools {
 	public static final long timeinterval = ConfigManager.globalCooldown;
 
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
-	public static ConcurrentHashMap<Block, Block> tempearthblocks = new ConcurrentHashMap<Block, Block>();
+	// public static ConcurrentHashMap<Block, Block> tempearthblocks = new
+	// ConcurrentHashMap<Block, Block>();
+	public static ConcurrentHashMap<Block, Information> tempair = new ConcurrentHashMap<Block, Information>();
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
 	public static ConcurrentHashMap<Player, Player> tempflyers = new ConcurrentHashMap<Player, Player>();
 	public static List<Player> toggledBending = new ArrayList<Player>();
@@ -513,10 +515,11 @@ public class Tools {
 
 	public static void addTempAirBlock(Block block) {
 		if (movedearth.containsKey(block)) {
-			block.setType(Material.AIR);
 			Information info = movedearth.get(block);
+			block.setType(Material.AIR);
 			info.setTime(System.currentTimeMillis());
-			movedearth.replace(block, info);
+			movedearth.remove(block);
+			tempair.put(info.getBlock(), info);
 		} else {
 			Information info = new Information();
 			info.setBlock(block);
@@ -524,25 +527,48 @@ public class Tools {
 			info.setData(block.getData());
 			info.setTime(System.currentTimeMillis());
 			block.setType(Material.AIR);
-			movedearth.put(block, info);
+			tempair.put(block, info);
 		}
-		// if (tempearthblocks.containsKey(block)) {
-		// Block index = tempearthblocks.get(block);
-		// tempearthblocks.remove(block);
-		// Information info = movedearth.get(index);
-		// if (info != null) {
-		// info.setTime(System.currentTimeMillis());
-		// movedearth.replace(index, info);
-		// }
+
+		// if (movedearth.containsKey(block)) {
 		// block.setType(Material.AIR);
+		// Information info = movedearth.get(block);
+		// info.setTime(System.currentTimeMillis());
+		// movedearth.replace(block, info);
 		// } else {
 		// Information info = new Information();
 		// info.setBlock(block);
 		// info.setType(block.getType());
+		// info.setData(block.getData());
 		// info.setTime(System.currentTimeMillis());
-		// movedearth.put(block, info);
 		// block.setType(Material.AIR);
+		// movedearth.put(block, info);
 		// }
+	}
+
+	public static void revertAirBlock(Block block) {
+		revertAirBlock(block, false);
+	}
+
+	public static void revertAirBlock(Block block, boolean force) {
+		if (!tempair.containsKey(block))
+			return;
+		Information info = tempair.get(block);
+		if (block.getType() != Material.AIR && !block.isLiquid()) {
+			if (force || !movedearth.containsKey(block)) {
+				ItemStack item = new ItemStack(info.getType());
+				item.setData(new MaterialData(info.getType(), info.getData()));
+				block.getWorld().dropItem(block.getLocation(), item);
+				tempair.remove(block);
+			} else {
+				info.setTime(info.getTime() + 10000);
+			}
+			return;
+		} else {
+			block.setType(info.getType());
+			block.setData(info.getData());
+			tempair.remove(block);
+		}
 	}
 
 	// public static void removeEarthbendedBlock(Block block) {
@@ -734,6 +760,10 @@ public class Tools {
 			// movedearth.remove(block);
 			// removeEarthbendedBlockByIndex(block);
 			revertBlock(block, null, true);
+		}
+
+		for (Block block : tempair.keySet()) {
+			revertAirBlock(block, true);
 		}
 	}
 

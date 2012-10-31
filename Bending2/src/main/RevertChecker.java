@@ -14,6 +14,7 @@ import tools.Tools;
 public class RevertChecker implements Runnable {
 
 	static ConcurrentHashMap<Block, Block> revertQueue = new ConcurrentHashMap<Block, Block>();
+	static ConcurrentHashMap<Block, Block> airRevertQueue = new ConcurrentHashMap<Block, Block>();
 	// static ConcurrentHashMap<Block, Material> movedEarthQueue = new
 	// ConcurrentHashMap<Block, Material>();
 
@@ -54,6 +55,20 @@ public class RevertChecker implements Runnable {
 				}
 			}
 
+			for (Block block : Tools.tempair.keySet()) {
+				if (airRevertQueue.containsKey(block))
+					continue;
+				boolean remove = true;
+				Information info = Tools.tempair.get(block);
+				if (time < info.getTime() + ConfigManager.revertchecktime
+						|| (chunks.contains(block.getChunk()) && safeRevert)) {
+					remove = false;
+				}
+				if (remove) {
+					addToAirRevertQueue(block);
+				}
+			}
+
 			// for (Block block : Tools.tempearthblocks.keySet()) {
 			// if (revertQueue.containsKey(block))
 			// continue;
@@ -89,6 +104,12 @@ public class RevertChecker implements Runnable {
 			// Tools.writeToLog("Still " + Tools.tempearthblocks.size()
 			// + " remaining.");
 		}
+	}
+
+	private void addToAirRevertQueue(Block block) {
+		if (!airRevertQueue.containsKey(block))
+			airRevertQueue.put(block, block);
+
 	}
 
 	// void addToMovedEarthQueue(Block block, Material type) {

@@ -68,11 +68,6 @@ public class Fireball {
 			return;
 		}
 
-		if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze, location)) {
-			remove();
-			return;
-		}
-
 		if (System.currentTimeMillis() > starttime + chargetime) {
 			charged = true;
 		}
@@ -91,6 +86,13 @@ public class Fireball {
 		}
 
 		if (System.currentTimeMillis() > time + interval) {
+			if (launched)
+				if (Tools.isRegionProtectedFromBuild(player, Abilities.Blaze,
+						location)) {
+					remove();
+					return;
+				}
+
 			time = System.currentTimeMillis();
 
 			if (!launched && !charged)
