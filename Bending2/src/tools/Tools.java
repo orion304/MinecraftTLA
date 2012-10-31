@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +35,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
@@ -100,6 +100,9 @@ import firebending.WallOfFire;
 public class Tools {
 
 	public static StorageManager config;
+
+	private static final ItemStack pickaxe = new ItemStack(
+			Material.DIAMOND_PICKAXE);
 
 	private static final Map<String, ChatColor> colors;
 
@@ -556,9 +559,13 @@ public class Tools {
 		Information info = tempair.get(block);
 		if (block.getType() != Material.AIR && !block.isLiquid()) {
 			if (force || !movedearth.containsKey(block)) {
-				ItemStack item = new ItemStack(info.getType());
-				item.setData(new MaterialData(info.getType(), info.getData()));
-				block.getWorld().dropItem(block.getLocation(), item);
+				dropItems(
+						block,
+						getDrops(block, info.getType(), info.getData(), pickaxe));
+				// ItemStack item = new ItemStack(info.getType());
+				// item.setData(new MaterialData(info.getType(),
+				// info.getData()));
+				// block.getWorld().dropItem(block.getLocation(), item);
 				tempair.remove(block);
 			} else {
 				info.setTime(info.getTime() + 10000);
@@ -709,10 +716,14 @@ public class Tools {
 					sourceblock.setData(info.getData());
 				} else {
 					if (info.getType() != Material.AIR) {
-						ItemStack item = new ItemStack(info.getType());
-						item.setData(new MaterialData(info.getType(), info
-								.getData()));
-						block.getWorld().dropItem(block.getLocation(), item);
+						// ItemStack item = new ItemStack(info.getType());
+						// item.setData(new MaterialData(info.getType(), info
+						// .getData()));
+						// block.getWorld().dropItem(block.getLocation(), item);
+						dropItems(
+								block,
+								getDrops(block, info.getType(), info.getData(),
+										pickaxe));
 					}
 				}
 
@@ -765,6 +776,24 @@ public class Tools {
 		for (Block block : tempair.keySet()) {
 			revertAirBlock(block, true);
 		}
+	}
+
+	public static Collection<ItemStack> getDrops(Block block, Material type,
+			byte data, ItemStack breakitem) {
+		byte olddata = block.getData();
+		Material oldtype = block.getType();
+		block.setType(type);
+		block.setData(data);
+		// Collection<ItemStack> item = block.getDrops(breakitem);
+		Collection<ItemStack> item = block.getDrops();
+		block.setType(oldtype);
+		block.setData(olddata);
+		return item;
+	}
+
+	public static void dropItems(Block block, Collection<ItemStack> items) {
+		for (ItemStack item : items)
+			block.getWorld().dropItem(block.getLocation(), item);
 	}
 
 	// public static void addTempEarthBlock(Block targetblock, Block

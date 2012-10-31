@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import tools.ConfigManager;
 import tools.TempBlock;
+import tools.TempPotionEffect;
 import tools.Tools;
 
 public class EarthArmor {
@@ -161,9 +162,13 @@ public class EarthArmor {
 				new ItemStack(Material.LEATHER_CHESTPLATE, 1),
 				new ItemStack(Material.LEATHER_HELMET, 1) };
 		player.getInventory().setArmorContents(armors);
-		player.addPotionEffect(new PotionEffect(
+		PotionEffect resistance = new PotionEffect(
 				PotionEffectType.DAMAGE_RESISTANCE, (int) duration / 50,
-				strength - 1));
+				strength - 1);
+		new TempPotionEffect(player, resistance);
+		// player.addPotionEffect(new PotionEffect(
+		// PotionEffectType.DAMAGE_RESISTANCE, (int) duration / 50,
+		// strength - 1));
 		formed = true;
 		starttime = System.currentTimeMillis();
 	}
@@ -203,7 +208,7 @@ public class EarthArmor {
 
 	private void removeEffect() {
 		player.getInventory().setArmorContents(oldarmor);
-		player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+		// player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
 		// instances.remove(player);
 	}
 

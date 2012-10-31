@@ -17,6 +17,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.TempPotionEffect;
 import tools.Tools;
 import waterbending.Bloodbending;
 import waterbending.FastSwimming;
@@ -107,6 +108,7 @@ public class BendingManager implements Runnable {
 			manageWaterbending();
 			manageChiBlocking();
 			// manageMessages();
+			TempPotionEffect.progressAll();
 			AvatarState.manageAvatarStates();
 			handleFlying();
 			handleDayNight();

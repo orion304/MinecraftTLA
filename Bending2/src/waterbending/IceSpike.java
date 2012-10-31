@@ -13,10 +13,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.ConfigManager;
+import tools.TempPotionEffect;
 import tools.Tools;
 
 public class IceSpike {
@@ -218,9 +221,10 @@ public class IceSpike {
 			if (en instanceof LivingEntity && en != player
 					&& !damaged.contains(((LivingEntity) en))) {
 				LivingEntity le = (LivingEntity) en;
-				le.setVelocity(thrown);
-				le.damage(damage);
-				damaged.add(le);
+				affect(le);
+				// le.setVelocity(thrown);
+				// le.damage(damage);
+				// damaged.add(le);
 				// Tools.verbose(damage + " Hp:" + le.getHealth());
 			}
 		}
@@ -232,6 +236,14 @@ public class IceSpike {
 		}
 
 		return true;
+	}
+
+	private void affect(LivingEntity entity) {
+		entity.setVelocity(thrown);
+		entity.damage(damage);
+		damaged.add(entity);
+		PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 70, 2);
+		new TempPotionEffect(entity, slow);
 	}
 
 	public static boolean progress(Player player) {

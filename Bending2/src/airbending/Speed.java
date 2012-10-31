@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
 import tools.BendingType;
+import tools.TempPotionEffect;
 import tools.Tools;
 
 public class Speed {
@@ -56,11 +57,17 @@ public class Speed {
 			factor = 1;
 		}
 		int jumpfactor = factor + 1;
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70,
-				factor));
+		PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 70,
+				factor);
+		PotionEffect jump = new PotionEffect(PotionEffectType.JUMP, 70,
+				jumpfactor);
+		// player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 70,
+		// factor));
+		new TempPotionEffect(player, speed);
 		if (Tools.getBendingAbility(player) != Abilities.AirScooter)
-			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70,
-					jumpfactor));
+			new TempPotionEffect(player, jump);
+		// player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 70,
+		// jumpfactor));
 	}
 
 	public static boolean progress(int ID) {

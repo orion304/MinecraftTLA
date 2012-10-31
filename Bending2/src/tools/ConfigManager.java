@@ -235,7 +235,7 @@ public class ConfigManager {
 
 	// IceSpike
 	public static long icespikecooldown = 6000;
-	public static int icespikedamage = 4;
+	public static int icespikedamage = 2;
 	public static int icespikerange = 20;
 	public static double icespikethrowingmult = 0.7;
 
