@@ -29,7 +29,7 @@ public class WaterManipulation {
 	private static final byte full = 0x0;
 	// private static final byte half = 0x4;
 
-	private static double range = ConfigManager.waterManipulationRange;
+	static double range = ConfigManager.waterManipulationRange;
 	private static int defaultdamage = ConfigManager.waterdmg;
 	private static double speed = ConfigManager.waterManipulationSpeed;
 	private static final double deflectrange = 3;
@@ -39,7 +39,7 @@ public class WaterManipulation {
 
 	private static long interval = (long) (1000. / speed);
 
-	private Player player;
+	Player player;
 	private int id;
 	private Location location = null;
 	private Block sourceblock = null;
@@ -247,6 +247,7 @@ public class WaterManipulation {
 				//
 				// instances.remove(player.getEntityId());
 				breakBlock();
+				new WaterReturn(player, sourceblock);
 				return false;
 
 			} else {
@@ -307,6 +308,7 @@ public class WaterManipulation {
 					Tools.breakBlock(block);
 				} else if (block.getType() != Material.AIR) {
 					breakBlock();
+					new WaterReturn(player, sourceblock);
 					return false;
 				}
 
@@ -329,6 +331,7 @@ public class WaterManipulation {
 
 				if (!progressing) {
 					breakBlock();
+					new WaterReturn(player, sourceblock);
 					return false;
 				}
 
@@ -420,6 +423,19 @@ public class WaterManipulation {
 		if (prepared.containsKey(player)) {
 			instances.get(prepared.get(player)).moveWater();
 			prepared.remove(player);
+		} else if (WaterReturn.hasWaterBottle(player)) {
+			Location eyeloc = player.getEyeLocation();
+			Block block = eyeloc.add(eyeloc.getDirection().normalize())
+					.getBlock();
+			if (Tools.isTransparentToEarthbending(player, block)
+					&& Tools.isTransparentToEarthbending(player,
+							eyeloc.getBlock())) {
+				WaterReturn.emptyWaterBottle(player);
+				block.setType(Material.WATER);
+				block.setData(full);
+				WaterManipulation watermanip = new WaterManipulation(player);
+				watermanip.moveWater();
+			}
 		}
 
 		redirectTargettedBlasts(player);

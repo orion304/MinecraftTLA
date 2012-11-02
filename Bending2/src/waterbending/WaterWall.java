@@ -33,7 +33,7 @@ public class WaterWall {
 	private static final double defaultradius = ConfigManager.waterWallRadius;
 	// private static double speed = 1.5;
 
-	private Player player;
+	Player player;
 	private Location location = null;
 	private Block sourceblock = null;
 	private Block oldwater = null;
@@ -82,6 +82,24 @@ public class WaterWall {
 			// Tools.verbose("New water wall prepared");
 			instances.put(player.getEntityId(), this);
 			time = System.currentTimeMillis();
+		}
+
+		if (!instances.containsKey(player.getEntityId())
+				&& WaterReturn.hasWaterBottle(player)) {
+
+			Location eyeloc = player.getEyeLocation();
+			Block block = eyeloc.add(eyeloc.getDirection().normalize())
+					.getBlock();
+			if (Tools.isTransparentToEarthbending(player, block)
+					&& Tools.isTransparentToEarthbending(player,
+							eyeloc.getBlock())) {
+				WaterReturn.emptyWaterBottle(player);
+				block.setType(Material.WATER);
+				block.setData(full);
+				Wave wave = new Wave(player);
+				wave.moveWater();
+			}
+
 		}
 
 	}
@@ -213,6 +231,7 @@ public class WaterWall {
 				removeWater(oldwater);
 			breakBlock();
 			unfocusBlock();
+			returnWater();
 			return false;
 		}
 		if (System.currentTimeMillis() - time >= interval) {
@@ -231,6 +250,7 @@ public class WaterWall {
 			if (progressing
 					&& (!player.isSneaking() || Tools.getBendingAbility(player) != Abilities.Surge)) {
 				breakBlock();
+				returnWater();
 				return false;
 			}
 
@@ -244,6 +264,7 @@ public class WaterWall {
 				ArrayList<Block> blocks = new ArrayList<Block>();
 				Location loc = Tools.getTargetedLocation(player, (int) range,
 						8, 9, 79);
+				location = loc.clone();
 				Vector dir = player.getEyeLocation().getDirection();
 				Vector vec;
 				Block block;
@@ -310,6 +331,7 @@ public class WaterWall {
 			}
 			if (block.getType() != Material.AIR) {
 				breakBlock();
+				returnWater();
 				return false;
 			}
 
@@ -432,16 +454,30 @@ public class WaterWall {
 
 	public static void form(Player player) {
 		if (!instances.containsKey(player.getEntityId())) {
+			if (Tools.getWaterSourceBlock(player, (int) Wave.defaultrange,
+					Tools.canPlantbend(player)) == null) {
+				Location eyeloc = player.getEyeLocation();
+				Block block = eyeloc.add(eyeloc.getDirection().normalize())
+						.getBlock();
+				if (Tools.isTransparentToEarthbending(player, block)
+						&& Tools.isTransparentToEarthbending(player,
+								eyeloc.getBlock())) {
+					WaterReturn.emptyWaterBottle(player);
+					block.setType(Material.WATER);
+					block.setData(full);
+					WaterWall wall = new WaterWall(player);
+					wall.moveWater();
+					return;
+				}
+			}
 			new Wave(player);
 			return;
-		} else {
-			if (Tools.isWaterbendable(
-					player.getTargetBlock(null, (int) Wave.defaultrange),
-					player)) {
-				new Wave(player);
-				return;
-			}
+		} else if (Tools.isWaterbendable(
+				player.getTargetBlock(null, (int) Wave.defaultrange), player)) {
+			new Wave(player);
+			return;
 		}
+
 		moveWater(player);
 	}
 
@@ -477,6 +513,12 @@ public class WaterWall {
 				return true;
 		}
 		return false;
+	}
+
+	private void returnWater() {
+		if (location != null) {
+			new WaterReturn(player, location.getBlock());
+		}
 	}
 
 	public static String getDescription() {

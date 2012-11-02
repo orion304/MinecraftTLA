@@ -39,7 +39,7 @@ public class Wave {
 	// private static int damage = 5;
 	// private static double speed = 1.5;
 
-	private Player player;
+	Player player;
 	private Location location = null;
 	private Block sourceblock = null;
 	boolean progressing = false;
@@ -210,12 +210,14 @@ public class Wave {
 					progressing = false;
 					thaw();
 					breakBlock();
+					returnWater();
 					return false;
 				}
 				if (!Tools.canBend(player, Abilities.Surge)) {
 					progressing = false;
 					thaw();
 					breakBlock();
+					returnWater();
 					return false;
 				}
 
@@ -321,6 +323,7 @@ public class Wave {
 				if (location.distance(targetdestination) < 1) {
 					progressing = false;
 					breakBlock();
+					returnWater();
 					return false;
 				}
 
@@ -473,6 +476,12 @@ public class Wave {
 			}
 		}
 		return true;
+	}
+
+	private void returnWater() {
+		if (location != null) {
+			new WaterReturn(player, location.getBlock());
+		}
 	}
 
 	public static String getDescription() {

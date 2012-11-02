@@ -28,6 +28,7 @@ import waterbending.OctopusForm;
 import waterbending.Plantbending;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
+import waterbending.WaterReturn;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import waterbending.Wave;
@@ -287,6 +288,8 @@ public class BendingManager implements Runnable {
 
 		Plantbending.regrow();
 
+		WaterReturn.progressAll();
+
 	}
 
 	private void handleFlying() {
@@ -353,15 +356,20 @@ public class BendingManager implements Runnable {
 
 	private void handleDayNight() {
 
-		if (worlds.isEmpty())
-			for (World world : plugin.getServer().getWorlds())
-				if (world.getWorldType() == WorldType.NORMAL) {
-					worlds.add(world);
-					nights.put(world, false);
-					days.put(world, false);
-				}
+		for (World world : plugin.getServer().getWorlds())
+			if (world.getWorldType() == WorldType.NORMAL
+					&& !worlds.contains(world)) {
+				worlds.add(world);
+				nights.put(world, false);
+				days.put(world, false);
+			}
 
+		ArrayList<World> removeworlds = new ArrayList<World>();
 		for (World world : worlds) {
+			if (!plugin.getServer().getWorlds().contains(world)) {
+				removeworlds.add(world);
+				continue;
+			}
 			boolean night = nights.get(world);
 			boolean day = days.get(world);
 			if (Tools.isDay(world) && !day) {
@@ -419,6 +427,10 @@ public class BendingManager implements Runnable {
 				}
 				nights.replace(world, false);
 			}
+		}
+
+		for (World world : removeworlds) {
+			worlds.remove(world);
 		}
 
 	}

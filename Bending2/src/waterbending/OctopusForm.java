@@ -18,7 +18,7 @@ import tools.Tools;
 
 public class OctopusForm {
 
-	private static ConcurrentHashMap<Player, OctopusForm> instances = new ConcurrentHashMap<Player, OctopusForm>();
+	static ConcurrentHashMap<Player, OctopusForm> instances = new ConcurrentHashMap<Player, OctopusForm>();
 
 	private static int range = 10;
 	static double radius = 3;
@@ -77,8 +77,22 @@ public class OctopusForm {
 	}
 
 	public static void form(Player player) {
-		if (instances.containsKey(player))
+		if (instances.containsKey(player)) {
 			instances.get(player).form();
+		} else if (WaterReturn.hasWaterBottle(player)) {
+			Location eyeloc = player.getEyeLocation();
+			Block block = eyeloc.add(eyeloc.getDirection().normalize())
+					.getBlock();
+			if (Tools.isTransparentToEarthbending(player, block)
+					&& Tools.isTransparentToEarthbending(player,
+							eyeloc.getBlock())) {
+				WaterReturn.emptyWaterBottle(player);
+				block.setType(Material.WATER);
+				block.setData(full);
+				OctopusForm form = new OctopusForm(player);
+				form.form();
+			}
+		}
 	}
 
 	private void form() {
@@ -135,6 +149,7 @@ public class OctopusForm {
 				|| (!player.isSneaking() && !sourceselected)
 				|| !Tools.hasAbility(player, Abilities.OctopusForm)) {
 			remove();
+			returnWater();
 			return;
 		}
 
@@ -166,6 +181,7 @@ public class OctopusForm {
 						sourceblock = newblock;
 					} else {
 						remove();
+						returnWater();
 					}
 				} else if (sourceblock.getY() > location.getBlockY()) {
 					source.revertBlock();
@@ -176,6 +192,7 @@ public class OctopusForm {
 						sourceblock = newblock;
 					} else {
 						remove();
+						returnWater();
 					}
 				} else if (sourcelocation.distance(location) > radius) {
 					Vector vector = Tools.getDirection(sourcelocation,
@@ -388,6 +405,21 @@ public class OctopusForm {
 		for (TempBlock block : blocks)
 			block.revertBlock();
 		instances.remove(player);
+	}
+
+	private void returnWater() {
+		if (source != null) {
+			source.revertBlock();
+			new WaterReturn(player, source.getLocation().getBlock());
+		} else {
+			Location location = player.getLocation();
+			double rtheta = Math.toRadians(startangle);
+			Block block = location
+					.clone()
+					.add(new Vector(radius * Math.cos(rtheta), 0, radius
+							* Math.sin(rtheta))).getBlock();
+			new WaterReturn(player, block);
+		}
 	}
 
 	public static void removeAll() {

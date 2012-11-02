@@ -44,6 +44,7 @@ import waterbending.IceSpike;
 import waterbending.OctopusForm;
 import waterbending.Plantbending;
 import waterbending.WaterManipulation;
+import waterbending.WaterReturn;
 import waterbending.WaterSpout;
 import waterbending.WaterWall;
 import waterbending.Wave;
@@ -1217,6 +1218,7 @@ public class Tools {
 		RapidPunch.instance.clear();
 
 		BendingManager.removeFlyers();
+		WaterReturn.removeAll();
 		TempBlock.removeAll();
 		removeAllEarthbendedBlocks();
 	}
@@ -1821,6 +1823,14 @@ public class Tools {
 				continue;
 			if (isWaterbendable(block, player)
 					&& (!isPlant(block) || plantbending)) {
+				if (TempBlock.isTempBlock(block)) {
+					TempBlock tb = TempBlock.get(block);
+					byte full = 0x0;
+					if (tb.data != full
+							&& (tb.type != Material.WATER || tb.type != Material.STATIONARY_WATER)) {
+						continue;
+					}
+				}
 				return block;
 			}
 			// } else if ((block.getType() == Material.WATER || block.getType()
