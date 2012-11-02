@@ -99,6 +99,7 @@ public class Wave {
 			if (old.progressing) {
 				old.breakBlock();
 				old.thaw();
+				old.returnWater();
 			} else {
 				old.cancel();
 			}

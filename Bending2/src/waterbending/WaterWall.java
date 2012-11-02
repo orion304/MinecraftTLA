@@ -454,8 +454,10 @@ public class WaterWall {
 
 	public static void form(Player player) {
 		if (!instances.containsKey(player.getEntityId())) {
-			if (Tools.getWaterSourceBlock(player, (int) Wave.defaultrange,
-					Tools.canPlantbend(player)) == null) {
+			if (!Wave.instances.containsKey(player.getEntityId())
+					&& Tools.getWaterSourceBlock(player,
+							(int) Wave.defaultrange, Tools.canPlantbend(player)) == null
+					&& WaterReturn.hasWaterBottle(player)) {
 				Location eyeloc = player.getEyeLocation();
 				Block block = eyeloc.add(eyeloc.getDirection().normalize())
 						.getBlock();
@@ -472,10 +474,13 @@ public class WaterWall {
 			}
 			new Wave(player);
 			return;
-		} else if (Tools.isWaterbendable(
-				player.getTargetBlock(null, (int) Wave.defaultrange), player)) {
-			new Wave(player);
-			return;
+		} else {
+			if (Tools.isWaterbendable(
+					player.getTargetBlock(null, (int) Wave.defaultrange),
+					player)) {
+				new Wave(player);
+				return;
+			}
 		}
 
 		moveWater(player);

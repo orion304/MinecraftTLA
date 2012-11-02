@@ -73,6 +73,11 @@ public class WaterReturn {
 				.getDirection(location, player.getEyeLocation()).normalize();
 		location = location.clone().add(direction);
 
+		if (location == null || block == null) {
+			remove();
+			return;
+		}
+
 		if (location.getBlock().equals(block.getLocation().getBlock()))
 			return;
 
