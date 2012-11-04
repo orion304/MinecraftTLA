@@ -1,8 +1,11 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -15,8 +18,11 @@ public class RevertChecker implements Runnable {
 
 	static ConcurrentHashMap<Block, Block> revertQueue = new ConcurrentHashMap<Block, Block>();
 	static ConcurrentHashMap<Block, Block> airRevertQueue = new ConcurrentHashMap<Block, Block>();
+	private Future<ArrayList<Chunk>> returnFuture;
 	// static ConcurrentHashMap<Block, Material> movedEarthQueue = new
 	// ConcurrentHashMap<Block, Material>();
+
+	static ConcurrentHashMap<Chunk, Chunk> chunks = new ConcurrentHashMap<Chunk, Chunk>();
 
 	private Bending plugin;
 
@@ -28,45 +34,75 @@ public class RevertChecker implements Runnable {
 		plugin = bending;
 	}
 
-	public void run() {
-		time = System.currentTimeMillis();
+	private class getOccupiedChunks implements Callable<ArrayList<Chunk>> {
 
-		if (ConfigManager.reverseearthbending) {
-
+		@Override
+		public ArrayList<Chunk> call() throws Exception {
 			ArrayList<Chunk> chunks = new ArrayList<Chunk>();
+			Player[] players = plugin.getServer().getOnlinePlayers();
 
-			for (Player player : plugin.getServer().getOnlinePlayers()) {
+			for (Player player : players) {
 				Chunk chunk = player.getLocation().getChunk();
 				if (!chunks.contains(chunk))
 					chunks.add(chunk);
 			}
 
-			for (Block block : Tools.movedearth.keySet()) {
-				if (revertQueue.containsKey(block))
-					continue;
-				boolean remove = true;
-				Information info = Tools.movedearth.get(block);
-				if (time < info.getTime() + ConfigManager.revertchecktime
-						|| (chunks.contains(block.getChunk()) && safeRevert)) {
-					remove = false;
-				}
-				if (remove) {
-					addToRevertQueue(block);
-				}
-			}
+			return chunks;
+		}
 
-			for (Block block : Tools.tempair.keySet()) {
-				if (airRevertQueue.containsKey(block))
-					continue;
-				boolean remove = true;
-				Information info = Tools.tempair.get(block);
-				if (time < info.getTime() + ConfigManager.revertchecktime
-						|| (chunks.contains(block.getChunk()) && safeRevert)) {
-					remove = false;
+	}
+
+	public void run() {
+		if (returnFuture == null)
+			returnFuture = plugin.getServer().getScheduler()
+					.callSyncMethod(plugin, new getOccupiedChunks());
+
+		time = System.currentTimeMillis();
+
+		if (ConfigManager.reverseearthbending) {
+
+			// ArrayList<Chunk> chunks = new ArrayList<Chunk>();
+			// Player[] players = plugin.getServer().getOnlinePlayers();
+			//
+			// for (Player player : players) {
+			// Chunk chunk = player.getLocation().getChunk();
+			// if (!chunks.contains(chunk))
+			// chunks.add(chunk);
+			// }
+
+			try {
+				ArrayList<Chunk> chunks = returnFuture.get();
+
+				for (Block block : Tools.movedearth.keySet()) {
+					if (revertQueue.containsKey(block))
+						continue;
+					boolean remove = true;
+					Information info = Tools.movedearth.get(block);
+					if (time < info.getTime() + ConfigManager.revertchecktime
+							|| (chunks.contains(block.getChunk()) && safeRevert)) {
+						remove = false;
+					}
+					if (remove) {
+						addToRevertQueue(block);
+					}
 				}
-				if (remove) {
-					addToAirRevertQueue(block);
+
+				for (Block block : Tools.tempair.keySet()) {
+					if (airRevertQueue.containsKey(block))
+						continue;
+					boolean remove = true;
+					Information info = Tools.tempair.get(block);
+					if (time < info.getTime() + ConfigManager.revertchecktime
+							|| (chunks.contains(block.getChunk()) && safeRevert)) {
+						remove = false;
+					}
+					if (remove) {
+						addToAirRevertQueue(block);
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				Tools.writeToLog(ExceptionUtils.getStackTrace(e));
 			}
 
 			// for (Block block : Tools.tempearthblocks.keySet()) {

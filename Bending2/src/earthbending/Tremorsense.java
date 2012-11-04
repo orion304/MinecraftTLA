@@ -109,6 +109,16 @@ public class Tremorsense {
 				standblock)) {
 			revert();
 		}
+
+		// Block standblock = player.getLocation().getBlock()
+		// .getRelative(BlockFace.DOWN);
+		//
+		// if (Tools.isEarthbendable(player, Abilities.Tremorsense, standblock))
+		// {
+		// PotionEffect potion = new PotionEffect(
+		// PotionEffectType.NIGHT_VISION, 70, 0);
+		// new TempPotionEffect(player, potion);
+		// }
 	}
 
 	private void revert() {

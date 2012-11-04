@@ -96,9 +96,11 @@ public class WaterManipulation {
 
 	private void cancelPrevious() {
 		if (prepared.containsKey(player)) {
-			WaterManipulation old = instances.get(prepared.get(player));
-			if (!old.progressing) {
-				old.cancel();
+			if (instances.containsKey(prepared.get(player))) {
+				WaterManipulation old = instances.get(prepared.get(player));
+				if (!old.progressing) {
+					old.cancel();
+				}
 			}
 		}
 	}
@@ -421,7 +423,9 @@ public class WaterManipulation {
 
 	public static void moveWater(Player player) {
 		if (prepared.containsKey(player)) {
-			instances.get(prepared.get(player)).moveWater();
+			if (instances.containsKey(prepared.get(player))) {
+				instances.get(prepared.get(player)).moveWater();
+			}
 			prepared.remove(player);
 		} else if (WaterReturn.hasWaterBottle(player)) {
 			Location eyeloc = player.getEyeLocation();
@@ -561,6 +565,7 @@ public class WaterManipulation {
 	public static void removeAll() {
 		for (int id : instances.keySet())
 			instances.get(id).breakBlock();
+		prepared.clear();
 	}
 
 	public static boolean canBubbleWater(Block block) {
