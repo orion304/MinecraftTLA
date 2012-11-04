@@ -1072,6 +1072,11 @@ public class Tools {
 				damage = AvatarState.getValue(damage);
 			}
 
+			// EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(
+			// player, entity, DamageCause.CUSTOM, damage);
+			// Bending.plugin.getServer().getPluginManager().callEvent(event);
+			// verbose(event.isCancelled());
+
 			((LivingEntity) entity).damage(damage, player);
 			((LivingEntity) entity)
 					.setLastDamageCause(new EntityDamageByEntityEvent(player,
@@ -1156,7 +1161,7 @@ public class Tools {
 				sources++;
 			}
 		}
-		if (sources >= 3)
+		if (sources >= 2)
 			return true;
 		return false;
 	}
@@ -1352,6 +1357,16 @@ public class Tools {
 			return false;
 		if (isHarmlessAbility(ability) && allowharmless)
 			return false;
+
+		// if (ignite.contains(ability)) {
+		// BlockIgniteEvent event = new BlockIgniteEvent(location.getBlock(),
+		// IgniteCause.FLINT_AND_STEEL, player);
+		// Bending.plugin.getServer().getPluginManager().callEvent(event);
+		// if (event.isCancelled())
+		// return false;
+		// event.setCancelled(true);
+		// }
+
 		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
 		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
 		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");

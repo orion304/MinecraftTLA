@@ -64,6 +64,7 @@ import waterbending.IceSpike;
 import waterbending.Melt;
 import waterbending.OctopusForm;
 import waterbending.SpikeField;
+import waterbending.Torrent;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
 import waterbending.WaterSpout;
@@ -427,6 +428,10 @@ public class BendingListener implements Listener {
 					new OctopusForm(player);
 				}
 
+				if (ability == Abilities.Torrent) {
+					new Torrent(player);
+				}
+
 				// if (ability == Abilities.Wave) {
 				// Wave.launch(player);
 				// }
@@ -547,6 +552,10 @@ public class BendingListener implements Listener {
 
 			if (ability == Abilities.Surge) {
 				WaterWall.form(player);
+			}
+
+			if (ability == Abilities.Torrent) {
+				Torrent.use(player);
 			}
 
 			if (ability == Abilities.OctopusForm) {
@@ -818,7 +827,8 @@ public class BendingListener implements Listener {
 		Block block = event.getBlock();
 		Player player = event.getPlayer();
 		if (WaterWall.wasBrokenFor(player, block)
-				|| OctopusForm.wasBrokenFor(player, block)) {
+				|| OctopusForm.wasBrokenFor(player, block)
+				|| Torrent.wasBrokenFor(player, block)) {
 			event.setCancelled(true);
 			return;
 		}

@@ -56,7 +56,7 @@ permissions:
       bending.water.Passive: true
       bending.water.WaterSpout: true
       bending.water.IceSpike: true
- #     bending.water.Torrent: true
+      bending.water.Torrent: true
       bending.water.OctopusForm: true
   bending.earth.*:
     description: Allows all earth bending.
@@ -231,8 +231,7 @@ permissions:
     default: true
   bending.water.Torrent:
     description: Allows the use of Torrent.
-#    default: true
-    default: false
+    default: true
   bending.water.IceSpike:
     description: Allows the use of IceSpike
     default: true

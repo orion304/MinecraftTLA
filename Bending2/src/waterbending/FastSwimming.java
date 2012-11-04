@@ -30,8 +30,9 @@ public class FastSwimming {
 							|| ability == Abilities.HealingWaters
 							|| ability == Abilities.PhaseChange
 							|| ability == Abilities.Bloodbending
-							|| ability == Abilities.IceSpike || Tools
-							.getBendingAbility(player) == Abilities.OctopusForm)) {
+							|| ability == Abilities.IceSpike
+							|| Tools.getBendingAbility(player) == Abilities.OctopusForm || Tools
+							.getBendingAbility(player) == Abilities.Torrent)) {
 				player.setVelocity(player.getEyeLocation().getDirection()
 						.clone().normalize().multiply(factor));
 			}

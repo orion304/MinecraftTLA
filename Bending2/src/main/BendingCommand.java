@@ -842,6 +842,9 @@ public class BendingCommand {
 					case Surge:
 						Tools.sendMessage(player, cc, element + ".Surge");
 						break;
+					case Torrent:
+						Tools.sendMessage(player, cc, element + ".Torrent");
+						break;
 					case AvatarState:
 						Tools.sendMessage(player, cc, element + ".AvatarState");
 						break;
