@@ -91,6 +91,13 @@ public class Illumination {
 				instances.get(player).set();
 			}
 		}
+
+		for (Player player : instances.keySet()) {
+			if (!player.isOnline() || player.isDead()) {
+				instances.get(player).revert();
+				instances.remove(player);
+			}
+		}
 	}
 
 	public static void removeAll() {

@@ -21,6 +21,15 @@ public class Cooldowns {
 		}
 	}
 
+	public static void forceCooldown(Player player) {
+		if (!cooldowns.containsKey(player)) {
+			new Cooldowns(player);
+		} else {
+			Cooldowns cd = cooldowns.get(player);
+			cd.mostRecent = System.currentTimeMillis();
+		}
+	}
+
 	public static void initialize() {
 		for (Abilities ability : Abilities.values()) {
 			long cd = 0;

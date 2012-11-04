@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Chunk;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -36,10 +37,16 @@ public class RevertChecker implements Runnable {
 
 	private class getOccupiedChunks implements Callable<ArrayList<Chunk>> {
 
+		private Server server;
+
+		public getOccupiedChunks(Server server) {
+			this.server = server;
+		}
+
 		@Override
 		public ArrayList<Chunk> call() throws Exception {
 			ArrayList<Chunk> chunks = new ArrayList<Chunk>();
-			Player[] players = plugin.getServer().getOnlinePlayers();
+			Player[] players = server.getOnlinePlayers();
 
 			for (Player player : players) {
 				Chunk chunk = player.getLocation().getChunk();
@@ -53,10 +60,6 @@ public class RevertChecker implements Runnable {
 	}
 
 	public void run() {
-		if (returnFuture == null)
-			returnFuture = plugin.getServer().getScheduler()
-					.callSyncMethod(plugin, new getOccupiedChunks());
-
 		time = System.currentTimeMillis();
 
 		if (ConfigManager.reverseearthbending) {
@@ -71,6 +74,11 @@ public class RevertChecker implements Runnable {
 			// }
 
 			try {
+				returnFuture = plugin
+						.getServer()
+						.getScheduler()
+						.callSyncMethod(plugin,
+								new getOccupiedChunks(plugin.getServer()));
 				ArrayList<Chunk> chunks = returnFuture.get();
 
 				for (Block block : Tools.movedearth.keySet()) {
