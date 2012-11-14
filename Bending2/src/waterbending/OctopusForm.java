@@ -147,7 +147,7 @@ public class OctopusForm {
 	private void progress() {
 		if (!Tools.canBend(player, Abilities.OctopusForm)
 				|| (!player.isSneaking() && !sourceselected)
-				|| !Tools.hasAbility(player, Abilities.OctopusForm)) {
+				|| Tools.getBendingAbility(player) != Abilities.OctopusForm) {
 			remove();
 			returnWater();
 			return;

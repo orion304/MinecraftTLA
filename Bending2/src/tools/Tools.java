@@ -1044,11 +1044,18 @@ public class Tools {
 	}
 
 	public static Entity getTargettedEntity(Player player, double range) {
+		return getTargettedEntity(player, range, new ArrayList<Entity>());
+	}
+
+	public static Entity getTargettedEntity(Player player, double range,
+			List<Entity> avoid) {
 		double longestr = range + 1;
 		Entity target = null;
 		Location origin = player.getEyeLocation();
 		Vector direction = player.getEyeLocation().getDirection().normalize();
 		for (Entity entity : origin.getWorld().getEntities()) {
+			if (avoid.contains(entity))
+				continue;
 			if (entity.getLocation().distance(origin) < longestr
 					&& getDistanceFromLine(direction, origin,
 							entity.getLocation()) < 2
@@ -1345,7 +1352,7 @@ public class Tools {
 	}
 
 	public static boolean isRegionProtectedFromBuild(Player player,
-			Abilities ability, Location location) {
+			Abilities ability, Location loc) {
 
 		List<Abilities> ignite = new ArrayList<Abilities>();
 		ignite.add(Abilities.Blaze);
@@ -1372,92 +1379,67 @@ public class Tools {
 		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
 		Plugin twnp = Bukkit.getPluginManager().getPlugin("Towny");
 
-		if (wgp != null && respectWorldGuard) {
-			WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager()
-					.getPlugin("WorldGuard");
-			if (!player.isOnline())
-				return true;
+		for (Location location : new Location[] { loc, player.getLocation() }) {
 
-			if (ignite.contains(ability)) {
-				if (!wg.hasPermission(player, "worldguard.override.lighter")) {
-					if (wg.getGlobalStateManager().get(location.getWorld()).blockLighter)
+			if (wgp != null && respectWorldGuard) {
+				WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit
+						.getPluginManager().getPlugin("WorldGuard");
+				if (!player.isOnline())
+					return true;
+
+				if (ignite.contains(ability)) {
+					if (!wg.hasPermission(player, "worldguard.override.lighter")) {
+						if (wg.getGlobalStateManager().get(location.getWorld()).blockLighter)
+							return true;
+						if (!wg.getGlobalRegionManager().hasBypass(player,
+								location.getWorld())
+								&& !wg.getGlobalRegionManager()
+										.get(location.getWorld())
+										.getApplicableRegions(location)
+										.allows(DefaultFlag.LIGHTER,
+												wg.wrapPlayer(player)))
+							return true;
+					}
+
+				}
+
+				if (explode.contains(ability)) {
+					if (wg.getGlobalStateManager().get(location.getWorld()).blockTNTExplosions)
 						return true;
-					if (!wg.getGlobalRegionManager().hasBypass(player,
-							location.getWorld())
-							&& !wg.getGlobalRegionManager()
-									.get(location.getWorld())
-									.getApplicableRegions(location)
-									.allows(DefaultFlag.LIGHTER,
-											wg.wrapPlayer(player)))
+					if (!wg.getGlobalRegionManager().get(location.getWorld())
+							.getApplicableRegions(location)
+							.allows(DefaultFlag.TNT))
 						return true;
 				}
 
-			}
-
-			if (explode.contains(ability)) {
-				if (wg.getGlobalStateManager().get(location.getWorld()).blockTNTExplosions)
+				if ((!(wg.getGlobalRegionManager().canBuild(player, location)) || !(wg
+						.getGlobalRegionManager()
+						.canConstruct(player, location)))) {
 					return true;
-				if (!wg.getGlobalRegionManager().get(location.getWorld())
-						.getApplicableRegions(location).allows(DefaultFlag.TNT))
-					return true;
+				}
 			}
 
-			if ((!(wg.getGlobalRegionManager().canBuild(player, location)) || !(wg
-					.getGlobalRegionManager().canConstruct(player, location)))) {
-				return true;
-			}
-		}
+			if (psp != null && respectPreciousStones) {
+				PreciousStones ps = (PreciousStones) psp;
 
-		if (psp != null && respectPreciousStones) {
-			PreciousStones ps = (PreciousStones) psp;
+				if (ignite.contains(ability)) {
+					if (ps.getForceFieldManager().hasSourceField(location,
+							FieldFlag.PREVENT_FIRE))
+						return true;
+				}
 
-			if (ignite.contains(ability)) {
+				if (explode.contains(ability)) {
+					if (ps.getForceFieldManager().hasSourceField(location,
+							FieldFlag.PREVENT_EXPLOSIONS))
+						return true;
+				}
+
 				if (ps.getForceFieldManager().hasSourceField(location,
-						FieldFlag.PREVENT_FIRE))
+						FieldFlag.PREVENT_PLACE))
 					return true;
 			}
 
-			if (explode.contains(ability)) {
-				if (ps.getForceFieldManager().hasSourceField(location,
-						FieldFlag.PREVENT_EXPLOSIONS))
-					return true;
-			}
-
-			if (ps.getForceFieldManager().hasSourceField(location,
-					FieldFlag.PREVENT_PLACE))
-				return true;
-		}
-
-		if (fcp != null && respectFactions) {
-			if (ignite.contains(ability)) {
-
-			}
-
-			if (explode.contains(ability)) {
-
-			}
-
-			if (!FactionsBlockListener.playerCanBuildDestroyBlock(player,
-					location, "build", true)) {
-				return true;
-			}
-		}
-
-		if (twnp != null && respectTowny) {
-			Towny twn = (Towny) twnp;
-
-			WorldCoord worldCoord;
-
-			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(
-						location.getWorld().getName());
-				worldCoord = new WorldCoord(world.getName(),
-						Coord.parseCoord(location));
-
-				boolean bBuild = PlayerCacheUtil
-						.getCachePermission(player, location, 3, (byte) 0,
-								TownyPermission.ActionType.BUILD);
-
+			if (fcp != null && respectFactions) {
 				if (ignite.contains(ability)) {
 
 				}
@@ -1466,37 +1448,68 @@ public class Tools {
 
 				}
 
-				if (!bBuild) {
-					PlayerCache cache = twn.getCache(player);
-					TownBlockStatus status = cache.getStatus();
-
-					if (((status == TownBlockStatus.ENEMY) && TownyWarConfig
-							.isAllowingAttacks())) {
-
-						try {
-							TownyWar.callAttackCellEvent(twn, player,
-									location.getBlock(), worldCoord);
-						} catch (Exception e) {
-							TownyMessaging.sendErrorMsg(player, e.getMessage());
-						}
-
-						return true;
-
-					} else if (status == TownBlockStatus.WARZONE) {
-					} else {
-						return true;
-					}
-
-					if ((cache.hasBlockErrMsg()))
-						TownyMessaging.sendErrorMsg(player,
-								cache.getBlockErrMsg());
+				if (!FactionsBlockListener.playerCanBuildDestroyBlock(player,
+						location, "build", true)) {
+					return true;
 				}
-
-			} catch (Exception e1) {
-				TownyMessaging.sendErrorMsg(player,
-						TownySettings.getLangString("msg_err_not_configured"));
 			}
 
+			if (twnp != null && respectTowny) {
+				Towny twn = (Towny) twnp;
+
+				WorldCoord worldCoord;
+
+				try {
+					TownyWorld world = TownyUniverse.getDataSource().getWorld(
+							location.getWorld().getName());
+					worldCoord = new WorldCoord(world.getName(),
+							Coord.parseCoord(location));
+
+					boolean bBuild = PlayerCacheUtil.getCachePermission(player,
+							location, 3, (byte) 0,
+							TownyPermission.ActionType.BUILD);
+
+					if (ignite.contains(ability)) {
+
+					}
+
+					if (explode.contains(ability)) {
+
+					}
+
+					if (!bBuild) {
+						PlayerCache cache = twn.getCache(player);
+						TownBlockStatus status = cache.getStatus();
+
+						if (((status == TownBlockStatus.ENEMY) && TownyWarConfig
+								.isAllowingAttacks())) {
+
+							try {
+								TownyWar.callAttackCellEvent(twn, player,
+										location.getBlock(), worldCoord);
+							} catch (Exception e) {
+								TownyMessaging.sendErrorMsg(player,
+										e.getMessage());
+							}
+
+							return true;
+
+						} else if (status == TownBlockStatus.WARZONE) {
+						} else {
+							return true;
+						}
+
+						if ((cache.hasBlockErrMsg()))
+							TownyMessaging.sendErrorMsg(player,
+									cache.getBlockErrMsg());
+					}
+
+				} catch (Exception e1) {
+					TownyMessaging.sendErrorMsg(player, TownySettings
+							.getLangString("msg_err_not_configured"));
+				}
+
+			}
 		}
 
 		return false;

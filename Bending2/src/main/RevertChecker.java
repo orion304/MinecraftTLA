@@ -74,12 +74,16 @@ public class RevertChecker implements Runnable {
 			// }
 
 			try {
+				// Tools.verbose("Calling future at t="
+				// + System.currentTimeMillis());
 				returnFuture = plugin
 						.getServer()
 						.getScheduler()
 						.callSyncMethod(plugin,
 								new getOccupiedChunks(plugin.getServer()));
 				ArrayList<Chunk> chunks = returnFuture.get();
+				// Tools.verbose("Future called, t=" +
+				// System.currentTimeMillis());
 
 				for (Block block : Tools.movedearth.keySet()) {
 					if (revertQueue.containsKey(block))

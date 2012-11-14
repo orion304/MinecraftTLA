@@ -57,6 +57,10 @@ public class Melt {
 			Wave.thaw(block);
 			return;
 		}
+		if (!Torrent.canThaw(block)) {
+			Torrent.thaw(block);
+			return;
+		}
 		if (Tools.isMeltable(block) && !TempBlock.isTempBlock(block)
 				&& WaterManipulation.canPhysicsChange(block)) {
 			if (block.getType() == Material.SNOW) {

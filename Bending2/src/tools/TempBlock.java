@@ -108,6 +108,10 @@ public class TempBlock {
 		return block.getLocation();
 	}
 
+	public Block getBlock() {
+		return block;
+	}
+
 	public static void removeAll() {
 		for (Block block : instances.keySet()) {
 			revertBlock(block, Material.AIR);

@@ -196,8 +196,14 @@ public class BendingCommand {
 			String arg = args[0];
 
 			// if (arg.equalsIgnoreCase("test")) {
-			// sendMessage(player, BendingPlayer.getBendingPlayer(args[1])
-			// .toString());
+			// try {
+			// Tools.verbose("Sleeping for 5000ms");
+			// Thread.sleep(5000);
+			// Tools.verbose("Done sleeping.");
+			// } catch (InterruptedException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
 			// }
 
 			if (Arrays.asList(bindAliases).contains(arg)) {

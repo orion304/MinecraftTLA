@@ -22,6 +22,7 @@ public class WaterReturn {
 	private static long interval = 50;
 
 	private static final byte full = 0x0;
+	private static double range = 30;
 
 	private Player player;
 	// private int id;
@@ -88,8 +89,7 @@ public class WaterReturn {
 		}
 
 		if (location.distance(player.getEyeLocation()) > Tools
-				.waterbendingNightAugment(WaterManipulation.range + 5,
-						player.getWorld())) {
+				.waterbendingNightAugment(range, player.getWorld())) {
 			remove();
 			return;
 		}

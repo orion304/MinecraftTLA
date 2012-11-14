@@ -2,7 +2,9 @@ package main;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Material;
@@ -154,10 +156,49 @@ public class PlayerStorageWriter implements Runnable {
 		queue.put(ID++, new Queue(player, language));
 	}
 
+	private class Task implements Callable<Object> {
+
+		Queue item;
+
+		public Task(Queue queue) {
+			item = queue;
+		}
+
+		@Override
+		public Object call() throws Exception {
+			if (item.addBending) {
+				Tools.config.addBending(item.player.getName(), item.type);
+			} else if (item.removeBending) {
+				Tools.config.removeBending(item.player);
+			} else if (item.setBending) {
+				Tools.config.setBending(item.player, item.type);
+			} else if (item.bindSlot) {
+				Tools.config.setAbility(item.player.getName(), item.ability,
+						item.slot);
+			} else if (item.bindItem) {
+				Tools.config.setAbility(item.player.getName(), item.ability,
+						item.item);
+			} else if (item.removeSlot) {
+				Tools.config.removeAbility(item.player, item.slot);
+			} else if (item.removeItem) {
+				Tools.config.removeAbility(item.player, item.item);
+			} else if (item.permaRemoveBending) {
+				Tools.config.permaRemoveBending(item.player);
+			} else if (item.setLanguage) {
+				Tools.config.setLanguage(item.player, item.language);
+			}
+			return null;
+		}
+
+	}
+
 	@Override
 	public void run() {
 
 		try {
+
+			Bending plugin = Bending.plugin;
+			Future<Object> returnFuture;
 
 			if (queue.isEmpty()) {
 				ID = Integer.MIN_VALUE;
@@ -173,29 +214,11 @@ public class PlayerStorageWriter implements Runnable {
 				if (run) {
 					Queue item = queue.get(index.get(i));
 					// Tools.verbose(item);
+					Task task = new Task(item);
 
-					if (item.addBending) {
-						Tools.config.addBending(item.player.getName(),
-								item.type);
-					} else if (item.removeBending) {
-						Tools.config.removeBending(item.player);
-					} else if (item.setBending) {
-						Tools.config.setBending(item.player, item.type);
-					} else if (item.bindSlot) {
-						Tools.config.setAbility(item.player.getName(),
-								item.ability, item.slot);
-					} else if (item.bindItem) {
-						Tools.config.setAbility(item.player.getName(),
-								item.ability, item.item);
-					} else if (item.removeSlot) {
-						Tools.config.removeAbility(item.player, item.slot);
-					} else if (item.removeItem) {
-						Tools.config.removeAbility(item.player, item.item);
-					} else if (item.permaRemoveBending) {
-						Tools.config.permaRemoveBending(item.player);
-					} else if (item.setLanguage) {
-						Tools.config.setLanguage(item.player, item.language);
-					}
+					returnFuture = plugin.getServer().getScheduler()
+							.callSyncMethod(plugin, task);
+					returnFuture.get();
 
 					queue.remove(index.get(i));
 

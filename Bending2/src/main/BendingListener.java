@@ -564,12 +564,12 @@ public class BendingListener implements Listener {
 				WaterWall.form(player);
 			}
 
-			if (ability == Abilities.Torrent) {
-				Torrent.use(player);
-			}
-
 			if (ability == Abilities.OctopusForm) {
 				OctopusForm.form(player);
+			}
+
+			if (ability == Abilities.Torrent) {
+				Torrent.create(player);
 			}
 
 			// if (ability == Abilities.Wave) {
@@ -816,6 +816,9 @@ public class BendingListener implements Listener {
 		}
 		if (!event.isCancelled()) {
 			event.setCancelled(!Wave.canThaw(block));
+		}
+		if (!event.isCancelled()) {
+			event.setCancelled(!Torrent.canThaw(block));
 		}
 		if (FireStream.ignitedblocks.containsKey(block)) {
 			FireStream.remove(block);
