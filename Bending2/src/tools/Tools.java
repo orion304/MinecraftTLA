@@ -1286,7 +1286,7 @@ public class Tools {
 		if ((isChiBlocked(player)))
 			return true;
 		Abilities ability = Abilities.Bloodbending;
-		if (hasPermission(player, ability) && !toggledBending(player))
+		if (canBend(player, ability) && !toggledBending(player))
 			return false;
 		return true;
 	}
@@ -1664,19 +1664,19 @@ public class Tools {
 		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player))
 				&& !AvatarState.isAvatarState(player))
 			return false;
+		if (!player.hasPermission("bending." + type + ".passive")) {
+			return false;
+		}
 		if (allowharmless && type != BendingType.Earth)
 			return true;
 		if (isRegionProtectedFromBuild(player, null, player.getLocation()))
 			return false;
-		if (player.hasPermission("bending." + type + ".passive")) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	public static boolean hasPermission(Player player, Abilities ability) {
 		if (ability == Abilities.AvatarState
-				&& player.hasPermission("bending.avatarstate")) {
+				&& player.hasPermission("bending.admin.AvatarState")) {
 			return true;
 		}
 		if (Abilities.isAirbending(ability)

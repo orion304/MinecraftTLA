@@ -91,7 +91,7 @@ permissions:
   bending.admin:
     description: Allows all commands.
     children:
-      bending.admin.avatarstate: true
+      bending.admin.AvatarState: true
       bending.admin.remove: true
       bending.admin.reload: true
       bending.admin.permaremove: true
@@ -290,10 +290,7 @@ permissions:
     default: true
     
 # ADMIN PERMISSIONS
-  bending.AvatarState:
-    description: Allows the use of AvatarState.
-    default: op
-  bending.admin.avatarstate: 
+  bending.admin.AvatarState: 
     description: Allows the use of AvatarState.
     default: op 
   bending.admin.remove: 

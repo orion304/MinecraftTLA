@@ -129,7 +129,7 @@ public class Fireball {
 					Effect.MOBSPAWNER_FLAMES, 0, 20);
 		}
 
-		for (Entity entity : Tools.getEntitiesAroundPoint(location, radius)) {
+		for (Entity entity : Tools.getEntitiesAroundPoint(location, 2 * radius)) {
 			if (entity.getEntityId() == player.getEntityId())
 				continue;
 			entity.setFireTicks(120);

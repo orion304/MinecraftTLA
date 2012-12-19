@@ -7,11 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
+import tools.TempPotionEffect;
 import tools.Tools;
 
 public class Bloodbending {
@@ -85,6 +88,8 @@ public class Bloodbending {
 	}
 
 	private void progress() {
+		PotionEffect effect = new PotionEffect(PotionEffectType.SLOW, 60, 1);
+
 		if (!player.isSneaking()
 				|| Tools.getBendingAbility(player) != Abilities.Bloodbending
 				|| !Tools.canBend(player, Abilities.Bloodbending)) {
@@ -122,6 +127,7 @@ public class Bloodbending {
 					} else {
 						entity.setVelocity(new Vector(0, 0, 0));
 					}
+					new TempPotionEffect((LivingEntity) entity, effect);
 					entity.setFallDistance(0);
 				}
 			}
@@ -153,6 +159,7 @@ public class Bloodbending {
 				} else {
 					entity.setVelocity(new Vector(0, 0, 0));
 				}
+				new TempPotionEffect((LivingEntity) entity, effect);
 				entity.setFallDistance(0);
 			}
 		}
@@ -173,10 +180,10 @@ public class Bloodbending {
 	public static boolean isBloodbended(Entity entity) {
 		for (Player player : instances.keySet()) {
 			if (instances.get(player).targetentities.containsKey(entity)) {
-				if (entity instanceof Player) {
-					if (!Tools.canBeBloodbent((Player) entity))
-						return false;
-				}
+				// if (entity instanceof Player) {
+				// if (!Tools.canBeBloodbent((Player) entity))
+				// return false;
+				// }
 				return true;
 			}
 		}

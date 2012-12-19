@@ -424,6 +424,11 @@ public class Wave {
 
 		for (Block block : Tools.getBlocksAroundPoint(frozenlocation,
 				freezeradius)) {
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.Surge,
+					block.getLocation())
+					|| Tools.isRegionProtectedFromBuild(player,
+							Abilities.PhaseChange, block.getLocation()))
+				continue;
 			if (TempBlock.isTempBlock(block))
 				continue;
 			if (block.getType() == Material.AIR

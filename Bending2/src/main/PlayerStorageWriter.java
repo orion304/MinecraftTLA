@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Material;
@@ -197,8 +196,8 @@ public class PlayerStorageWriter implements Runnable {
 
 		try {
 
-			Bending plugin = Bending.plugin;
-			Future<Object> returnFuture;
+			// Bending plugin = Bending.plugin;
+			// Future<Object> returnFuture;
 
 			if (queue.isEmpty()) {
 				ID = Integer.MIN_VALUE;
@@ -215,10 +214,11 @@ public class PlayerStorageWriter implements Runnable {
 					Queue item = queue.get(index.get(i));
 					// Tools.verbose(item);
 					Task task = new Task(item);
+					task.call();
 
-					returnFuture = plugin.getServer().getScheduler()
-							.callSyncMethod(plugin, task);
-					returnFuture.get();
+					// returnFuture = plugin.getServer().getScheduler()
+					// .callSyncMethod(plugin, task);
+					// returnFuture.get();
 
 					queue.remove(index.get(i));
 
