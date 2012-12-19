@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.server.Packet18ArmAnimation;
-
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -68,12 +65,12 @@ public class RapidPunch {
 	private void swing(Player p) {
 		// punching.add(p);
 		// timers = System.currentTimeMillis();
-		Packet18ArmAnimation packet = new Packet18ArmAnimation();
-		packet.a = p.getEntityId();
-		packet.b = (byte) 1;
-		for (Player observer : p.getWorld().getPlayers())
-			((CraftPlayer) observer).getHandle().netServerHandler
-					.sendPacket(packet);
+		// Packet18ArmAnimation packet = new Packet18ArmAnimation();
+		// packet.a = p.getEntityId();
+		// packet.b = (byte) 1;
+		// for (Player observer : p.getWorld().getPlayers())
+		// ((CraftPlayer) observer).getHandle().netServerHandler
+		// .sendPacket(packet);
 	}
 
 	public static String getDescription() {

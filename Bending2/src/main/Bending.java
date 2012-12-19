@@ -7,14 +7,11 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import main.Metrics.Graph;
-import net.minecraft.server.EntityFireball;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -102,8 +99,6 @@ public class Bending extends JavaPlugin {
 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
 				playerStorageWriter, 0, 40);
-
-		removeFireballs();
 
 		Tools.printHooks();
 		Tools.verbose("Bending v" + this.getDescription().getVersion()
@@ -239,17 +234,6 @@ public class Bending extends JavaPlugin {
 		commands.put("command.clear", "clear");
 		commands.put("command.display", "display");
 		commands.put("command.bind", "bind <ability>");
-	}
-
-	private void removeFireballs() {
-		for (World world : getServer().getWorlds()) {
-			for (Entity entity : world.getEntities()) {
-				if (entity instanceof EntityFireball) {
-					entity.remove();
-				}
-			}
-		}
-
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,

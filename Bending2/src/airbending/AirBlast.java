@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
-import net.minecraft.server.EntityHuman;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -159,12 +156,12 @@ public class AirBlast {
 			}
 			if (((block.getType() == Material.LEVER) || (block.getType() == Material.STONE_BUTTON))
 					&& !affectedlevers.contains(block)) {
-				EntityHuman eH = ((CraftPlayer) player).getHandle();
-
-				net.minecraft.server.Block.byId[block.getTypeId()].interact(
-						((CraftWorld) block.getWorld()).getHandle(),
-						block.getX(), block.getY(), block.getZ(), eH, 0, 0, 0,
-						0);
+				// EntityHuman eH = ((CraftPlayer) player).getHandle();
+				//
+				// net.minecraft.server.Block.byId[block.getTypeId()].interact(
+				// ((CraftWorld) block.getWorld()).getHandle(),
+				// block.getX(), block.getY(), block.getZ(), eH, 0, 0, 0,
+				// 0);
 
 				affectedlevers.add(block);
 			}
