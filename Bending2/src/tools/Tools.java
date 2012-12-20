@@ -1240,6 +1240,10 @@ public class Tools {
 			return false;
 		if (hasPermission(player, ability) && ability == Abilities.AvatarState)
 			return true;
+
+		if (!hasPermission(player, ability))
+			return false;
+
 		if ((isChiBlocked(player) || Bloodbending.isBloodbended(player)))
 			return false;
 
