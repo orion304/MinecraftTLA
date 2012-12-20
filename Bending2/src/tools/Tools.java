@@ -1268,12 +1268,13 @@ public class Tools {
 			return false;
 		}
 
-		if (allowharmless && Tools.isHarmlessAbility(ability)
-				&& !toggledBending(player))
-			return true;
 		if (hasPermission(player, ability)
 				&& (!isLocalAbility(ability) || !isRegionProtectedFromBuild(
 						player, Abilities.AirBlast, player.getLocation()))
+				&& !toggledBending(player))
+			return true;
+
+		if (allowharmless && Tools.isHarmlessAbility(ability)
 				&& !toggledBending(player))
 			return true;
 		return false;
