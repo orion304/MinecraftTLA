@@ -94,10 +94,14 @@ public class Bending extends JavaPlugin {
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, manager, 0,
 				1);
 
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
-				revertChecker, 0, 40);
+		// getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+		// revertChecker, 0, 40);
+		// getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+		// playerStorageWriter, 0, 40);
 
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+		getServer().getScheduler().runTaskTimerAsynchronously(plugin,
+				revertChecker, 0, 40);
+		getServer().getScheduler().runTaskTimerAsynchronously(plugin,
 				playerStorageWriter, 0, 40);
 
 		Tools.printHooks();
