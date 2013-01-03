@@ -145,6 +145,8 @@ public class Tools {
 	private static boolean respectFactions = true;
 	private static boolean respectTowny = true;
 
+	// private static boolean logblockhook = true;
+
 	public Tools(StorageManager config2) {
 		config = config2;
 	}
@@ -1354,6 +1356,16 @@ public class Tools {
 				verbose("But Bending is set to ignore Towny.");
 			}
 		}
+
+		// Plugin lgbk = Bukkit.getPluginManager().getPlugin("LogBlock");
+		// if (lgbk != null) {
+		// verbose("Recognized LogBlock...");
+		// if (logblockhook) {
+		// verbose("Bending is set to log to LogBlock.");
+		// } else {
+		// verbose("But Bending isn't set to hook into LogBlock.");
+		// }
+		// }
 	}
 
 	public static boolean isRegionProtectedFromBuild(Player player,
@@ -1956,6 +1968,12 @@ public class Tools {
 		return (Bending.language.getSupportedLanguages().contains(language
 				.toLowerCase()));
 	}
+
+	// public static void logBending(Player player, Abilities ability) {
+	// if (Bending.logblock != null) {
+	//
+	// }
+	// }
 
 	public static int getIntCardinalDirection(Vector vector) {
 		BlockFace face = getCardinalDirection(vector);
