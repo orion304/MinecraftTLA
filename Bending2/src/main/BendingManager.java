@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.server.EntityFireball;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
@@ -54,7 +52,6 @@ import earthbending.Tremorsense;
 import firebending.FireBlast;
 import firebending.FireJet;
 import firebending.FireStream;
-import firebending.Fireball;
 import firebending.Illumination;
 import firebending.Lightning;
 import firebending.WallOfFire;
@@ -240,15 +237,15 @@ public class BendingManager implements Runnable {
 			}
 		}
 
-		for (EntityFireball entity : Fireball.fireballs.keySet()) {
-			if (System.currentTimeMillis() >= Fireball.fireballs.get(entity)
-					+ Fireball.duration) {
-				entity.die();
-			}
-			if (!entity.isAlive()) {
-				Fireball.fireballs.remove(entity);
-			}
-		}
+		// for (EntityFireball entity : Fireball.fireballs.keySet()) {
+		// if (System.currentTimeMillis() >= Fireball.fireballs.get(entity)
+		// + Fireball.duration) {
+		// entity.die();
+		// }
+		// if (!entity.isAlive()) {
+		// Fireball.fireballs.remove(entity);
+		// }
+		// }
 		for (int ID : WallOfFire.instances.keySet()) {
 			WallOfFire.manageWallOfFire(ID);
 		}
@@ -478,7 +475,8 @@ public class BendingManager implements Runnable {
 		int tremorsenseplayers = 0;
 		tremorsenses = Tremorsense.instances.size();
 
-		int fireballs, fireblasts, firejets, firestreams, illuminations, walloffires; // ,lightings;
+		int fireblasts, firejets, firestreams, illuminations, walloffires; // fireballs
+																			// ,lightings;
 
 		int fireblastplayers = 0;
 		fireblasts = FireBlast.instances.size();
@@ -486,8 +484,8 @@ public class BendingManager implements Runnable {
 		int firestreamplayers = 0;
 		firestreams = FireStream.instances.size();
 
-		int fireballplayers = 0;
-		fireballs = Fireball.fireballs.size();
+		// int fireballplayers = 0;
+		// fireballs = Fireball.fireballs.size();
 
 		int firejetplayers = 0;
 		firejets = FireJet.instances.size();
@@ -562,8 +560,8 @@ public class BendingManager implements Runnable {
 
 			if (ability == Abilities.Blaze)
 				firestreamplayers++;
-			if (ability == Abilities.Fireball)
-				fireballplayers++;
+			// if (ability == Abilities.Fireball)
+			// fireballplayers++;
 			if (ability == Abilities.FireBlast)
 				fireblastplayers++;
 			if (Tools.hasAbility(player, Abilities.FireJet))
@@ -615,7 +613,7 @@ public class BendingManager implements Runnable {
 		// verbose("shockwaves", shockwaves, shockwaveplayers, false);
 		verbose("tremorsenses", tremorsenses, tremorsenseplayers, true);
 
-		verbose("fireballs", fireballs, fireballplayers, false);
+		// verbose("fireballs", fireballs, fireballplayers, false);
 		verbose("fireblasts", fireblasts, fireblastplayers, false);
 		verbose("firejets", firejets, firejetplayers, true);
 		verbose("firestreams", firestreams, firestreamplayers, false);
