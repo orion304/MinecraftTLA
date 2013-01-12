@@ -97,6 +97,7 @@ public class WaterWall {
 				block.setType(Material.WATER);
 				block.setData(full);
 				Wave wave = new Wave(player);
+				wave.canhitself = false;
 				wave.moveWater();
 			}
 
