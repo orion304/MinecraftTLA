@@ -104,7 +104,7 @@ public class RevertChecker implements Runnable {
 						continue;
 					boolean remove = true;
 					Information info = Tools.tempair.get(i);
-					Block block = info.getState().getBlock();
+					Block block = info.getBlock();
 					if (time < info.getTime() + ConfigManager.revertchecktime
 							|| (chunks.contains(block.getChunk()) && safeRevert)) {
 						remove = false;

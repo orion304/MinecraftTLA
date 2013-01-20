@@ -11,8 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Furnace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -149,17 +147,19 @@ public class FireBlast {
 		// }
 		if (Tools.isSolid(block) || block.isLiquid()) {
 			if (block.getType() == Material.FURNACE && canPowerFurnace) {
-				BlockState state = block.getState();
-				state.setType(Material.BURNING_FURNACE);
-				Furnace furnace = (Furnace) state;
-				furnace.setType(Material.BURNING_FURNACE);
-				short time = 2000;
-				furnace.setBurnTime(time);
-				furnace.setCookTime(time);
-				furnace.update(true);
-				state.update(true);
-				Tools.verbose("Powered");
-
+				// BlockState state = block.getState();
+				// Furnace furnace = (Furnace) state;
+				// FurnaceInventory inv = furnace.getInventory();
+				// if (inv.getFuel() == null) {
+				// ItemStack temp = inv.getSmelting();
+				// ItemStack tempfuel = new ItemStack(Material.WOOD_AXE, 1);
+				// ItemStack tempsmelt = new ItemStack(Material.COBBLESTONE);
+				// inv.setFuel(tempfuel);
+				// inv.setSmelting(tempsmelt);
+				// state.update(true);
+				// inv.setSmelting(temp);
+				// state.update(true);
+				// }
 			} else if (FireStream.isIgnitable(player,
 					block.getRelative(BlockFace.UP))) {
 				ignite(location);

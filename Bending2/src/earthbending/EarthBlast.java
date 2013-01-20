@@ -1,5 +1,6 @@
 package earthbending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
@@ -404,14 +405,17 @@ public class EarthBlast {
 		// prepared.remove(player);
 		// }
 
+		ArrayList<EarthBlast> ignore = new ArrayList<EarthBlast>();
+
 		for (int id : instances.keySet()) {
 			EarthBlast blast = instances.get(id);
 			if (blast.player == player && !blast.progressing) {
 				blast.throwEarth();
+				ignore.add(blast);
 			}
 		}
 
-		redirectTargettedBlasts(player);
+		redirectTargettedBlasts(player, ignore);
 	}
 
 	public static boolean progress(int ID) {
@@ -424,11 +428,12 @@ public class EarthBlast {
 		}
 	}
 
-	private static void redirectTargettedBlasts(Player player) {
+	private static void redirectTargettedBlasts(Player player,
+			ArrayList<EarthBlast> ignore) {
 		for (int id : instances.keySet()) {
 			EarthBlast blast = instances.get(id);
 
-			if (!blast.progressing)
+			if (!blast.progressing || ignore.contains(blast))
 				continue;
 
 			if (!blast.location.getWorld().equals(player.getWorld()))
@@ -457,6 +462,7 @@ public class EarthBlast {
 			if (location.distance(player.getLocation()) <= range) {
 				// direction = Tools.getDirection(location, targetlocation)
 				// .normalize();
+				settingup = false;
 				destination = targetlocation;
 			}
 		}

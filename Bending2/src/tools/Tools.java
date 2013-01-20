@@ -447,7 +447,7 @@ public class Tools {
 		} else {
 			// verbose("Moving something for the first time.");
 			info = new Information();
-			// info.setBlock(source);
+			info.setBlock(source);
 			// info.setType(source.getType());
 			// info.setData(source.getData());
 			info.setTime(System.currentTimeMillis());
@@ -478,7 +478,7 @@ public class Tools {
 			tempair.put(info.getID(), info);
 		} else {
 			Information info = new Information();
-			// info.setBlock(block);
+			info.setBlock(block);
 			// info.setType(block.getType());
 			// info.setData(block.getData());
 			info.setState(block.getState());
