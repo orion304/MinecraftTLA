@@ -17,6 +17,7 @@ public class ConfigManager {
 	public static boolean bendToItem = false;
 	public static boolean colors = true;
 	public static boolean compatibility = false;
+	public static String message_format;
 
 	public static Map<String, String> prefixes = new HashMap<String, String>();
 	public static Map<String, String> color = new HashMap<String, String>();
@@ -286,7 +287,6 @@ public class ConfigManager {
 		enabled = config.getBoolean("Chat.Enabled", enabled);
 		colors = config.getBoolean("Chat.Colors", colors);
 		compatibility = config.getBoolean("Chat.Compatibility", compatibility);
-
 		// Prefix
 		prefixes.put("Air", config.getString("Chat.Prefix.Air", "[Airbender] "));
 		prefixes.put("Avatar",
@@ -724,6 +724,7 @@ public class ConfigManager {
 		config.set("Chat.Enabled", enabled);
 		config.set("Chat.Colors", colors);
 		config.set("Chat.Compatibility", compatibility);
+		config.set("chat.message_format",  message_format = config.getString("chat.message_format", "<name>&f: <message>"));
 		// Prefix
 		config.set("Chat.Prefix.Air", prefixes.get("Air"));
 		config.set("Chat.Prefix.Fire", prefixes.get("Fire"));

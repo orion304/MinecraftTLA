@@ -2055,5 +2055,8 @@ public class Tools {
 
 		colors = Collections.unmodifiableMap(tmpMap);
 	}
+	public static String colorize(String message) {
+        return message.replaceAll("(?i)&([a-fk-or0-9])", "\u00A7$1");
+    }
 
 }

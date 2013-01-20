@@ -165,8 +165,9 @@ public class BendingListener implements Listener {
 							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
 			}
-			player.setDisplayName("<" + color + append + player.getName()
-					+ ChatColor.WHITE + ">");
+			player.setDisplayName(color + append + player.getName());
+//			player.setDisplayName("<" + color + append + player.getName()
+//					+ ChatColor.WHITE + ">");
 		}
 
 		YamlConfiguration dc = new YamlConfiguration();
@@ -268,8 +269,21 @@ public class BendingListener implements Listener {
 			}
 
 			try {
-				event.setFormat("<" + color + player.getDisplayName()
-						+ ChatColor.WHITE + "> " + event.getMessage());
+				String message = event.getMessage();
+				String format = ConfigManager.message_format;
+				format = format.replace("<message>", "%2$s");
+				format = format.replace("<name>", color + player.getDisplayName());
+				format = Tools.colorize(format);
+				
+				event.setFormat(format);
+				event.setMessage(message);
+//				format = format.replace("<message>", event.getMessage());
+//				format = format.replace("<name>", player.getDisplayName());
+//				event.setMessage(format);
+				
+				
+//				event.setFormat("<" + color + player.getDisplayName()
+//						+ ChatColor.WHITE + "> " + event.getMessage());
 				// event.setFormat(format);
 				// // event.setMessage(message + "Test");
 				// Tools.verbose(event.getFormat());
