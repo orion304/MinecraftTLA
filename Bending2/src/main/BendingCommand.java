@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -643,7 +644,9 @@ public class BendingCommand {
 				// String playername = getplayername[0];
 				String[] getSetter = s.split("<");
 				String Setter = getSetter[1];
+				OfflinePlayer oPlayer = server.getOfflinePlayer(getSetter[0]);
 				String binded = Setter.replace("Bind", "").replace(">", "");
+				Tools.verbose(getSetter[0] + ": " + binded);
 				String ability = temp.getKey(s);
 				if ((binded.equalsIgnoreCase("0")
 						|| binded.equalsIgnoreCase("1")
@@ -656,33 +659,36 @@ public class BendingCommand {
 							.equalsIgnoreCase("8"))) {
 					int slot = Integer.parseInt(binded);
 					// config.setAbility(playername, ability, slot);
-					PlayerStorageWriter.bindSlot(player, slot,
+					PlayerStorageWriter.bindSlot(oPlayer, slot,
 							Abilities.getAbility(ability));
+				} else if (binded.equalsIgnoreCase("Language")) {
+					PlayerStorageWriter.setLanguage(oPlayer, ability);
 				} else {
 					// config.setAbility(playername, ability,
 					// Material.matchMaterial(binded));
-					PlayerStorageWriter.bindItem(player,
+					PlayerStorageWriter.bindItem(oPlayer,
 							Material.matchMaterial(binded),
 							Abilities.getAbility(ability));
 				}
 			} else {
 				// String playerName = s;
 				String bending = temp.getKey(s);
+				OfflinePlayer oPlayer = server.getOfflinePlayer(s);
 				if (bending.contains("a"))
 					// config.addBending(playerName, BendingType.Air);
-					PlayerStorageWriter.addBending(player, BendingType.Air);
+					PlayerStorageWriter.addBending(oPlayer, BendingType.Air);
 				if (bending.contains("w"))
 					// config.addBending(playerName, BendingType.Water);
-					PlayerStorageWriter.addBending(player, BendingType.Water);
+					PlayerStorageWriter.addBending(oPlayer, BendingType.Water);
 				if (bending.contains("f"))
 					// config.addBending(playerName, BendingType.Fire);
-					PlayerStorageWriter.addBending(player, BendingType.Fire);
+					PlayerStorageWriter.addBending(oPlayer, BendingType.Fire);
 				if (bending.contains("e"))
 					// config.addBending(playerName, BendingType.Earth);
-					PlayerStorageWriter.addBending(player, BendingType.Earth);
+					PlayerStorageWriter.addBending(oPlayer, BendingType.Earth);
 				if (bending.contains("c"))
 					// config.addBending(playerName, BendingType.ChiBlocker);
-					PlayerStorageWriter.addBending(player,
+					PlayerStorageWriter.addBending(oPlayer,
 							BendingType.ChiBlocker);
 
 			}

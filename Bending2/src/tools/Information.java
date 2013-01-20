@@ -3,6 +3,7 @@ package tools;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
 public class Information {
@@ -16,9 +17,28 @@ public class Information {
 	private double value;
 	private byte data;
 	private String string;
+	private BlockState state;
+
+	private static int ID = Integer.MIN_VALUE;
+	private int id;
 
 	public Information() {
+		id = ID++;
+		if (ID >= Integer.MAX_VALUE) {
+			ID = Integer.MIN_VALUE;
+		}
+	}
 
+	public int getID() {
+		return id;
+	}
+
+	public void setState(BlockState state) {
+		this.state = state;
+	}
+
+	public BlockState getState() {
+		return state;
 	}
 
 	public void setString(String string) {

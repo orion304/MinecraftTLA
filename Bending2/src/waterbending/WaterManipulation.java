@@ -156,7 +156,7 @@ public class WaterManipulation {
 		} else {
 			// targetting = true;
 			location = ((LivingEntity) target).getEyeLocation();
-			location.setY(location.getY() - 1);
+			// location.setY(location.getY() - 1);
 		}
 		return location;
 	}
@@ -434,11 +434,14 @@ public class WaterManipulation {
 			if (Tools.isTransparentToEarthbending(player, block)
 					&& Tools.isTransparentToEarthbending(player,
 							eyeloc.getBlock())) {
-				WaterReturn.emptyWaterBottle(player);
-				block.setType(Material.WATER);
-				block.setData(full);
-				WaterManipulation watermanip = new WaterManipulation(player);
-				watermanip.moveWater();
+
+				if (getTargetLocation(player).distance(block.getLocation()) > 1) {
+					WaterReturn.emptyWaterBottle(player);
+					block.setType(Material.WATER);
+					block.setData(full);
+					WaterManipulation watermanip = new WaterManipulation(player);
+					watermanip.moveWater();
+				}
 			}
 		}
 

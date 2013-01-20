@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -129,6 +130,9 @@ public class Bloodbending {
 					}
 					new TempPotionEffect((LivingEntity) entity, effect);
 					entity.setFallDistance(0);
+					if (entity instanceof Creature) {
+						((Creature) entity).setTarget(null);
+					}
 				}
 			}
 			for (Entity entity : targetentities.keySet()) {
@@ -161,6 +165,9 @@ public class Bloodbending {
 				}
 				new TempPotionEffect((LivingEntity) entity, effect);
 				entity.setFallDistance(0);
+				if (entity instanceof Creature) {
+					((Creature) entity).setTarget(null);
+				}
 			}
 		}
 	}

@@ -18,7 +18,6 @@ import main.StorageManager;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -28,6 +27,7 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
@@ -132,7 +132,7 @@ public class Tools {
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
 	// public static ConcurrentHashMap<Block, Block> tempearthblocks = new
 	// ConcurrentHashMap<Block, Block>();
-	public static ConcurrentHashMap<Block, Information> tempair = new ConcurrentHashMap<Block, Information>();
+	public static ConcurrentHashMap<Integer, Information> tempair = new ConcurrentHashMap<Integer, Information>();
 	public static ConcurrentHashMap<Player, Long> blockedchis = new ConcurrentHashMap<Player, Long>();
 	public static ConcurrentHashMap<Player, Player> tempflyers = new ConcurrentHashMap<Player, Player>();
 	public static List<Player> toggledBending = new ArrayList<Player>();
@@ -229,13 +229,16 @@ public class Tools {
 
 		int r = (int) radius + 4;
 
-		Block originblock = location.getBlock();
+		// Block originblock = location.getBlock();
 
 		for (int x = xorg - r; x <= xorg + r; x++) {
 			for (int y = yorg - r; y <= yorg + r; y++) {
 				for (int z = zorg - r; z <= zorg + r; z++) {
 					Block block = location.getWorld().getBlockAt(x, y, z);
-					if (block.getLocation().distance(originblock.getLocation()) <= radius) {
+					// if
+					// (block.getLocation().distance(originblock.getLocation())
+					// <= radius) {
+					if (block.getLocation().distance(location) <= radius) {
 						blocks.add(block);
 					}
 				}
@@ -444,10 +447,11 @@ public class Tools {
 		} else {
 			// verbose("Moving something for the first time.");
 			info = new Information();
-			info.setBlock(source);
-			info.setType(source.getType());
-			info.setData(source.getData());
+			// info.setBlock(source);
+			// info.setType(source.getType());
+			// info.setData(source.getData());
 			info.setTime(System.currentTimeMillis());
+			info.setState(source.getState());
 			movedearth.put(target, info);
 		}
 
@@ -457,67 +461,13 @@ public class Tools {
 		} else {
 			source.setType(Material.AIR);
 		}
-		if (info.getType() == Material.SAND) {
+		if (info.getState().getType() == Material.SAND) {
 			target.setType(Material.SANDSTONE);
 		} else {
-			target.setType(info.getType());
-			target.setData(info.getData());
+			target.setType(info.getState().getType());
+			target.setData(info.getState().getRawData());
 		}
-
-		// if (tempearthblocks.containsKey(source)) {
-		// Block index = tempearthblocks.get(source);
-		// tempearthblocks.remove(source);
-		// tempearthblocks.put(target, index);
-		// if (movedearth.containsKey(index)) {
-		// Information info = movedearth.get(index);
-		// info.setBlock(target);
-		// info.setTime(System.currentTimeMillis());
-		// movedearth.replace(index, info);
-		// } else {
-		// verbose("Moved earth not in keys.");
-		// }
-		// } else {
-		// tempearthblocks.put(target, source);
-		// Information info = new Information();
-		// info.setBlock(target);
-		// info.setType(source.getType());
-		// info.setData(source.getData());
-		// info.setTime(System.currentTimeMillis());
-		// movedearth.put(source, info);
-		// }
-		//
-		// target.setType(source.getType());
-		// target.setData(source.getData());
-		// if (!Tools.adjacentToThreeOrMoreSources(source)) {
-		// source.setType(Material.AIR);
-		// } else {
-		// byte full = 0x0;
-		// source.setType(Material.WATER);
-		// source.setData(full);
-		// }
 	}
-
-	// public static void addTempEarthBlock(Block source, Block target) {
-	// if (tempearthblocks.containsKey(source)) {
-	// Block index = tempearthblocks.get(source);
-	// tempearthblocks.remove(source);
-	// tempearthblocks.put(target, index);
-	// Information info = movedearth.get(index);
-	// if (info != null) {
-	// info.setBlock(source);
-	// info.setTime(System.currentTimeMillis());
-	// movedearth.replace(index, info);
-	// }
-	// } else {
-	// tempearthblocks.put(target, source);
-	// Information info = new Information();
-	// info.setBlock(source);
-	// info.setType(source.getType());
-	// info.setData(source.getData());
-	// info.setTime(System.currentTimeMillis());
-	// movedearth.put(source, info);
-	// }
-	// }
 
 	public static void addTempAirBlock(Block block) {
 		if (movedearth.containsKey(block)) {
@@ -525,220 +475,73 @@ public class Tools {
 			block.setType(Material.AIR);
 			info.setTime(System.currentTimeMillis());
 			movedearth.remove(block);
-			tempair.put(info.getBlock(), info);
+			tempair.put(info.getID(), info);
 		} else {
 			Information info = new Information();
-			info.setBlock(block);
-			info.setType(block.getType());
-			info.setData(block.getData());
+			// info.setBlock(block);
+			// info.setType(block.getType());
+			// info.setData(block.getData());
+			info.setState(block.getState());
 			info.setTime(System.currentTimeMillis());
 			block.setType(Material.AIR);
-			tempair.put(block, info);
+			tempair.put(info.getID(), info);
 		}
 
-		// if (movedearth.containsKey(block)) {
-		// block.setType(Material.AIR);
-		// Information info = movedearth.get(block);
-		// info.setTime(System.currentTimeMillis());
-		// movedearth.replace(block, info);
-		// } else {
-		// Information info = new Information();
-		// info.setBlock(block);
-		// info.setType(block.getType());
-		// info.setData(block.getData());
-		// info.setTime(System.currentTimeMillis());
-		// block.setType(Material.AIR);
-		// movedearth.put(block, info);
-		// }
 	}
 
-	public static void revertAirBlock(Block block) {
-		revertAirBlock(block, false);
+	public static void revertAirBlock(int i) {
+		revertAirBlock(i, false);
 	}
 
-	public static void revertAirBlock(Block block, boolean force) {
-		if (!tempair.containsKey(block))
+	public static void revertAirBlock(int i, boolean force) {
+		if (!tempair.containsKey(i))
 			return;
-		Information info = tempair.get(block);
+		Information info = tempair.get(i);
+		Block block = info.getState().getBlock();
 		if (block.getType() != Material.AIR && !block.isLiquid()) {
 			if (force || !movedearth.containsKey(block)) {
 				dropItems(
 						block,
-						getDrops(block, info.getType(), info.getData(), pickaxe));
+						getDrops(block, info.getState().getType(), info
+								.getState().getRawData(), pickaxe));
 				// ItemStack item = new ItemStack(info.getType());
 				// item.setData(new MaterialData(info.getType(),
 				// info.getData()));
 				// block.getWorld().dropItem(block.getLocation(), item);
-				tempair.remove(block);
+				tempair.remove(i);
 			} else {
 				info.setTime(info.getTime() + 10000);
 			}
 			return;
 		} else {
-			block.setType(info.getType());
-			block.setData(info.getData());
-			tempair.remove(block);
+			// block.setType(info.getType());
+			// block.setData(info.getData());
+			info.getState().update(true);
+			tempair.remove(i);
 		}
 	}
 
-	// public static void removeEarthbendedBlock(Block block) {
-	// if (tempearthblocks.containsKey(block)) {
-	// Block index = Tools.tempearthblocks.get(block);
-	// if (!Tools.adjacentToThreeOrMoreSources(block)) {
-	// block.setType(Material.AIR);
-	// } else {
-	// byte full = 0x0;
-	// block.setType(Material.WATER);
-	// block.setData(full);
-	// }
-	// if (movedearth.containsKey(index)) {
-	// Information info = movedearth.get(index);
-	// index.setType(info.getType());
-	// index.setData(info.getData());
-	// movedearth.remove(index);
-	// } else {
-	// verbose("Tried reverting a block that didn't have an index...");
-	// }
-	// tempearthblocks.remove(block);
-	// if (EarthColumn.blockInAllAffectedBlocks(block)) {
-	// EarthColumn.revertBlock(block);
-	// }
-	// if (EarthColumn.blockInAllAffectedBlocks(index)) {
-	// EarthColumn.revertBlock(index);
-	// }
-	// EarthColumn.resetBlock(block);
-	// EarthColumn.resetBlock(index);
-	// }
-	// }
-
-	// public static void removeEarthbendedBlockByIndex(Block index) {
-	// if (movedearth.containsKey(index)) {
-	// Information info = movedearth.get(index);
-	// Block block = info.getBlock();
-	// if (!Tools.adjacentToThreeOrMoreSources(block)) {
-	// block.setType(Material.AIR);
-	// } else {
-	// byte full = 0x0;
-	// block.setType(Material.WATER);
-	// block.setData(full);
-	// }
-	// if (index.getType() == Material.AIR || index.isLiquid()) {
-	// index.setType(info.getType());
-	// index.setData(info.getData());
-	// } else {
-	// if (info.getType() != Material.AIR)
-	// block.getWorld().dropItem(block.getLocation(),
-	// new ItemStack(info.getType()));
-	// }
-	// movedearth.remove(index);
-	// tempearthblocks.remove(block);
-	// if (EarthColumn.blockInAllAffectedBlocks(block)) {
-	// EarthColumn.revertBlock(block);
-	// }
-	// if (EarthColumn.blockInAllAffectedBlocks(index)) {
-	// EarthColumn.revertBlock(index);
-	// }
-	// EarthColumn.resetBlock(block);
-	// EarthColumn.resetBlock(index);
-	// } else {
-	// verbose("Index not in movedearth.");
-	// }
-	// }
-	//
-	// public static void removeEarthbendedBlockIndex(Block block) {
-	// if (tempearthblocks.containsKey(block)) {
-	// Block index = tempearthblocks.get(block);
-	// tempearthblocks.remove(block);
-	// movedearth.remove(index);
-	// }
+	// public static boolean revertBlock(Block block) {
+	// return revertBlock(block, true);
 	// }
 
 	public static boolean revertBlock(Block block) {
-		return revertBlock(block, null, true);
-	}
+		byte full = 0x0;
+		if (movedearth.containsKey(block)) {
+			Information info = movedearth.get(block);
+			Block sourceblock = info.getState().getBlock();
 
-	public static boolean revertBlock(Block block, Block startblock,
-			boolean force) {
-		try {
+			if (info.getState().getType() == Material.AIR) {
+				movedearth.remove(block);
+				return true;
+			}
 
-			byte full = 0x0;
-			if (movedearth.containsKey(block)) {
-				Information info = movedearth.get(block);
-				Block sourceblock = info.getBlock();
-
-				if (block.equals(sourceblock)) {
-					// verbose("Equals!");
-					if (block.getType() == Material.SANDSTONE
-							&& info.getType() == Material.SAND)
-						block.setType(Material.SAND);
-					if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
-						EarthColumn.revertBlock(sourceblock);
-					if (EarthColumn.blockInAllAffectedBlocks(block))
-						EarthColumn.revertBlock(block);
-					EarthColumn.resetBlock(sourceblock);
-					EarthColumn.resetBlock(block);
-					movedearth.remove(block);
-					return true;
-				}
-
-				if (movedearth.containsKey(sourceblock)) {
-					// verbose("Block: " + block);
-					// verbose("Sourceblock: " + sourceblock);
-					// verbose("StartBlock: " + startblock);
-					if (startblock != null) {
-						if (startblock.equals(sourceblock)) {
-							sourceblock.setType(info.getType());
-							sourceblock.setData(info.getData());
-							if (adjacentToThreeOrMoreSources(block)) {
-								block.setType(Material.WATER);
-								block.setData(full);
-							} else {
-								block.setType(Material.AIR);
-							}
-							movedearth.get(startblock).setInteger(10);
-							if (EarthColumn
-									.blockInAllAffectedBlocks(sourceblock))
-								EarthColumn.revertBlock(sourceblock);
-							if (EarthColumn.blockInAllAffectedBlocks(block))
-								EarthColumn.revertBlock(block);
-							EarthColumn.resetBlock(sourceblock);
-							EarthColumn.resetBlock(block);
-							movedearth.remove(block);
-							return true;
-						}
-
-					} else {
-						startblock = block;
-					}
-					revertBlock(sourceblock, startblock, true);
-				}
-
-				if (sourceblock.getType() == Material.AIR
-						|| sourceblock.isLiquid()) {
-					sourceblock.setType(info.getType());
-					sourceblock.setData(info.getData());
-				} else {
-					if (info.getType() != Material.AIR) {
-						// ItemStack item = new ItemStack(info.getType());
-						// item.setData(new MaterialData(info.getType(), info
-						// .getData()));
-						// block.getWorld().dropItem(block.getLocation(), item);
-						dropItems(
-								block,
-								getDrops(block, info.getType(), info.getData(),
-										pickaxe));
-					}
-				}
-
-				if (info.getInteger() != 10) {
-					if (adjacentToThreeOrMoreSources(block)) {
-						block.setType(Material.WATER);
-						block.setData(full);
-					} else {
-						block.setType(Material.AIR);
-					}
-				}
-
+			if (block.equals(sourceblock)) {
+				// verbose("Equals!");
+				// if (block.getType() == Material.SANDSTONE
+				// && info.getState().getType() == Material.SAND)
+				// block.setType(Material.SAND);
+				info.getState().update(true);
 				if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
 					EarthColumn.revertBlock(sourceblock);
 				if (EarthColumn.blockInAllAffectedBlocks(block))
@@ -746,14 +549,79 @@ public class Tools {
 				EarthColumn.resetBlock(sourceblock);
 				EarthColumn.resetBlock(block);
 				movedearth.remove(block);
+				return true;
 			}
-			return true;
-		} catch (StackOverflowError e) {
-			e.printStackTrace();
-			Tools.writeToLog(ExceptionUtils.getStackTrace(e));
+
+			if (movedearth.containsKey(sourceblock)) {
+				addTempAirBlock(block);
+				movedearth.remove(block);
+				return true;
+				// verbose("Block: " + block);
+				// verbose("Sourceblock: " + sourceblock);
+				// verbose("StartBlock: " + startblock);
+				// if (startblock != null) {
+				// if (startblock.equals(sourceblock)) {
+				// sourceblock.setType(info.getType());
+				// sourceblock.setData(info.getData());
+				// if (adjacentToThreeOrMoreSources(block)) {
+				// block.setType(Material.WATER);
+				// block.setData(full);
+				// } else {
+				// block.setType(Material.AIR);
+				// }
+				// movedearth.get(startblock).setInteger(10);
+				// if (EarthColumn
+				// .blockInAllAffectedBlocks(sourceblock))
+				// EarthColumn.revertBlock(sourceblock);
+				// if (EarthColumn.blockInAllAffectedBlocks(block))
+				// EarthColumn.revertBlock(block);
+				// EarthColumn.resetBlock(sourceblock);
+				// EarthColumn.resetBlock(block);
+				// movedearth.remove(block);
+				// return true;
+				// }
+				//
+				// } else {
+				// startblock = block;
+				// }
+				// revertBlock(sourceblock, startblock, true);
+			}
+
+			if (sourceblock.getType() == Material.AIR || sourceblock.isLiquid()) {
+				// sourceblock.setType(info.getType());
+				// sourceblock.setData(info.getData());
+				info.getState().update(true);
+			} else {
+				// if (info.getType() != Material.AIR) {
+				// ItemStack item = new ItemStack(info.getType());
+				// item.setData(new MaterialData(info.getType(), info
+				// .getData()));
+				// block.getWorld().dropItem(block.getLocation(), item);
+				dropItems(
+						block,
+						getDrops(block, info.getState().getType(), info
+								.getState().getRawData(), pickaxe));
+				// }
+			}
+
+			// if (info.getInteger() != 10) {
+			if (adjacentToThreeOrMoreSources(block)) {
+				block.setType(Material.WATER);
+				block.setData(full);
+			} else {
+				block.setType(Material.AIR);
+			}
+			// }
+
+			if (EarthColumn.blockInAllAffectedBlocks(sourceblock))
+				EarthColumn.revertBlock(sourceblock);
+			if (EarthColumn.blockInAllAffectedBlocks(block))
+				EarthColumn.revertBlock(block);
+			EarthColumn.resetBlock(sourceblock);
+			EarthColumn.resetBlock(block);
 			movedearth.remove(block);
-			return false;
 		}
+		return true;
 	}
 
 	public static void removeRevertIndex(Block block) {
@@ -764,6 +632,7 @@ public class Tools {
 				block.setType(Material.SAND);
 			if (EarthColumn.blockInAllAffectedBlocks(block))
 				EarthColumn.revertBlock(block);
+			EarthColumn.resetBlock(block);
 			movedearth.remove(block);
 		}
 	}
@@ -773,24 +642,26 @@ public class Tools {
 			// block.setType(Material.GLASS);
 			// movedearth.remove(block);
 			// removeEarthbendedBlockByIndex(block);
-			revertBlock(block, null, true);
+			revertBlock(block);
 		}
 
-		for (Block block : tempair.keySet()) {
-			revertAirBlock(block, true);
+		for (Integer i : tempair.keySet()) {
+			revertAirBlock(i, true);
 		}
 	}
 
 	public static Collection<ItemStack> getDrops(Block block, Material type,
 			byte data, ItemStack breakitem) {
-		byte olddata = block.getData();
-		Material oldtype = block.getType();
+		BlockState tempstate = block.getState();
+		// byte olddata = block.getData();
+		// Material oldtype = block.getType();
 		block.setType(type);
 		block.setData(data);
 		// Collection<ItemStack> item = block.getDrops(breakitem);
 		Collection<ItemStack> item = block.getDrops();
-		block.setType(oldtype);
-		block.setData(olddata);
+		// block.setType(oldtype);
+		// block.setData(olddata);
+		tempstate.update(true);
 		return item;
 	}
 
@@ -798,49 +669,6 @@ public class Tools {
 		for (ItemStack item : items)
 			block.getWorld().dropItem(block.getLocation(), item);
 	}
-
-	// public static void addTempEarthBlock(Block targetblock, Block
-	// sourceblock) {
-	// if (tempearthblocks.containsKey(targetblock)) {
-	// Block index = tempearthblocks.get(targetblock);
-	// tempearthblocks.remove(targetblock);
-	// tempearthblocks.put(sourceblock, index);
-	// Information info = movedearth.get(index);
-	// if (info != null) {
-	// info.setBlock(sourceblock);
-	// info.setTime(System.currentTimeMillis());
-	// movedearth.replace(index, info);
-	// }
-	// } else {
-	// tempearthblocks.put(sourceblock, targetblock);
-	// Information info = new Information();
-	// info.setBlock(sourceblock);
-	// info.setType(targetblock.getType());
-	// info.setData(targetblock.getData());
-	// info.setTime(System.currentTimeMillis());
-	// movedearth.put(targetblock, info);
-	// }
-	// }
-
-	// public static void addTempAirBlock(Block block) {
-	// if (tempearthblocks.containsKey(block)) {
-	// Block index = tempearthblocks.get(block);
-	// tempearthblocks.remove(block);
-	// Information info = movedearth.get(index);
-	// if (info != null) {
-	// info.setTime(System.currentTimeMillis());
-	// movedearth.replace(index, info);
-	// }
-	// block.setType(Material.AIR);
-	// } else {
-	// Information info = new Information();
-	// info.setBlock(block);
-	// info.setType(block.getType());
-	// info.setTime(System.currentTimeMillis());
-	// movedearth.put(block, info);
-	// block.setType(Material.AIR);
-	// }
-	// }
 
 	public static boolean isWater(Block block) {
 		if (block.getType() == Material.WATER

@@ -37,18 +37,24 @@ public class BendingPlayer {
 				bendingType.add(type);
 		}
 
-		for (int i = 0; i < 9; i++) {
-			Abilities ability = config.getAbility(player, i);
-			if (ability != null) {
-				slotAbilities.put(i, ability);
-			}
-		}
+		if (ConfigManager.bendToItem) {
 
-		for (Material item : Material.values()) {
-			Abilities ability = config.getAbility(player, item);
-			if (ability != null) {
-				itemAbilities.put(item, ability);
+			for (Material item : Material.values()) {
+				Abilities ability = config.getAbility(player, item);
+				if (ability != null) {
+					itemAbilities.put(item, ability);
+				}
 			}
+
+		} else {
+
+			for (int i = 0; i < 9; i++) {
+				Abilities ability = config.getAbility(player, i);
+				if (ability != null) {
+					slotAbilities.put(i, ability);
+				}
+			}
+
 		}
 
 		this.player = player;

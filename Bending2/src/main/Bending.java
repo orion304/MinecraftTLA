@@ -27,7 +27,8 @@ import de.diddiz.LogBlock.LogBlock;
 public class Bending extends JavaPlugin {
 
 	public static long time_step = 1; // in ms
-	public static Logger log = Logger.getLogger("Minecraft");
+	// public static Logger log = Logger.getLogger("Minecraft");
+	public static Logger log = Logger.getLogger("Bending");
 
 	public static Bending plugin;
 

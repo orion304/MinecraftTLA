@@ -18,7 +18,7 @@ import tools.Tools;
 public class RevertChecker implements Runnable {
 
 	static ConcurrentHashMap<Block, Block> revertQueue = new ConcurrentHashMap<Block, Block>();
-	static ConcurrentHashMap<Block, Block> airRevertQueue = new ConcurrentHashMap<Block, Block>();
+	static ConcurrentHashMap<Integer, Integer> airRevertQueue = new ConcurrentHashMap<Integer, Integer>();
 	private Future<ArrayList<Chunk>> returnFuture;
 	// static ConcurrentHashMap<Block, Material> movedEarthQueue = new
 	// ConcurrentHashMap<Block, Material>();
@@ -99,17 +99,18 @@ public class RevertChecker implements Runnable {
 					}
 				}
 
-				for (Block block : Tools.tempair.keySet()) {
-					if (airRevertQueue.containsKey(block))
+				for (Integer i : Tools.tempair.keySet()) {
+					if (airRevertQueue.containsKey(i))
 						continue;
 					boolean remove = true;
-					Information info = Tools.tempair.get(block);
+					Information info = Tools.tempair.get(i);
+					Block block = info.getState().getBlock();
 					if (time < info.getTime() + ConfigManager.revertchecktime
 							|| (chunks.contains(block.getChunk()) && safeRevert)) {
 						remove = false;
 					}
 					if (remove) {
-						addToAirRevertQueue(block);
+						addToAirRevertQueue(i);
 					}
 				}
 			} catch (Exception e) {
@@ -154,9 +155,9 @@ public class RevertChecker implements Runnable {
 		}
 	}
 
-	private void addToAirRevertQueue(Block block) {
-		if (!airRevertQueue.containsKey(block))
-			airRevertQueue.put(block, block);
+	private void addToAirRevertQueue(int i) {
+		if (!airRevertQueue.containsKey(i))
+			airRevertQueue.put(i, i);
 
 	}
 
