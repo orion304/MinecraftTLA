@@ -33,6 +33,12 @@ public class ConfigManager {
 	public static int seaLevel = 62;
 
 	public static long globalCooldown = 500;
+	
+	// Avatar State
+	public static int Regeneration = 4;
+	public static int Speed = 3;
+	public static int Resistance = 3;
+	public static int FireResistance = 3;
 
 	public static long chiblockduration = 2500;
 	public static double dodgechance = 25;
@@ -350,6 +356,11 @@ public class ConfigManager {
 		seaLevel = config.getInt("Bending.Option.Sea-Level", seaLevel);
 
 		// Properties
+		//AvatarState
+		Regeneration = config.getInt("Properties.AvatarState.Regeneration", Regeneration);
+		Speed = config.getInt("Properties.AvatarState.Speed", Speed);
+		FireResistance = config.getInt("Properties.AvatarState.FireResistance", FireResistance);
+		Resistance = config.getInt("Properties.AvatarState.Resistance", Resistance);
 		// ChiBlocker
 		chiblockduration = config.getLong(
 				"Properties.ChiBlocker.ChiBlock-Duration", chiblockduration);
@@ -754,6 +765,11 @@ public class ConfigManager {
 		config.set("Bending.Option.Firebending-Dissipate-Time", dissipateAfter);
 		config.set("Bending.Option.Sea-Level", seaLevel);
 		// Properties
+		// Avatar State
+		config.set("Properties.AvatarState.Regeneration", Regeneration);
+		config.set("Properties.AvatarState.FireResistance", FireResistance);
+		config.set("Properties.AvatarState.Resistance", Resistance);
+		config.set("Properties.AvatarState.Speed", Speed);
 		// ChiBlocker
 		config.set("Properties.ChiBlocker.ChiBlock-Duration", chiblockduration);
 		config.set("Properties.ChiBlocker.Dodge-Chance", dodgechance);

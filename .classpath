@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="Bending2/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Local Server/plugins/Vault.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Local Server/Bukkit.jar"/>
