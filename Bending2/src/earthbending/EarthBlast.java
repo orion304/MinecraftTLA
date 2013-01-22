@@ -439,6 +439,10 @@ public class EarthBlast {
 			if (!blast.location.getWorld().equals(player.getWorld()))
 				continue;
 
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.EarthBlast,
+					blast.location))
+				continue;
+
 			if (blast.player.equals(player))
 				blast.redirect(player, getTargetLocation(player));
 
@@ -479,6 +483,10 @@ public class EarthBlast {
 				continue;
 
 			if (!blast.progressing)
+				continue;
+
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.EarthBlast,
+					blast.location))
 				continue;
 
 			Location location = player.getEyeLocation();

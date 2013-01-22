@@ -458,6 +458,10 @@ public class WaterManipulation {
 			if (!manip.location.getWorld().equals(player.getWorld()))
 				continue;
 
+			if (Tools.isRegionProtectedFromBuild(player,
+					Abilities.WaterManipulation, manip.location))
+				continue;
+
 			if (manip.player.equals(player))
 				manip.redirect(player, getTargetLocation(player));
 
@@ -487,6 +491,10 @@ public class WaterManipulation {
 				continue;
 
 			if (!manip.progressing)
+				continue;
+
+			if (Tools.isRegionProtectedFromBuild(player,
+					Abilities.WaterManipulation, manip.location))
 				continue;
 
 			Location location = player.getEyeLocation();

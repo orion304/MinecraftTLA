@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import tools.ConfigManager;
+import tools.Tools;
 
 public class Plantbending {
 
@@ -21,8 +22,7 @@ public class Plantbending {
 	private int id;
 
 	public Plantbending(Block block) {
-		if (regrowtime != 0 && block.getType() != Material.CACTUS
-				&& block.getType() != Material.SUGAR_CANE_BLOCK) {
+		if (regrowtime != 0) {
 			this.block = block;
 			type = block.getType();
 			data = block.getData();
@@ -39,8 +39,12 @@ public class Plantbending {
 	}
 
 	private void revert() {
-		block.setType(type);
-		block.setData(data);
+		if (block.getType() == Material.AIR) {
+			block.setType(type);
+			block.setData(data);
+		} else {
+			Tools.dropItems(block, Tools.getDrops(block, type, data, null));
+		}
 		instances.remove(id);
 	}
 

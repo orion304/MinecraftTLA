@@ -24,6 +24,7 @@ import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
+import waterbending.IceSpike2;
 import waterbending.OctopusForm;
 import waterbending.Plantbending;
 import waterbending.Torrent;
@@ -282,6 +283,8 @@ public class BendingManager implements Runnable {
 		for (int ID : IceSpike.instances.keySet()) {
 			IceSpike.instances.get(ID).progress();
 		}
+
+		IceSpike2.progressAll();
 
 		Torrent.progressAll();
 		TorrentBurst.progressAll();

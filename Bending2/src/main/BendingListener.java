@@ -62,10 +62,9 @@ import tools.TempBlock;
 import tools.Tools;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
-import waterbending.IceSpike;
+import waterbending.IceSpike2;
 import waterbending.Melt;
 import waterbending.OctopusForm;
-import waterbending.SpikeField;
 import waterbending.Torrent;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -424,7 +423,7 @@ public class BendingListener implements Listener {
 				}
 
 				if (ability == Abilities.IceSpike) {
-					new IceSpike(player);
+					IceSpike2.activate(player);
 				}
 
 				if (ability == Abilities.PhaseChange) {
@@ -490,7 +489,8 @@ public class BendingListener implements Listener {
 
 		Abilities[] sourceabilities = { Abilities.AirBlast,
 				Abilities.AirSuction, Abilities.EarthBlast,
-				Abilities.WaterManipulation, Abilities.Surge };
+				Abilities.WaterManipulation, Abilities.Surge,
+				Abilities.IceSpike };
 
 		AirScooter.check(player);
 
@@ -550,7 +550,7 @@ public class BendingListener implements Listener {
 			}
 
 			if (ability == Abilities.IceSpike) {
-				new SpikeField(player);
+				new IceSpike2(player);
 			}
 
 			if (ability == Abilities.EarthTunnel) {

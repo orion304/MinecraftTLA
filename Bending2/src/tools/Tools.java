@@ -41,6 +41,7 @@ import org.bukkit.util.Vector;
 import waterbending.Bloodbending;
 import waterbending.FreezeMelt;
 import waterbending.IceSpike;
+import waterbending.IceSpike2;
 import waterbending.OctopusForm;
 import waterbending.Plantbending;
 import waterbending.WaterManipulation;
@@ -1038,6 +1039,7 @@ public class Tools {
 
 		FreezeMelt.removeAll();
 		IceSpike.removeAll();
+		IceSpike2.removeAll();
 		WaterManipulation.removeAll();
 		WaterSpout.removeAll();
 		WaterWall.removeAll();
@@ -1699,8 +1701,9 @@ public class Tools {
 				if (TempBlock.isTempBlock(block)) {
 					TempBlock tb = TempBlock.get(block);
 					byte full = 0x0;
-					if (tb.data != full
-							&& (tb.type != Material.WATER || tb.type != Material.STATIONARY_WATER)) {
+					if (tb.state.getRawData() != full
+							&& (tb.state.getType() != Material.WATER || tb.state
+									.getType() != Material.STATIONARY_WATER)) {
 						continue;
 					}
 				}
