@@ -11,7 +11,7 @@ public class AvatarState {
 
 	public static ConcurrentHashMap<Player, AvatarState> instances = new ConcurrentHashMap<Player, AvatarState>();
 
-	private static final double factor = 5;
+	private static final double factor = ConfigManager.Factor;
 
 	Player player;
 

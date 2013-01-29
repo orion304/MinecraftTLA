@@ -39,6 +39,7 @@ public class ConfigManager {
 	public static int Speed = 3;
 	public static int Resistance = 3;
 	public static int FireResistance = 3;
+	public static int Factor = 5;
 
 	public static long chiblockduration = 2500;
 	public static double dodgechance = 25;
@@ -357,6 +358,7 @@ public class ConfigManager {
 
 		// Properties
 		//AvatarState
+		Factor = config.getInt("Properties.AvatarState.Factor", Factor);
 		Regeneration = config.getInt("Properties.AvatarState.Regeneration", Regeneration);
 		Speed = config.getInt("Properties.AvatarState.Speed", Speed);
 		FireResistance = config.getInt("Properties.AvatarState.FireResistance", FireResistance);
@@ -766,6 +768,7 @@ public class ConfigManager {
 		config.set("Bending.Option.Sea-Level", seaLevel);
 		// Properties
 		// Avatar State
+		config.set("Properties.AvatarState.Factor", Factor);
 		config.set("Properties.AvatarState.Regeneration", Regeneration);
 		config.set("Properties.AvatarState.FireResistance", FireResistance);
 		config.set("Properties.AvatarState.Resistance", Resistance);
