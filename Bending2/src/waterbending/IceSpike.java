@@ -48,9 +48,9 @@ public class IceSpike {
 	private Player player;
 	private int progress = 0;
 	private int damage = ConfigManager.icespikedamage;
-	private int id;
+	int id;
 	private long time;
-	private int height = 2;
+	int height = 2;
 	private Vector thrown = new Vector(0, ConfigManager.icespikethrowingmult, 0);
 	private ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
 	private List<LivingEntity> damaged = new ArrayList<LivingEntity>();
@@ -280,14 +280,12 @@ public class IceSpike {
 	}
 
 	public static String getDescription() {
-		return "To use, target an entity or target an ice block in range. "
-				+ "An ice spike will quickly raise to damage nearby entities as well as knocking them up. "
-				+ "Alternatively, you can sneak to use a similar ability that will raise "
-				+ SpikeField.numofspikes
-				+ " spikes that will look similar to the default point and click ability. "
-				+ " But it will act differently throwing entities a different heigth and dealing "
-				+ " a different amount of damage. This ability is really useful to skilled bender "
-				+ " that freeze a field to take advantage with this powerful ability.";
+		return "This ability has many functions. Clicking while targetting ice, or an entity over some ice, "
+				+ "will raise a spike of ice up, damaging and slowing the target. Tapping sneak (shift) while"
+				+ " selecting a water source will select that source that can then be fired with a click. Firing"
+				+ " this will launch a spike of ice at your target, dealing a bit of damage and slowing the target. "
+				+ "If you sneak (shift) while not selecting a source, many ice spikes will erupt from around you, "
+				+ "damaging and slowing those targets.";
 	}
 
 }

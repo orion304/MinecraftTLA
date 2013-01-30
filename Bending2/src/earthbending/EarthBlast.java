@@ -1,5 +1,6 @@
 package earthbending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
@@ -42,9 +43,12 @@ public class EarthBlast {
 	private Material sourcetype = null;
 	private boolean progressing = false;
 	private Location destination = null;
-	private Vector direction = null;
+	private Location firstdestination = null;
+	// private Vector firstdirection = null;
+	// private Vector targetdirection = null;
 	private boolean falling = false;
 	private long time;
+	private boolean settingup = true;
 
 	public EarthBlast(Player player) {
 		this.player = player;
@@ -89,7 +93,7 @@ public class EarthBlast {
 		} else {
 			// targetting = true;
 			location = ((LivingEntity) target).getEyeLocation();
-			location.setY(location.getY() - 1);
+			// location.setY(location.getY() - 1);
 		}
 		return location;
 	}
@@ -149,8 +153,12 @@ public class EarthBlast {
 					destination = player.getTargetBlock(
 							Tools.getTransparentEarthbending(), (int) range)
 							.getLocation();
+					firstdestination = sourceblock.getLocation().clone();
+					firstdestination.setY(destination.getY());
 				} else {
 					destination = ((LivingEntity) target).getEyeLocation();
+					firstdestination = sourceblock.getLocation().clone();
+					firstdestination.setY(destination.getY());
 					destination = Tools.getPointOnLine(
 							sourceblock.getLocation(), destination, range);
 				}
@@ -162,7 +170,7 @@ public class EarthBlast {
 					sourceblock.getWorld().playEffect(
 							sourceblock.getLocation(), Effect.GHAST_SHOOT, 0,
 							10);
-					direction = getDirection().normalize();
+					// direction = getDirection().normalize();
 					if (sourcetype != Material.SAND
 							&& sourcetype != Material.GRAVEL) {
 						sourceblock.setType(sourcetype);
@@ -173,21 +181,21 @@ public class EarthBlast {
 		}
 	}
 
-	private Vector getDirection() {
-		double x1, y1, z1;
-		double x0, y0, z0;
-
-		x1 = destination.getX();
-		y1 = destination.getY();
-		z1 = destination.getZ();
-
-		x0 = (double) sourceblock.getX();
-		y0 = (double) sourceblock.getY();
-		z0 = (double) sourceblock.getZ();
-
-		return new Vector(x1 - x0, y1 - y0, z1 - z0);
-
-	}
+	// private Vector getDirection() {
+	// double x1, y1, z1;
+	// double x0, y0, z0;
+	//
+	// x1 = destination.getX();
+	// y1 = destination.getY();
+	// z1 = destination.getZ();
+	//
+	// x0 = (double) sourceblock.getX();
+	// y0 = (double) sourceblock.getY();
+	// z0 = (double) sourceblock.getZ();
+	//
+	// return new Vector(x1 - x0, y1 - y0, z1 - z0);
+	//
+	// }
 
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
@@ -270,6 +278,18 @@ public class EarthBlast {
 					return false;
 				}
 
+				if (sourceblock.getY() == firstdestination.getBlockY())
+					settingup = false;
+
+				Vector direction;
+				if (settingup) {
+					direction = Tools.getDirection(location, firstdestination)
+							.normalize();
+				} else {
+					direction = Tools.getDirection(location, destination)
+							.normalize();
+				}
+
 				location = location.clone().add(direction);
 
 				Tools.removeSpouts(location, player);
@@ -283,9 +303,30 @@ public class EarthBlast {
 				if (Tools.isTransparentToEarthbending(player, block)
 						&& !block.isLiquid()) {
 					Tools.breakBlock(block);
-				} else {
+				} else if (!settingup) {
 					breakBlock();
 					return false;
+				} else {
+					location = location.clone().subtract(direction);
+					direction = Tools.getDirection(location, destination)
+							.normalize();
+					location = location.clone().add(direction);
+
+					Tools.removeSpouts(location, player);
+
+					Block block2 = location.getBlock();
+					if (block2.getLocation().equals(sourceblock.getLocation())) {
+						location = location.clone().add(direction);
+						block2 = location.getBlock();
+					}
+
+					if (Tools.isTransparentToEarthbending(player, block)
+							&& !block.isLiquid()) {
+						Tools.breakBlock(block);
+					} else {
+						breakBlock();
+						return false;
+					}
 				}
 
 				for (Entity entity : Tools.getEntitiesAroundPoint(location, 3)) {
@@ -308,7 +349,12 @@ public class EarthBlast {
 
 				if (revert) {
 					// Tools.addTempEarthBlock(sourceblock, block);
+					sourceblock.setType(sourcetype);
 					Tools.moveEarthBlock(sourceblock, block);
+					if (block.getType() == Material.SAND)
+						block.setType(Material.SANDSTONE);
+					if (block.getType() == Material.GRAVEL)
+						block.setType(Material.STONE);
 				} else {
 					block.setType(sourceblock.getType());
 					sourceblock.setType(Material.AIR);
@@ -359,14 +405,17 @@ public class EarthBlast {
 		// prepared.remove(player);
 		// }
 
+		ArrayList<EarthBlast> ignore = new ArrayList<EarthBlast>();
+
 		for (int id : instances.keySet()) {
 			EarthBlast blast = instances.get(id);
 			if (blast.player == player && !blast.progressing) {
 				blast.throwEarth();
+				ignore.add(blast);
 			}
 		}
 
-		redirectTargettedBlasts(player);
+		redirectTargettedBlasts(player, ignore);
 	}
 
 	public static boolean progress(int ID) {
@@ -379,14 +428,19 @@ public class EarthBlast {
 		}
 	}
 
-	private static void redirectTargettedBlasts(Player player) {
+	private static void redirectTargettedBlasts(Player player,
+			ArrayList<EarthBlast> ignore) {
 		for (int id : instances.keySet()) {
 			EarthBlast blast = instances.get(id);
 
-			if (!blast.progressing)
+			if (!blast.progressing || ignore.contains(blast))
 				continue;
 
 			if (!blast.location.getWorld().equals(player.getWorld()))
+				continue;
+
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.EarthBlast,
+					blast.location))
 				continue;
 
 			if (blast.player.equals(player))
@@ -409,10 +463,12 @@ public class EarthBlast {
 
 	private void redirect(Player player, Location targetlocation) {
 		if (progressing) {
-			if (location.distance(player.getLocation()) <= range)
-				direction = Tools.getDirection(location, targetlocation)
-						.normalize();
-			destination = targetlocation;
+			if (location.distance(player.getLocation()) <= range) {
+				// direction = Tools.getDirection(location, targetlocation)
+				// .normalize();
+				settingup = false;
+				destination = targetlocation;
+			}
 		}
 	}
 
@@ -427,6 +483,10 @@ public class EarthBlast {
 				continue;
 
 			if (!blast.progressing)
+				continue;
+
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.EarthBlast,
+					blast.location))
 				continue;
 
 			Location location = player.getEyeLocation();

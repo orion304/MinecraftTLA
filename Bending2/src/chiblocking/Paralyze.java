@@ -2,6 +2,7 @@ package chiblocking;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -37,6 +38,9 @@ public class Paralyze {
 
 	private static void paralyze(Entity entity) {
 		entities.put(entity, System.currentTimeMillis());
+		if (entity instanceof Creature) {
+			((Creature) entity).setTarget(null);
+		}
 	}
 
 	public static boolean isParalyzed(Entity entity) {

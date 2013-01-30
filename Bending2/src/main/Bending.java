@@ -13,6 +13,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tools.Abilities;
@@ -20,11 +21,14 @@ import tools.BendingType;
 import tools.ConfigManager;
 import tools.Cooldowns;
 import tools.Tools;
+import de.diddiz.LogBlock.Consumer;
+import de.diddiz.LogBlock.LogBlock;
 
 public class Bending extends JavaPlugin {
 
 	public static long time_step = 1; // in ms
-	public static Logger log = Logger.getLogger("Minecraft");
+	// public static Logger log = Logger.getLogger("Minecraft");
+	public static Logger log = Logger.getLogger("Bending");
 
 	public static Bending plugin;
 
@@ -33,6 +37,7 @@ public class Bending extends JavaPlugin {
 	private final RevertChecker revertChecker = new RevertChecker(this);
 	private final PlayerStorageWriter playerStorageWriter = new PlayerStorageWriter();
 	public final TagAPIListener Taglistener = new TagAPIListener();
+	public static Consumer logblock = null;
 
 	static Map<String, String> commands = new HashMap<String, String>();
 	// public static ConcurrentHashMap<String, List<BendingType>> benders = new
@@ -67,6 +72,11 @@ public class Bending extends JavaPlugin {
 		configManager.load(new File(getDataFolder(), "config.yml"));
 		language.load(new File(getDataFolder(), "language.yml"));
 
+		Plugin lb = getServer().getPluginManager().getPlugin("LogBlock");
+		if (lb != null) {
+			logblock = ((LogBlock) lb).getConsumer();
+		}
+
 		config = new StorageManager(getDataFolder());
 		Cooldowns.initialize();
 
@@ -94,10 +104,14 @@ public class Bending extends JavaPlugin {
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, manager, 0,
 				1);
 
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
-				revertChecker, 0, 40);
+		// getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+		// revertChecker, 0, 40);
+		// getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+		// playerStorageWriter, 0, 40);
 
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+		getServer().getScheduler().runTaskTimerAsynchronously(plugin,
+				revertChecker, 0, 40);
+		getServer().getScheduler().runTaskTimerAsynchronously(plugin,
 				playerStorageWriter, 0, 40);
 
 		Tools.printHooks();

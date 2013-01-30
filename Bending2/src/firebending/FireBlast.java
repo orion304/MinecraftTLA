@@ -34,6 +34,7 @@ public class FireBlast {
 	private static double speed = ConfigManager.fireBlastSpeed;
 	static double affectingradius = ConfigManager.fireBlastRadius;
 	private static double pushfactor = ConfigManager.fireBlastPush;
+	private static boolean canPowerFurnace = true;
 	static boolean dissipate = ConfigManager.fireBlastDissipate;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
@@ -145,7 +146,22 @@ public class FireBlast {
 		// }
 		// }
 		if (Tools.isSolid(block) || block.isLiquid()) {
-			if (FireStream.isIgnitable(player, block.getRelative(BlockFace.UP))) {
+			if (block.getType() == Material.FURNACE && canPowerFurnace) {
+				// BlockState state = block.getState();
+				// Furnace furnace = (Furnace) state;
+				// FurnaceInventory inv = furnace.getInventory();
+				// if (inv.getFuel() == null) {
+				// ItemStack temp = inv.getSmelting();
+				// ItemStack tempfuel = new ItemStack(Material.WOOD_AXE, 1);
+				// ItemStack tempsmelt = new ItemStack(Material.COBBLESTONE);
+				// inv.setFuel(tempfuel);
+				// inv.setSmelting(tempsmelt);
+				// state.update(true);
+				// inv.setSmelting(temp);
+				// state.update(true);
+				// }
+			} else if (FireStream.isIgnitable(player,
+					block.getRelative(BlockFace.UP))) {
 				ignite(location);
 			}
 			instances.remove(id);
@@ -216,6 +232,7 @@ public class FireBlast {
 				Tools.damageEntity(player, entity, (int) Tools
 						.firebendingDayAugment((double) damage,
 								entity.getWorld()));
+				new Enflamed(entity, player);
 				instances.remove(id);
 			}
 		}

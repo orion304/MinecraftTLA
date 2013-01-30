@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
@@ -23,15 +24,17 @@ public class AirBubble {
 	private static double defaultWaterRadius = ConfigManager.waterBubbleRadius;
 	// private static byte full = AirBlast.full;
 
-	private static final byte full = 0x0;
+	// private static final byte full = 0x0;
 
 	private Player player;
 	private double radius;
-	private ConcurrentHashMap<Block, Byte> waterorigins;
+	// private ConcurrentHashMap<Block, Byte> waterorigins;
+	private ConcurrentHashMap<Block, BlockState> waterorigins;
 
 	public AirBubble(Player player) {
 		this.player = player;
-		waterorigins = new ConcurrentHashMap<Block, Byte>();
+		// waterorigins = new ConcurrentHashMap<Block, Byte>();
+		waterorigins = new ConcurrentHashMap<Block, BlockState>();
 		instances.put(player.getEntityId(), this);
 	}
 
@@ -58,8 +61,9 @@ public class AirBubble {
 			if (block.getType() == Material.STATIONARY_WATER
 					|| block.getType() == Material.WATER) {
 				if (WaterManipulation.canBubbleWater(block)) {
-					if (block.getData() == full)
-						waterorigins.put(block, block.getData());
+					// if (block.getData() == full)
+					waterorigins.put(block, block.getState());
+					// waterorigins.put(block, block.getData());
 
 					block.setType(Material.AIR);
 				}
@@ -69,22 +73,24 @@ public class AirBubble {
 
 		for (Block block : waterorigins.keySet()) {
 			if (block.getWorld() != location.getWorld()) {
-				// byte data = waterorigins.get(block);
-				byte data = full;
-				block = block.getLocation().getBlock();
-				if (block.getType() == Material.AIR) {
-					block.setType(Material.WATER);
-					block.setData(data);
-				}
+				if (block.getType() == Material.AIR || Tools.isWater(block))
+					waterorigins.get(block).update(true);
+				// byte data = full;
+				// block = block.getLocation().getBlock();
+				// if (block.getType() == Material.AIR) {
+				// block.setType(Material.WATER);
+				// block.setData(data);
+				// }
 				waterorigins.remove(block);
 			} else if (block.getLocation().distance(location) > radius) {
-				// byte data = waterorigins.get(block);
-				byte data = full;
-				block = block.getLocation().getBlock();
-				if (block.getType() == Material.AIR) {
-					block.setType(Material.WATER);
-					block.setData(data);
-				}
+				if (block.getType() == Material.AIR || Tools.isWater(block))
+					waterorigins.get(block).update(true);
+				// byte data = full;
+				// block = block.getLocation().getBlock();
+				// if (block.getType() == Material.AIR) {
+				// block.setType(Material.WATER);
+				// block.setData(data);
+				// }
 				waterorigins.remove(block);
 			}
 		}
@@ -132,12 +138,14 @@ public class AirBubble {
 	private void removeBubble() {
 		for (Block block : waterorigins.keySet()) {
 			// byte data = waterorigins.get(block);
-			byte data = 0x0;
-			block = block.getLocation().getBlock();
-			if (block.getType() == Material.AIR) {
-				block.setType(Material.WATER);
-				block.setData(data);
-			}
+			// byte data = 0x0;
+			// block = block.getLocation().getBlock();
+			// if (block.getType() == Material.AIR) {
+			// block.setType(Material.WATER);
+			// block.setData(data);
+			// }
+			if (block.getType() == Material.AIR || block.isLiquid())
+				waterorigins.get(block).update(true);
 		}
 		instances.remove(player.getEntityId());
 	}

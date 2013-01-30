@@ -167,6 +167,9 @@ public class WaterReturn {
 				return true;
 		}
 
+		if (IceSpike2.isBending(player))
+			return true;
+
 		return false;
 	}
 

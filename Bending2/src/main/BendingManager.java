@@ -24,6 +24,7 @@ import waterbending.FastSwimming;
 import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
+import waterbending.IceSpike2;
 import waterbending.OctopusForm;
 import waterbending.Plantbending;
 import waterbending.Torrent;
@@ -56,6 +57,7 @@ import earthbending.EarthTunnel;
 import earthbending.Shockwave;
 import earthbending.Tremorsense;
 import firebending.Cook;
+import firebending.Enflamed;
 import firebending.FireBlast;
 import firebending.FireBurst;
 import firebending.FireJet;
@@ -200,9 +202,9 @@ public class BendingManager implements Runnable {
 			RevertChecker.revertQueue.remove(block);
 		}
 
-		for (Block block : RevertChecker.airRevertQueue.keySet()) {
-			Tools.revertAirBlock(block);
-			RevertChecker.airRevertQueue.remove(block);
+		for (int i : RevertChecker.airRevertQueue.keySet()) {
+			Tools.revertAirBlock(i);
+			RevertChecker.airRevertQueue.remove(i);
 		}
 
 		// for (Block block : RevertChecker.movedEarthQueue.keySet()) {
@@ -246,6 +248,8 @@ public class BendingManager implements Runnable {
 
 		Illumination.manage(plugin.getServer());
 
+		Enflamed.handleFlames();
+
 	}
 
 	private void manageChiBlocking() {
@@ -279,6 +283,8 @@ public class BendingManager implements Runnable {
 		for (int ID : IceSpike.instances.keySet()) {
 			IceSpike.instances.get(ID).progress();
 		}
+
+		IceSpike2.progressAll();
 
 		Torrent.progressAll();
 		TorrentBurst.progressAll();

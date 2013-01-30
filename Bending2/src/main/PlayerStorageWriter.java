@@ -213,8 +213,10 @@ public class PlayerStorageWriter implements Runnable {
 				if (run) {
 					Queue item = queue.get(index.get(i));
 					// Tools.verbose(item);
-					Task task = new Task(item);
-					task.call();
+					if (item != null) {
+						Task task = new Task(item);
+						task.call();
+					}
 
 					// returnFuture = plugin.getServer().getScheduler()
 					// .callSyncMethod(plugin, task);

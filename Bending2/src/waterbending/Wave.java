@@ -55,6 +55,7 @@ public class Wave {
 	private Location frozenlocation;
 	double range = defaultrange;
 	private double factor = defaultfactor;
+	boolean canhitself = true;
 
 	public Wave(Player player) {
 		this.player = player;
@@ -295,7 +296,9 @@ public class Wave {
 								freeze();
 								break;
 							}
-							knockback = true;
+							if (entity.getEntityId() != player.getEntityId()
+									|| canhitself)
+								knockback = true;
 						}
 					}
 					if (knockback) {

@@ -1,0 +1,48 @@
+Merge branch 'master' of http://github.com/orion304/MinecraftTLA
+
+Conflicts:
+	Bending2/.classpath
+	Bending2/.devbuild/Bending.jar
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# All conflicts fixed but you are still merging.
+#   (use "git commit" to conclude merge)
+#
+# Changes to be committed:
+#
+#	new file:   Bending2/.classpath
+#	modified:   Bending2/src/airbending/AirBubble.java
+#	modified:   Bending2/src/chiblocking/Paralyze.java
+#	modified:   Bending2/src/earthbending/EarthBlast.java
+#	new file:   Bending2/src/firebending/Enflamed.java
+#	modified:   Bending2/src/firebending/FireBlast.java
+#	modified:   Bending2/src/main/Bending.java
+#	modified:   Bending2/src/main/BendingCommand.java
+#	modified:   Bending2/src/main/BendingListener.java
+#	modified:   Bending2/src/main/BendingManager.java
+#	modified:   Bending2/src/main/Metrics.java
+#	modified:   Bending2/src/main/PlayerStorageWriter.java
+#	modified:   Bending2/src/main/RevertChecker.java
+#	modified:   Bending2/src/tools/BendingPlayer.java
+#	modified:   Bending2/src/tools/ConfigManager.java
+#	modified:   Bending2/src/tools/Information.java
+#	modified:   Bending2/src/tools/TempBlock.java
+#	modified:   Bending2/src/tools/Tools.java
+#	modified:   Bending2/src/waterbending/Bloodbending.java
+#	modified:   Bending2/src/waterbending/IceSpike.java
+#	new file:   Bending2/src/waterbending/IceSpike2.java
+#	modified:   Bending2/src/waterbending/Plantbending.java
+#	modified:   Bending2/src/waterbending/WaterManipulation.java
+#	modified:   Bending2/src/waterbending/WaterReturn.java
+#	modified:   Bending2/src/waterbending/WaterWall.java
+#	modified:   Bending2/src/waterbending/Wave.java
+#
+

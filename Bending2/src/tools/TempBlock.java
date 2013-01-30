@@ -6,14 +6,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 
 public class TempBlock {
 
 	public static ConcurrentHashMap<Block, TempBlock> instances = new ConcurrentHashMap<Block, TempBlock>();
 
 	Block block;
-	Material type, newtype;
-	byte data, newdata;
+	Material newtype;
+	byte newdata;
+	BlockState state;
 
 	public TempBlock(Block block, Material newtype, byte newdata) {
 		this.block = block;
@@ -29,34 +31,34 @@ public class TempBlock {
 				temp.block.setData(newdata);
 				temp.newdata = newdata;
 			}
-			type = temp.type;
-			data = temp.data;
+			state = temp.state;
 			instances.replace(block, temp);
 		} else {
-			type = block.getType();
-			data = block.getData();
+			state = block.getState();
 			block.setType(newtype);
 			block.setData(newdata);
 			instances.put(block, this);
 		}
-		if (type == Material.FIRE)
-			type = Material.AIR;
+		if (block.getType() == Material.FIRE)
+			state.setType(Material.AIR);
 	}
 
 	public void revertBlock() {
 		// Tools.verbose(block.getType());
-		if (block.getType() == newtype
-				|| (Tools.isWater(block) && (newtype == Material.WATER || newtype == Material.STATIONARY_WATER))) {
-			if (type == Material.WATER || type == Material.STATIONARY_WATER
-					|| type == Material.AIR) {
-				if (Tools.adjacentToThreeOrMoreSources(block)) {
-					type = Material.WATER;
-					data = (byte) 0x0;
-				}
-			}
-			block.setType(type);
-			block.setData(data);
-		}
+		// if (block.getType() == newtype
+		// || (Tools.isWater(block) && (newtype == Material.WATER || newtype ==
+		// Material.STATIONARY_WATER))) {
+		// if (type == Material.WATER || type == Material.STATIONARY_WATER
+		// || type == Material.AIR) {
+		// if (Tools.adjacentToThreeOrMoreSources(block)) {
+		// type = Material.WATER;
+		// data = (byte) 0x0;
+		// }
+		// }
+		// block.setType(type);
+		// block.setData(data);
+		// }
+		state.update(true);
 		instances.remove(block);
 	}
 

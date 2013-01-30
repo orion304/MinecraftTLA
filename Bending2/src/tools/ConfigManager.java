@@ -1011,6 +1011,8 @@ public class ConfigManager {
 
 		defaultearthbendable.add("GOLD_ORE");
 
+		defaultearthbendable.add("EMERALD_ORE");
+
 		defaultearthbendable.add("GRASS");
 
 		defaultearthbendable.add("GRAVEL");
