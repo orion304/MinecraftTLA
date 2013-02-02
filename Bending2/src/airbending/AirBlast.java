@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.material.Lever;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -156,6 +157,8 @@ public class AirBlast {
 			}
 			if (((block.getType() == Material.LEVER) || (block.getType() == Material.STONE_BUTTON))
 					&& !affectedlevers.contains(block)) {
+				Lever lever = (Lever) block;
+				lever.setPowered(!lever.isPowered());
 				// EntityHuman eH = ((CraftPlayer) player).getHandle();
 				//
 				// net.minecraft.server.Block.byId[block.getTypeId()].interact(

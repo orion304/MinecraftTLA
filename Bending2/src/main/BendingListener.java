@@ -821,14 +821,16 @@ public class BendingListener implements Listener {
 	public void onBlockFlowTo(BlockFromToEvent event) {
 		Block toblock = event.getToBlock();
 		Block fromblock = event.getBlock();
-		event.setCancelled(!AirBubble.canFlowTo(toblock));
-		if (!event.isCancelled()) {
-			event.setCancelled(!WaterManipulation.canFlowFromTo(fromblock,
-					toblock));
-		}
-		if (!event.isCancelled()) {
-			if (Illumination.blocks.containsKey(toblock))
-				toblock.setType(Material.AIR);
+		if (Tools.isWater(fromblock)) {
+			event.setCancelled(!AirBubble.canFlowTo(toblock));
+			if (!event.isCancelled()) {
+				event.setCancelled(!WaterManipulation.canFlowFromTo(fromblock,
+						toblock));
+			}
+			if (!event.isCancelled()) {
+				if (Illumination.blocks.containsKey(toblock))
+					toblock.setType(Material.AIR);
+			}
 		}
 	}
 

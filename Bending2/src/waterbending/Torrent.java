@@ -28,7 +28,7 @@ public class Torrent {
 	private static int selectrange = 10;
 	private static double radius = 3;
 	static double range = 25;
-	private static int damage = 4;
+	private static int damage = 2;
 	private static int deflectdamage = 1;
 	private static double factor = 1;
 	private static int maxlayer = 3;
@@ -539,10 +539,11 @@ public class Torrent {
 			if (Tools.isNight(world)) {
 				damagedealt = (int) (Tools.getWaterbendingNightAugment(world) * (double) damage);
 			}
-			if (((LivingEntity) entity).getNoDamageTicks() == 0) {
-				Tools.damageEntity(player, entity, damagedealt);
-				hurtentities.add(entity);
-			}
+			// if (((LivingEntity) entity).getNoDamageTicks() == 0) {
+			Tools.damageEntity(player, entity, damagedealt);
+			hurtentities.add(entity);
+			// }
+			((LivingEntity) entity).setNoDamageTicks(0);
 		}
 	}
 

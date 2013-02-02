@@ -39,7 +39,7 @@ public class TempBlock {
 			block.setData(newdata);
 			instances.put(block, this);
 		}
-		if (block.getType() == Material.FIRE)
+		if (state.getType() == Material.FIRE)
 			state.setType(Material.AIR);
 	}
 
