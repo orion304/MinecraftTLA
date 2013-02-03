@@ -28,6 +28,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.craftbukkit.v1_4_6.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
@@ -686,7 +687,8 @@ public class Tools {
 		for (int i = 0; i <= maxlength; i++) {
 			j = (double) i;
 			if (!isEarthbendable(player,
-					location.clone().add(direction.multiply(j)).getBlock())) {
+					location.clone().add(direction.clone().multiply(j))
+							.getBlock())) {
 				return i;
 			}
 		}
@@ -872,6 +874,12 @@ public class Tools {
 			}
 		}
 		return false;
+	}
+
+	public static void updatePhysics(Block block) {
+		CraftWorld world = (CraftWorld) block.getWorld();
+		world.getHandle().applyPhysics(block.getX(), block.getY(),
+				block.getZ(), block.getTypeId());
 	}
 
 	public static Entity getTargettedEntity(Player player, double range) {

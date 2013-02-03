@@ -333,7 +333,7 @@ public class Torrent {
 		} else if (!Tools.isTransparentToEarthbending(player, b)) {
 			// b.setType(Material.GLASS);
 			if (layer < maxlayer) {
-				if (layer == 0)
+				if (layer == 1)
 					hurtentities.clear();
 				if (freeze || layer < 1)
 					layer++;

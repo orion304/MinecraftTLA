@@ -120,9 +120,9 @@ public class ConfigManager {
 	public static double compactColumnSpeed = 8;
 
 	// EarthArmor
-	public static long eartharmorduration = 20000;
+	public static long eartharmorduration = 10000;
 	public static int eartharmorstrength = 2;
-	public static long eartharmorcooldown = 150000;
+	public static long eartharmorcooldown = 17500;
 
 	// EarthBlast
 	public static int earthdmg = 4;
@@ -154,7 +154,7 @@ public class ConfigManager {
 	public static int earthWallWidth = 6;
 
 	// Tremorsense
-	public static long tremorsenseCooldown = 3000;
+	public static long tremorsenseCooldown = 1000;
 	public static int tremorsenseMaxDepth = 10;
 	public static int tremorsenseRadius = 5;
 	public static byte tremorsenseLightThreshold = 7;
@@ -211,8 +211,8 @@ public class ConfigManager {
 	public static int wallOfFireWidth = 6;
 	public static long wallOfFireDuration = 5000;
 	public static int wallOfFireDamage = 3;
-	public static long wallOfFireInterval = 2000;
-	public static long wallOfFireCooldown = 75000;
+	public static long wallOfFireInterval = 500;
+	public static long wallOfFireCooldown = 7500;
 
 	// Day
 	public static double dayFactor = 1.5;

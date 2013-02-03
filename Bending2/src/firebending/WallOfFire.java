@@ -43,7 +43,7 @@ public class WallOfFire {
 	private static Map<Player, Long> cooldowns = new HashMap<Player, Long>();
 	private static Map<Player, List<Location>> blockslocation = new HashMap<Player, List<Location>>();
 	private static Map<Entity, Long> damaged = new HashMap<Entity, Long>();
-	private static long damageinterval = 1000;
+	private static long damageinterval = 2000;
 
 	public WallOfFire(Player player) {
 		if (ID >= Integer.MAX_VALUE) {
@@ -183,6 +183,7 @@ public class WallOfFire {
 													.getBlock().getLocation()
 													.getZ()) * 0.2));
 									en.setFireTicks(81);
+									new Enflamed(en, p);
 									damaged.put(en, System.currentTimeMillis());
 								}
 							}

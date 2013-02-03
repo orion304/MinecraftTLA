@@ -20,7 +20,7 @@ public class Ripple {
 	private static ConcurrentHashMap<Integer[], Block> blocks = new ConcurrentHashMap<Integer[], Block>();
 
 	static final double radius = 15;
-	private static final int damage = 4;
+	private static final int damage = 5;
 
 	private static int ID = Integer.MIN_VALUE;
 

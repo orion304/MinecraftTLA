@@ -14,6 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.TempBlock;
 import tools.TempPotionEffect;
 import tools.Tools;
@@ -26,6 +27,7 @@ public class IceSpike2 {
 	private static int defaultdamage = 1;
 	private static int defaultmod = 2;
 	private static int ID = Integer.MIN_VALUE;
+	static long slowCooldown = 5000;
 
 	private static final long interval = 20;
 	private static final byte data = 0;
@@ -295,8 +297,20 @@ public class IceSpike2 {
 				player.getWorld());
 		int damage = (int) Tools.waterbendingNightAugment(defaultdamage,
 				player.getWorld());
-		PotionEffect effect = new PotionEffect(PotionEffectType.SLOW, 70, mod);
-		new TempPotionEffect(entity, effect);
+		if (entity instanceof Player) {
+			BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+			if (bPlayer.canBeSlowed()) {
+				PotionEffect effect = new PotionEffect(PotionEffectType.SLOW,
+						70, mod);
+				new TempPotionEffect(entity, effect);
+				bPlayer.slow(slowCooldown);
+			}
+		} else {
+			PotionEffect effect = new PotionEffect(PotionEffectType.SLOW, 70,
+					mod);
+			new TempPotionEffect(entity, effect);
+		}
+
 		entity.damage(damage, player);
 	}
 
