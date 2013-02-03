@@ -1258,7 +1258,7 @@ public class Tools {
 						return true;
 				}
 
-				if (claim != null && !claim.getOwnerName().equalsIgnoreCase(player.getName()))
+				if (claim != null)
 					return true;
 			}
 			if (wgp != null && respectWorldGuard) {
