@@ -83,7 +83,7 @@ public class ConfigManager {
 	public static double airSuctionPush = 1;
 
 	// AirSwipe
-	public static int airdmg = 2;
+	public static int airdmg = 1;
 	public static double airSwipeRange = 16;
 	public static int airSwipeArc = 20;
 	public static double airSwipeSpeed = 25;
@@ -111,7 +111,7 @@ public class ConfigManager {
 	public static int rapidPunchDamage = 1;
 	public static int rapidPunchDistance = 4;
 	public static long rapidPunchCooldown = 15000;
-	public static int rapidPunchPunches = 5;
+	public static int rapidPunchPunches = 4;
 
 	// Earth
 	// Catapult
@@ -128,12 +128,12 @@ public class ConfigManager {
 	public static double compactColumnSpeed = 8;
 
 	// EarthArmor
-	public static long eartharmorduration = 30000;
+	public static long eartharmorduration = 10000;
 	public static int eartharmorstrength = 2;
-	public static long eartharmorcooldown = 150000;
+	public static long eartharmorcooldown = 17500;
 
 	// EarthBlast
-	public static int earthdmg = 7;
+	public static int earthdmg = 4;
 	public static boolean earthBlastHitSelf = false;
 	public static double earthBlastPrepareRange = 7;
 	public static double earthBlastRange = 20;
@@ -162,7 +162,7 @@ public class ConfigManager {
 	public static int earthWallWidth = 6;
 
 	// Tremorsense
-	public static long tremorsenseCooldown = 3000;
+	public static long tremorsenseCooldown = 1000;
 	public static int tremorsenseMaxDepth = 10;
 	public static int tremorsenseRadius = 5;
 	public static byte tremorsenseLightThreshold = 7;
@@ -218,12 +218,12 @@ public class ConfigManager {
 	public static int wallOfFireHeight = 3;
 	public static int wallOfFireWidth = 6;
 	public static long wallOfFireDuration = 5000;
-	public static int wallOfFireDamage = 4;
-	public static long wallOfFireInterval = 400;
-	public static long wallOfFireCooldown = 10000;
+	public static int wallOfFireDamage = 3;
+	public static long wallOfFireInterval = 500;
+	public static long wallOfFireCooldown = 7500;
 
 	// Day
-	public static double dayFactor = 1.3;
+	public static double dayFactor = 1.5;
 
 	// Water
 	// Bloodbending
@@ -242,7 +242,7 @@ public class ConfigManager {
 	public static long healingWatersInterval = 750;
 
 	// IceSpike
-	public static long icespikecooldown = 6000;
+	public static long icespikecooldown = 2000;
 	public static int icespikedamage = 2;
 	public static int icespikerange = 20;
 	public static double icespikethrowingmult = 0.7;
@@ -251,7 +251,7 @@ public class ConfigManager {
 	public static long plantbendingRegrowTime = 180000;
 
 	// SpikeField
-	public static long icespikeareacooldown = 20000;
+	public static long icespikeareacooldown = 3000;
 	public static int icespikeareadamage = 2;
 	public static int icespikearearadius = 4;
 	public static double icespikeareathrowingmult = 1;
@@ -260,7 +260,7 @@ public class ConfigManager {
 	public static double waterBubbleRadius = airBubbleRadius;
 
 	// WaterManipulation
-	public static int waterdmg = 5;
+	public static int waterdmg = 3;
 	public static double waterManipulationRange = 20;
 	public static double waterManipulationSpeed = 35;
 

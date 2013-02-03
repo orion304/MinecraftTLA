@@ -25,6 +25,9 @@ public class BendingPlayer {
 
 	private ArrayList<BendingType> bendingType = new ArrayList<BendingType>();
 
+	private long paralyzeTime = 0;
+	private long slowTime = 0;
+
 	public BendingPlayer(OfflinePlayer player) {
 		if (players.containsKey(player)) {
 			players.remove(player);
@@ -187,6 +190,22 @@ public class BendingPlayer {
 
 	public String getLanguage() {
 		return language;
+	}
+
+	public boolean canBeParalyzed() {
+		return (System.currentTimeMillis() > paralyzeTime);
+	}
+
+	public boolean canBeSlowed() {
+		return (System.currentTimeMillis() > slowTime);
+	}
+
+	public void paralyze(long cooldown) {
+		paralyzeTime = System.currentTimeMillis() + cooldown;
+	}
+
+	public void slow(long cooldown) {
+		slowTime = System.currentTimeMillis() + cooldown;
 	}
 
 	public String toString() {

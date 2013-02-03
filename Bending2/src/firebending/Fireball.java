@@ -165,7 +165,7 @@ public class Fireball {
 		if (explode) {
 			Entity tnt = player.getWorld().spawn(location, TNTPrimed.class);
 			((TNTPrimed) tnt).setFuseTicks(0);
-			((TNTPrimed) tnt).setYield(1);
+			((TNTPrimed) tnt).setYield(2);
 		}
 		// location.getWorld().createExplosion(location, 1);
 

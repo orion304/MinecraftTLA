@@ -24,7 +24,7 @@ public class OctopusForm {
 	static double radius = 3;
 	private static final byte full = 0x0;
 	private static long interval = 50;
-	private static int damage = 5;
+	private static int damage = 3;
 
 	private Player player;
 	private Block sourceblock;

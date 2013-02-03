@@ -228,7 +228,7 @@ public class FireBlast {
 				entity.setVelocity(direction.clone().multiply(pushfactor));
 			}
 			if (entity instanceof LivingEntity) {
-				entity.setFireTicks(120);
+				entity.setFireTicks(50);
 				Tools.damageEntity(player, entity, (int) Tools
 						.firebendingDayAugment((double) damage,
 								entity.getWorld()));

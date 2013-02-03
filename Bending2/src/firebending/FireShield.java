@@ -111,6 +111,7 @@ public class FireShield {
 						continue;
 					if (player.getEntityId() != entity.getEntityId() && ignite) {
 						entity.setFireTicks(120);
+						new Enflamed(entity, player);
 					}
 				}
 

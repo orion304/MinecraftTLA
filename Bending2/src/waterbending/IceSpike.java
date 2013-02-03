@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempPotionEffect;
 import tools.Tools;
@@ -242,8 +243,22 @@ public class IceSpike {
 		entity.setVelocity(thrown);
 		entity.damage(damage);
 		damaged.add(entity);
-		PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 70, 2);
-		new TempPotionEffect(entity, slow);
+		long slowCooldown = IceSpike2.slowCooldown;
+		int mod = 2;
+		if (entity instanceof Player) {
+			BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+			if (bPlayer.canBeSlowed()) {
+				PotionEffect effect = new PotionEffect(PotionEffectType.SLOW,
+						70, mod);
+				new TempPotionEffect(entity, effect);
+				bPlayer.slow(slowCooldown);
+			}
+		} else {
+			PotionEffect effect = new PotionEffect(PotionEffectType.SLOW, 70,
+					mod);
+			new TempPotionEffect(entity, effect);
+		}
+
 	}
 
 	public static boolean progress(Player player) {

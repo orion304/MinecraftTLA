@@ -28,19 +28,25 @@ import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -221,12 +227,7 @@ public class BendingListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		Cooldowns.forceCooldown(player);
-	}
-
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onProjectileLaunch(EntityShootBowEvent event) {
-		Entity entity = event.getEntity();
-		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity)) {
+		if (Paralyze.isParalyzed(player) || Bloodbending.isBloodbended(player)) {
 			event.setCancelled(true);
 		}
 	}
@@ -500,6 +501,10 @@ public class BendingListener implements Listener {
 
 		Player player = event.getPlayer();
 		// Tools.verbose(Tools.getBendingAbility(player));
+
+		if (Paralyze.isParalyzed(player) || Bloodbending.isBloodbended(player)) {
+			event.setCancelled(true);
+		}
 
 		Abilities[] sourceabilities = { Abilities.AirBlast,
 				Abilities.AirSuction, Abilities.EarthBlast,
@@ -835,14 +840,16 @@ public class BendingListener implements Listener {
 	public void onBlockFlowTo(BlockFromToEvent event) {
 		Block toblock = event.getToBlock();
 		Block fromblock = event.getBlock();
-		event.setCancelled(!AirBubble.canFlowTo(toblock));
-		if (!event.isCancelled()) {
-			event.setCancelled(!WaterManipulation.canFlowFromTo(fromblock,
-					toblock));
-		}
-		if (!event.isCancelled()) {
-			if (Illumination.blocks.containsKey(toblock))
-				toblock.setType(Material.AIR);
+		if (Tools.isWater(fromblock)) {
+			event.setCancelled(!AirBubble.canFlowTo(toblock));
+			if (!event.isCancelled()) {
+				event.setCancelled(!WaterManipulation.canFlowFromTo(fromblock,
+						toblock));
+			}
+			if (!event.isCancelled()) {
+				if (Illumination.blocks.containsKey(toblock))
+					toblock.setType(Material.AIR);
+			}
 		}
 	}
 
@@ -997,15 +1004,15 @@ public class BendingListener implements Listener {
 
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerKick(PlayerKickEvent event) {
-		Tools.verbose(event.getReason());
-		if (BendingManager.flyingplayers.contains(event.getPlayer())
-				|| Bloodbending.isBloodbended(event.getPlayer())) {
-			event.setCancelled(true);
-			event.setReason(null);
-		}
-	}
+	// @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	// public void onPlayerKick(PlayerKickEvent event) {
+	// Tools.verbose(event.getReason());
+	// if (BendingManager.flyingplayers.contains(event.getPlayer())
+	// || Bloodbending.isBloodbended(event.getPlayer())) {
+	// event.setCancelled(true);
+	// event.setReason(null);
+	// }
+	// }
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockForm(BlockFormEvent event) {
@@ -1015,19 +1022,68 @@ public class BendingListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	// @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	// public void onEntityTarget(EntityTargetEvent event) {
-	// Entity entity = event.getEntity();
-	// if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
-	// event.setCancelled(true);
-	// }
-	//
-	// @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	// public void onEntityTargetLiving(EntityTargetLivingEntityEvent event) {
-	// Entity entity = event.getEntity();
-	// if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
-	// event.setCancelled(true);
-	// }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityTarget(EntityTargetEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityTargetLiving(EntityTargetLivingEntityEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityExploeEvent(EntityExplodeEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityInteractEvent(EntityInteractEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityShootBowEvent(EntityShootBowEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityTeleportEvent(EntityTeleportEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityProjectileLaunchEvent(ProjectileLaunchEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntitySlimeSplitEvent(SlimeSplitEvent event) {
+		Entity entity = event.getEntity();
+		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
+			event.setCancelled(true);
+	}
 
 	// @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	// public void onEntityEvent(EntityEvent event) {

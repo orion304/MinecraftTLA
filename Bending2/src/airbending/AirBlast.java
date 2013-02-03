@@ -9,8 +9,11 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.material.Attachable;
+import org.bukkit.material.Lever;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
@@ -156,12 +159,23 @@ public class AirBlast {
 			}
 			if (((block.getType() == Material.LEVER) || (block.getType() == Material.STONE_BUTTON))
 					&& !affectedlevers.contains(block)) {
-				// EntityHuman eH = ((CraftPlayer) player).getHandle();
+				BlockState state = block.getState();
+				Lever lever = (Lever) (state.getData());
+				lever.setPowered(!lever.isPowered());
+				state.setData(lever);
+				state.update(true);
+
+				Block relative = block.getRelative(((Attachable) block
+						.getState().getData()).getFacing(), -1);
+				Tools.updatePhysics(relative);
+
+				// BlockFace[] faces = { BlockFace.DOWN, BlockFace.UP,
+				// BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST,
+				// BlockFace.SOUTH };
 				//
-				// net.minecraft.server.Block.byId[block.getTypeId()].interact(
-				// ((CraftWorld) block.getWorld()).getHandle(),
-				// block.getX(), block.getY(), block.getZ(), eH, 0, 0, 0,
-				// 0);
+				// for (BlockFace face : faces) {
+				// block.getRelative(face).getState().update(true);
+				// }
 
 				affectedlevers.add(block);
 			}

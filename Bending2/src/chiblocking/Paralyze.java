@@ -15,7 +15,7 @@ import tools.Tools;
 public class Paralyze {
 
 	private static ConcurrentHashMap<Entity, Long> entities = new ConcurrentHashMap<Entity, Long>();
-	private static ConcurrentHashMap<Player, Long> cooldowns = new ConcurrentHashMap<Player, Long>();
+	private static ConcurrentHashMap<Entity, Long> cooldowns = new ConcurrentHashMap<Entity, Long>();
 
 	private static final long cooldown = ConfigManager.paralyzeCooldown;
 	private static final long duration = ConfigManager.paralyzeDuration;
@@ -23,16 +23,16 @@ public class Paralyze {
 	public Paralyze(Player sourceplayer, Entity targetentity) {
 		if (Tools.isBender(sourceplayer.getName(), BendingType.ChiBlocker)
 				&& Tools.getBendingAbility(sourceplayer) == Abilities.Paralyze) {
-			if (cooldowns.containsKey(sourceplayer)) {
-				if (System.currentTimeMillis() < cooldowns.get(sourceplayer)
+			if (cooldowns.containsKey(targetentity)) {
+				if (System.currentTimeMillis() < cooldowns.get(targetentity)
 						+ cooldown) {
 					return;
 				} else {
-					cooldowns.remove(sourceplayer);
+					cooldowns.remove(targetentity);
 				}
 			}
 			paralyze(targetentity);
-			cooldowns.put(sourceplayer, System.currentTimeMillis());
+			cooldowns.put(targetentity, System.currentTimeMillis());
 		}
 	}
 

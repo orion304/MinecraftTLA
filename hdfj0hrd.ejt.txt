@@ -1,0 +1,38 @@
+Merge branch 'master' of http://github.com/orion304/MinecraftTLA
+
+Conflicts:
+	Bending2/.devbuild/Bending.jar
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# All conflicts fixed but you are still merging.
+#   (use "git commit" to conclude merge)
+#
+# Changes to be committed:
+#
+#	modified:   Bending2/src/airbending/AirBlast.java
+#	modified:   Bending2/src/chiblocking/Paralyze.java
+#	modified:   Bending2/src/earthbending/Ripple.java
+#	modified:   Bending2/src/firebending/Enflamed.java
+#	modified:   Bending2/src/firebending/FireBlast.java
+#	modified:   Bending2/src/firebending/FireShield.java
+#	modified:   Bending2/src/firebending/Fireball.java
+#	modified:   Bending2/src/firebending/WallOfFire.java
+#	modified:   Bending2/src/main/BendingListener.java
+#	modified:   Bending2/src/tools/BendingPlayer.java
+#	modified:   Bending2/src/tools/ConfigManager.java
+#	modified:   Bending2/src/tools/TempBlock.java
+#	modified:   Bending2/src/tools/Tools.java
+#	modified:   Bending2/src/waterbending/IceSpike.java
+#	modified:   Bending2/src/waterbending/IceSpike2.java
+#	modified:   Bending2/src/waterbending/OctopusForm.java
+#	modified:   Bending2/src/waterbending/Torrent.java
+#
+
