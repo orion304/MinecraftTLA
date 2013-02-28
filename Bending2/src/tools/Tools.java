@@ -112,24 +112,24 @@ public class Tools {
 	private static final Map<String, ChatColor> colors;
 
 	private static Abilities[] harmlessAbilities = { Abilities.AirScooter,
-			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
-			Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
+		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+		Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
 
 	private static Abilities[] localAbilities = { Abilities.AirScooter,
-			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
-			Abilities.Illumination, Abilities.Tremorsense,
-			Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
-			Abilities.Paralyze, Abilities.RapidPunch };
+		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+		Abilities.Illumination, Abilities.Tremorsense,
+		Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
+		Abilities.Paralyze, Abilities.RapidPunch };
 
 	public static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11, 30,
-			31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
+		31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
 
 	public static Integer[] nonOpaque = { 0, 6, 8, 9, 10, 11, 27, 28, 30, 31,
-			32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
-			78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
+		32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
+		78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
 
 	private static Integer[] plantIds = { 6, 18, 31, 32, 37, 38, 39, 40, 59,
-			81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
+		81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
 
 	public static final long timeinterval = ConfigManager.globalCooldown;
 
@@ -330,7 +330,7 @@ public class Tools {
 							if (lentity.getEyeLocation().getBlockX() == affectedblock
 									.getX()
 									&& lentity.getEyeLocation().getBlockZ() == affectedblock
-											.getZ())
+									.getZ())
 								if (!(entity instanceof FallingBlock))
 									entity.setVelocity(norm.clone().multiply(
 											.75));
@@ -338,7 +338,7 @@ public class Tools {
 							if (entity.getLocation().getBlockX() == affectedblock
 									.getX()
 									&& entity.getLocation().getBlockZ() == affectedblock
-											.getZ())
+									.getZ())
 								if (!(entity instanceof FallingBlock))
 									entity.setVelocity(norm.clone().multiply(
 											.75));
@@ -691,7 +691,7 @@ public class Tools {
 			j = (double) i;
 			if (!isEarthbendable(player,
 					location.clone().add(direction.clone().multiply(j))
-							.getBlock())) {
+					.getBlock())) {
 				return i;
 			}
 		}
@@ -901,13 +901,13 @@ public class Tools {
 			if (entity.getLocation().distance(origin) < longestr
 					&& getDistanceFromLine(direction, origin,
 							entity.getLocation()) < 2
-					&& (entity instanceof LivingEntity)
-					&& entity.getEntityId() != player.getEntityId()
-					&& entity.getLocation().distance(
-							origin.clone().add(direction)) < entity
-							.getLocation().distance(
-									origin.clone().add(
-											direction.clone().multiply(-1)))) {
+							&& (entity instanceof LivingEntity)
+							&& entity.getEntityId() != player.getEntityId()
+							&& entity.getLocation().distance(
+									origin.clone().add(direction)) < entity
+									.getLocation().distance(
+											origin.clone().add(
+													direction.clone().multiply(-1)))) {
 				target = entity;
 				longestr = entity.getLocation().distance(origin);
 			}
@@ -928,8 +928,8 @@ public class Tools {
 
 			((LivingEntity) entity).damage(damage, player);
 			((LivingEntity) entity)
-					.setLastDamageCause(new EntityDamageByEntityEvent(player,
-							entity, DamageCause.CUSTOM, damage));
+			.setLastDamageCause(new EntityDamageByEntityEvent(player,
+					entity, DamageCause.CUSTOM, damage));
 		}
 	}
 
@@ -1118,7 +1118,7 @@ public class Tools {
 		if (hasPermission(player, ability)
 				&& (!isLocalAbility(ability) || !isRegionProtectedFromBuild(
 						player, Abilities.AirBlast, player.getLocation()))
-				&& !toggledBending(player))
+						&& !toggledBending(player))
 			return true;
 
 		if (allowharmless && Tools.isHarmlessAbility(ability)
@@ -1177,7 +1177,7 @@ public class Tools {
 				verbose("But Bending is set to ignore PreciousStones' flags.");
 			}
 		}
-		
+
 		Plugin gpp = Bukkit.getPluginManager().getPlugin("GriefPrevention");
 		if (gpp != null) {
 			verbose("Recognized GriefPrevention...");
@@ -1219,8 +1219,40 @@ public class Tools {
 		// }
 	}
 
+	@SuppressWarnings("static-access")
 	public static boolean isRegionProtectedFromBuild(Player player,
 			Abilities ability, Location loc) {
+
+		List<Abilities> nugp = new ArrayList<Abilities>();
+		nugp.add(Abilities.AirBlast);
+		nugp.add(Abilities.AirBurst);
+		nugp.add(Abilities.AirShield);
+		nugp.add(Abilities.AirSuction);
+		nugp.add(Abilities.AirSwipe);
+		nugp.add(Abilities.Blaze);
+		nugp.add(Abilities.Bloodbending);
+		nugp.add(Abilities.Collapse);
+		nugp.add(Abilities.EarthArmor);
+		nugp.add(Abilities.EarthBlast);
+		nugp.add(Abilities.EarthGrab);
+		nugp.add(Abilities.EarthTunnel);
+		nugp.add(Abilities.FireBlast);
+		nugp.add(Abilities.FireBurst);
+		nugp.add(Abilities.FireShield);
+		nugp.add(Abilities.FireJet);
+		nugp.add(Abilities.IceSpike);
+		nugp.add(Abilities.Lightning);
+		nugp.add(Abilities.OctopusForm);
+		nugp.add(Abilities.Paralyze);
+		nugp.add(Abilities.PhaseChange);
+		nugp.add(Abilities.RaiseEarth);
+		nugp.add(Abilities.RapidPunch);
+		nugp.add(Abilities.Shockwave);
+		nugp.add(Abilities.Surge);
+		nugp.add(Abilities.Tornado);
+		nugp.add(Abilities.Torrent);
+		nugp.add(Abilities.WallOfFire);
+		nugp.add(Abilities.WaterManipulation);
 
 		List<Abilities> ignite = new ArrayList<Abilities>();
 		ignite.add(Abilities.Blaze);
@@ -1228,10 +1260,10 @@ public class Tools {
 		explode.add(Abilities.FireBlast);
 		explode.add(Abilities.Lightning);
 
-		if (ability == null && allowharmless)
-			return false;
-		if (isHarmlessAbility(ability) && allowharmless)
-			return false;
+//		if (ability == null && allowharmless)
+//			return false;
+//		if (isHarmlessAbility(ability) && allowharmless)
+//			return false;
 
 		// if (ignite.contains(ability)) {
 		// BlockIgniteEvent event = new BlockIgniteEvent(location.getBlock(),
@@ -1254,21 +1286,24 @@ public class Tools {
 				Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);
 				GriefPrevention gp = (GriefPrevention) Bukkit
 						.getPluginManager().getPlugin("GriefPrevention");
-				if (!player.isOnline())
-					return true;
-				
-				if (ignite.contains(ability)) {
-					if (claim != null)
-						return true;
+				if (claim != null) {
+					if (player.getName().equals(claim.getOwnerName())) {
+						return false;
+					} else {
+						if (!player.isOnline()) return true;
+						if (nugp.contains(ability)) return true;
+//						if (ignite.contains(ability)) return true;
+//						if (explode.contains(ability)) return true;
+						//					if (errorMessage.equals(null)) {
+						//						return false;
+						//					} else {
+						//						player.sendMessage(errorMessage);
+						//						return true;
+						//					}
+					}
 				}
-				if (explode.contains(ability)) {
-					if (claim != null)
-						return true;
-				}
-
-				if (claim != null)
-					return true;
 			}
+
 			if (wgp != null && respectWorldGuard) {
 				WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit
 						.getPluginManager().getPlugin("WorldGuard");
@@ -1282,10 +1317,10 @@ public class Tools {
 						if (!wg.getGlobalRegionManager().hasBypass(player,
 								location.getWorld())
 								&& !wg.getGlobalRegionManager()
-										.get(location.getWorld())
-										.getApplicableRegions(location)
-										.allows(DefaultFlag.LIGHTER,
-												wg.wrapPlayer(player)))
+								.get(location.getWorld())
+								.getApplicableRegions(location)
+								.allows(DefaultFlag.LIGHTER,
+										wg.wrapPlayer(player)))
 							return true;
 					}
 
@@ -1744,7 +1779,7 @@ public class Tools {
 					byte full = 0x0;
 					if (tb.state.getRawData() != full
 							&& (tb.state.getType() != Material.WATER || tb.state
-									.getType() != Material.STATIONARY_WATER)) {
+							.getType() != Material.STATIONARY_WATER)) {
 						continue;
 					}
 				}
@@ -1946,7 +1981,7 @@ public class Tools {
 		colors = Collections.unmodifiableMap(tmpMap);
 	}
 	public static String colorize(String message) {
-        return message.replaceAll("(?i)&([a-fk-or0-9])", "\u00A7$1");
-    }
+		return message.replaceAll("(?i)&([a-fk-or0-9])", "\u00A7$1");
+	}
 
 }
