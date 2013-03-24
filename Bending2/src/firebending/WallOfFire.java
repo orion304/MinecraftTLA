@@ -93,7 +93,7 @@ public class WallOfFire {
 		cooldowns.put(p, System.currentTimeMillis());
 		if (tblock.getType() != Material.AIR
 				&& !FireStream.isIgnitable(player, tblock)) {
-			instances.remove(p);
+			instances.remove(id);
 			durations.remove(p);
 			cooldowns.remove(p);
 		}

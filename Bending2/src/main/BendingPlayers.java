@@ -47,9 +47,10 @@ public class BendingPlayers {
 	}
 
 	public void setKey(String key, String field) {
-		if (!(bendingPlayers == null))
+		if (!(bendingPlayers == null)) {
 			bendingPlayers.set(key, field);
-		save();
+			save();
+		}
 		// if (bendingPlayers == null)
 		// Tools.verbose("Uh oh?");
 		// Tools.verbose(key);

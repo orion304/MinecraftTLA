@@ -36,7 +36,7 @@ public class WaterWall {
 	Player player;
 	private Location location = null;
 	private Block sourceblock = null;
-	private Block oldwater = null;
+	// private Block oldwater = null;
 	private boolean progressing = false;
 	private Location firstdestination = null;
 	private Location targetdestination = null;
@@ -229,8 +229,8 @@ public class WaterWall {
 		}
 		if (!Tools.canBend(player, Abilities.Surge)) {
 			if (!forming)
-				removeWater(oldwater);
-			breakBlock();
+				// removeWater(oldwater);
+				breakBlock();
 			unfocusBlock();
 			returnWater();
 			return false;
@@ -239,7 +239,7 @@ public class WaterWall {
 			time = System.currentTimeMillis();
 
 			if (!forming) {
-				removeWater(oldwater);
+				// removeWater(oldwater);
 			}
 
 			if (!progressing
@@ -348,7 +348,7 @@ public class WaterWall {
 			if (location.distance(targetdestination) < 1) {
 
 				removeWater(sourceblock);
-				removeWater(oldwater);
+				// removeWater(oldwater);
 				forming = true;
 			}
 

@@ -265,7 +265,7 @@ public class Torrent {
 				double dy = 0;
 				double dz = Math.sin(phi) * radius;
 				Location blockloc = loc.clone().add(dx, dy, dz);
-				if (theta == startangle)
+				if (Math.abs(theta - startangle) < 10)
 					location = blockloc.clone();
 				Block block = blockloc.getBlock();
 				if (!doneblocks.contains(block)

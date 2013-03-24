@@ -1889,19 +1889,8 @@ public class BendingCommand {
 			} else {
 				// config.setAbility(player, ability, mat);
 				PlayerStorageWriter.bindItem(player, mat, ability);
-				char[] tocap = mat.name().replaceAll("_", " ").toCharArray();
-				boolean cap = true;
-				for (int i = 0; i < tocap.length; i++) {
-					if (cap) {
-						tocap[i] = Character.toUpperCase(tocap[i]);
-						cap = false;
-					}
-					if (Character.isWhitespace(tocap[i]))
-						cap = true;
-
-				}
 				sendMessage(player, color + ability.name() + white
-						+ " bound to " + tocap.toString());
+						+ " bound to " + mat.name().replaceAll("_", " "));
 			}
 			return;
 		}

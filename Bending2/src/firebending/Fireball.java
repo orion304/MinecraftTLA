@@ -40,8 +40,6 @@ public class Fireball {
 	private boolean launched = false;
 
 	public Fireball(Player player) {
-		if (instances.containsKey(player))
-			return;
 		this.player = player;
 		time = System.currentTimeMillis();
 		starttime = time;

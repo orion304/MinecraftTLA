@@ -75,7 +75,7 @@ public class ConfigManager {
 	public static double airSuctionPush = 1;
 
 	// AirSwipe
-	public static int airdmg = 1;
+	public static int airdmg = 2;
 	public static double airSwipeRange = 16;
 	public static int airSwipeArc = 20;
 	public static double airSwipeSpeed = 25;

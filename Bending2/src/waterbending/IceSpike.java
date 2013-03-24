@@ -261,10 +261,6 @@ public class IceSpike {
 
 	}
 
-	public static boolean progress(Player player) {
-		return instances.get(player).progress();
-	}
-
 	public static boolean blockIsBase(Block block) {
 		if (baseblocks.containsKey(block)) {
 			return true;
