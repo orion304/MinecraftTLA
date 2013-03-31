@@ -55,7 +55,7 @@ public class BendingCommand {
 	private String[] chiblockingabilities = Abilities.getChiBlockingAbilities();
 
 	private File dataFolder;
-	private StorageManager config;
+	// private Bending config;
 	private Server server;
 	private boolean verbose = true;
 	private BendingPlayer bPlayer;
@@ -166,10 +166,10 @@ public class BendingCommand {
 	static final String you_add_chi = "is now also a chiblocker!";
 
 	public BendingCommand(Player player, String[] args, File dataFolder,
-			StorageManager config, Server server) {
+			Server server) {
 
 		this.dataFolder = dataFolder;
-		this.config = config;
+		// this.config = config;
 		this.server = server;
 
 		if (player != null)
@@ -257,7 +257,8 @@ public class BendingCommand {
 			String language = args[1];
 			if (Tools.isLanguageSupported(language)) {
 				// config.setLanguage(player, language);
-				PlayerStorageWriter.setLanguage(player, language);
+				// PlayerStorageWriter.setLanguage(player, language);
+				BendingPlayer.getBendingPlayer(player).setLanguage(language);
 				Tools.sendMessage(player, "General.language_success");
 			} else {
 				Tools.sendMessage(player, "General.language_not_supported");
@@ -473,8 +474,10 @@ public class BendingCommand {
 				Tools.sendMessage(player, "General.choosen_air");
 				// config.removeBending(player);
 				// config.setBending(player, "air");
-				PlayerStorageWriter.removeBending(player);
-				PlayerStorageWriter.setBending(player, BendingType.Air);
+				// PlayerStorageWriter.removeBending(player);
+				// PlayerStorageWriter.setBending(player, BendingType.Air);
+				BendingPlayer.getBendingPlayer(player).setBender(
+						BendingType.Air);
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -485,8 +488,10 @@ public class BendingCommand {
 				Tools.sendMessage(player, "General.choosen_fire");
 				// config.removeBending(player);
 				// config.setBending(player, "fire");
-				PlayerStorageWriter.removeBending(player);
-				PlayerStorageWriter.setBending(player, BendingType.Fire);
+				// PlayerStorageWriter.removeBending(player);
+				// PlayerStorageWriter.setBending(player, BendingType.Fire);
+				BendingPlayer.getBendingPlayer(player).setBender(
+						BendingType.Fire);
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -497,8 +502,10 @@ public class BendingCommand {
 				Tools.sendMessage(player, "General.choosen_earth");
 				// config.removeBending(player);
 				// config.setBending(player, "earth");
-				PlayerStorageWriter.removeBending(player);
-				PlayerStorageWriter.setBending(player, BendingType.Earth);
+				// PlayerStorageWriter.removeBending(player);
+				// PlayerStorageWriter.setBending(player, BendingType.Earth);
+				BendingPlayer.getBendingPlayer(player).setBender(
+						BendingType.Earth);
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -509,8 +516,10 @@ public class BendingCommand {
 				Tools.sendMessage(player, "General.choosen_water");
 				// config.removeBending(player);
 				// config.setBending(player, "water");
-				PlayerStorageWriter.removeBending(player);
-				PlayerStorageWriter.setBending(player, BendingType.Water);
+				// PlayerStorageWriter.removeBending(player);
+				// PlayerStorageWriter.setBending(player, BendingType.Water);
+				BendingPlayer.getBendingPlayer(player).setBender(
+						BendingType.Water);
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
@@ -521,8 +530,11 @@ public class BendingCommand {
 				Tools.sendMessage(player, "General.choosen_chi");
 				// config.removeBending(player);
 				// config.setBending(player, "chiblocker");
-				PlayerStorageWriter.removeBending(player);
-				PlayerStorageWriter.setBending(player, BendingType.ChiBlocker);
+				// PlayerStorageWriter.removeBending(player);
+				// PlayerStorageWriter.setBending(player,
+				// BendingType.ChiBlocker);
+				BendingPlayer.getBendingPlayer(player).setBender(
+						BendingType.ChiBlocker);
 				return;
 			}
 			printChooseUsage(player);
@@ -559,8 +571,11 @@ public class BendingCommand {
 				Tools.sendMessage(targetplayer, "General.choosen_air");
 				// config.removeBending(targetplayer);
 				// config.setBending(targetplayer, "air");
-				PlayerStorageWriter.removeBending(targetplayer);
-				PlayerStorageWriter.setBending(targetplayer, BendingType.Air);
+				// PlayerStorageWriter.removeBending(targetplayer);
+				// PlayerStorageWriter.setBending(targetplayer,
+				// BendingType.Air);
+				BendingPlayer.getBendingPlayer(targetplayer).setBender(
+						BendingType.Air);
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -580,8 +595,11 @@ public class BendingCommand {
 				Tools.sendMessage(targetplayer, "General.choosen_fire");
 				// config.removeBending(targetplayer);
 				// config.setBending(targetplayer, "fire");
-				PlayerStorageWriter.removeBending(targetplayer);
-				PlayerStorageWriter.setBending(targetplayer, BendingType.Fire);
+				// PlayerStorageWriter.removeBending(targetplayer);
+				// PlayerStorageWriter.setBending(targetplayer,
+				// BendingType.Fire);
+				BendingPlayer.getBendingPlayer(targetplayer).setBender(
+						BendingType.Fire);
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -601,8 +619,11 @@ public class BendingCommand {
 				Tools.sendMessage(targetplayer, "General.choosen_earth");
 				// config.removeBending(targetplayer);
 				// config.setBending(targetplayer, "earth");
-				PlayerStorageWriter.removeBending(targetplayer);
-				PlayerStorageWriter.setBending(targetplayer, BendingType.Earth);
+				// PlayerStorageWriter.removeBending(targetplayer);
+				// PlayerStorageWriter.setBending(targetplayer,
+				// BendingType.Earth);
+				BendingPlayer.getBendingPlayer(targetplayer).setBender(
+						BendingType.Earth);
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -622,8 +643,11 @@ public class BendingCommand {
 				Tools.sendMessage(targetplayer, "General.choosen_water");
 				// config.removeBending(targetplayer);
 				// config.setBending(targetplayer, "water");
-				PlayerStorageWriter.removeBending(targetplayer);
-				PlayerStorageWriter.setBending(targetplayer, BendingType.Water);
+				// PlayerStorageWriter.removeBending(targetplayer);
+				// PlayerStorageWriter.setBending(targetplayer,
+				// BendingType.Water);
+				BendingPlayer.getBendingPlayer(targetplayer).setBender(
+						BendingType.Water);
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
@@ -643,8 +667,10 @@ public class BendingCommand {
 				Tools.sendMessage(targetplayer, "General.choosen_chi");
 				// config.removeBending(targetplayer);
 				// config.setBending(targetplayer, "chiblocker");
-				PlayerStorageWriter.removeBending(targetplayer);
-				PlayerStorageWriter.setBending(targetplayer,
+				// PlayerStorageWriter.removeBending(targetplayer);
+				// PlayerStorageWriter.setBending(targetplayer,
+				// BendingType.ChiBlocker);
+				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.ChiBlocker);
 				return;
 			}
@@ -706,16 +732,23 @@ public class BendingCommand {
 							.equalsIgnoreCase("8"))) {
 					int slot = Integer.parseInt(binded);
 					// config.setAbility(playername, ability, slot);
-					PlayerStorageWriter.bindSlot(oPlayer, slot,
+					// PlayerStorageWriter.bindSlot(oPlayer, slot,
+					// Abilities.getAbility(ability));
+					BendingPlayer.getBendingPlayer(oPlayer).setAbility(slot,
 							Abilities.getAbility(ability));
 				} else if (binded.equalsIgnoreCase("Language")) {
-					PlayerStorageWriter.setLanguage(oPlayer, ability);
+					// PlayerStorageWriter.setLanguage(oPlayer, ability);
+					BendingPlayer.getBendingPlayer(oPlayer)
+							.setLanguage(ability);
 				} else {
 					// config.setAbility(playername, ability,
 					// Material.matchMaterial(binded));
-					PlayerStorageWriter.bindItem(oPlayer,
+					// PlayerStorageWriter.bindItem(oPlayer,
+					// Material.matchMaterial(binded),
+					// Abilities.getAbility(ability));
+					BendingPlayer.getBendingPlayer(oPlayer).setAbility(
 							Material.matchMaterial(binded),
-							Abilities.getAbility(ability));
+							Abilities.getAbility(binded));
 				}
 			} else {
 				// String playerName = s;
@@ -723,19 +756,32 @@ public class BendingCommand {
 				OfflinePlayer oPlayer = server.getOfflinePlayer(s);
 				if (bending.contains("a"))
 					// config.addBending(playerName, BendingType.Air);
-					PlayerStorageWriter.addBending(oPlayer, BendingType.Air);
+					// PlayerStorageWriter.addBending(oPlayer, BendingType.Air);
+					BendingPlayer.getBendingPlayer(oPlayer).addBender(
+							BendingType.Air);
 				if (bending.contains("w"))
 					// config.addBending(playerName, BendingType.Water);
-					PlayerStorageWriter.addBending(oPlayer, BendingType.Water);
+					// PlayerStorageWriter.addBending(oPlayer,
+					// BendingType.Water);
+					BendingPlayer.getBendingPlayer(oPlayer).addBender(
+							BendingType.Water);
 				if (bending.contains("f"))
 					// config.addBending(playerName, BendingType.Fire);
-					PlayerStorageWriter.addBending(oPlayer, BendingType.Fire);
+					// PlayerStorageWriter.addBending(oPlayer,
+					// BendingType.Fire);
+					BendingPlayer.getBendingPlayer(oPlayer).addBender(
+							BendingType.Fire);
 				if (bending.contains("e"))
 					// config.addBending(playerName, BendingType.Earth);
-					PlayerStorageWriter.addBending(oPlayer, BendingType.Earth);
+					// PlayerStorageWriter.addBending(oPlayer,
+					// BendingType.Earth);
+					BendingPlayer.getBendingPlayer(oPlayer).addBender(
+							BendingType.Earth);
 				if (bending.contains("c"))
 					// config.addBending(playerName, BendingType.ChiBlocker);
-					PlayerStorageWriter.addBending(oPlayer,
+					// PlayerStorageWriter.addBending(oPlayer,
+					// BendingType.ChiBlocker);
+					BendingPlayer.getBendingPlayer(oPlayer).addBender(
 							BendingType.ChiBlocker);
 
 			}
@@ -1199,12 +1245,16 @@ public class BendingCommand {
 			return;
 		Bending.configManager.load(new File(dataFolder, "config.yml"));
 		Bending.language.load(new File(dataFolder, "language.yml"));
-		config.initialize(dataFolder);
-		String append = StorageManager.useMySQL ? " Database "
-				: "Players file ";
+		// config.initialize(dataFolder);
+		server.getScheduler().runTaskAsynchronously(Bending.plugin,
+				new BendingPlayersSaver());
+		// String append = StorageManager.useMySQL ? " Database "
+		// : "Players file ";
 		Tools.stopAllBending();
-		sendMessage(player, ChatColor.AQUA + "Config and Bending " + append
-				+ Tools.getMessage(player, "General.reload_success"));
+		sendMessage(
+				player,
+				ChatColor.AQUA + "Bending "
+						+ Tools.getMessage(player, "General.reload_success"));
 
 	}
 
@@ -1421,7 +1471,9 @@ public class BendingCommand {
 			Player targetplayer = server.getPlayer(playername);
 			if (targetplayer != null) {
 				// config.permaRemoveBending(targetplayer);
-				PlayerStorageWriter.permaRemoveBending(targetplayer);
+				// PlayerStorageWriter.permaRemoveBending(targetplayer);
+				BendingPlayer.getBendingPlayer(targetplayer)
+						.permaremoveBender();
 				targetplayer.sendMessage(senderName
 						+ " "
 						+ Tools.getMessage(targetplayer,
@@ -1455,7 +1507,8 @@ public class BendingCommand {
 				senderName = player.getName();
 			if (targetplayer != null) {
 				// config.removeBending(targetplayer);
-				PlayerStorageWriter.removeBending(targetplayer);
+				// PlayerStorageWriter.removeBending(targetplayer);
+				BendingPlayer.getBendingPlayer(targetplayer).removeBender();
 				targetplayer.sendMessage(senderName + " "
 						+ Tools.getMessage(targetplayer, "General.remove_you"));
 				playerlist = playerlist + targetplayer.getName() + " ";
@@ -1495,7 +1548,9 @@ public class BendingCommand {
 				}
 				Tools.sendMessage(player, "General.add_air");
 				// config.addBending(player, "air");
-				PlayerStorageWriter.addBending(player, BendingType.Air);
+				// PlayerStorageWriter.addBending(player, BendingType.Air);
+				BendingPlayer.getBendingPlayer(player).addBender(
+						BendingType.Air);
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -1509,7 +1564,9 @@ public class BendingCommand {
 				}
 				Tools.sendMessage(player, "General.add_fire");
 				// config.addBending(player, "fire");
-				PlayerStorageWriter.addBending(player, BendingType.Fire);
+				// PlayerStorageWriter.addBending(player, BendingType.Fire);
+				BendingPlayer.getBendingPlayer(player).addBender(
+						BendingType.Fire);
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -1523,7 +1580,9 @@ public class BendingCommand {
 				}
 				Tools.sendMessage(player, "General.add_earth");
 				// config.addBending(player, "earth");
-				PlayerStorageWriter.addBending(player, BendingType.Earth);
+				// PlayerStorageWriter.addBending(player, BendingType.Earth);
+				BendingPlayer.getBendingPlayer(player).addBender(
+						BendingType.Earth);
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -1537,7 +1596,9 @@ public class BendingCommand {
 				}
 				Tools.sendMessage(player, "General.add_water");
 				// config.addBending(player, "water");
-				PlayerStorageWriter.addBending(player, BendingType.Water);
+				// PlayerStorageWriter.addBending(player, BendingType.Water);
+				BendingPlayer.getBendingPlayer(player).addBender(
+						BendingType.Water);
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
@@ -1551,7 +1612,10 @@ public class BendingCommand {
 				}
 				Tools.sendMessage(player, "General.add_chi");
 				// config.addBending(player, "chiblocker");
-				PlayerStorageWriter.addBending(player, BendingType.ChiBlocker);
+				// PlayerStorageWriter.addBending(player,
+				// BendingType.ChiBlocker);
+				BendingPlayer.getBendingPlayer(player).addBender(
+						BendingType.ChiBlocker);
 				return;
 			}
 			printAddUsage(player);
@@ -1596,7 +1660,10 @@ public class BendingCommand {
 								+ Tools.getMessage(targetplayer,
 										"General.add_you_air"));
 				// config.addBending(targetplayer, "air");
-				PlayerStorageWriter.addBending(targetplayer, BendingType.Air);
+				// PlayerStorageWriter.addBending(targetplayer,
+				// BendingType.Air);
+				BendingPlayer.getBendingPlayer(targetplayer).addBender(
+						BendingType.Air);
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -1626,7 +1693,10 @@ public class BendingCommand {
 								+ Tools.getMessage(targetplayer,
 										"General.add_you_fire"));
 				// config.addBending(targetplayer, "fire");
-				PlayerStorageWriter.addBending(targetplayer, BendingType.Fire);
+				// PlayerStorageWriter.addBending(targetplayer,
+				// BendingType.Fire);
+				BendingPlayer.getBendingPlayer(targetplayer).addBender(
+						BendingType.Fire);
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -1656,7 +1726,10 @@ public class BendingCommand {
 								+ Tools.getMessage(targetplayer,
 										"General.add_you_earth"));
 				// config.addBending(targetplayer, "earth");
-				PlayerStorageWriter.addBending(targetplayer, BendingType.Earth);
+				// PlayerStorageWriter.addBending(targetplayer,
+				// BendingType.Earth);
+				BendingPlayer.getBendingPlayer(targetplayer).addBender(
+						BendingType.Earth);
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -1685,7 +1758,10 @@ public class BendingCommand {
 								+ Tools.getMessage(targetplayer,
 										"General.add_you_water"));
 				// config.addBending(targetplayer, "water");
-				PlayerStorageWriter.addBending(targetplayer, BendingType.Water);
+				// PlayerStorageWriter.addBending(targetplayer,
+				// BendingType.Water);
+				BendingPlayer.getBendingPlayer(targetplayer).addBender(
+						BendingType.Water);
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
@@ -1716,7 +1792,9 @@ public class BendingCommand {
 								+ Tools.getMessage(targetplayer,
 										"General.add_you_chi"));
 				// config.addBending(targetplayer, "chiblocker");
-				PlayerStorageWriter.addBending(targetplayer,
+				// PlayerStorageWriter.addBending(targetplayer,
+				// BendingType.ChiBlocker);
+				BendingPlayer.getBendingPlayer(targetplayer).addBender(
 						BendingType.ChiBlocker);
 				return;
 			}
@@ -1749,46 +1827,44 @@ public class BendingCommand {
 		}
 
 		if (args.length == 1) {
-			if (!ConfigManager.bendToItem) {
-				for (int i = 0; i <= 8; i++) {
-					// config.removeAbility(player, i);
-					PlayerStorageWriter.removeSlot(player, i);
-				}
-			} else {
-				for (Material mat : Material.values()) {
-					// config.removeAbility(player, mat.getId());
-					PlayerStorageWriter.removeItem(player, mat);
-				}
-			}
+			// if (!ConfigManager.bendToItem) {
+			// for (int i = 0; i <= 8; i++) {
+			// // config.removeAbility(player, i);
+			// // PlayerStorageWriter.removeSlot(player, i);
+			// BendingPlayer.getBendingPlayer(player).removeAbility(i);
+			// }
+			// } else {
+			// for (Material mat : Material.values()) {
+			// // config.removeAbility(player, mat.getId());
+			// // PlayerStorageWriter.removeItem(player, mat);
+			// BendingPlayer.getBendingPlayer(player).removeAbility(mat);
+			// }
+			// }
+			BendingPlayer.getBendingPlayer(player).clearAbilities();
 			Tools.sendMessage(player, "General.cleared_message");
 		} else if (args.length == 2) {
-			if (!ConfigManager.bendToItem) {
-				try {
-					int slot = Integer.parseInt(args[1]);
+			try {
+				int slot = Integer.parseInt(args[1]);
 
-					if (slot > 0 && slot < 10) {
-						// config.removeAbility(player, slot - 1);
-						PlayerStorageWriter.removeSlot(player, slot - 1);
-						sendMessage(
-								player,
-								Tools.getMessage(player, "General.slot")
-										+ " "
-										+ args[1]
-										+ " "
-										+ Tools.getMessage(player,
-												"General.slot_item_cleared"));
-						return;
-					}
-					printClearUsage(player);
-				} catch (NumberFormatException e) {
-					printClearUsage(player);
+				if (slot > 0 && slot < 10) {
+					BendingPlayer.getBendingPlayer(player).removeAbility(
+							slot - 1);
+					sendMessage(
+							player,
+							Tools.getMessage(player, "General.slot")
+									+ " "
+									+ args[1]
+									+ " "
+									+ Tools.getMessage(player,
+											"General.slot_item_cleared"));
 					return;
 				}
-			} else {
-				if (Material.matchMaterial(args[1]) != null) {
-					// config.removeAbility(player,
-					// Material.matchMaterial(args[1]));
-					PlayerStorageWriter.removeItem(player,
+				printClearUsage(player);
+				return;
+			} catch (NumberFormatException e) {
+				Material mat = Material.matchMaterial(args[1]);
+				if (mat != null) {
+					BendingPlayer.getBendingPlayer(player).removeAbility(
 							Material.matchMaterial(args[1]));
 					sendMessage(
 							player,
@@ -1798,9 +1874,55 @@ public class BendingCommand {
 									+ Tools.getMessage(player,
 											"General.slot_item_cleared"));
 					return;
+				} else {
+					printClearUsage(player);
+					return;
 				}
-				printClearUsage(player);
 			}
+			//
+			// if (!ConfigManager.bendToItem) {
+			// try {
+			// int slot = Integer.parseInt(args[1]);
+			//
+			// if (slot > 0 && slot < 10) {
+			// // config.removeAbility(player, slot - 1);
+			// // PlayerStorageWriter.removeSlot(player, slot - 1);
+			// BendingPlayer.getBendingPlayer(player).removeAbility(
+			// slot - 1);
+			// sendMessage(
+			// player,
+			// Tools.getMessage(player, "General.slot")
+			// + " "
+			// + args[1]
+			// + " "
+			// + Tools.getMessage(player,
+			// "General.slot_item_cleared"));
+			// return;
+			// }
+			// printClearUsage(player);
+			// } catch (NumberFormatException e) {
+			// printClearUsage(player);
+			// return;
+			// }
+			// } else {
+			// if (Material.matchMaterial(args[1]) != null) {
+			// // config.removeAbility(player,
+			// // Material.matchMaterial(args[1]));
+			// // PlayerStorageWriter.removeItem(player,
+			// // Material.matchMaterial(args[1]));
+			// BendingPlayer.getBendingPlayer(player).removeAbility(
+			// Material.matchMaterial(args[1]));
+			// sendMessage(
+			// player,
+			// "Item "
+			// + args[1]
+			// + " "
+			// + Tools.getMessage(player,
+			// "General.slot_item_cleared"));
+			// return;
+			// }
+			// printClearUsage(player);
+			// }
 
 		}
 
@@ -1848,27 +1970,47 @@ public class BendingCommand {
 
 		int slot = player.getInventory().getHeldItemSlot();
 		Material mat = player.getInventory().getItemInHand().getType();
+		boolean item = false;
 
-		if (args.length == 3 && ConfigManager.bendToItem) {
-			mat = Material.matchMaterial(args[2]);
-			if (mat == null) {
-				printNoPermissions(player);
-				return;
-			}
-		} else if (args.length == 3) {
+		if (args.length == 3) {
 			try {
 				slot = Integer.parseInt(args[2]);
 
 				if (slot <= 0 || slot >= 10) {
-					printNoPermissions(player);
+					printBindUsage(player);
 					return;
 				}
 				slot--;
 			} catch (NumberFormatException e) {
-				printBindUsage(player);
-				return;
+				mat = Material.matchMaterial(args[2]);
+				if (mat == null) {
+					printBindUsage(player);
+					return;
+				}
+				item = true;
 			}
 		}
+
+		// if (args.length == 3 && ConfigManager.bendToItem) {
+		// mat = Material.matchMaterial(args[2]);
+		// if (mat == null) {
+		// printNoPermissions(player);
+		// return;
+		// }
+		// } else if (args.length == 3) {
+		// try {
+		// slot = Integer.parseInt(args[2]);
+		//
+		// if (slot <= 0 || slot >= 10) {
+		// printNoPermissions(player);
+		// return;
+		// }
+		// slot--;
+		// } catch (NumberFormatException e) {
+		// printBindUsage(player);
+		// return;
+		// }
+		// }
 
 		ChatColor color = ChatColor.WHITE;
 		ChatColor white = ChatColor.WHITE;
@@ -1881,14 +2023,17 @@ public class BendingCommand {
 				return;
 			}
 			color = Tools.getColor(ConfigManager.getColor("Water"));
-			if (!ConfigManager.bendToItem) {
+			if (!item) {
 				// config.setAbility(player, ability, slot);
-				PlayerStorageWriter.bindSlot(player, slot, ability);
+				// PlayerStorageWriter.bindSlot(player, slot, ability);
+				BendingPlayer.getBendingPlayer(player)
+						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
 			} else {
 				// config.setAbility(player, ability, mat);
-				PlayerStorageWriter.bindItem(player, mat, ability);
+				// PlayerStorageWriter.bindItem(player, mat, ability);
+				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
 			}
@@ -1902,14 +2047,17 @@ public class BendingCommand {
 				return;
 			}
 			color = Tools.getColor(ConfigManager.getColor("Air"));
-			if (!ConfigManager.bendToItem) {
+			if (!item) {
 				// config.setAbility(player, ability, slot);
-				PlayerStorageWriter.bindSlot(player, slot, ability);
+				// PlayerStorageWriter.bindSlot(player, slot, ability);
+				BendingPlayer.getBendingPlayer(player)
+						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
 			} else {
 				// config.setAbility(player, ability, mat);
-				PlayerStorageWriter.bindItem(player, mat, ability);
+				// PlayerStorageWriter.bindItem(player, mat, ability);
+				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
 			}
@@ -1923,14 +2071,17 @@ public class BendingCommand {
 				return;
 			}
 			color = Tools.getColor(ConfigManager.getColor("Earth"));
-			if (!ConfigManager.bendToItem) {
+			if (!item) {
 				// config.setAbility(player, ability, slot);
-				PlayerStorageWriter.bindSlot(player, slot, ability);
+				// PlayerStorageWriter.bindSlot(player, slot, ability);
+				BendingPlayer.getBendingPlayer(player)
+						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
 			} else {
 				// config.setAbility(player, ability, mat);
-				PlayerStorageWriter.bindItem(player, mat, ability);
+				// PlayerStorageWriter.bindItem(player, mat, ability);
+				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
 			}
@@ -1944,14 +2095,17 @@ public class BendingCommand {
 				return;
 			}
 			color = Tools.getColor(ConfigManager.getColor("ChiBlocker"));
-			if (!ConfigManager.bendToItem) {
+			if (!item) {
 				// config.setAbility(player, ability, slot);
-				PlayerStorageWriter.bindSlot(player, slot, ability);
+				// PlayerStorageWriter.bindSlot(player, slot, ability);
+				BendingPlayer.getBendingPlayer(player)
+						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
 			} else {
 				// config.setAbility(player, ability, mat);
-				PlayerStorageWriter.bindItem(player, mat, ability);
+				// PlayerStorageWriter.bindItem(player, mat, ability);
+				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
 			}
@@ -1965,14 +2119,17 @@ public class BendingCommand {
 				return;
 			}
 			color = Tools.getColor(ConfigManager.getColor("Fire"));
-			if (!ConfigManager.bendToItem) {
+			if (!item) {
 				// config.setAbility(player, ability, slot);
-				PlayerStorageWriter.bindSlot(player, slot, ability);
+				// PlayerStorageWriter.bindSlot(player, slot, ability);
+				BendingPlayer.getBendingPlayer(player)
+						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
 			} else {
 				// config.setAbility(player, ability, mat);
-				PlayerStorageWriter.bindItem(player, mat, ability);
+				// PlayerStorageWriter.bindItem(player, mat, ability);
+				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
 			}
@@ -1983,14 +2140,17 @@ public class BendingCommand {
 				return;
 
 			color = ChatColor.DARK_PURPLE;
-			if (!ConfigManager.bendToItem) {
+			if (!item) {
 				// config.setAbility(player, ability, slot);
-				PlayerStorageWriter.bindSlot(player, slot, ability);
+				// PlayerStorageWriter.bindSlot(player, slot, ability);
+				BendingPlayer.getBendingPlayer(player)
+						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
 			} else {
 				// config.setAbility(player, ability, mat);
-				PlayerStorageWriter.bindItem(player, mat, ability);
+				// PlayerStorageWriter.bindItem(player, mat, ability);
+				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
 			}

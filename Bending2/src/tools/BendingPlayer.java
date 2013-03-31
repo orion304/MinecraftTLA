@@ -1,88 +1,99 @@
 package tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
-import main.StorageManager;
+import main.BendingPlayers;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 
-public class BendingPlayer {
+@SerializableAs("BendingPlayer")
+public class BendingPlayer implements CustomSerializable {
 
-	private static ConcurrentHashMap<OfflinePlayer, BendingPlayer> players = new ConcurrentHashMap<OfflinePlayer, BendingPlayer>();
+	private static ConcurrentHashMap<String, BendingPlayer> players = new ConcurrentHashMap<String, BendingPlayer>();
 
-	private static StorageManager config = Tools.config;
+	private static BendingPlayers config = Tools.config;
 
-	private OfflinePlayer player;
+	private String playername;
 	private String language;
 
-	private ConcurrentHashMap<Integer, Abilities> slotAbilities = new ConcurrentHashMap<Integer, Abilities>();
-	private ConcurrentHashMap<Material, Abilities> itemAbilities = new ConcurrentHashMap<Material, Abilities>();
+	private List<Integer> slotAbilities = initializeEmptySlots();
+	private List<Integer> itemAbilities = initializeEmptyItems();
 
-	private ArrayList<BendingType> bendingType = new ArrayList<BendingType>();
+	private List<Integer> bendingType = new ArrayList<Integer>();
+
+	private boolean bendToItem = ConfigManager.bendToItem;
 
 	private long paralyzeTime = 0;
 	private long slowTime = 0;
 
-	public BendingPlayer(OfflinePlayer player) {
+	private long lasttime = 0;
+
+	private boolean permaremoved = false;
+
+	private static List<Integer> initializeEmptySlots() {
+		Integer[] array = new Integer[10];
+		Arrays.fill(array, -1);
+		return Arrays.asList(array);
+	}
+
+	private static List<Integer> initializeEmptyItems() {
+		Integer[] array = new Integer[500];
+		Arrays.fill(array, -1);
+		return Arrays.asList(array);
+	}
+
+	public BendingPlayer(String player) {
 		if (players.containsKey(player)) {
 			players.remove(player);
 		}
 
-		language = config.getLanguage(player);
+		language = Tools.getDefaultLanguage();
 
-		for (BendingType type : BendingType.values()) {
-			if (config.isBender(player.getName(), type))
-				bendingType.add(type);
-		}
+		playername = player;
 
-		if (ConfigManager.bendToItem) {
-
-			for (Material item : Material.values()) {
-				Abilities ability = config.getAbility(player, item);
-				if (ability != null) {
-					itemAbilities.put(item, ability);
-				}
-			}
-
-		} else {
-
-			for (int i = 0; i < 9; i++) {
-				Abilities ability = config.getAbility(player, i);
-				if (ability != null) {
-					slotAbilities.put(i, ability);
-				}
-			}
-
-		}
-
-		this.player = player;
+		lasttime = System.currentTimeMillis();
 
 		players.put(player, this);
+
+		// Tools.verbose(playername + " slot size: " + slotAbilities.size());
+		// Tools.verbose(playername + " item size: " + itemAbilities.size());
+	}
+
+	public static List<BendingPlayer> getBendingPlayers() {
+		List<BendingPlayer> bPlayers = new ArrayList<BendingPlayer>(
+				players.values());
+		return bPlayers;
 	}
 
 	public static BendingPlayer getBendingPlayer(OfflinePlayer player) {
-		if (players.containsKey(player)) {
-			BendingPlayer bPlayer = players.get(player);
-			bPlayer.player = Bending.plugin.getServer().getOfflinePlayer(
-					player.getName());
-			return bPlayer;
-		}
-		return new BendingPlayer(player);
+		return getBendingPlayer(player.getName());
 	}
 
 	public static BendingPlayer getBendingPlayer(String playername) {
-		OfflinePlayer player = Bending.plugin.getServer().getOfflinePlayer(
-				playername);
-		if (player != null) {
-			return getBendingPlayer(player);
+		if (players.containsKey(playername)) {
+			return players.get(playername);
 		}
-		// Tools.verbose("No player by that name!");
-		return null;
+
+		BendingPlayer player = config.getBendingPlayer(playername);
+		if (player != null) {
+			players.put(playername, player);
+			return player;
+		} else {
+			return new BendingPlayer(playername);
+		}
+	}
+
+	public String getName() {
+		return playername;
 	}
 
 	public boolean isBender() {
@@ -90,98 +101,124 @@ public class BendingPlayer {
 	}
 
 	public boolean isBender(BendingType type) {
-		return bendingType.contains(type);
+		lasttime = System.currentTimeMillis();
+		return bendingType.contains(BendingType.getIndex(type));
 	}
 
 	public void setBender(BendingType type) {
-		bendingType.clear();
-		slotAbilities.clear();
-		itemAbilities.clear();
-		bendingType.add(type);
+		removeBender();
+		bendingType.add(BendingType.getIndex(type));
 	}
 
 	public void addBender(BendingType type) {
+		permaremoved = false;
 		if (!bendingType.contains(type))
-			bendingType.add(type);
+			bendingType.add(BendingType.getIndex(type));
+	}
+
+	public void clearAbilities() {
+		slotAbilities = initializeEmptySlots();
+		itemAbilities = initializeEmptyItems();
 	}
 
 	public void removeBender() {
 		bendingType.clear();
-		slotAbilities.clear();
-		itemAbilities.clear();
+		clearAbilities();
+	}
+
+	public void permaremoveBender() {
+		permaremoved = true;
+		removeBender();
+	}
+
+	public boolean isPermaRemoved() {
+		return permaremoved;
+	}
+
+	public void setPermaRemoved(boolean value) {
+		permaremoved = value;
 	}
 
 	public Abilities getAbility() {
-		if (!(player instanceof Player)) {
-			// Tools.verbose(this);
-			// Tools.verbose("Player isn't online??");
+		Player player = Bending.plugin.getServer().getPlayerExact(playername);
+		if (player == null)
 			return null;
-		}
-		Player pPlayer = (Player) player;
-		if (ConfigManager.bendToItem) {
-			Material item = pPlayer.getItemInHand().getType();
+		if (!player.isOnline() || player.isDead())
+			return null;
+		if (bendToItem) {
+			Material item = player.getItemInHand().getType();
 			return getAbility(item);
 		} else {
-			int slot = pPlayer.getInventory().getHeldItemSlot();
+			int slot = player.getInventory().getHeldItemSlot();
 			return getAbility(slot);
 		}
 	}
 
 	public Abilities getAbility(int slot) {
-		if (slotAbilities.containsKey(slot)) {
-			return slotAbilities.get(slot);
-		}
-		return null;
+		return Abilities.getAbility(slotAbilities.get(slot));
 	}
 
 	public Abilities getAbility(Material item) {
-		if (itemAbilities.containsKey(item)) {
-			return itemAbilities.get(item);
+		int id = item.getId();
+		if (id > 450) {
+			id = id - 2200 + 400;
 		}
-		return null;
+		return Abilities.getAbility(itemAbilities.get(id));
 	}
 
 	public void setAbility(int slot, Abilities ability) {
-		slotAbilities.put(slot, ability);
+		slotAbilities.set(slot, Abilities.getIndex(ability));
 	}
 
 	public void setAbility(Material item, Abilities ability) {
-		itemAbilities.put(item, ability);
+		int id = item.getId();
+		if (id > 450) {
+			id = id - 2200 + 400;
+		}
+		itemAbilities.set(id, Abilities.getIndex(ability));
+	}
+
+	public void removeSelectedAbility() {
+		Player player = Bending.plugin.getServer().getPlayerExact(playername);
+		if (player == null)
+			return;
+		if (!player.isOnline() || player.isDead())
+			return;
+		if (bendToItem) {
+			Material item = player.getItemInHand().getType();
+			removeAbility(item);
+		} else {
+			int slot = player.getInventory().getHeldItemSlot();
+			removeAbility(slot);
+		}
 	}
 
 	public void removeAbility(int slot) {
-		if (slotAbilities.containsKey(slot)) {
-			slotAbilities.remove(slot);
-		}
+		setAbility(slot, null);
 	}
 
 	public void removeAbility(Material item) {
-		if (itemAbilities.containsKey(item)) {
-			itemAbilities.remove(item);
-		}
+		setAbility(item, null);
 	}
 
-	public OfflinePlayer getPlayer() {
-		return player;
+	public Player getPlayer() {
+		return Bending.plugin.getServer().getPlayerExact(playername);
 	}
 
-	public static ArrayList<BendingPlayer> getBendingPlayers() {
-		ArrayList<BendingPlayer> list = new ArrayList<BendingPlayer>();
-		for (OfflinePlayer player : players.keySet()) {
-			list.add(players.get(player));
-		}
-		return list;
-	}
-
-	public boolean hasAbility(Abilities ability) {
-
-		return false;
-	}
+	// public static ArrayList<BendingPlayer> getBendingPlayers() {
+	// ArrayList<BendingPlayer> list = new ArrayList<BendingPlayer>();
+	// for (String player : players.keySet()) {
+	// list.add(players.get(player));
+	// }
+	// return list;
+	// }
 
 	public List<BendingType> getBendingTypes() {
-		if (bendingType.isEmpty())
-			return null;
-		return bendingType;
+		List<BendingType> list = new ArrayList<BendingType>();
+		for (int index : bendingType) {
+			list.add(BendingType.getType(index));
+		}
+		return list;
 	}
 
 	public void setLanguage(String language) {
@@ -190,6 +227,14 @@ public class BendingPlayer {
 
 	public String getLanguage() {
 		return language;
+	}
+
+	public void setBendToItem(boolean value) {
+		bendToItem = value;
+	}
+
+	public boolean getBendToItem() {
+		return bendToItem;
 	}
 
 	public boolean canBeParalyzed() {
@@ -208,9 +253,17 @@ public class BendingPlayer {
 		slowTime = System.currentTimeMillis() + cooldown;
 	}
 
+	public long getLastTime() {
+		return lasttime;
+	}
+
+	public void delete() {
+		players.remove(playername);
+	}
+
 	public String toString() {
 		String string = "BendingPlayer{";
-		string += "Player=" + player;
+		string += "Player=" + playername;
 		string += ", ";
 		string += "BendingType=" + bendingType;
 		string += ", ";
@@ -223,6 +276,49 @@ public class BendingPlayer {
 		}
 		string += "}";
 		return string;
+	}
+
+	@SuppressWarnings("unchecked")
+	public BendingPlayer(Map<String, Object> map) {
+		playername = (String) map.get("PlayerName");
+
+		if (players.containsKey(playername)) {
+			players.remove(playername);
+		}
+
+		bendingType = (List<Integer>) map.get("BendingTypes");
+		language = (String) map.get("Language");
+		bendToItem = (Boolean) map.get("BendToItem");
+		itemAbilities = (List<Integer>) map.get("ItemAbilities");
+		slotAbilities = (List<Integer>) map.get("SlotAbilities");
+
+		permaremoved = (Boolean) map.get("Permaremove");
+
+		lasttime = (Long) map.get("LastTime");
+
+		players.put(playername, this);
+	}
+
+	@Override
+	public Map<String, Object> serialize() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("PlayerName", playername);
+		map.put("BendingTypes", bendingType);
+		map.put("Language", language);
+		map.put("BendToItem", bendToItem);
+		map.put("ItemAbilities", itemAbilities);
+		map.put("SlotAbilities", slotAbilities);
+		map.put("Permaremove", permaremoved);
+		map.put("LastTime", lasttime);
+		return map;
+	}
+
+	public static BendingPlayer deserialize(Map<String, Object> map) {
+		return new BendingPlayer(map);
+	}
+
+	public static BendingPlayer valueOf(Map<String, Object> map) {
+		return deserialize(map);
 	}
 
 }

@@ -9,14 +9,15 @@ import java.util.logging.Logger;
 import main.Metrics.Graph;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Cooldowns;
@@ -35,7 +36,9 @@ public class Bending extends JavaPlugin {
 	public final BendingManager manager = new BendingManager(this);
 	public final BendingListener listener = new BendingListener(this);
 	private final RevertChecker revertChecker = new RevertChecker(this);
-	private final PlayerStorageWriter playerStorageWriter = new PlayerStorageWriter();
+	// private final PlayerStorageWriter playerStorageWriter = new
+	// PlayerStorageWriter();
+	private final BendingPlayersSaver saver = new BendingPlayersSaver();
 	public final TagAPIListener Taglistener = new TagAPIListener();
 	public static Consumer logblock = null;
 
@@ -47,7 +50,7 @@ public class Bending extends JavaPlugin {
 	// getResource("bendingPlayers.yml"));
 	public static ConfigManager configManager = new ConfigManager();
 	public static Language language = new Language();
-	public StorageManager config;
+	public BendingPlayers config;
 	public Tools tools;
 
 	public String[] waterbendingabilities;
@@ -56,10 +59,13 @@ public class Bending extends JavaPlugin {
 	public String[] firebendingabilities;
 	public String[] chiblockingabilities;
 
+	static int air = 0, earth = 0, water = 0, fire = 0, chi = 0;
+
 	public void onDisable() {
 
 		Tools.stopAllBending();
-		PlayerStorageWriter.finish();
+		// PlayerStorageWriter.finish();
+		BendingPlayersSaver.save();
 
 		getServer().getScheduler().cancelTasks(plugin);
 
@@ -69,6 +75,9 @@ public class Bending extends JavaPlugin {
 
 		plugin = this;
 
+		ConfigurationSerialization.registerClass(BendingPlayer.class,
+				"BendingPlayer");
+
 		configManager.load(new File(getDataFolder(), "config.yml"));
 		language.load(new File(getDataFolder(), "language.yml"));
 
@@ -77,7 +86,7 @@ public class Bending extends JavaPlugin {
 			logblock = ((LogBlock) lb).getConsumer();
 		}
 
-		config = new StorageManager(getDataFolder());
+		config = new BendingPlayers(getDataFolder());
 		Cooldowns.initialize();
 
 		tools = new Tools(config);
@@ -111,8 +120,8 @@ public class Bending extends JavaPlugin {
 
 		getServer().getScheduler().runTaskTimerAsynchronously(plugin,
 				revertChecker, 0, 40);
-		getServer().getScheduler().runTaskTimerAsynchronously(plugin,
-				playerStorageWriter, 0, 40);
+		getServer().getScheduler().runTaskTimerAsynchronously(plugin, saver, 0,
+				20 * 60 * 5);
 
 		Tools.printHooks();
 		Tools.verbose("Bending v" + this.getDescription().getVersion()
@@ -123,17 +132,24 @@ public class Bending extends JavaPlugin {
 
 			Graph bending = metrics.createGraph("Bending");
 
+			for (String p : config.getSavedPlayers()) {
+				if (Tools.isBender(p, BendingType.Air))
+					air++;
+				if (Tools.isBender(p, BendingType.Earth))
+					earth++;
+				if (Tools.isBender(p, BendingType.Water))
+					water++;
+				if (Tools.isBender(p, BendingType.Fire))
+					fire++;
+				if (Tools.isBender(p, BendingType.ChiBlocker))
+					chi++;
+			}
+
 			bending.addPlotter(new Metrics.Plotter("Air") {
 
 				@Override
 				public int getValue() {
-					int i = 0;
-					for (OfflinePlayer p : Bukkit.getServer()
-							.getOfflinePlayers()) {
-						if (Tools.isBender(p.getName(), BendingType.Air))
-							i++;
-					}
-					return i;
+					return air;
 				}
 
 			});
@@ -142,13 +158,7 @@ public class Bending extends JavaPlugin {
 
 				@Override
 				public int getValue() {
-					int i = 0;
-					for (OfflinePlayer p : Bukkit.getServer()
-							.getOfflinePlayers()) {
-						if (Tools.isBender(p.getName(), BendingType.Fire))
-							i++;
-					}
-					return i;
+					return fire;
 				}
 
 			});
@@ -157,13 +167,7 @@ public class Bending extends JavaPlugin {
 
 				@Override
 				public int getValue() {
-					int i = 0;
-					for (OfflinePlayer p : Bukkit.getServer()
-							.getOfflinePlayers()) {
-						if (Tools.isBender(p.getName(), BendingType.Water))
-							i++;
-					}
-					return i;
+					return water;
 				}
 
 			});
@@ -172,13 +176,7 @@ public class Bending extends JavaPlugin {
 
 				@Override
 				public int getValue() {
-					int i = 0;
-					for (OfflinePlayer p : Bukkit.getServer()
-							.getOfflinePlayers()) {
-						if (Tools.isBender(p.getName(), BendingType.Earth))
-							i++;
-					}
-					return i;
+					return earth;
 				}
 
 			});
@@ -187,13 +185,7 @@ public class Bending extends JavaPlugin {
 
 				@Override
 				public int getValue() {
-					int i = 0;
-					for (OfflinePlayer p : Bukkit.getServer()
-							.getOfflinePlayers()) {
-						if (Tools.isBender(p.getName(), BendingType.ChiBlocker))
-							i++;
-					}
-					return i;
+					return chi;
 				}
 
 			});
@@ -258,8 +250,7 @@ public class Bending extends JavaPlugin {
 		}
 		if (cmd.getName().equalsIgnoreCase("bending")) {
 
-			new BendingCommand(player, args, getDataFolder(), config,
-					getServer());
+			new BendingCommand(player, args, getDataFolder(), getServer());
 
 		}
 

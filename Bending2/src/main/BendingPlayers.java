@@ -2,6 +2,8 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,12 +12,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import tools.BendingPlayer;
+
 public class BendingPlayers {
 
 	private FileConfiguration bendingPlayers = null;
 	private File bendingPlayersFile = null;
 
 	private File dataFolder;
+
+	private int version = 1;
 
 	// private InputStream defConfigStream;
 
@@ -35,6 +41,55 @@ public class BendingPlayers {
 			return bendingPlayers.getString(s, "");
 		return "";
 	}
+
+	public Object get(String s) {
+		if (bendingPlayers != null) {
+			return bendingPlayers.get(s);
+		}
+		return null;
+	}
+
+	public void setPlayer(String playername, BendingPlayer player) {
+		if (bendingPlayers != null) {
+			bendingPlayers.set(playername, player);
+			// Tools.verbose(playername + ": " + player.serialize());
+		}
+		return;
+	}
+
+	public BendingPlayer getBendingPlayer(String playername) {
+		if (bendingPlayers != null) {
+			if (bendingPlayers.contains(playername))
+				return new BendingPlayer(bendingPlayers
+						.getConfigurationSection(playername).getValues(false));
+		}
+		return null;
+	}
+
+	public List<String> getSavedPlayers() {
+		List<String> list = new ArrayList<String>();
+		if (bendingPlayers != null) {
+			list = new ArrayList<String>(bendingPlayers.getKeys(false));
+			list.remove("version");
+		}
+		return list;
+	}
+
+	// public void purgeOldPlayers(long timelimitdays) {
+	// if (timelimitdays == 0)
+	// return;
+	// long nowtime = System.currentTimeMillis();
+	// long timelimit = timelimitdays * (1000 * 60 * 60 * 24);
+	// for (BendingPlayer player : BendingPlayer.getBendingPlayers()) {
+	// long time = player.getLastTime();
+	// if (nowtime - time >= timelimit) {
+	// player.delete();
+	// if (bendingPlayers != null) {
+	// bendingPlayers.set(player.getName(), null);
+	// }
+	// }
+	// }
+	// }
 
 	public Boolean checkKeys(String s) {
 		if (!(bendingPlayers == null))
@@ -63,6 +118,15 @@ public class BendingPlayers {
 		}
 		bendingPlayers = YamlConfiguration
 				.loadConfiguration(bendingPlayersFile);
+		if (bendingPlayers.contains("version")) {
+			if (bendingPlayers.getInt("version", 0) == version) {
+				return;
+			}
+		}
+		bendingPlayers = new YamlConfiguration();
+		bendingPlayers.set("version", version);
+		save();
+		return;
 	}
 
 	private void load() {

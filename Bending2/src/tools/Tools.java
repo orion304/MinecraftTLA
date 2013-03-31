@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
 import main.BendingManager;
-import main.StorageManager;
+import main.BendingPlayers;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 
@@ -102,7 +102,7 @@ import firebending.WallOfFire;
 
 public class Tools {
 
-	public static StorageManager config;
+	public static BendingPlayers config;
 
 	private static final ItemStack pickaxe = new ItemStack(
 			Material.DIAMOND_PICKAXE);
@@ -149,7 +149,7 @@ public class Tools {
 
 	// private static boolean logblockhook = true;
 
-	public Tools(StorageManager config2) {
+	public Tools(BendingPlayers config2) {
 		config = config2;
 	}
 
@@ -1799,7 +1799,7 @@ public class Tools {
 	public static String getLanguage(Player player) {
 		String language = getDefaultLanguage();
 		if (player != null)
-			language = config.getLanguage(player);
+			language = BendingPlayer.getBendingPlayer(player).getLanguage();
 		return language;
 	}
 
