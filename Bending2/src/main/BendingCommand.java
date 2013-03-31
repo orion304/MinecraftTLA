@@ -34,6 +34,9 @@ public class BendingCommand {
 	private final String[] importAliases = { "import" };
 	private final String[] whoAliases = { "who", "wh", "w" };
 	private final String[] languageAliases = { "language", "lang", "la", "l" };
+	private final String[] bindModeAliases = { "bindmode", "bmode", "bindm",
+			"bm" };
+	private final String[] versionAliases = { "version", "ver", "v" };
 
 	private final String[] airbendingAliases = { "air", "a", "airbender",
 			"airbending", "airbend" };
@@ -45,6 +48,9 @@ public class BendingCommand {
 			"waterbending", "waterbend" };
 	private final String[] chiblockingAliases = { "chi", "c", "chiblock",
 			"chiblocker", "chiblocking" };
+
+	private final String[] itemAliases = { "item", "ite", "it", "i" };
+	private final String[] slotAliases = { "slot", "slo", "sl", "s" };
 
 	private String[] waterbendingabilities = Abilities
 			.getWaterbendingAbilities();
@@ -120,6 +126,12 @@ public class BendingCommand {
 	static final String bind_to_slot = "This binds <ability> to <slot#>.";
 	static final String bind_item = "This binds <ability> to your current item.";
 	static final String bind_to_item = "This binds <ability> to <item>.";
+	static final String bind_mode_usage = "Displays your current bind mode, whether you bind abilities to slots or items.";
+	static final String bind_mode_change_usage = "Changes your bind mode, allowing you to bind to items instead of slots, or vice versa.";
+	static final String bind_mode_change = "You have changed your binding mode to bind to: ";
+	static final String your_bind_mode = "You're currently binding to: ";
+	static final String server_bind_mode = "The server default of bindmode is: ";
+	static final String version_usage = "Displays information about the version and author of Bending.";
 	static final String not_air = "You are not an airbender.";
 	static final String not_earth = "You are not an earthbender.";
 	static final String not_fire = "You are not a firebender.";
@@ -233,6 +245,10 @@ public class BendingCommand {
 				who(player, args);
 			} else if (Arrays.asList(languageAliases).contains(arg)) {
 				language(player, args);
+			} else if (Arrays.asList(bindModeAliases).contains(arg)) {
+				bindMode(player, args);
+			} else if (Arrays.asList(versionAliases).contains(arg)) {
+				version(player, args);
 			} else {
 				printHelpDialogue(player);
 			}
@@ -242,6 +258,98 @@ public class BendingCommand {
 
 		}
 
+	}
+
+	private void version(Player player, String[] args) {
+		if (!hasHelpPermission(player, "bending.command.version")) {
+			sendNoCommandPermissionMessage(player, "version");
+			return;
+		}
+
+		sendMessage(player, "Bending v"
+				+ Bending.plugin.getDescription().getVersion());
+		sendMessage(player, "Author: orion304");
+	}
+
+	private void printVersionUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.command.version")) {
+			sendNoCommandPermissionMessage(player, "version");
+		}
+
+		printUsageMessage(player, "/bending version", "General.version_usage");
+	}
+
+	private void bindMode(Player player, String[] args) {
+		if (!hasHelpPermission(player, "bending.command.bindmode")) {
+			sendNoCommandPermissionMessage(player, "bindmode");
+			return;
+		}
+
+		boolean bindmode = ConfigManager.bendToItem;
+		String mode;
+
+		if (args.length > 2) {
+			printBindModeUsage(player);
+			return;
+		} else if (args.length == 1) {
+			if (player == null) {
+				if (bindmode) {
+					mode = "item";
+				} else {
+					mode = "slot";
+				}
+				sendMessage(player,
+						Tools.getMessage(player, "General.server_bind_mode")
+								+ "" + mode);
+			} else {
+				bPlayer = BendingPlayer.getBendingPlayer(player);
+				bindmode = bPlayer.getBendToItem();
+				if (bindmode) {
+					mode = "item";
+				} else {
+					mode = "slot";
+				}
+				sendMessage(player,
+						Tools.getMessage(player, "General.your_bind_mode") + ""
+								+ mode);
+			}
+			return;
+		} else if (player == null) {
+			printNotFromConsole();
+			return;
+		} else {
+			bPlayer = BendingPlayer.getBendingPlayer(player);
+			String choice = args[1];
+			if (Arrays.asList(slotAliases).contains(choice)) {
+				bPlayer.setBendToItem(false);
+				sendMessage(player,
+						Tools.getMessage(player, "General.bind_mode_change")
+								+ "slot");
+			} else if (Arrays.asList(itemAliases).contains(choice)) {
+				bPlayer.setBendToItem(true);
+				sendMessage(player,
+						Tools.getMessage(player, "General.bind_mode_change")
+								+ "item");
+			} else {
+				printBindModeUsage(player);
+			}
+			return;
+		}
+	}
+
+	private void printBindModeUsage(Player player) {
+		if (!hasHelpPermission(player, "bending.command.bindmode")) {
+			sendNoCommandPermissionMessage(player, "language");
+			return;
+		}
+
+		printUsageMessage(player, "/bending bindmode",
+				"General.bind_mode_usage");
+
+		if (player != null) {
+			printUsageMessage(player, "/bending bindmode <slot/item>",
+					"General.bind_mode_change_usage");
+		}
 	}
 
 	private void language(Player player, String[] args) {
@@ -1228,6 +1336,28 @@ public class BendingCommand {
 				aliases = aliases + alias + " ";
 			sendMessage(player, color + "Aliases: " + aliases);
 			printLanguageUsage(player);
+		} else if (Arrays.asList(versionAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.version")) {
+				sendNoCommandPermissionMessage(player, "version");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending version");
+			String aliases = "";
+			for (String alias : versionAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printVersionUsage(player);
+		} else if (Arrays.asList(bindModeAliases).contains(command)) {
+			if (!hasHelpPermission(player, "bending.command.bindmode")) {
+				sendNoCommandPermissionMessage(player, "bindmode");
+				return;
+			}
+			sendMessage(player, color + "Command: /bending bindmode");
+			String aliases = "";
+			for (String alias : bindModeAliases)
+				aliases = aliases + alias + " ";
+			sendMessage(player, color + "Aliases: " + aliases);
+			printBindModeUsage(player);
 		}
 	}
 
@@ -1285,8 +1415,9 @@ public class BendingCommand {
 			}
 
 			boolean none = true;
+			boolean item = bPlayer.getBendToItem();
 
-			if (!ConfigManager.bendToItem) {
+			if (!item) {
 				for (int i = 0; i <= 8; i++) {
 					// Abilities a = config.getAbility(player, i);
 					Abilities a = bPlayer.getAbility(i);
@@ -1805,13 +1936,12 @@ public class BendingCommand {
 
 	private void printClearUsage(Player player) {
 		printUsageMessage(player, "/bending clear", "General.clear_all");
-		if (!ConfigManager.bendToItem) {
-			printUsageMessage(player, "/bending clear <slot#>",
-					"General.clear_slot");
-		} else {
-			printUsageMessage(player, "/bending clear <item>",
-					"General.clear_item");
-		}
+
+		printUsageMessage(player, "/bending clear <slot#>",
+				"General.clear_slot");
+
+		printUsageMessage(player, "/bending clear <item>", "General.clear_item");
+
 	}
 
 	private void clear(Player player, String[] args) {
@@ -1929,17 +2059,18 @@ public class BendingCommand {
 	}
 
 	private void printBindUsage(Player player) {
-		if (!ConfigManager.bendToItem) {
+		boolean item = bPlayer.getBendToItem();
+		if (!item) {
 			printUsageMessage(player, "/bending bind <ability>",
 					"General.bind_slot");
-			printUsageMessage(player, "/bending bind <ability> <slot#>",
-					"General.bind_to_slot");
 		} else {
 			printUsageMessage(player, "/bending bind <ability>",
 					"General.bind_item");
-			printUsageMessage(player, "/bending bind <ability> <item>",
-					"General.bind_to_item");
 		}
+		printUsageMessage(player, "/bending bind <ability> <slot#>",
+				"General.bind_to_slot");
+		printUsageMessage(player, "/bending bind <ability> <item>",
+				"General.bind_to_item");
 	}
 
 	private void bind(Player player, String[] args) {
@@ -1970,7 +2101,7 @@ public class BendingCommand {
 
 		int slot = player.getInventory().getHeldItemSlot();
 		Material mat = player.getInventory().getItemInHand().getType();
-		boolean item = false;
+		boolean item = bPlayer.getBendToItem();
 
 		if (args.length == 3) {
 			try {
@@ -2192,8 +2323,11 @@ public class BendingCommand {
 	private void printCommands(Player player) {
 		sendMessage(player, "Bending aliases: bending bend b mtla tla");
 		String slot = Tools.getMessage(player, "General.slot") + "#";
-		if (ConfigManager.bendToItem)
-			slot = "item";
+		if (player != null)
+			if (bPlayer.getBendToItem())
+				slot = "item";
+		// if (ConfigManager.bendToItem)
+		// slot = "item";
 		if (hasHelpPermission(player, "bending.command.bind"))
 			sendMessage(player, "/bending bind <ability> [" + slot + "]");
 		if (hasHelpPermission(player, "bending.command.clear"))
@@ -2231,6 +2365,10 @@ public class BendingCommand {
 			sendMessage(player, "/bending who [player]");
 		if (hasHelpPermission(player, "bending.command.language"))
 			sendMessage(player, "/bending language [language]");
+		if (hasHelpPermission(player, "bending.command.bindmode"))
+			sendMessage(player, "/bending bindmode [slot/item]");
+		if (hasHelpPermission(player, "bending.command.version"))
+			sendMessage(player, "/bending version");
 
 	}
 

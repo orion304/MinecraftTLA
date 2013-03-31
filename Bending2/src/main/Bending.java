@@ -240,6 +240,8 @@ public class Bending extends JavaPlugin {
 		commands.put("command.clear", "clear");
 		commands.put("command.display", "display");
 		commands.put("command.bind", "bind <ability>");
+		commands.put("command.version", "version");
+		commands.put("command.bindmode", "bindmode [item/slot]");
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
