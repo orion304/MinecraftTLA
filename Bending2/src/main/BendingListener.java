@@ -660,7 +660,10 @@ public class BendingListener implements Listener {
 				player.setFallDistance(0);
 				event.setDamage(0);
 				event.setCancelled(true);
-			} else if (Tools.isBender(player.getName(), BendingType.Water)
+			}
+
+			if (!event.isCancelled()
+					&& Tools.isBender(player.getName(), BendingType.Water)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Water)) {
 				if (WaterPassive.softenLanding(player)) {
@@ -672,7 +675,10 @@ public class BendingListener implements Listener {
 					event.setDamage(0);
 					event.setCancelled(true);
 				}
-			} else if (Tools.isBender(player.getName(), BendingType.Earth)
+			}
+
+			if (!event.isCancelled()
+					&& Tools.isBender(player.getName(), BendingType.Earth)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Earth)) {
 				if (EarthPassive.softenLanding(player)) {
@@ -685,7 +691,10 @@ public class BendingListener implements Listener {
 					event.setCancelled(true);
 
 				}
-			} else if (Tools.isBender(player.getName(), BendingType.ChiBlocker)
+			}
+
+			if (!event.isCancelled()
+					&& Tools.isBender(player.getName(), BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.FALL) {
 				event.setDamage((int) ((double) event.getDamage() * (ConfigManager.falldamagereduction / 100.)));
 			}

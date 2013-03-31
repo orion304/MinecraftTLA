@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import main.Bending;
 import main.BendingManager;
 import main.BendingPlayers;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 
@@ -146,6 +147,7 @@ public class Tools {
 	private static boolean respectPreciousStones = true;
 	private static boolean respectFactions = true;
 	private static boolean respectTowny = true;
+	private static boolean respectGriefPrevention = true;
 
 	// private static boolean logblockhook = true;
 
@@ -1233,6 +1235,7 @@ public class Tools {
 		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
 		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
 		Plugin twnp = Bukkit.getPluginManager().getPlugin("Towny");
+		Plugin gpp = Bukkit.getPluginManager().getPlugin("GriefPrevention");
 
 		for (Location location : new Location[] { loc, player.getLocation() }) {
 
@@ -1364,6 +1367,22 @@ public class Tools {
 							.getLangString("msg_err_not_configured"));
 				}
 
+			}
+
+			if (gpp != null && respectGriefPrevention) {
+				String reason = GriefPrevention.instance.allowBuild(player,
+						location);
+
+				if (ignite.contains(ability)) {
+
+				}
+
+				if (explode.contains(ability)) {
+
+				}
+
+				if (reason != null)
+					return true;
 			}
 		}
 
