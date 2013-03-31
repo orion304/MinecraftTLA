@@ -83,6 +83,10 @@ public class BendingPlayer implements CustomSerializable {
 			return players.get(playername);
 		}
 
+		if (config == null) {
+			config = Tools.config;
+		}
+
 		BendingPlayer player = config.getBendingPlayer(playername);
 		if (player != null) {
 			players.put(playername, player);
