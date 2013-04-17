@@ -13,6 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.AvatarState;
 import tools.ConfigManager;
 import tools.Tools;
@@ -20,6 +21,8 @@ import tools.Tools;
 public class WallOfFire {
 
 	private Player player;
+
+	private static double maxangle = 50;
 
 	private static int range = ConfigManager.wallOfFireRange;
 	private int height = ConfigManager.wallOfFireHeight;
@@ -62,6 +65,14 @@ public class WallOfFire {
 		Block block = origin.getBlock();
 
 		if (block.isLiquid() || Tools.isSolid(block)) {
+			return;
+		}
+
+		Vector direction = player.getEyeLocation().getDirection();
+		Vector compare = direction.clone();
+		compare.setY(0);
+
+		if (Math.abs(direction.angle(compare)) < maxangle) {
 			return;
 		}
 
@@ -116,6 +127,9 @@ public class WallOfFire {
 				Location location = origin.clone().add(
 						orthoud.clone().multiply(j));
 				location = location.add(ortholr.clone().multiply(i));
+				if (Tools.isRegionProtectedFromBuild(player,
+						Abilities.WallOfFire, location))
+					continue;
 				Block block = location.getBlock();
 				if (!blocks.contains(block))
 					blocks.add(block);
@@ -140,6 +154,9 @@ public class WallOfFire {
 		if (entities.contains(player))
 			entities.remove(player);
 		for (Entity entity : entities) {
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.WallOfFire,
+					entity.getLocation()))
+				continue;
 			for (Block block : blocks) {
 				if (entity.getLocation().distance(block.getLocation()) <= 1.5) {
 					affect(entity);
