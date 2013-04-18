@@ -72,7 +72,7 @@ public class WallOfFire {
 		Vector compare = direction.clone();
 		compare.setY(0);
 		double angle = direction.angle(compare);
-		Tools.verbose(Math.toDegrees(angle));
+		// Tools.verbose(Math.toDegrees(angle));
 
 		if (Math.abs(direction.angle(compare)) > Math.toRadians(maxangle)) {
 			return;
