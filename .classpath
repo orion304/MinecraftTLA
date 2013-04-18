@@ -7,9 +7,9 @@
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/Towny.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/Factions.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/PreciousStones.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/WorldGuard.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/Vault.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/LogBlock.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/GriefPrevention.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/WorldGuard.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -146,7 +146,6 @@ public class Tools {
 	private static boolean allowharmless = true;
 	private static boolean respectWorldGuard = true;
 	private static boolean respectPreciousStones = true;
-	private static boolean respectGriefPrevention = true;
 	private static boolean respectFactions = true;
 	private static boolean respectTowny = true;
 
@@ -1178,16 +1177,6 @@ public class Tools {
 			}
 		}
 
-		Plugin gpp = Bukkit.getPluginManager().getPlugin("GriefPrevention");
-		if (gpp != null) {
-			verbose("Recognized GriefPrevention...");
-			if (respectGriefPrevention) {
-				verbose("Bending is set to respect GriefPrevention's claims.");
-			} else {
-				verbose ("But Bending is set to ignore GriefPrevention's claims.");
-			}
-		}
-
 		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
 		if (fcp != null) {
 			verbose("Recognized Factions...");
@@ -1281,28 +1270,6 @@ public class Tools {
 		Plugin gpp = Bukkit.getPluginManager().getPlugin("GriefPrevention");
 
 		for (Location location : new Location[] { loc, player.getLocation() }) {
-
-			if (gpp != null && respectGriefPrevention) {
-				Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);
-				GriefPrevention gp = (GriefPrevention) Bukkit
-						.getPluginManager().getPlugin("GriefPrevention");
-				if (claim != null) {
-					if (player.getName().equals(claim.getOwnerName())) {
-						return false;
-					} else {
-						if (!player.isOnline()) return true;
-						if (nugp.contains(ability)) return true;
-//						if (ignite.contains(ability)) return true;
-//						if (explode.contains(ability)) return true;
-						//					if (errorMessage.equals(null)) {
-						//						return false;
-						//					} else {
-						//						player.sendMessage(errorMessage);
-						//						return true;
-						//					}
-					}
-				}
-			}
 
 			if (wgp != null && respectWorldGuard) {
 				WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit
