@@ -83,7 +83,7 @@ public class ConfigManager {
 	public static double airSuctionPush = 1;
 
 	// AirSwipe
-	public static int airdmg = 1;
+	public static int airdmg = 2;
 	public static double airSwipeRange = 16;
 	public static int airSwipeArc = 20;
 	public static double airSwipeSpeed = 25;
@@ -214,11 +214,11 @@ public class ConfigManager {
 	public static int ringOfFireRange = 7;
 
 	// WallOfFire
-	public static int wallOfFireRange = 10;
-	public static int wallOfFireHeight = 3;
-	public static int wallOfFireWidth = 6;
+	public static int wallOfFireRange = 4;
+	public static int wallOfFireHeight = 4;
+	public static int wallOfFireWidth = 4;
 	public static long wallOfFireDuration = 5000;
-	public static int wallOfFireDamage = 3;
+	public static int wallOfFireDamage = 2;
 	public static long wallOfFireInterval = 500;
 	public static long wallOfFireCooldown = 7500;
 
@@ -253,7 +253,7 @@ public class ConfigManager {
 	// SpikeField
 	public static long icespikeareacooldown = 3000;
 	public static int icespikeareadamage = 2;
-	public static int icespikearearadius = 4;
+	public static int icespikearearadius = 6;
 	public static double icespikeareathrowingmult = 1;
 
 	// WaterBubble

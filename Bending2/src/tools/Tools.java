@@ -14,8 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
 import main.BendingManager;
-import main.StorageManager;
-import me.ryanhamshire.GriefPrevention.Claim;
+import main.BendingPlayers;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
@@ -30,7 +29,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_5_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_5_R2.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
@@ -104,7 +103,7 @@ import firebending.WallOfFire;
 
 public class Tools {
 
-	public static StorageManager config;
+	public static BendingPlayers config;
 
 	private static final ItemStack pickaxe = new ItemStack(
 			Material.DIAMOND_PICKAXE);
@@ -148,10 +147,11 @@ public class Tools {
 	private static boolean respectPreciousStones = true;
 	private static boolean respectFactions = true;
 	private static boolean respectTowny = true;
+	private static boolean respectGriefPrevention = true;
 
 	// private static boolean logblockhook = true;
 
-	public Tools(StorageManager config2) {
+	public Tools(BendingPlayers config2) {
 		config = config2;
 	}
 
@@ -1208,40 +1208,8 @@ public class Tools {
 		// }
 	}
 
-	@SuppressWarnings("static-access")
 	public static boolean isRegionProtectedFromBuild(Player player,
 			Abilities ability, Location loc) {
-
-		List<Abilities> nugp = new ArrayList<Abilities>();
-		nugp.add(Abilities.AirBlast);
-		nugp.add(Abilities.AirBurst);
-		nugp.add(Abilities.AirShield);
-		nugp.add(Abilities.AirSuction);
-		nugp.add(Abilities.AirSwipe);
-		nugp.add(Abilities.Blaze);
-		nugp.add(Abilities.Bloodbending);
-		nugp.add(Abilities.Collapse);
-		nugp.add(Abilities.EarthArmor);
-		nugp.add(Abilities.EarthBlast);
-		nugp.add(Abilities.EarthGrab);
-		nugp.add(Abilities.EarthTunnel);
-		nugp.add(Abilities.FireBlast);
-		nugp.add(Abilities.FireBurst);
-		nugp.add(Abilities.FireShield);
-		nugp.add(Abilities.FireJet);
-		nugp.add(Abilities.IceSpike);
-		nugp.add(Abilities.Lightning);
-		nugp.add(Abilities.OctopusForm);
-		nugp.add(Abilities.Paralyze);
-		nugp.add(Abilities.PhaseChange);
-		nugp.add(Abilities.RaiseEarth);
-		nugp.add(Abilities.RapidPunch);
-		nugp.add(Abilities.Shockwave);
-		nugp.add(Abilities.Surge);
-		nugp.add(Abilities.Tornado);
-		nugp.add(Abilities.Torrent);
-		nugp.add(Abilities.WallOfFire);
-		nugp.add(Abilities.WaterManipulation);
 
 		List<Abilities> ignite = new ArrayList<Abilities>();
 		ignite.add(Abilities.Blaze);
@@ -1249,10 +1217,10 @@ public class Tools {
 		explode.add(Abilities.FireBlast);
 		explode.add(Abilities.Lightning);
 
-//		if (ability == null && allowharmless)
-//			return false;
-//		if (isHarmlessAbility(ability) && allowharmless)
-//			return false;
+		if (ability == null && allowharmless)
+			return false;
+		if (isHarmlessAbility(ability) && allowharmless)
+			return false;
 
 		// if (ignite.contains(ability)) {
 		// BlockIgniteEvent event = new BlockIgniteEvent(location.getBlock(),
@@ -1399,6 +1367,22 @@ public class Tools {
 							.getLangString("msg_err_not_configured"));
 				}
 
+			}
+
+			if (gpp != null && respectGriefPrevention) {
+				String reason = GriefPrevention.instance.allowBuild(player,
+						location);
+
+				if (ignite.contains(ability)) {
+
+				}
+
+				if (explode.contains(ability)) {
+
+				}
+
+				if (reason != null)
+					return true;
 			}
 		}
 
@@ -1834,7 +1818,7 @@ public class Tools {
 	public static String getLanguage(Player player) {
 		String language = getDefaultLanguage();
 		if (player != null)
-			language = config.getLanguage(player);
+			language = BendingPlayer.getBendingPlayer(player).getLanguage();
 		return language;
 	}
 
@@ -1947,6 +1931,7 @@ public class Tools {
 
 		colors = Collections.unmodifiableMap(tmpMap);
 	}
+
 	public static String colorize(String message) {
 		return message.replaceAll("(?i)&([a-fk-or0-9])", "\u00A7$1");
 	}

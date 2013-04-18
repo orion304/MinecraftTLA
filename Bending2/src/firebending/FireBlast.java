@@ -92,7 +92,7 @@ public class FireBlast {
 		this.location = location.clone();
 		origin = location.clone();
 		this.direction = direction.clone().normalize();
-		this.damage *= damage;
+		this.damage *= 1.5;
 		id = ID;
 		instances.put(id, this);
 		if (ID == Integer.MAX_VALUE)

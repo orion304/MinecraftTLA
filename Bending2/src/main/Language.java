@@ -491,6 +491,24 @@ public class Language {
 			general.put(language + ".General.you_add_chi", config.getString(
 					language + ".General.you_add_chi",
 					BendingCommand.you_add_chi));
+			general.put(language + ".General.bind_mode_usage", config
+					.getString(language + ".General.bind_mode_usage",
+							BendingCommand.bind_mode_usage));
+			general.put(language + ".General.bind_mode_change_usage", config
+					.getString(language + ".General.bind_mode_change_usage",
+							BendingCommand.bind_mode_change_usage));
+			general.put(language + ".General.bind_mode_change", config
+					.getString(language + ".General.bind_mode_change",
+							BendingCommand.bind_mode_change));
+			general.put(language + ".General.your_bind_mode", config.getString(
+					language + ".General.your_bind_mode",
+					BendingCommand.your_bind_mode));
+			general.put(language + ".General.server_bind_mode", config
+					.getString(language + ".General.server_bind_mode",
+							BendingCommand.server_bind_mode));
+			general.put(language + ".General.version_usage", config.getString(
+					language + ".General.version_usage",
+					BendingCommand.version_usage));
 
 			HashMap<String, String> total = new HashMap<String, String>();
 			for (String index : messages.keySet()) {

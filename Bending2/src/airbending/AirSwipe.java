@@ -72,15 +72,17 @@ public class AirSwipe {
 		this.charging = charging;
 		origin = player.getEyeLocation();
 		time = System.currentTimeMillis();
+
+		if (ID == Integer.MAX_VALUE) {
+			ID = Integer.MIN_VALUE;
+		}
+		id = ID++;
+
 		instances.put(id, this);
 
 		if (!charging)
 			launch();
 
-		if (ID == Integer.MAX_VALUE) {
-			ID = Integer.MIN_VALUE;
-		}
-		ID++;
 		timers.put(player, System.currentTimeMillis());
 	}
 
@@ -194,8 +196,8 @@ public class AirSwipe {
 						affectPeople(location, direction);
 					}
 				}
-			} else {
-				elements.remove(direction);
+				// } else {
+				// elements.remove(direction);
 			}
 
 		}

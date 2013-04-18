@@ -28,7 +28,7 @@ public class RapidPunch {
 	public static List<Player> punching = new ArrayList<Player>();
 
 	public RapidPunch(Player p) {// , Entity t) {
-		if (instance.contains(p))
+		if (instance.containsKey(p))
 			return;
 		if (cooldowns.containsKey(p.getName())
 				&& cooldowns.get(p.getName()) + cooldown >= System

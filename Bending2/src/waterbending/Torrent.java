@@ -265,7 +265,7 @@ public class Torrent {
 				double dy = 0;
 				double dz = Math.sin(phi) * radius;
 				Location blockloc = loc.clone().add(dx, dy, dz);
-				if (theta == startangle)
+				if (Math.abs(theta - startangle) < 10)
 					location = blockloc.clone();
 				Block block = blockloc.getBlock();
 				if (!doneblocks.contains(block)
@@ -333,7 +333,8 @@ public class Torrent {
 		} else if (!Tools.isTransparentToEarthbending(player, b)) {
 			// b.setType(Material.GLASS);
 			if (layer < maxlayer) {
-				if (layer == 1)
+				// Tools.verbose(layer);
+				if (layer == 0)
 					hurtentities.clear();
 				if (freeze || layer < 1)
 					layer++;
@@ -541,6 +542,8 @@ public class Torrent {
 			}
 			// if (((LivingEntity) entity).getNoDamageTicks() == 0) {
 			Tools.damageEntity(player, entity, damagedealt);
+			// Tools.verbose("Hit! Health at "
+			// + ((LivingEntity) entity).getHealth());
 			hurtentities.add(entity);
 			// }
 			((LivingEntity) entity).setNoDamageTicks(0);

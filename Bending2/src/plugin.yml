@@ -121,6 +121,8 @@ permissions:
       bending.command.toggle: true
       bending.command.who: true
       bending.command.language: true
+      bending.command.bindmode: true
+      bending.command.version: true
 
 # AIRBENDING PERMISSIONS
   bending.air:
@@ -342,6 +344,12 @@ permissions:
     default: true
   bending.command.who:
     description: Allows the use of /bending who
+    default: true
+  bending.command.version:
+    description: Allows the use of /bending version
+    default: true
+  bending.command.bindmode:
+    description: Allows the use of /bending bindmode
     default: true
 
   bending.avatar:

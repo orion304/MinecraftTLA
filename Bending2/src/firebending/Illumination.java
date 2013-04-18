@@ -41,7 +41,7 @@ public class Illumination {
 		if ((FireStream.isIgnitable(player, standingblock) && standblock
 				.getType() != Material.LEAVES)
 				&& block == null
-				&& !blocks.contains(standblock)) {
+				&& !blocks.containsKey(standblock)) {
 			block = standingblock;
 			normaltype = block.getType();
 			normaldata = block.getData();
@@ -50,7 +50,7 @@ public class Illumination {
 		} else if ((FireStream.isIgnitable(player, standingblock) && standblock
 				.getType() != Material.LEAVES)
 				&& !block.equals(standblock)
-				&& !blocks.contains(standblock) && Tools.isSolid(standblock)) {
+				&& !blocks.containsKey(standblock) && Tools.isSolid(standblock)) {
 			revert();
 			block = standingblock;
 			normaltype = block.getType();

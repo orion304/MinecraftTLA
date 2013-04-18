@@ -50,7 +50,7 @@ public class Lightning {
 		Location targetlocation;
 		targetlocation = Tools.getTargetedLocation(player, distance);
 		Entity target = Tools.getTargettedEntity(player, distance);
-		if (target == null) {
+		if (target != null) {
 			if (target instanceof LivingEntity) {
 				targetlocation = target.getLocation();
 			}
