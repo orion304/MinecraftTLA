@@ -71,8 +71,10 @@ public class WallOfFire {
 		Vector direction = player.getEyeLocation().getDirection();
 		Vector compare = direction.clone();
 		compare.setY(0);
+		double angle = direction.angle(compare);
+		Tools.verbose(Math.toDegrees(angle));
 
-		if (Math.abs(direction.angle(compare)) < maxangle) {
+		if (Math.abs(direction.angle(compare)) > Math.toRadians(maxangle)) {
 			return;
 		}
 

@@ -33,14 +33,14 @@ public class Cooldowns {
 	public static void initialize() {
 		for (Abilities ability : Abilities.values()) {
 			long cd = 0;
-			switch (ability) {
-			case WaterManipulation:
-				cd = 1000;
-				break;
-			case EarthBlast:
-				cd = 1000;
-				break;
-			}
+			// switch (ability) {
+			// case WaterManipulation:
+			// cd = 1000;
+			// break;
+			// case EarthBlast:
+			// cd = 1000;
+			// break;
+			// }
 			abilitycooldowns.put(ability, cd);
 		}
 	}
