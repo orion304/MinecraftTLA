@@ -3,7 +3,6 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UnknownFormatConversionException;
 
@@ -63,7 +62,6 @@ import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
-import tools.Cooldowns;
 import tools.TempBlock;
 import tools.Tools;
 import waterbending.Bloodbending;
@@ -216,7 +214,8 @@ public class BendingListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
-			Cooldowns.forceCooldown(player);
+			BendingPlayer.getBendingPlayer(player).cooldown();
+		// Cooldowns.forceCooldown(player);
 		if (Paralyze.isParalyzed(player) || Bloodbending.isBloodbended(player)) {
 			event.setCancelled(true);
 		}
@@ -225,7 +224,8 @@ public class BendingListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
-		Cooldowns.forceCooldown(player);
+		// Cooldowns.forceCooldown(player);
+		BendingPlayer.getBendingPlayer(player).cooldown();
 		if (Paralyze.isParalyzed(player) || Bloodbending.isBloodbended(player)) {
 			event.setCancelled(true);
 		}
@@ -304,10 +304,10 @@ public class BendingListener implements Listener {
 
 		if (Tools.canBend(player, ability)) {
 
-			if (!Arrays.asList(sourceabilities).contains(ability)) {
-				if (!Cooldowns.canUseAbility(player, ability))
-					return;
-			}
+			// if (!Arrays.asList(sourceabilities).contains(ability)) {
+			// if (!Cooldowns.canUseAbility(player, ability))
+			// return;
+			// }
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Air")) {
@@ -505,10 +505,10 @@ public class BendingListener implements Listener {
 
 		if (!player.isSneaking() && Tools.canBend(player, ability)) {
 
-			if (!Arrays.asList(sourceabilities).contains(ability)) {
-				if (!Cooldowns.canUseAbility(player, ability))
-					return;
-			}
+			// if (!Arrays.asList(sourceabilities).contains(ability)) {
+			// if (!Cooldowns.canUseAbility(player, ability))
+			// return;
+			// }
 
 			if (ability == Abilities.AirShield) {
 				new AirShield(player);

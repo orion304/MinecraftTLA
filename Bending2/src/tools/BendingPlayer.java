@@ -20,6 +20,8 @@ public class BendingPlayer implements CustomSerializable {
 
 	private static ConcurrentHashMap<String, BendingPlayer> players = new ConcurrentHashMap<String, BendingPlayer>();
 
+	private static Map<Abilities, Long> abilityCooldowns = new HashMap<Abilities, Long>();
+	private static long globalCooldown = 250;
 	private static BendingPlayers config = Tools.config;
 
 	private String playername;
@@ -29,6 +31,8 @@ public class BendingPlayer implements CustomSerializable {
 	private List<Integer> itemAbilities = initializeEmptyItems();
 
 	private List<Integer> bendingType = new ArrayList<Integer>();
+
+	private Map<Abilities, Long> cooldowns = new HashMap<Abilities, Long>();
 
 	private boolean bendToItem = ConfigManager.bendToItem;
 
@@ -96,6 +100,54 @@ public class BendingPlayer implements CustomSerializable {
 		}
 	}
 
+	public static void initializeCooldowns() {
+		if (abilityCooldowns.isEmpty()) {
+			for (Abilities ability : Abilities.values()) {
+				long cd = 0;
+				switch (ability) {
+				case WaterManipulation:
+					cd = 1000;
+				case EarthBlast:
+					cd = 1000;
+				case AirSwipe:
+					cd = ConfigManager.airSwipeCooldown;
+				}
+				abilityCooldowns.put(ability, cd);
+			}
+		}
+	}
+
+	public boolean isOnGlobalCooldown() {
+		return (System.currentTimeMillis() <= lasttime + globalCooldown);
+	}
+
+	public boolean isOnCooldown(Abilities ability) {
+		if (ability == Abilities.AvatarState)
+			return false;
+		if (isOnGlobalCooldown()) {
+			return true;
+		}
+
+		if (cooldowns.containsKey(ability)) {
+			return (System.currentTimeMillis() < cooldowns.get(ability)
+					+ abilityCooldowns.get(ability));
+
+		} else {
+			return false;
+		}
+	}
+
+	public void cooldown() {
+		cooldown(null);
+	}
+
+	public void cooldown(Abilities ability) {
+		long time = System.currentTimeMillis();
+		if (ability != null)
+			cooldowns.put(ability, time);
+		lasttime = time;
+	}
+
 	public String getName() {
 		return playername;
 	}
@@ -105,7 +157,7 @@ public class BendingPlayer implements CustomSerializable {
 	}
 
 	public boolean isBender(BendingType type) {
-		lasttime = System.currentTimeMillis();
+		// lasttime = System.currentTimeMillis();
 		return bendingType.contains(BendingType.getIndex(type));
 	}
 

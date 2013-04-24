@@ -29,7 +29,6 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_5_R2.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
@@ -878,11 +877,12 @@ public class Tools {
 		return false;
 	}
 
-	public static void updatePhysics(Block block) {
-		CraftWorld world = (CraftWorld) block.getWorld();
-		world.getHandle().applyPhysics(block.getX(), block.getY(),
-				block.getZ(), block.getTypeId());
-	}
+	// public static void updatePhysics(Block block) {
+	// Tools.verbose(Bending.plugin.getServer().getBukkitVersion());
+	// // CraftWorld world = (CraftWorld) block.getWorld();
+	// // world.getHandle().applyPhysics(block.getX(), block.getY(),
+	// // block.getZ(), block.getTypeId());
+	// }
 
 	public static Entity getTargettedEntity(Player player, double range) {
 		return getTargettedEntity(player, range, new ArrayList<Entity>());

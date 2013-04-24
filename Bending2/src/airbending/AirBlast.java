@@ -9,15 +9,13 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.material.Attachable;
-import org.bukkit.material.Lever;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -25,8 +23,9 @@ public class AirBlast {
 
 	public static ConcurrentHashMap<Integer, AirBlast> instances = new ConcurrentHashMap<Integer, AirBlast>();
 	private static ConcurrentHashMap<Player, Location> origins = new ConcurrentHashMap<Player, Location>();
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = Tools.timeinterval;
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
+	// static final long soonesttime = Tools.timeinterval;
 
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
@@ -56,15 +55,21 @@ public class AirBlast {
 	// private long time;
 
 	public AirBlast(Player player) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
-				return;
-			}
-		}
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+		// return;
+		// }
+		// }
+
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.AirBlast))
+			return;
+
 		if (player.getEyeLocation().getBlock().isLiquid()) {
 			return;
 		}
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		if (origins.containsKey(player)) {
 			otherorigin = true;
@@ -85,11 +90,12 @@ public class AirBlast {
 		location = origin.clone();
 		id = ID;
 		instances.put(id, this);
+		bPlayer.cooldown(Abilities.AirBlast);
 		if (ID == Integer.MAX_VALUE)
 			ID = Integer.MIN_VALUE;
 		ID++;
 		// time = System.currentTimeMillis();
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 	}
 
 	public AirBlast(Location location, Vector direction, Player player,
@@ -159,15 +165,15 @@ public class AirBlast {
 			}
 			if (((block.getType() == Material.LEVER) || (block.getType() == Material.STONE_BUTTON))
 					&& !affectedlevers.contains(block)) {
-				BlockState state = block.getState();
-				Lever lever = (Lever) (state.getData());
-				lever.setPowered(!lever.isPowered());
-				state.setData(lever);
-				state.update(true);
-
-				Block relative = block.getRelative(((Attachable) block
-						.getState().getData()).getFacing(), -1);
-				Tools.updatePhysics(relative);
+				// BlockState state = block.getState();
+				// Lever lever = (Lever) (state.getData());
+				// lever.setPowered(!lever.isPowered());
+				// state.setData(lever);
+				// state.update(true);
+				//
+				// Block relative = block.getRelative(((Attachable) block
+				// .getState().getData()).getFacing(), -1);
+				// Tools.updatePhysics(relative);
 
 				// BlockFace[] faces = { BlockFace.DOWN, BlockFace.UP,
 				// BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST,

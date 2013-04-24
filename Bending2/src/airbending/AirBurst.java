@@ -22,7 +22,7 @@ public class AirBurst {
 
 	private Player player;
 	private long starttime;
-	private long chargetime = 2500;
+	private long chargetime = 1750;
 	private boolean charged = false;
 
 	public AirBurst(Player player) {

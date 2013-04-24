@@ -17,6 +17,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 import firebending.Illumination;
@@ -24,8 +25,9 @@ import firebending.Illumination;
 public class AirSwipe {
 
 	public static ConcurrentHashMap<Integer, AirSwipe> instances = new ConcurrentHashMap<Integer, AirSwipe>();
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = ConfigManager.airSwipeCooldown;
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
+	// static final long soonesttime = ConfigManager.airSwipeCooldown;
 
 	private static int ID = Integer.MIN_VALUE;
 
@@ -60,11 +62,17 @@ public class AirSwipe {
 	}
 
 	public AirSwipe(Player player, boolean charging) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
-				return;
-			}
-		}
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+		// return;
+		// }
+		// }
+
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.AirSwipe))
+			return;
+
 		if (player.getEyeLocation().getBlock().isLiquid()) {
 			return;
 		}
@@ -80,10 +88,12 @@ public class AirSwipe {
 
 		instances.put(id, this);
 
+		bPlayer.cooldown(Abilities.AirSwipe);
+
 		if (!charging)
 			launch();
 
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 	}
 
 	private void launch() {
@@ -179,6 +189,11 @@ public class AirSwipe {
 					}
 
 					if (block.getType() != Material.AIR) {
+						if (isBlockBreakable(block)) {
+							Tools.breakBlock(block);
+						} else {
+							elements.remove(direction);
+						}
 						if (block.getType() == Material.LAVA
 								|| block.getType() == Material.STATIONARY_LAVA) {
 							if (block.getData() == full) {
@@ -186,9 +201,6 @@ public class AirSwipe {
 							} else {
 								block.setType(Material.COBBLESTONE);
 							}
-							elements.remove(direction);
-						} else {
-							elements.remove(direction);
 						}
 					} else {
 						location.getWorld().playEffect(location, Effect.SMOKE,
