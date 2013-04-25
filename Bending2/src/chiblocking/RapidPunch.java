@@ -1,15 +1,15 @@
 package chiblocking;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -17,10 +17,10 @@ public class RapidPunch {
 
 	private static int damage = ConfigManager.rapidPunchDamage;
 	private int distance = ConfigManager.rapidPunchDistance;
-	private long cooldown = ConfigManager.rapidPunchCooldown;
+	// private long cooldown = ConfigManager.rapidPunchCooldown;
 	private static int punches = ConfigManager.rapidPunchPunches;
 
-	private static Map<String, Long> cooldowns = new HashMap<String, Long>();
+	// private static Map<String, Long> cooldowns = new HashMap<String, Long>();
 	public static ConcurrentHashMap<Player, RapidPunch> instance = new ConcurrentHashMap<Player, RapidPunch>();
 	private int numpunches;
 	// private long timers;
@@ -30,9 +30,13 @@ public class RapidPunch {
 	public RapidPunch(Player p) {// , Entity t) {
 		if (instance.containsKey(p))
 			return;
-		if (cooldowns.containsKey(p.getName())
-				&& cooldowns.get(p.getName()) + cooldown >= System
-						.currentTimeMillis())
+		// if (cooldowns.containsKey(p.getName())
+		// && cooldowns.get(p.getName()) + cooldown >= System
+		// .currentTimeMillis())
+		// return;
+
+		if (BendingPlayer.getBendingPlayer(p)
+				.isOnCooldown(Abilities.RapidPunch))
 			return;
 
 		Entity t = Tools.getTargettedEntity(p, distance);
@@ -57,7 +61,8 @@ public class RapidPunch {
 			lt.setNoDamageTicks(0);
 			// Tools.verbose("PUNCHIN MOFO");
 		}
-		cooldowns.put(p.getName(), System.currentTimeMillis());
+		// cooldowns.put(p.getName(), System.currentTimeMillis());
+		BendingPlayer.getBendingPlayer(p).cooldown(Abilities.RapidPunch);
 		swing(p);
 		numpunches++;
 	}

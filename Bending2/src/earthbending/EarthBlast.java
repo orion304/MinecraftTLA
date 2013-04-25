@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -405,14 +406,24 @@ public class EarthBlast {
 		// prepared.remove(player);
 		// }
 
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
 		ArrayList<EarthBlast> ignore = new ArrayList<EarthBlast>();
 
-		for (int id : instances.keySet()) {
-			EarthBlast blast = instances.get(id);
-			if (blast.player == player && !blast.progressing) {
-				blast.throwEarth();
-				ignore.add(blast);
+		if (!bPlayer.isOnCooldown(Abilities.EarthBlast)) {
+
+			boolean cooldown = false;
+			for (int id : instances.keySet()) {
+				EarthBlast blast = instances.get(id);
+				if (blast.player == player && !blast.progressing) {
+					blast.throwEarth();
+					cooldown = true;
+					ignore.add(blast);
+				}
 			}
+
+			if (cooldown)
+				bPlayer.cooldown(Abilities.EarthBlast);
+
 		}
 
 		redirectTargettedBlasts(player, ignore);

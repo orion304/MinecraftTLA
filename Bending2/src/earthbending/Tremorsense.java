@@ -10,6 +10,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -18,7 +19,7 @@ public class Tremorsense {
 	public static ConcurrentHashMap<Player, Tremorsense> instances = new ConcurrentHashMap<Player, Tremorsense>();
 	public static ConcurrentHashMap<Block, Player> blocks = new ConcurrentHashMap<Block, Player>();
 
-	private static final long cooldown = ConfigManager.tremorsenseCooldown;
+	// private static final long cooldown = ConfigManager.tremorsenseCooldown;
 	private static final int maxdepth = ConfigManager.tremorsenseMaxDepth;
 	private static final int radius = ConfigManager.tremorsenseRadius;
 	private static final byte lightthreshold = ConfigManager.tremorsenseLightThreshold;
@@ -26,17 +27,24 @@ public class Tremorsense {
 	private Player player;
 	private Block block;
 
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
 
 	public Tremorsense(Player player) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + cooldown)
-				return;
-		}
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player) + cooldown)
+		// return;
+		// }
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Tremorsense))
+			return;
+
 		if (Tools.isEarthbendable(player, Abilities.Tremorsense, player
 				.getLocation().getBlock().getRelative(BlockFace.DOWN))) {
 			this.player = player;
-			timers.put(player, System.currentTimeMillis());
+			bPlayer.cooldown(Abilities.Tremorsense);
+			// timers.put(player, System.currentTimeMillis());
 			activate();
 		}
 	}

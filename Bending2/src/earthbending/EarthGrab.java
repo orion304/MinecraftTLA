@@ -9,6 +9,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -18,6 +20,11 @@ public class EarthGrab {
 
 	public EarthGrab(Player player) {
 		// Tools.verbose("initiating");
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.EarthGrab))
+			return;
+
 		Location origin = player.getEyeLocation();
 		Vector direction = origin.getDirection();
 		double lowestdistance = range + 1;
@@ -74,6 +81,9 @@ public class EarthGrab {
 					}
 				}
 			}
+
+			if (!blocks.isEmpty())
+				bPlayer.cooldown(Abilities.EarthGrab);
 		}
 	}
 

@@ -7,6 +7,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -37,6 +39,11 @@ public class EarthColumn {
 	private ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
 
 	public EarthColumn(Player player) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.RaiseEarth))
+			return;
+
 		try {
 			block = player.getTargetBlock(Tools.getTransparentEarthbending(),
 					(int) range);
@@ -56,6 +63,7 @@ public class EarthColumn {
 			if (canInstantiate()) {
 				id = ID;
 				instances.put(id, this);
+				bPlayer.cooldown(Abilities.RaiseEarth);
 				if (ID >= Integer.MAX_VALUE) {
 					ID = Integer.MIN_VALUE;
 				}

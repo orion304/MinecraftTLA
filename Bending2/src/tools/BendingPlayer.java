@@ -111,6 +111,12 @@ public class BendingPlayer implements CustomSerializable {
 					cd = 1000;
 				case AirSwipe:
 					cd = ConfigManager.airSwipeCooldown;
+				case HighJump:
+					cd = ConfigManager.highJumpCooldown;
+				case RapidPunch:
+					cd = ConfigManager.rapidPunchCooldown;
+				case Tremorsense:
+					cd = ConfigManager.tremorsenseCooldown;
 				}
 				abilityCooldowns.put(ability, cd);
 			}
