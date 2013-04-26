@@ -18,13 +18,16 @@ public class Tornado {
 
 	public static ConcurrentHashMap<Integer, Tornado> instances = new ConcurrentHashMap<Integer, Tornado>();
 
-	private static double radius = ConfigManager.tornadoRadius;
-	private static double height = ConfigManager.tornadoHeight;
+	private static double maxradius = ConfigManager.tornadoRadius;
+	private static double maxheight = ConfigManager.tornadoHeight;
 	private static double range = ConfigManager.tornadoRange;
-	private static int numberOfStreams = (int) (.3 * (double) height);
+	private static int numberOfStreams = (int) (.3 * (double) maxheight);
 	private static double NPCpushfactor = ConfigManager.tornadoMobPush;
 	private static double PCpushfactor = ConfigManager.tornadoPlayerPush;
 	// private static double speed = .75;
+
+	private double height = 1;
+	private double radius = height / maxheight * maxradius;
 
 	// private static double speedfactor = 1000 * speed
 	// * (Bending.time_step / 1000.);
@@ -44,7 +47,7 @@ public class Tornado {
 		origin.setY(origin.getY() - 1. / 10. * height);
 
 		int angle = 0;
-		for (int i = 0; i <= height; i += (int) height / numberOfStreams) {
+		for (int i = 0; i <= maxheight; i += (int) maxheight / numberOfStreams) {
 			angles.put(i, angle);
 			angle += 90;
 			if (angle == 360)
@@ -85,6 +88,10 @@ public class Tornado {
 
 	private void rotateTornado() {
 		origin = player.getTargetBlock(null, (int) range).getLocation();
+
+		double timefactor = height / maxheight;
+		radius = timefactor * maxradius;
+
 		if (origin.getBlock().getType() != Material.AIR) {
 			origin.setY(origin.getY() - 1. / 10. * height);
 
@@ -129,6 +136,7 @@ public class Tornado {
 						velocity.setX(vx);
 						velocity.setZ(vz);
 						velocity.setY(vy);
+						velocity.multiply(timefactor);
 						entity.setVelocity(velocity);
 						entity.setFallDistance(0);
 					}
@@ -141,11 +149,13 @@ public class Tornado {
 				angle = Math.toRadians(angle);
 				double factor;
 
-				y = origin.getY() + (double) i;
+				y = origin.getY() + timefactor * (double) i;
 				factor = (double) i / height;
 
-				x = origin.getX() + factor * radius * Math.cos(angle);
-				z = origin.getZ() + factor * radius * Math.sin(angle);
+				x = origin.getX() + timefactor * factor * radius
+						* Math.cos(angle);
+				z = origin.getZ() + timefactor * factor * radius
+						* Math.sin(angle);
 
 				Location effect = new Location(origin.getWorld(), x, y, z);
 				if (!Tools.isRegionProtectedFromBuild(player,
@@ -156,6 +166,9 @@ public class Tornado {
 				angles.put(i, angles.get(i) + 25 * (int) speedfactor);
 			}
 		}
+
+		if (height < maxheight)
+			height += 0.25;
 
 	}
 

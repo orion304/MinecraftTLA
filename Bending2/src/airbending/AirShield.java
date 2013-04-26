@@ -20,9 +20,10 @@ public class AirShield {
 
 	public static ConcurrentHashMap<Integer, AirShield> instances = new ConcurrentHashMap<Integer, AirShield>();
 
-	private static double radius = ConfigManager.airShieldRadius;
-	private static int numberOfStreams = (int) (.75 * (double) radius);
-	// private static double speed = 500;
+	private static double maxradius = ConfigManager.airShieldRadius;
+	private static int numberOfStreams = (int) (.75 * (double) maxradius);
+
+	private double radius = 2;
 
 	private double speedfactor;
 
@@ -37,8 +38,8 @@ public class AirShield {
 		}
 		this.player = player;
 		int angle = 0;
-		int di = (int) (radius * 2 / numberOfStreams);
-		for (int i = -(int) radius + di; i < (int) radius; i += di) {
+		int di = (int) (maxradius * 2 / numberOfStreams);
+		for (int i = -(int) maxradius + di; i < (int) maxradius; i += di) {
 			angles.put(i, angle);
 			angle += 90;
 			if (angle == 360)
@@ -79,6 +80,7 @@ public class AirShield {
 					velocity.setZ(vz);
 				}
 
+				velocity.multiply(radius / maxradius);
 				entity.setVelocity(velocity);
 				entity.setFallDistance(0);
 			}
@@ -90,10 +92,12 @@ public class AirShield {
 			double angle = (double) angles.get(i);
 			angle = Math.toRadians(angle);
 
-			y = origin.getY() + (double) i;
+			double factor = radius / maxradius;
+
+			y = origin.getY() + factor * (double) i;
 
 			// double theta = Math.asin(y/radius);
-			double f = Math.sqrt(1 - ((double) i / radius)
+			double f = Math.sqrt(1 - factor * factor * ((double) i / radius)
 					* ((double) i / radius));
 
 			x = origin.getX() + radius * Math.cos(angle) * f;
@@ -106,6 +110,10 @@ public class AirShield {
 						(int) AirBlast.defaultrange);
 
 			angles.put(i, angles.get(i) + (int) (10 * speedfactor));
+		}
+
+		if (radius < maxradius) {
+			radius += .2;
 		}
 
 	}
