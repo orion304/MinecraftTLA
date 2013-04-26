@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -25,6 +26,10 @@ public class Illumination {
 	private byte normaldata;
 
 	public Illumination(Player player) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Illumination))
+			return;
 		if (instances.containsKey(player)) {
 			instances.get(player).revert();
 			instances.remove(player);
@@ -32,6 +37,7 @@ public class Illumination {
 			this.player = player;
 			set();
 			instances.put(player, this);
+			bPlayer.cooldown(Abilities.Illumination);
 		}
 	}
 

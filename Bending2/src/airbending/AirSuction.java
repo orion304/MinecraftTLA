@@ -113,6 +113,11 @@ public class AirSuction {
 		if (location.getBlock().isLiquid()
 				|| Tools.isSolid(location.getBlock()))
 			return;
+
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.AirSuction,
+				location))
+			return;
+
 		if (origins.containsKey(player)) {
 			origins.replace(player, location);
 		} else {

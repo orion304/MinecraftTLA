@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.Tools;
 import waterbending.WaterManipulation;
 import earthbending.EarthBlast;
@@ -40,10 +41,17 @@ public class FireShield {
 		this.shield = shield;
 		if (instances.containsKey(player))
 			return;
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.FireShield))
+			return;
+
 		if (!player.getEyeLocation().getBlock().isLiquid()) {
 			time = System.currentTimeMillis();
 			starttime = time;
 			instances.put(player, this);
+			if (!shield)
+				bPlayer.cooldown(Abilities.FireShield);
 		}
 	}
 

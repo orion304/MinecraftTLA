@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
@@ -32,6 +33,10 @@ public class WaterSpout {
 	private TempBlock baseblock;
 
 	public WaterSpout(Player player) {
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.WaterSpout))
+			return;
+
 		if (instances.containsKey(player)) {
 			instances.get(player).remove();
 			return;

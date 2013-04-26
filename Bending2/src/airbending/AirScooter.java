@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -30,6 +31,10 @@ public class AirScooter {
 	private ArrayList<Double> angles = new ArrayList<Double>();
 
 	public AirScooter(Player player) {
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.AirScooter))
+			return;
+
 		if (instances.containsKey(player)) {
 			instances.get(player).remove();
 			return;

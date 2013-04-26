@@ -101,6 +101,11 @@ public class IceSpike2 {
 	public static void activate(Player player) {
 		redirect(player);
 		boolean activate = false;
+
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.IceSpike))
+			return;
+
 		for (IceSpike2 ice : getInstances(player)) {
 			if (ice.prepared) {
 				ice.throwIce();

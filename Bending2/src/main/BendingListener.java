@@ -369,10 +369,6 @@ public class BendingListener implements Listener {
 					new EarthArmor(player);
 				}
 
-				if (ability == Abilities.EarthArmor) {
-					new EarthArmor(player);
-				}
-
 				if (ability == Abilities.Shockwave) {
 					Shockwave.coneShockwave(player);
 				}
@@ -470,12 +466,15 @@ public class BendingListener implements Listener {
 				new HighJump(player);
 			}
 
-			if (ability == Abilities.RapidPunch) {
-				new RapidPunch(player);
-			}
+			if (!Tools.isWeapon(player.getItemInHand().getType())) {
 
-			if (ability == Abilities.Paralyze) {
-				// new Paralyze(player);
+				if (ability == Abilities.RapidPunch) {
+					new RapidPunch(player);
+				}
+
+				if (ability == Abilities.Paralyze) {
+					// new Paralyze(player);
+				}
 			}
 
 		}

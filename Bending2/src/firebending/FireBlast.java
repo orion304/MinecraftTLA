@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 import waterbending.Plantbending;
@@ -25,8 +26,9 @@ import waterbending.Plantbending;
 public class FireBlast {
 
 	public static ConcurrentHashMap<Integer, FireBlast> instances = new ConcurrentHashMap<Integer, FireBlast>();
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = ConfigManager.fireBlastCooldown;
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
+	// static final long soonesttime = ConfigManager.fireBlastCooldown;
 
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
@@ -55,17 +57,22 @@ public class FireBlast {
 	// private long time;
 
 	public FireBlast(Player player) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
-				return;
-			}
-		}
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+		// return;
+		// }
+		// }
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.FireBlast))
+			return;
+
 		if (player.getEyeLocation().getBlock().isLiquid()
 				|| Fireball.isCharging(player)) {
 			return;
 		}
 		range = Tools.firebendingDayAugment(range, player.getWorld());
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		location = player.getEyeLocation();
 		origin = player.getEyeLocation();
@@ -73,11 +80,12 @@ public class FireBlast {
 		location = location.add(direction.clone());
 		id = ID;
 		instances.put(id, this);
+		bPlayer.cooldown(Abilities.FireBlast);
 		if (ID == Integer.MAX_VALUE)
 			ID = Integer.MIN_VALUE;
 		ID++;
 		// time = System.currentTimeMillis();
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 	}
 
 	public FireBlast(Location location, Vector direction, Player player,
@@ -87,7 +95,7 @@ public class FireBlast {
 		}
 		safe = safeblocks;
 		range = Tools.firebendingDayAugment(range, player.getWorld());
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		this.location = location.clone();
 		origin = location.clone();

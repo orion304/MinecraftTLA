@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
@@ -21,6 +22,11 @@ public class FreezeMelt {
 	public static final int defaultradius = ConfigManager.freezeMeltRadius;
 
 	public FreezeMelt(Player player) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.PhaseChange))
+			return;
+
 		int range = (int) Tools.waterbendingNightAugment(defaultrange,
 				player.getWorld());
 		int radius = (int) Tools.waterbendingNightAugment(defaultradius,
@@ -29,11 +35,20 @@ public class FreezeMelt {
 			range = AvatarState.getValue(range);
 			// radius = AvatarState.getValue(radius);
 		}
+
+		boolean cooldown = false;
+
 		Location location = Tools.getTargetedLocation(player, range);
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
-			if (isFreezable(player, block))
+			if (isFreezable(player, block)) {
 				freeze(player, block);
+				cooldown = true;
+			}
 		}
+
+		if (cooldown)
+			bPlayer.cooldown(Abilities.PhaseChange);
+
 	}
 
 	private static boolean isFreezable(Player player, Block block) {

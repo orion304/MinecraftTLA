@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -26,6 +27,9 @@ public class FireBurst {
 	private boolean charged = false;
 
 	public FireBurst(Player player) {
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.FireBurst))
+			return;
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();

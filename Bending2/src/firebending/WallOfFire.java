@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -44,6 +45,10 @@ public class WallOfFire {
 		if (instances.containsKey(player) && !AvatarState.isAvatarState(player)) {
 			return;
 		}
+
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.WallOfFire))
+			return;
 
 		this.player = player;
 

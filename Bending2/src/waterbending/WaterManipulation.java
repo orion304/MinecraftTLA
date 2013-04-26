@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
@@ -142,7 +143,11 @@ public class WaterManipulation {
 						new Plantbending(sourceblock);
 					addWater(sourceblock);
 				}
+
 			}
+
+			BendingPlayer.getBendingPlayer(player).cooldown(
+					Abilities.WaterManipulation);
 
 		}
 	}
@@ -422,25 +427,31 @@ public class WaterManipulation {
 	}
 
 	public static void moveWater(Player player) {
-		if (prepared.containsKey(player)) {
-			if (instances.containsKey(prepared.get(player))) {
-				instances.get(prepared.get(player)).moveWater();
-			}
-			prepared.remove(player);
-		} else if (WaterReturn.hasWaterBottle(player)) {
-			Location eyeloc = player.getEyeLocation();
-			Block block = eyeloc.add(eyeloc.getDirection().normalize())
-					.getBlock();
-			if (Tools.isTransparentToEarthbending(player, block)
-					&& Tools.isTransparentToEarthbending(player,
-							eyeloc.getBlock())) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
 
-				if (getTargetLocation(player).distance(block.getLocation()) > 1) {
-					WaterReturn.emptyWaterBottle(player);
-					block.setType(Material.WATER);
-					block.setData(full);
-					WaterManipulation watermanip = new WaterManipulation(player);
-					watermanip.moveWater();
+		if (!bPlayer.isOnCooldown(Abilities.WaterManipulation)) {
+
+			if (prepared.containsKey(player)) {
+				if (instances.containsKey(prepared.get(player))) {
+					instances.get(prepared.get(player)).moveWater();
+				}
+				prepared.remove(player);
+			} else if (WaterReturn.hasWaterBottle(player)) {
+				Location eyeloc = player.getEyeLocation();
+				Block block = eyeloc.add(eyeloc.getDirection().normalize())
+						.getBlock();
+				if (Tools.isTransparentToEarthbending(player, block)
+						&& Tools.isTransparentToEarthbending(player,
+								eyeloc.getBlock())) {
+
+					if (getTargetLocation(player).distance(block.getLocation()) > 1) {
+						WaterReturn.emptyWaterBottle(player);
+						block.setType(Material.WATER);
+						block.setData(full);
+						WaterManipulation watermanip = new WaterManipulation(
+								player);
+						watermanip.moveWater();
+					}
 				}
 			}
 		}

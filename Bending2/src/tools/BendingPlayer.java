@@ -107,16 +107,31 @@ public class BendingPlayer implements CustomSerializable {
 				switch (ability) {
 				case WaterManipulation:
 					cd = 1000;
+					break;
 				case EarthBlast:
 					cd = 1000;
+					break;
 				case AirSwipe:
 					cd = ConfigManager.airSwipeCooldown;
+					break;
 				case HighJump:
 					cd = ConfigManager.highJumpCooldown;
+					break;
 				case RapidPunch:
 					cd = ConfigManager.rapidPunchCooldown;
+					break;
 				case Tremorsense:
 					cd = ConfigManager.tremorsenseCooldown;
+					break;
+				case FireBlast:
+					cd = ConfigManager.fireBlastCooldown;
+					break;
+				case FireJet:
+					cd = ConfigManager.fireJetCooldown;
+					break;
+				case IceSpike:
+					cd = ConfigManager.icespikecooldown;
+					break;
 				}
 				abilityCooldowns.put(ability, cd);
 			}
@@ -135,8 +150,10 @@ public class BendingPlayer implements CustomSerializable {
 		}
 
 		if (cooldowns.containsKey(ability)) {
-			return (System.currentTimeMillis() < cooldowns.get(ability)
-					+ abilityCooldowns.get(ability));
+			double time = System.currentTimeMillis() - cooldowns.get(ability);
+			// Tools.verbose(time);
+			// Tools.verbose(ability + ": " + abilityCooldowns.get(ability));
+			return (time <= abilityCooldowns.get(ability));
 
 		} else {
 			return false;

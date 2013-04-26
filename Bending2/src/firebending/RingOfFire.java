@@ -1,29 +1,34 @@
 package firebending;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
-import tools.Tools;
 
 public class RingOfFire {
 
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = Tools.timeinterval;
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
+	// static final long soonesttime = Tools.timeinterval;
 
 	static final int defaultrange = ConfigManager.ringOfFireRange;
 
 	public RingOfFire(Player player) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
-				return;
-			}
-		}
-		timers.put(player, System.currentTimeMillis());
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+		// return;
+		// }
+		// }
+		// timers.put(player, System.currentTimeMillis());
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Blaze))
+			return;
+
 		Location location = player.getLocation();
 
 		for (double degrees = 0; degrees < 360; degrees += 10) {
@@ -46,6 +51,8 @@ public class RingOfFire {
 
 			new FireStream(location, direction, player, range);
 		}
+
+		bPlayer.cooldown(Abilities.Blaze);
 	}
 
 	public static String getDescription() {

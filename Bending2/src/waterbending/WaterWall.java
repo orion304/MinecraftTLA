@@ -12,6 +12,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
@@ -51,6 +52,13 @@ public class WaterWall {
 
 	public WaterWall(Player player) {
 		this.player = player;
+
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Surge))
+			return;
+
+		bPlayer.cooldown(Abilities.Surge);
 
 		if (Wave.instances.containsKey(player.getEntityId())) {
 			Wave wave = Wave.instances.get(player.getEntityId());
@@ -454,11 +462,19 @@ public class WaterWall {
 	}
 
 	public static void form(Player player) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
 		if (!instances.containsKey(player.getEntityId())) {
 			if (!Wave.instances.containsKey(player.getEntityId())
 					&& Tools.getWaterSourceBlock(player,
 							(int) Wave.defaultrange, Tools.canPlantbend(player)) == null
 					&& WaterReturn.hasWaterBottle(player)) {
+
+				if (bPlayer.isOnCooldown(Abilities.Surge))
+					return;
+
+				bPlayer.cooldown(Abilities.Surge);
+
 				Location eyeloc = player.getEyeLocation();
 				Block block = eyeloc.add(eyeloc.getDirection().normalize())
 						.getBlock();

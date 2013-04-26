@@ -8,7 +8,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -17,9 +19,10 @@ public class FireJet {
 	public static ConcurrentHashMap<Player, FireJet> instances = new ConcurrentHashMap<Player, FireJet>();
 	private static final double defaultfactor = ConfigManager.fireJetSpeed;
 	private static final long defaultduration = ConfigManager.fireJetDuration;
-	private static final long cooldown = ConfigManager.fireJetCooldown;
+	// private static final long cooldown = ConfigManager.fireJetCooldown;
 
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
 
 	private Player player;
 	// private boolean canfly;
@@ -33,13 +36,18 @@ public class FireJet {
 			instances.remove(player);
 			return;
 		}
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player)
-					+ (long) ((double) cooldown / Tools
-							.getFirebendingDayAugment(player.getWorld()))) {
-				return;
-			}
-		}
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player)
+		// + (long) ((double) cooldown / Tools
+		// .getFirebendingDayAugment(player.getWorld()))) {
+		// return;
+		// }
+		// }
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.FireJet))
+			return;
+
 		factor = Tools.firebendingDayAugment(defaultfactor, player.getWorld());
 		Block block = player.getLocation().getBlock();
 		if (FireStream.isIgnitable(player, block)
@@ -52,8 +60,9 @@ public class FireJet {
 			// canfly = player.getAllowFlight();
 			player.setAllowFlight(true);
 			time = System.currentTimeMillis();
-			timers.put(player, time);
+			// timers.put(player, time);
 			instances.put(player, this);
+			bPlayer.cooldown(Abilities.FireJet);
 		}
 
 	}

@@ -9,6 +9,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.Tools;
 
 public class AirBurst {
@@ -26,6 +27,10 @@ public class AirBurst {
 	private boolean charged = false;
 
 	public AirBurst(Player player) {
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.AirBurst))
+			return;
+
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();

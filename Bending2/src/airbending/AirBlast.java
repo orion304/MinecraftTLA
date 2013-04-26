@@ -122,6 +122,11 @@ public class AirBlast {
 		if (location.getBlock().isLiquid()
 				|| Tools.isSolid(location.getBlock()))
 			return;
+
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.AirBlast,
+				location))
+			return;
+
 		if (origins.containsKey(player)) {
 			origins.replace(player, location);
 		} else {
