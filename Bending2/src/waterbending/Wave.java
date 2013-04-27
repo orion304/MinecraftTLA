@@ -69,13 +69,6 @@ public class Wave {
 			}
 		}
 
-		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
-
-		if (bPlayer.isOnCooldown(Abilities.Surge))
-			return;
-
-		bPlayer.cooldown(Abilities.Surge);
-
 		if (AvatarState.isAvatarState(player)) {
 			maxradius = AvatarState.getValue(maxradius);
 		}
@@ -130,6 +123,12 @@ public class Wave {
 	}
 
 	public void moveWater() {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Surge))
+			return;
+
+		bPlayer.cooldown(Abilities.Surge);
 		if (sourceblock != null) {
 			if (sourceblock.getWorld() != player.getWorld()) {
 				return;

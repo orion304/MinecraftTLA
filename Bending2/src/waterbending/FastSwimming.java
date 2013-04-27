@@ -41,6 +41,19 @@ public class FastSwimming {
 					&& !(Arrays.asList(shiftabilities).contains(ability))) {
 				player.setVelocity(player.getEyeLocation().getDirection()
 						.clone().normalize().multiply(factor));
+				// for (Entity entity : Tools.getEntitiesAroundPoint(
+				// player.getLocation(), 1.5)) {
+				// if (entity instanceof Player) {
+				// Player tagalong = (Player) entity;
+				// if (tagalong.isSneaking()
+				// && !(Arrays.asList(shiftabilities)
+				// .contains(Tools
+				// .getBendingAbility(tagalong))))
+				// tagalong.setVelocity(player.getEyeLocation()
+				// .getDirection().clone().normalize()
+				// .multiply(factor));
+				// }
+				// }
 			}
 		}
 		// for (Player p : s.getOnlinePlayers()) {

@@ -61,6 +61,11 @@ public class Bloodbending {
 					|| Tools.isRegionProtectedFromBuild(player,
 							Abilities.Bloodbending, target.getLocation()))
 				return;
+			if (target instanceof Player) {
+				if (Tools.canBend((Player) target, Abilities.Bloodbending)
+						|| AvatarState.isAvatarState((Player) target))
+					return;
+			}
 			Tools.damageEntity(player, target, 0);
 			targetentities.put(target, target.getLocation().clone());
 		}

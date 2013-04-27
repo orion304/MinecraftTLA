@@ -313,6 +313,7 @@ public class WaterManipulation {
 							|| FireBlast.annihilateBlasts(location, radius,
 									source)) {
 						breakBlock();
+						new WaterReturn(player, sourceblock);
 						return false;
 					}
 
@@ -419,6 +420,7 @@ public class WaterManipulation {
 				// block.setData(half);
 			}
 			// oldwater = block;
+			affectedblocks.remove(block);
 		}
 	}
 

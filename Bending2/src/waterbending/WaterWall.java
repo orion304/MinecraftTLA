@@ -56,10 +56,6 @@ public class WaterWall {
 		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
 
 		if (Wave.instances.containsKey(player.getEntityId())) {
-			if (bPlayer.isOnCooldown(Abilities.Surge))
-				return;
-
-			bPlayer.cooldown(Abilities.Surge);
 			Wave wave = Wave.instances.get(player.getEntityId());
 			if (!wave.progressing) {
 				Wave.launch(player);
