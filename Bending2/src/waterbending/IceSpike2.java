@@ -198,7 +198,8 @@ public class IceSpike2 {
 	}
 
 	private void progress() {
-		if (player.isDead() || !player.isOnline()) {
+		if (player.isDead() || !player.isOnline()
+				|| !Tools.canBend(player, Abilities.IceSpike)) {
 			cancel();
 			return;
 		}

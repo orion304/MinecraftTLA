@@ -22,6 +22,8 @@ import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 import waterbending.Plantbending;
+import waterbending.WaterManipulation;
+import earthbending.EarthBlast;
 
 public class FireBlast {
 
@@ -34,7 +36,7 @@ public class FireBlast {
 	static final int maxticks = 10000;
 
 	private static double speed = ConfigManager.fireBlastSpeed;
-	static double affectingradius = ConfigManager.fireBlastRadius;
+	public static double affectingradius = 2;
 	private static double pushfactor = ConfigManager.fireBlastPush;
 	private static boolean canPowerFurnace = true;
 	static boolean dissipate = ConfigManager.fireBlastDissipate;
@@ -183,11 +185,31 @@ public class FireBlast {
 
 		Tools.removeSpouts(location, player);
 
+		double radius = FireBlast.affectingradius;
+		Player source = player;
+		if (EarthBlast.annihilateBlasts(location, radius, source)
+				|| WaterManipulation.annihilateBlasts(location, radius, source)
+				|| FireBlast.annihilateBlasts(location, radius, source)) {
+			instances.remove(id);
+			return false;
+		}
+
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
+			// Block bblock = location.getBlock();
+			// Block block1 = entity.getLocation().getBlock();
+			// if (bblock.equals(block1))
 			affect(entity);
-			if (entity instanceof LivingEntity)
+			if (entity instanceof LivingEntity) {
+				// Block block2 = ((LivingEntity) entity).getEyeLocation()
+				// .getBlock();
+				// if (bblock.equals(block1))
+				// break;
+				// if (bblock.equals(block2)) {
+				// affect(entity);
 				break;
+				// }
+			}
 		}
 
 		advanceLocation();
@@ -256,6 +278,25 @@ public class FireBlast {
 			}
 		}
 		Fireball.removeFireballsAroundPoint(location, radius);
+	}
+
+	public static boolean annihilateBlasts(Location location, double radius,
+			Player source) {
+		boolean broke = false;
+		for (int id : instances.keySet()) {
+			FireBlast blast = instances.get(id);
+			Location fireblastlocation = blast.location;
+			if (location.getWorld() == fireblastlocation.getWorld()
+					&& !blast.player.equals(source)) {
+				if (location.distance(fireblastlocation) <= radius) {
+					instances.remove(id);
+					broke = true;
+				}
+			}
+		}
+		if (Fireball.annihilateBlasts(location, radius, source))
+			broke = true;
+		return broke;
 	}
 
 	public static void removeAll() {

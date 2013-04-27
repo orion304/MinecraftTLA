@@ -113,8 +113,11 @@ public class AirShield {
 		}
 
 		if (radius < maxradius) {
-			radius += .2;
+			radius += .3;
 		}
+
+		if (radius > maxradius)
+			radius = maxradius;
 
 	}
 

@@ -1,7 +1,7 @@
 package waterbending;
 
-import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
 import tools.ConfigManager;
+import tools.TempBlock;
 import tools.Tools;
 
 public class HealingWaters {
@@ -55,9 +56,13 @@ public class HealingWaters {
 	}
 
 	private static boolean inWater(Entity entity) {
-		if (entity.getLocation().getBlock().getType() == Material.WATER
-				|| entity.getLocation().getBlock().getType() == Material.STATIONARY_WATER)
+		Block block = entity.getLocation().getBlock();
+		if (Tools.isWater(block) && !TempBlock.isTempBlock(block))
 			return true;
+		// if (entity.getLocation().getBlock().getType() == Material.WATER
+		// || entity.getLocation().getBlock().getType() ==
+		// Material.STATIONARY_WATER) &&
+		// return true;
 		return false;
 	}
 

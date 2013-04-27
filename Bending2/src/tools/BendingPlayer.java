@@ -43,6 +43,8 @@ public class BendingPlayer implements CustomSerializable {
 
 	private boolean permaremoved = false;
 
+	private boolean tremorsense = true;
+
 	private static List<Integer> initializeEmptySlots() {
 		Integer[] array = new Integer[10];
 		Arrays.fill(array, -1);
@@ -158,6 +160,14 @@ public class BendingPlayer implements CustomSerializable {
 		} else {
 			return false;
 		}
+	}
+
+	public void toggleTremorsense() {
+		tremorsense = !tremorsense;
+	}
+
+	public boolean isTremorsensing() {
+		return tremorsense;
 	}
 
 	public void cooldown() {

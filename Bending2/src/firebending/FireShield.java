@@ -23,7 +23,7 @@ public class FireShield {
 
 	private static long interval = 100;
 	private static double radius = 3;
-	private static double discradius = 1;
+	private static double discradius = 1.5;
 	private static long duration = 1000;
 	private static boolean ignite = true;
 

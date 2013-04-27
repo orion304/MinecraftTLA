@@ -98,6 +98,12 @@ public class Tremorsense {
 		Block standblock = player.getLocation().getBlock()
 				.getRelative(BlockFace.DOWN);
 
+		if (!BendingPlayer.getBendingPlayer(player).isTremorsensing()) {
+			if (block != null)
+				revert();
+			return;
+		}
+
 		if (Tools.isEarthbendable(player, Abilities.Tremorsense, standblock)
 				&& block == null) {
 			block = standblock;

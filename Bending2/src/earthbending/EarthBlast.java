@@ -16,6 +16,8 @@ import tools.Abilities;
 import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
+import waterbending.WaterManipulation;
+import firebending.FireBlast;
 
 public class EarthBlast {
 
@@ -160,8 +162,8 @@ public class EarthBlast {
 					destination = ((LivingEntity) target).getEyeLocation();
 					firstdestination = sourceblock.getLocation().clone();
 					firstdestination.setY(destination.getY());
-					destination = Tools.getPointOnLine(
-							sourceblock.getLocation(), destination, range);
+					destination = Tools.getPointOnLine(firstdestination,
+							destination, range);
 				}
 				if (destination.distance(location) <= 1) {
 					progressing = false;
@@ -198,8 +200,18 @@ public class EarthBlast {
 	//
 	// }
 
+	public static EarthBlast getBlastFromSource(Block block) {
+		for (int id : instances.keySet()) {
+			EarthBlast blast = instances.get(id);
+			if (blast.sourceblock.equals(block))
+				return blast;
+		}
+		return null;
+	}
+
 	public boolean progress() {
-		if (player.isDead() || !player.isOnline()) {
+		if (player.isDead() || !player.isOnline()
+				|| !Tools.canBend(player, Abilities.EarthBlast)) {
 			breakBlock();
 			return false;
 		}
@@ -211,7 +223,14 @@ public class EarthBlast {
 				return false;
 			}
 
+			if (!Tools.isEarthbendable(player, sourceblock)
+					&& sourceblock.getType() != Material.COBBLESTONE) {
+				instances.remove(id);
+				return false;
+			}
+
 			if (!progressing && !falling) {
+
 				if (Tools.getBendingAbility(player) != Abilities.EarthBlast) {
 					unfocusBlock();
 					return false;
@@ -228,10 +247,10 @@ public class EarthBlast {
 					unfocusBlock();
 					return false;
 				}
-				if (sourceblock.getType() == Material.AIR) {
-					instances.remove(player.getEntityId());
-					return false;
-				}
+				// if (sourceblock.getType() == Material.AIR) {
+				// instances.remove(player.getEntityId());
+				// return false;
+				// }
 			}
 
 			if (falling) {
@@ -314,6 +333,16 @@ public class EarthBlast {
 					location = location.clone().add(direction);
 
 					Tools.removeSpouts(location, player);
+					double radius = FireBlast.affectingradius;
+					Player source = player;
+					if (EarthBlast.annihilateBlasts(location, radius, source)
+							|| WaterManipulation.annihilateBlasts(location,
+									radius, source)
+							|| FireBlast.annihilateBlasts(location, radius,
+									source)) {
+						breakBlock();
+						return false;
+					}
 
 					Block block2 = location.getBlock();
 					if (block2.getLocation().equals(sourceblock.getLocation())) {
@@ -330,16 +359,26 @@ public class EarthBlast {
 					}
 				}
 
-				for (Entity entity : Tools.getEntitiesAroundPoint(location, 3)) {
+				for (Entity entity : Tools.getEntitiesAroundPoint(location,
+						FireBlast.affectingradius)) {
 					if (Tools.isRegionProtectedFromBuild(player,
 							Abilities.EarthBlast, entity.getLocation()))
 						continue;
 					if (entity instanceof LivingEntity
 							&& (entity.getEntityId() != player.getEntityId() || hitself)) {
+						// Block testblock = location.getBlock();
+						// Block block1 = entity.getLocation().getBlock();
+						// Block block2 = ((LivingEntity)
+						// entity).getEyeLocation()
+						// .getBlock();
+						//
+						// if (testblock.equals(block1)
+						// || testblock.equals(block2)) {
 						entity.setVelocity(entity.getVelocity().clone()
 								.add(direction));
 						Tools.damageEntity(player, entity, damage);
 						progressing = false;
+						// }
 					}
 				}
 
@@ -537,6 +576,21 @@ public class EarthBlast {
 
 		}
 
+	}
+
+	public static boolean annihilateBlasts(Location location, double radius,
+			Player source) {
+		boolean broke = false;
+		for (int id : instances.keySet()) {
+			EarthBlast blast = instances.get(id);
+			if (blast.location.getWorld().equals(location.getWorld())
+					&& !source.equals(blast.player))
+				if (blast.location.distance(location) <= radius) {
+					blast.breakBlock();
+					broke = true;
+				}
+		}
+		return broke;
 	}
 
 }

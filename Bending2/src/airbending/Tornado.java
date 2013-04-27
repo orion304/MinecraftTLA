@@ -26,7 +26,7 @@ public class Tornado {
 	private static double PCpushfactor = ConfigManager.tornadoPlayerPush;
 	// private static double speed = .75;
 
-	private double height = 1;
+	private double height = 2;
 	private double radius = height / maxheight * maxradius;
 
 	// private static double speedfactor = 1000 * speed
@@ -167,8 +167,13 @@ public class Tornado {
 			}
 		}
 
-		if (height < maxheight)
-			height += 0.25;
+		if (height < maxheight) {
+			height += 1;
+		}
+
+		if (height > maxheight) {
+			height = maxheight;
+		}
 
 	}
 

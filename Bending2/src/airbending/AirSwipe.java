@@ -20,6 +20,9 @@ import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
+import waterbending.WaterManipulation;
+import earthbending.EarthBlast;
+import firebending.FireBlast;
 import firebending.Illumination;
 
 public class AirSwipe {
@@ -177,6 +180,19 @@ public class AirSwipe {
 								Abilities.AirSwipe, location)) {
 					elements.remove(direction);
 				} else {
+					Tools.removeSpouts(location, player);
+
+					double radius = FireBlast.affectingradius;
+					Player source = player;
+					if (EarthBlast.annihilateBlasts(location, radius, source)
+							|| WaterManipulation.annihilateBlasts(location,
+									radius, source)
+							|| FireBlast.annihilateBlasts(location, radius,
+									source)) {
+						elements.remove(direction);
+						continue;
+					}
+
 					Block block = location.getBlock();
 					for (Block testblock : Tools.getBlocksAroundPoint(location,
 							affectingradius)) {

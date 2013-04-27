@@ -55,12 +55,11 @@ public class WaterWall {
 
 		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
 
-		if (bPlayer.isOnCooldown(Abilities.Surge))
-			return;
-
-		bPlayer.cooldown(Abilities.Surge);
-
 		if (Wave.instances.containsKey(player.getEntityId())) {
+			if (bPlayer.isOnCooldown(Abilities.Surge))
+				return;
+
+			bPlayer.cooldown(Abilities.Surge);
 			Wave wave = Wave.instances.get(player.getEntityId());
 			if (!wave.progressing) {
 				Wave.launch(player);
@@ -92,6 +91,9 @@ public class WaterWall {
 			time = System.currentTimeMillis();
 		}
 
+		if (bPlayer.isOnCooldown(Abilities.Surge))
+			return;
+
 		if (!instances.containsKey(player.getEntityId())
 				&& WaterReturn.hasWaterBottle(player)) {
 
@@ -107,6 +109,11 @@ public class WaterWall {
 				Wave wave = new Wave(player);
 				wave.canhitself = false;
 				wave.moveWater();
+				if (!wave.progressing) {
+					block.setType(Material.AIR);
+					wave.returnWater();
+					wave.cancel();
+				}
 			}
 
 		}
@@ -473,8 +480,6 @@ public class WaterWall {
 				if (bPlayer.isOnCooldown(Abilities.Surge))
 					return;
 
-				bPlayer.cooldown(Abilities.Surge);
-
 				Location eyeloc = player.getEyeLocation();
 				Block block = eyeloc.add(eyeloc.getDirection().normalize())
 						.getBlock();
@@ -486,9 +491,15 @@ public class WaterWall {
 					block.setData(full);
 					WaterWall wall = new WaterWall(player);
 					wall.moveWater();
+					if (!wall.progressing) {
+						block.setType(Material.AIR);
+						wall.returnWater();
+						wall.cancel();
+					}
 					return;
 				}
 			}
+
 			new Wave(player);
 			return;
 		} else {

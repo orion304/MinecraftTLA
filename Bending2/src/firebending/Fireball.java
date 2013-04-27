@@ -213,4 +213,25 @@ public class Fireball {
 		}
 
 	}
+
+	public static boolean annihilateBlasts(Location location, double radius,
+			Player source) {
+		boolean broke = false;
+		for (int id : instances.keySet()) {
+			Fireball fireball = instances.get(id);
+			if (!fireball.launched)
+				continue;
+			Location fireblastlocation = fireball.location;
+			if (location.getWorld() == fireblastlocation.getWorld()
+					&& !source.equals(fireball.player)) {
+				if (location.distance(fireblastlocation) <= radius) {
+					instances.remove(id);
+					broke = true;
+				}
+			}
+		}
+
+		return broke;
+
+	}
 }

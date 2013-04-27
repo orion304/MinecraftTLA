@@ -294,7 +294,8 @@ public class BendingListener implements Listener {
 
 		// Tools.verbose(Tools.getBendingAbility(player));
 
-		Abilities[] sourceabilities = { Abilities.OctopusForm, Abilities.Surge };
+		// Abilities[] sourceabilities = { Abilities.OctopusForm,
+		// Abilities.Surge };
 
 		AirScooter.check(player);
 
@@ -491,10 +492,10 @@ public class BendingListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		Abilities[] sourceabilities = { Abilities.AirBlast,
-				Abilities.AirSuction, Abilities.EarthBlast,
-				Abilities.WaterManipulation, Abilities.Surge,
-				Abilities.IceSpike };
+		// Abilities[] sourceabilities = { Abilities.AirBlast,
+		// Abilities.AirSuction, Abilities.EarthBlast,
+		// Abilities.WaterManipulation, Abilities.Surge,
+		// Abilities.IceSpike };
 
 		AirScooter.check(player);
 
@@ -543,6 +544,10 @@ public class BendingListener implements Listener {
 
 			if (ability == Abilities.Shockwave) {
 				new Shockwave(player);
+			}
+
+			if (ability == Abilities.Tremorsense) {
+				BendingPlayer.getBendingPlayer(player).toggleTremorsense();
 			}
 
 			if (ability == Abilities.Collapse) {
@@ -891,6 +896,10 @@ public class BendingListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		EarthBlast blast = EarthBlast.getBlastFromSource(block);
+		if (blast != null) {
+			blast.cancel();
+		}
 		if (FreezeMelt.frozenblocks.containsKey(block)) {
 			FreezeMelt.thaw(block);
 			event.setCancelled(true);
@@ -968,6 +977,11 @@ public class BendingListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
 		for (Block block : event.blockList()) {
+			EarthBlast blast = EarthBlast.getBlastFromSource(block);
+
+			if (blast != null) {
+				blast.cancel();
+			}
 			if (FreezeMelt.frozenblocks.containsKey(block)) {
 				FreezeMelt.thaw(block);
 			}

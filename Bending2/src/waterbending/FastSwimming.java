@@ -1,5 +1,7 @@
 package waterbending;
 
+import java.util.Arrays;
+
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -17,6 +19,17 @@ public class FastSwimming {
 	// private static long interval = ConfigManager.fastSwimmingInterval;
 	private static double factor = ConfigManager.fastSwimmingFactor;
 
+	private static final Abilities[] shiftabilities = {
+			Abilities.WaterManipulation, Abilities.Surge,
+			Abilities.HealingWaters, Abilities.PhaseChange,
+			Abilities.Bloodbending, Abilities.IceSpike, Abilities.OctopusForm,
+			Abilities.Torrent, Abilities.AirBlast, Abilities.AirBurst,
+			Abilities.AirShield, Abilities.AirSuction, Abilities.AirSwipe,
+			Abilities.Blaze, Abilities.Collapse, Abilities.EarthBlast,
+			Abilities.EarthTunnel, Abilities.FireBlast, Abilities.FireBurst,
+			Abilities.FireShield, Abilities.Lightning, Abilities.RaiseEarth,
+			Abilities.Shockwave, Abilities.Tornado, Abilities.Tremorsense };
+
 	public static void HandleSwim(Server server) {
 		for (Player player : server.getOnlinePlayers()) {
 			Abilities ability = Tools.getBendingAbility(player);
@@ -25,14 +38,7 @@ public class FastSwimming {
 					&& player.isSneaking()
 					&& Tools.isWater(player.getLocation().getBlock())
 					&& !TempBlock.isTempBlock(player.getLocation().getBlock())
-					&& !(ability == Abilities.WaterManipulation
-							|| ability == Abilities.Surge
-							|| ability == Abilities.HealingWaters
-							|| ability == Abilities.PhaseChange
-							|| ability == Abilities.Bloodbending
-							|| ability == Abilities.IceSpike
-							|| Tools.getBendingAbility(player) == Abilities.OctopusForm || Tools
-							.getBendingAbility(player) == Abilities.Torrent)) {
+					&& !(Arrays.asList(shiftabilities).contains(ability))) {
 				player.setVelocity(player.getEyeLocation().getDirection()
 						.clone().normalize().multiply(factor));
 			}

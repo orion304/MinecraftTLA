@@ -198,7 +198,7 @@ public class ConfigManager {
 	public static int illuminationRange = 5;
 
 	// Lightning
-	public static long lightningwarmup = 1500;
+	public static long lightningwarmup = 3500;
 	public static int lightningrange = 15;
 	public static double lightningmisschance = 10;
 
