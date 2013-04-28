@@ -45,8 +45,9 @@ public class EarthColumn {
 			return;
 
 		try {
-			block = player.getTargetBlock(Tools.getTransparentEarthbending(),
-					(int) range);
+			block = Tools.getEarthSourceBlock(player, range);
+			if (block == null)
+				return;
 			origin = block.getLocation();
 			location = origin.clone();
 			distance = Tools.getEarthbendableBlocksLength(player, block,

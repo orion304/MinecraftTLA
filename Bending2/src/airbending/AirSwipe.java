@@ -190,6 +190,7 @@ public class AirSwipe {
 							|| FireBlast.annihilateBlasts(location, radius,
 									source)) {
 						elements.remove(direction);
+						damage = 0;
 						continue;
 					}
 
@@ -252,7 +253,8 @@ public class AirSwipe {
 
 				if (entity instanceof LivingEntity
 						&& !affectedentities.contains(entity)) {
-					Tools.damageEntity(player, entity, damage);
+					if (damage != 0)
+						Tools.damageEntity(player, entity, damage);
 					affectedentities.add(entity);
 				}
 

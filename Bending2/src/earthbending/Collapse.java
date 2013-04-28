@@ -35,8 +35,14 @@ public class Collapse {
 		if (AvatarState.isAvatarState(player))
 			radius = AvatarState.getValue(defaultradius);
 		this.player = player;
-		Location location = player.getTargetBlock(
-				Tools.getTransparentEarthbending(), range).getLocation();
+		Block sblock = Tools.getEarthSourceBlock(player, range);
+		Location location;
+		if (sblock == null) {
+			location = player.getTargetBlock(
+					Tools.getTransparentEarthbending(), range).getLocation();
+		} else {
+			location = sblock.getLocation();
+		}
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
 			if (Tools.isEarthbendable(player, block)
 					&& !blocks.containsKey(block)

@@ -43,8 +43,14 @@ public class EarthWall {
 		Vector orth = new Vector(ox, oy, oz);
 		orth = orth.normalize();
 
-		Location origin = player.getTargetBlock(
-				Tools.getTransparentEarthbending(), range).getLocation();
+		Block sblock = Tools.getEarthSourceBlock(player, range);
+		Location origin;
+		if (sblock == null) {
+			origin = player.getTargetBlock(Tools.getTransparentEarthbending(),
+					range).getLocation();
+		} else {
+			origin = sblock.getLocation();
+		}
 		World world = origin.getWorld();
 
 		boolean cooldown = false;

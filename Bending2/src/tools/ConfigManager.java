@@ -51,7 +51,7 @@ public class ConfigManager {
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;
-	public static double airBlastPush = 1.2;
+	public static double airBlastPush = 1.8;
 
 	// AirBubble
 	public static int airBubbleRadius = 7;

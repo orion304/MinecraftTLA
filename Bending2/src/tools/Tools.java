@@ -1711,6 +1711,22 @@ public class Tools {
 		removeSpouts(location, 1.5, sourceplayer);
 	}
 
+	public static Block getEarthSourceBlock(Player player, double range) {
+		Location location = player.getEyeLocation();
+		Vector vector = location.getDirection().clone().normalize();
+		for (double i = 0; i <= range; i++) {
+			Block block = location.clone().add(vector.clone().multiply(i))
+					.getBlock();
+			if (isRegionProtectedFromBuild(player, Abilities.RaiseEarth,
+					location))
+				continue;
+			if (isEarthbendable(player, block)) {
+				return block;
+			}
+		}
+		return null;
+	}
+
 	public static Block getWaterSourceBlock(Player player, double range,
 			boolean plantbending) {
 		// byte full = 0x0;

@@ -42,8 +42,9 @@ public class CompactColumn {
 		if (bPlayer.isOnCooldown(Abilities.Collapse))
 			return;
 
-		block = player.getTargetBlock(Tools.getTransparentEarthbending(),
-				(int) range);
+		block = Tools.getEarthSourceBlock(player, range);
+		if (block == null)
+			return;
 		origin = block.getLocation();
 		location = origin.clone();
 		this.player = player;

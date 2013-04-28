@@ -136,11 +136,11 @@ public class WaterManipulation {
 					firstdirection = Tools.getDirection(
 							sourceblock.getLocation(), firstdestination)
 							.normalize();
+					targetdestination = Tools.getPointOnLine(firstdestination,
+							targetdestination, range);
 					targetdirection = Tools.getDirection(firstdestination,
 							targetdestination).normalize();
-					if (!displacing)
-						targetdestination = Tools.getPointOnLine(
-								firstdestination, targetdestination, range);
+
 					if (Tools.isPlant(sourceblock))
 						new Plantbending(sourceblock);
 					addWater(sourceblock);
@@ -326,10 +326,24 @@ public class WaterManipulation {
 					}
 				}
 
+				if (trail2 != null) {
+					if (trail2.getBlock().equals(block))
+						trail2.revertBlock();
+				}
+
+				if (trail != null) {
+					if (trail.getBlock().equals(block)) {
+						trail.revertBlock();
+						if (trail2 != null)
+							trail2.revertBlock();
+					}
+				}
+
 				if (Tools.isTransparentToEarthbending(player, block)
 						&& !block.isLiquid()) {
 					Tools.breakBlock(block);
-				} else if (block.getType() != Material.AIR) {
+				} else if (block.getType() != Material.AIR
+						&& !Tools.isWater(block)) {
 					breakBlock();
 					new WaterReturn(player, sourceblock);
 					return false;
@@ -563,7 +577,9 @@ public class WaterManipulation {
 	}
 
 	public static boolean progress(int ID) {
-		return instances.get(ID).progress();
+		if (instances.containsKey(ID))
+			return instances.get(ID).progress();
+		return false;
 	}
 
 	public static boolean canFlowFromTo(Block from, Block to) {

@@ -257,7 +257,7 @@ public class AirBlast {
 					}
 				}
 			}
-			velocity.multiply(1 - location.distance(origin) / range);
+			velocity.multiply(1 - location.distance(origin) / (2 * range));
 			entity.setVelocity(velocity);
 			entity.setFallDistance(0);
 			if (entity.getFireTicks() > 0)

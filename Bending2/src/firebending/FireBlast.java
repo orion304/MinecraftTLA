@@ -240,7 +240,9 @@ public class FireBlast {
 	}
 
 	public static boolean progress(int ID) {
-		return instances.get(ID).progress();
+		if (instances.containsKey(ID))
+			return instances.get(ID).progress();
+		return false;
 	}
 
 	public static void progressAll() {

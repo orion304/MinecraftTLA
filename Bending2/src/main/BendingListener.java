@@ -900,6 +900,7 @@ public class BendingListener implements Listener {
 		if (blast != null) {
 			blast.cancel();
 		}
+
 		if (FreezeMelt.frozenblocks.containsKey(block)) {
 			FreezeMelt.thaw(block);
 			event.setCancelled(true);
@@ -920,6 +921,8 @@ public class BendingListener implements Listener {
 		} else if (Tools.movedearth.containsKey(block)) {
 			// Tools.removeEarthbendedBlockIndex(block);
 			Tools.removeRevertIndex(block);
+		} else if (TempBlock.isTempBlock(block)) {
+			TempBlock.revertBlock(block, Material.AIR);
 		}
 	}
 

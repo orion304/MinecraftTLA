@@ -71,8 +71,7 @@ public class EarthBlast {
 
 	public boolean prepare() {
 		cancelPrevious();
-		Block block = player.getTargetBlock(Tools.getTransparentEarthbending(),
-				(int) preparerange);
+		Block block = Tools.getEarthSourceBlock(player, preparerange);
 		// if (Tools.isEarthbendable(player, block)) {
 		// sourceblock = block;
 		// focusBlock();
@@ -80,7 +79,7 @@ public class EarthBlast {
 		// }
 		// return false;
 		block(player);
-		if (Tools.isEarthbendable(player, block)) {
+		if (block != null) {
 			sourceblock = block;
 			focusBlock();
 			return true;
@@ -469,7 +468,9 @@ public class EarthBlast {
 	}
 
 	public static boolean progress(int ID) {
-		return instances.get(ID).progress();
+		if (instances.containsKey(ID))
+			return instances.get(ID).progress();
+		return false;
 	}
 
 	public static void removeAll() {
