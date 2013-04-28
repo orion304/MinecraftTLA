@@ -49,7 +49,8 @@ public class EarthArmor {
 			return;
 
 		this.player = player;
-		headblock = player.getTargetBlock(null, range);
+		headblock = player.getTargetBlock(Tools.getTransparentEarthbending(),
+				range);
 		if (Tools.getEarthbendableBlocksLength(player, headblock, new Vector(0,
 				-1, 0), 2) >= 2) {
 			legsblock = headblock.getRelative(BlockFace.DOWN);

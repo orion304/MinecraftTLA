@@ -151,6 +151,7 @@ public class EarthBlast {
 					// Tools.removeEarthbendedBlockIndex(sourceblock);
 				}
 				Entity target = Tools.getTargettedEntity(player, range);
+				Tools.verbose(target);
 				if (target == null) {
 					destination = player.getTargetBlock(
 							Tools.getTransparentEarthbending(), (int) range)
@@ -164,6 +165,8 @@ public class EarthBlast {
 					destination = Tools.getPointOnLine(firstdestination,
 							destination, range);
 				}
+				// firstdestination.getBlock().setType(Material.GLOWSTONE);
+				// destination.getBlock().setType(Material.GLOWSTONE);
 				if (destination.distance(location) <= 1) {
 					progressing = false;
 					destination = null;
