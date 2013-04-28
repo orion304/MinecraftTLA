@@ -9,7 +9,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
-import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
@@ -32,8 +31,8 @@ public class Collapse {
 		if (bPlayer.isOnCooldown(Abilities.Collapse))
 			return;
 
-		if (AvatarState.isAvatarState(player))
-			radius = AvatarState.getValue(defaultradius);
+		// if (AvatarState.isAvatarState(player))
+		// radius = AvatarState.getValue(defaultradius);
 		this.player = player;
 		Block sblock = Tools.getEarthSourceBlock(player, range);
 		Location location;
