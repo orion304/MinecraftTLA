@@ -8,6 +8,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -24,17 +26,32 @@ public class Collapse {
 	private Player player;
 
 	public Collapse(Player player) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Collapse))
+			return;
+
 		// if (AvatarState.isAvatarState(player))
 		// radius = AvatarState.getValue(defaultradius);
 		this.player = player;
-		Location location = player.getTargetBlock(
-				Tools.getTransparentEarthbending(), range).getLocation();
+		Block sblock = Tools.getEarthSourceBlock(player, range);
+		Location location;
+		if (sblock == null) {
+			location = player.getTargetBlock(
+					Tools.getTransparentEarthbending(), range).getLocation();
+		} else {
+			location = sblock.getLocation();
+		}
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
 			if (Tools.isEarthbendable(player, block)
 					&& !blocks.containsKey(block)
 					&& block.getY() >= location.getBlockY()) {
 				getAffectedBlocks(block);
 			}
+		}
+
+		if (!baseblocks.isEmpty()) {
+			bPlayer.cooldown(Abilities.Collapse);
 		}
 
 		for (Block block : baseblocks.keySet()) {

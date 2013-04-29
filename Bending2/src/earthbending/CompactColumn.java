@@ -7,6 +7,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -35,8 +37,14 @@ public class CompactColumn {
 	private ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
 
 	public CompactColumn(Player player) {
-		block = player.getTargetBlock(Tools.getTransparentEarthbending(),
-				(int) range);
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Collapse))
+			return;
+
+		block = Tools.getEarthSourceBlock(player, range);
+		if (block == null)
+			return;
 		origin = block.getLocation();
 		location = origin.clone();
 		this.player = player;
@@ -49,6 +57,7 @@ public class CompactColumn {
 			if (canInstantiate()) {
 				id = ID;
 				instances.put(id, this);
+				bPlayer.cooldown(Abilities.Collapse);
 				if (ID >= Integer.MAX_VALUE) {
 					ID = Integer.MIN_VALUE;
 				}

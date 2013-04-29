@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
@@ -22,6 +23,11 @@ public class Melt {
 	private static final byte full = 0x0;
 
 	public Melt(Player player) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.PhaseChange))
+			return;
+
 		int range = (int) Tools.waterbendingNightAugment(defaultrange,
 				player.getWorld());
 		int radius = (int) Tools.waterbendingNightAugment(defaultradius,
@@ -47,6 +53,8 @@ public class Melt {
 				melt(player, block);
 			}
 		}
+
+		bPlayer.cooldown(Abilities.PhaseChange);
 	}
 
 	public static void melt(Player player, Block block) {

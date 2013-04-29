@@ -12,6 +12,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 import waterbending.WaterSpout;
@@ -20,7 +21,8 @@ public class AirSuction {
 
 	public static ConcurrentHashMap<Integer, AirSuction> instances = new ConcurrentHashMap<Integer, AirSuction>();
 	private static ConcurrentHashMap<Player, Location> origins = new ConcurrentHashMap<Player, Location>();
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
 	static final long soonesttime = Tools.timeinterval;
 
 	private static int ID = Integer.MIN_VALUE;
@@ -46,18 +48,24 @@ public class AirSuction {
 	private double speedfactor;
 
 	public AirSuction(Player player) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
-				return;
-			}
-		}
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+		// return;
+		// }
+		// }
+
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.AirSuction))
+			return;
+
 		if (player.getEyeLocation().getBlock().isLiquid()) {
 			return;
 		}
 		if (AirSpout.getPlayers().contains(player)
 				|| WaterSpout.getPlayers().contains(player))
 			return;
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 		this.player = player;
 		if (origins.containsKey(player)) {
 			origin = origins.get(player);
@@ -91,11 +99,12 @@ public class AirSuction {
 
 		id = ID;
 		instances.put(id, this);
+		bPlayer.cooldown(Abilities.AirSuction);
 		if (ID == Integer.MAX_VALUE)
 			ID = Integer.MIN_VALUE;
 		ID++;
 		// time = System.currentTimeMillis();
-		timers.put(player, System.currentTimeMillis());
+		// timers.put(player, System.currentTimeMillis());
 	}
 
 	public static void setOrigin(Player player) {
@@ -104,6 +113,11 @@ public class AirSuction {
 		if (location.getBlock().isLiquid()
 				|| Tools.isSolid(location.getBlock()))
 			return;
+
+		if (Tools.isRegionProtectedFromBuild(player, Abilities.AirSuction,
+				location))
+			return;
+
 		if (origins.containsKey(player)) {
 			origins.replace(player, location);
 		} else {

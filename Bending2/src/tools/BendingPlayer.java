@@ -20,6 +20,8 @@ public class BendingPlayer implements CustomSerializable {
 
 	private static ConcurrentHashMap<String, BendingPlayer> players = new ConcurrentHashMap<String, BendingPlayer>();
 
+	private static Map<Abilities, Long> abilityCooldowns = new HashMap<Abilities, Long>();
+	private static long globalCooldown = 250;
 	private static BendingPlayers config = Tools.config;
 
 	private String playername;
@@ -30,6 +32,8 @@ public class BendingPlayer implements CustomSerializable {
 
 	private List<Integer> bendingType = new ArrayList<Integer>();
 
+	private Map<Abilities, Long> cooldowns = new HashMap<Abilities, Long>();
+
 	private boolean bendToItem = ConfigManager.bendToItem;
 
 	private long paralyzeTime = 0;
@@ -38,6 +42,8 @@ public class BendingPlayer implements CustomSerializable {
 	private long lasttime = 0;
 
 	private boolean permaremoved = false;
+
+	private boolean tremorsense = true;
 
 	private static List<Integer> initializeEmptySlots() {
 		Integer[] array = new Integer[10];
@@ -96,6 +102,85 @@ public class BendingPlayer implements CustomSerializable {
 		}
 	}
 
+	public static void initializeCooldowns() {
+		if (abilityCooldowns.isEmpty()) {
+			for (Abilities ability : Abilities.values()) {
+				long cd = 0;
+				switch (ability) {
+				case WaterManipulation:
+					cd = 1000;
+					break;
+				case EarthBlast:
+					cd = 1000;
+					break;
+				case AirSwipe:
+					cd = ConfigManager.airSwipeCooldown;
+					break;
+				case HighJump:
+					cd = ConfigManager.highJumpCooldown;
+					break;
+				case RapidPunch:
+					cd = ConfigManager.rapidPunchCooldown;
+					break;
+				case Tremorsense:
+					cd = ConfigManager.tremorsenseCooldown;
+					break;
+				case FireBlast:
+					cd = ConfigManager.fireBlastCooldown;
+					break;
+				case FireJet:
+					cd = ConfigManager.fireJetCooldown;
+					break;
+				case IceSpike:
+					cd = ConfigManager.icespikecooldown;
+					break;
+				}
+				abilityCooldowns.put(ability, cd);
+			}
+		}
+	}
+
+	public boolean isOnGlobalCooldown() {
+		return (System.currentTimeMillis() <= lasttime + globalCooldown);
+	}
+
+	public boolean isOnCooldown(Abilities ability) {
+		if (ability == Abilities.AvatarState)
+			return false;
+		if (isOnGlobalCooldown()) {
+			return true;
+		}
+
+		if (cooldowns.containsKey(ability)) {
+			double time = System.currentTimeMillis() - cooldowns.get(ability);
+			// Tools.verbose(time);
+			// Tools.verbose(ability + ": " + abilityCooldowns.get(ability));
+			return (time <= abilityCooldowns.get(ability));
+
+		} else {
+			return false;
+		}
+	}
+
+	public void toggleTremorsense() {
+		tremorsense = !tremorsense;
+	}
+
+	public boolean isTremorsensing() {
+		return tremorsense;
+	}
+
+	public void cooldown() {
+		cooldown(null);
+	}
+
+	public void cooldown(Abilities ability) {
+		long time = System.currentTimeMillis();
+		if (ability != null)
+			cooldowns.put(ability, time);
+		lasttime = time;
+	}
+
 	public String getName() {
 		return playername;
 	}
@@ -105,7 +190,7 @@ public class BendingPlayer implements CustomSerializable {
 	}
 
 	public boolean isBender(BendingType type) {
-		lasttime = System.currentTimeMillis();
+		// lasttime = System.currentTimeMillis();
 		return bendingType.contains(BendingType.getIndex(type));
 	}
 

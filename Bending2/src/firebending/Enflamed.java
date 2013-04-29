@@ -16,6 +16,8 @@ public class Enflamed {
 	private static final long buffer = 30;
 
 	public Enflamed(Entity entity, Player source) {
+		if (entity.getEntityId() == source.getEntityId())
+			return;
 		if (instances.containsKey(entity)) {
 			instances.replace(entity, source);
 		} else {

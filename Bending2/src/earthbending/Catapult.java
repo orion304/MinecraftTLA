@@ -10,14 +10,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
 public class Catapult {
 
 	public static ConcurrentHashMap<Integer, Catapult> instances = new ConcurrentHashMap<Integer, Catapult>();
-	private static ConcurrentHashMap<Player, Long> timers = new ConcurrentHashMap<Player, Long>();
-	static final long soonesttime = Tools.timeinterval;
+	// private static ConcurrentHashMap<Player, Long> timers = new
+	// ConcurrentHashMap<Player, Long>();
+	// static final long soonesttime = Tools.timeinterval;
 
 	private static int length = ConfigManager.catapultLength;
 	private static double speed = ConfigManager.catapultSpeed;
@@ -39,11 +42,17 @@ public class Catapult {
 	private int ticks = 0;
 
 	public Catapult(Player player) {
-		if (timers.containsKey(player)) {
-			if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
-				return;
-			}
-		}
+		// if (timers.containsKey(player)) {
+		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
+		// return;
+		// }
+		// }
+
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Catapult))
+			return;
+
 		this.player = player;
 		origin = player.getEyeLocation().clone();
 		direction = origin.getDirection().clone().normalize();
@@ -74,7 +83,8 @@ public class Catapult {
 			starttime = System.currentTimeMillis();
 			moving = true;
 			instances.put(player.getEntityId(), this);
-			timers.put(player, System.currentTimeMillis());
+			bPlayer.cooldown(Abilities.Catapult);
+			// timers.put(player, System.currentTimeMillis());
 		}
 
 	}
@@ -183,7 +193,8 @@ public class Catapult {
 				return false;
 			}
 		}
-		Tools.moveEarth(player, location, direction, distance, false);
+		Tools.moveEarth(player, location.clone().subtract(direction),
+				direction, distance, false);
 		// Tools.moveEarth(location, direction, distance);
 		// location = location.clone().add(direction);
 		return true;

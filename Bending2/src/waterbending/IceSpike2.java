@@ -101,6 +101,11 @@ public class IceSpike2 {
 	public static void activate(Player player) {
 		redirect(player);
 		boolean activate = false;
+
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.IceSpike))
+			return;
+
 		for (IceSpike2 ice : getInstances(player)) {
 			if (ice.prepared) {
 				ice.throwIce();
@@ -193,7 +198,8 @@ public class IceSpike2 {
 	}
 
 	private void progress() {
-		if (player.isDead() || !player.isOnline()) {
+		if (player.isDead() || !player.isOnline()
+				|| !Tools.canBend(player, Abilities.IceSpike)) {
 			cancel();
 			return;
 		}

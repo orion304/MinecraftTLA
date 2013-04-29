@@ -20,7 +20,6 @@ import tools.Abilities;
 import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
-import tools.Cooldowns;
 import tools.Tools;
 import de.diddiz.LogBlock.Consumer;
 import de.diddiz.LogBlock.LogBlock;
@@ -87,7 +86,7 @@ public class Bending extends JavaPlugin {
 		}
 
 		config = new BendingPlayers(getDataFolder());
-		Cooldowns.initialize();
+		BendingPlayer.initializeCooldowns();
 
 		tools = new Tools(config);
 
@@ -119,7 +118,7 @@ public class Bending extends JavaPlugin {
 		// playerStorageWriter, 0, 40);
 
 		getServer().getScheduler().runTaskTimerAsynchronously(plugin,
-				revertChecker, 0, 40);
+				revertChecker, 0, 200);
 		getServer().getScheduler().runTaskTimerAsynchronously(plugin, saver, 0,
 				20 * 60 * 5);
 

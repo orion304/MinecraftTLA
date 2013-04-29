@@ -7,7 +7,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -21,6 +23,11 @@ public class EarthWall {
 	private int halfwidth = defaulthalfwidth;
 
 	public EarthWall(Player player) {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.RaiseEarth))
+			return;
+
 		if (AvatarState.isAvatarState(player)) {
 			height = (int) (2. / 5. * (double) AvatarState.getValue(height));
 			halfwidth = AvatarState.getValue(halfwidth);
@@ -36,9 +43,17 @@ public class EarthWall {
 		Vector orth = new Vector(ox, oy, oz);
 		orth = orth.normalize();
 
-		Location origin = player.getTargetBlock(
-				Tools.getTransparentEarthbending(), range).getLocation();
+		Block sblock = Tools.getEarthSourceBlock(player, range);
+		Location origin;
+		if (sblock == null) {
+			origin = player.getTargetBlock(Tools.getTransparentEarthbending(),
+					range).getLocation();
+		} else {
+			origin = sblock.getLocation();
+		}
 		World world = origin.getWorld();
+
+		boolean cooldown = false;
 
 		for (int i = -halfwidth; i <= halfwidth; i++) {
 			Block block = world.getBlockAt(origin.clone().add(
@@ -48,6 +63,7 @@ public class EarthWall {
 				for (int j = 1; j < height; j++) {
 					block = block.getRelative(BlockFace.DOWN);
 					if (Tools.isEarthbendable(player, block)) {
+						cooldown = true;
 						new EarthColumn(player, block.getLocation(), height);
 						// } else if (block.getType() != Material.AIR
 						// && !block.isLiquid()) {
@@ -63,6 +79,7 @@ public class EarthWall {
 					// if (block.getType() == Material.AIR || block.isLiquid())
 					// {
 					if (Tools.isTransparentToEarthbending(player, block)) {
+						cooldown = true;
 						new EarthColumn(player, block.getRelative(
 								BlockFace.DOWN).getLocation(), height);
 					} else if (!Tools.isEarthbendable(player, block)) {
@@ -70,9 +87,14 @@ public class EarthWall {
 					}
 				}
 			} else if (Tools.isEarthbendable(player, block)) {
+				cooldown = true;
 				new EarthColumn(player, block.getLocation(), height);
 			}
 		}
+
+		if (cooldown)
+			bPlayer.cooldown(Abilities.RaiseEarth);
+
 	}
 
 }

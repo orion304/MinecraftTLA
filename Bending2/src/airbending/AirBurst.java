@@ -9,6 +9,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.Tools;
 
 public class AirBurst {
@@ -16,16 +17,20 @@ public class AirBurst {
 	private static ConcurrentHashMap<Player, AirBurst> instances = new ConcurrentHashMap<Player, AirBurst>();
 
 	private static double threshold = 10;
-	private static double pushfactor = 1;
+	private static double pushfactor = 2. / 3.;
 	private static double deltheta = 10;
 	private static double delphi = 10;
 
 	private Player player;
 	private long starttime;
-	private long chargetime = 2500;
+	private long chargetime = 1750;
 	private boolean charged = false;
 
 	public AirBurst(Player player) {
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.AirBurst))
+			return;
+
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();

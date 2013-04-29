@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
@@ -59,6 +60,7 @@ public class Wave {
 
 	public Wave(Player player) {
 		this.player = player;
+
 		if (instances.containsKey(player.getEntityId())) {
 			if (instances.get(player.getEntityId()).progressing
 					&& !instances.get(player.getEntityId()).freeze) {
@@ -66,6 +68,7 @@ public class Wave {
 				return;
 			}
 		}
+
 		if (AvatarState.isAvatarState(player)) {
 			maxradius = AvatarState.getValue(maxradius);
 		}
@@ -120,6 +123,12 @@ public class Wave {
 	}
 
 	public void moveWater() {
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.Surge))
+			return;
+
+		bPlayer.cooldown(Abilities.Surge);
 		if (sourceblock != null) {
 			if (sourceblock.getWorld() != player.getWorld()) {
 				return;
@@ -173,7 +182,8 @@ public class Wave {
 	}
 
 	public boolean progress() {
-		if (player.isDead() || !player.isOnline()) {
+		if (player.isDead() || !player.isOnline()
+				|| !Tools.canBend(player, Abilities.Surge)) {
 			breakBlock();
 			thaw();
 			// instances.remove(player.getEntityId());
@@ -487,7 +497,7 @@ public class Wave {
 		return true;
 	}
 
-	private void returnWater() {
+	void returnWater() {
 		if (location != null) {
 			new WaterReturn(player, location.getBlock());
 		}

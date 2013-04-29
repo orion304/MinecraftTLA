@@ -17,10 +17,10 @@ public class RapidPunch {
 
 	private static int damage = ConfigManager.rapidPunchDamage;
 	private int distance = ConfigManager.rapidPunchDistance;
-	private long cooldown = ConfigManager.rapidPunchCooldown;
+	// private long cooldown = ConfigManager.rapidPunchCooldown;
 	private static int punches = ConfigManager.rapidPunchPunches;
 
-	private static Map<String, Long> cooldowns = new HashMap<String, Long>();
+	// private static Map<String, Long> cooldowns = new HashMap<String, Long>();
 	public static ConcurrentHashMap<Player, RapidPunch> instance = new ConcurrentHashMap<Player, RapidPunch>();
 	private int numpunches;
 	// private long timers;
@@ -30,9 +30,13 @@ public class RapidPunch {
 	public RapidPunch(Player p) {// , Entity t) {
 		if (instance.containsKey(p))
 			return;
-		if (cooldowns.containsKey(p.getName())
-				&& cooldowns.get(p.getName()) + cooldown >= System
-						.currentTimeMillis())
+		// if (cooldowns.containsKey(p.getName())
+		// && cooldowns.get(p.getName()) + cooldown >= System
+		// .currentTimeMillis())
+		// return;
+
+		if (BendingPlayer.getBendingPlayer(p)
+				.isOnCooldown(Abilities.RapidPunch))
 			return;
 
 		Entity t = Tools.getTargettedEntity(p, distance);
@@ -57,7 +61,8 @@ public class RapidPunch {
 			lt.setNoDamageTicks(0);
 			// Tools.verbose("PUNCHIN MOFO");
 		}
-		cooldowns.put(p.getName(), System.currentTimeMillis());
+		// cooldowns.put(p.getName(), System.currentTimeMillis());
+		BendingPlayer.getBendingPlayer(p).cooldown(Abilities.RapidPunch);
 		swing(p);
 		numpunches++;
 	}
@@ -78,4 +83,5 @@ public class RapidPunch {
 				+ " This has a short cooldown.";
 	}
 
+>>>>>>> 2c4fd6249ad1c98faf4e1714d0a68b30e9bc4a4b
 }

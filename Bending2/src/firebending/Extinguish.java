@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
 import tools.Tools;
@@ -18,6 +19,12 @@ public class Extinguish {
 	private static byte full = AirBlast.full;
 
 	public Extinguish(Player player) {
+
+		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
+
+		if (bPlayer.isOnCooldown(Abilities.HeatControl))
+			return;
+
 		double range = Tools.firebendingDayAugment(defaultrange,
 				player.getWorld());
 		if (Tools.isMeltable(player.getTargetBlock(null, (int) range))) {
@@ -49,6 +56,8 @@ public class Extinguish {
 						Effect.EXTINGUISH, 0);
 			}
 		}
+
+		bPlayer.cooldown(Abilities.HeatControl);
 	}
 
 	public static boolean canBurn(Player player) {

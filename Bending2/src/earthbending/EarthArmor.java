@@ -12,6 +12,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import tools.Abilities;
+import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.TempPotionEffect;
@@ -42,8 +44,13 @@ public class EarthArmor {
 			return;
 		}
 
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
+				Abilities.EarthArmor))
+			return;
+
 		this.player = player;
-		headblock = player.getTargetBlock(null, range);
+		headblock = player.getTargetBlock(Tools.getTransparentEarthbending(),
+				range);
 		if (Tools.getEarthbendableBlocksLength(player, headblock, new Vector(0,
 				-1, 0), 2) >= 2) {
 			legsblock = headblock.getRelative(BlockFace.DOWN);

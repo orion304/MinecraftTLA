@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
@@ -14,3 +15,20 @@
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/GriefPrevention.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/WorldEdit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/WorldGuard.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/craftbukkit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/PreciousStones.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/plugins/TagAPI.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/Towny.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/Factions.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/LogBlock.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/GriefPrevention.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
+>>>>>>> 2c4fd6249ad1c98faf4e1714d0a68b30e9bc4a4b
