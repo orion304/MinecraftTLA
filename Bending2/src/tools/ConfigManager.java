@@ -17,6 +17,7 @@ public class ConfigManager {
 	public static boolean bendToItem = false;
 	public static boolean colors = true;
 	public static boolean compatibility = false;
+	public static String message_format;
 
 	public static Map<String, String> prefixes = new HashMap<String, String>();
 	public static Map<String, String> color = new HashMap<String, String>();
@@ -32,6 +33,13 @@ public class ConfigManager {
 	public static int seaLevel = 62;
 
 	public static long globalCooldown = 500;
+	
+	// Avatar State
+	public static int Regeneration = 4;
+	public static int Speed = 3;
+	public static int Resistance = 3;
+	public static int FireResistance = 3;
+	public static int Factor = 5;
 
 	public static long chiblockduration = 2500;
 	public static double dodgechance = 25;
@@ -51,7 +59,7 @@ public class ConfigManager {
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;
-	public static double airBlastPush = 1.8;
+	public static double airBlastPush = 1.2;
 
 	// AirBubble
 	public static int airBubbleRadius = 7;
@@ -198,7 +206,7 @@ public class ConfigManager {
 	public static int illuminationRange = 5;
 
 	// Lightning
-	public static long lightningwarmup = 3500;
+	public static long lightningwarmup = 1500;
 	public static int lightningrange = 15;
 	public static double lightningmisschance = 10;
 
@@ -286,7 +294,6 @@ public class ConfigManager {
 		enabled = config.getBoolean("Chat.Enabled", enabled);
 		colors = config.getBoolean("Chat.Colors", colors);
 		compatibility = config.getBoolean("Chat.Compatibility", compatibility);
-
 		// Prefix
 		prefixes.put("Air", config.getString("Chat.Prefix.Air", "[Airbender] "));
 		prefixes.put("Avatar",
@@ -350,6 +357,12 @@ public class ConfigManager {
 		seaLevel = config.getInt("Bending.Option.Sea-Level", seaLevel);
 
 		// Properties
+		//AvatarState
+		Factor = config.getInt("Properties.AvatarState.Factor", Factor);
+		Regeneration = config.getInt("Properties.AvatarState.Regeneration", Regeneration);
+		Speed = config.getInt("Properties.AvatarState.Speed", Speed);
+		FireResistance = config.getInt("Properties.AvatarState.FireResistance", FireResistance);
+		Resistance = config.getInt("Properties.AvatarState.Resistance", Resistance);
 		// ChiBlocker
 		chiblockduration = config.getLong(
 				"Properties.ChiBlocker.ChiBlock-Duration", chiblockduration);
@@ -724,6 +737,7 @@ public class ConfigManager {
 		config.set("Chat.Enabled", enabled);
 		config.set("Chat.Colors", colors);
 		config.set("Chat.Compatibility", compatibility);
+		config.set("chat.message_format",  message_format = config.getString("chat.message_format", "<name>&f: <message>"));
 		// Prefix
 		config.set("Chat.Prefix.Air", prefixes.get("Air"));
 		config.set("Chat.Prefix.Fire", prefixes.get("Fire"));
@@ -753,6 +767,12 @@ public class ConfigManager {
 		config.set("Bending.Option.Firebending-Dissipate-Time", dissipateAfter);
 		config.set("Bending.Option.Sea-Level", seaLevel);
 		// Properties
+		// Avatar State
+		config.set("Properties.AvatarState.Factor", Factor);
+		config.set("Properties.AvatarState.Regeneration", Regeneration);
+		config.set("Properties.AvatarState.FireResistance", FireResistance);
+		config.set("Properties.AvatarState.Resistance", Resistance);
+		config.set("Properties.AvatarState.Speed", Speed);
 		// ChiBlocker
 		config.set("Properties.ChiBlocker.ChiBlock-Duration", chiblockduration);
 		config.set("Properties.ChiBlocker.Dodge-Chance", dodgechance);

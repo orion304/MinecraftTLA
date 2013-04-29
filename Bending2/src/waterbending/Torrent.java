@@ -556,10 +556,6 @@ public class Torrent {
 
 		for (TempBlock block : frozenblocks.keySet()) {
 			Player player = frozenblocks.get(block);
-			if (block.getBlock().getType() != Material.ICE) {
-				frozenblocks.remove(block);
-				continue;
-			}
 			if (block.getBlock().getWorld() != player.getWorld()) {
 				thaw(block);
 				continue;

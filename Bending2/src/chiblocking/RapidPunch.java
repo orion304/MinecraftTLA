@@ -1,15 +1,15 @@
 package chiblocking;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import tools.Abilities;
-import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.Tools;
 
@@ -83,4 +83,5 @@ public class RapidPunch {
 				+ " This has a short cooldown.";
 	}
 
+>>>>>>> 2c4fd6249ad1c98faf4e1714d0a68b30e9bc4a4b
 }

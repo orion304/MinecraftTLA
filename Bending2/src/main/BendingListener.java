@@ -3,6 +3,7 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UnknownFormatConversionException;
 
@@ -62,6 +63,7 @@ import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.Cooldowns;
 import tools.TempBlock;
 import tools.Tools;
 import waterbending.Bloodbending;
@@ -169,8 +171,9 @@ public class BendingListener implements Listener {
 							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
 			}
-			player.setDisplayName("<" + color + append + player.getName()
-					+ ChatColor.WHITE + ">");
+			player.setDisplayName(color + append + player.getName());
+//			player.setDisplayName("<" + color + append + player.getName()
+//					+ ChatColor.WHITE + ">");
 		}
 
 		YamlConfiguration dc = new YamlConfiguration();
@@ -214,8 +217,7 @@ public class BendingListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
-			BendingPlayer.getBendingPlayer(player).cooldown();
-		// Cooldowns.forceCooldown(player);
+			Cooldowns.forceCooldown(player);
 		if (Paralyze.isParalyzed(player) || Bloodbending.isBloodbended(player)) {
 			event.setCancelled(true);
 		}
@@ -224,8 +226,7 @@ public class BendingListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
-		// Cooldowns.forceCooldown(player);
-		BendingPlayer.getBendingPlayer(player).cooldown();
+		Cooldowns.forceCooldown(player);
 		if (Paralyze.isParalyzed(player) || Bloodbending.isBloodbended(player)) {
 			event.setCancelled(true);
 		}
@@ -269,8 +270,21 @@ public class BendingListener implements Listener {
 			}
 
 			try {
-				event.setFormat("<" + color + player.getDisplayName()
-						+ ChatColor.WHITE + "> " + event.getMessage());
+				String message = event.getMessage();
+				String format = ConfigManager.message_format;
+				format = format.replace("<message>", "%2$s");
+				format = format.replace("<name>", color + player.getDisplayName());
+				format = Tools.colorize(format);
+				
+				event.setFormat(format);
+				event.setMessage(message);
+//				format = format.replace("<message>", event.getMessage());
+//				format = format.replace("<name>", player.getDisplayName());
+//				event.setMessage(format);
+				
+				
+//				event.setFormat("<" + color + player.getDisplayName()
+//						+ ChatColor.WHITE + "> " + event.getMessage());
 				// event.setFormat(format);
 				// // event.setMessage(message + "Test");
 				// Tools.verbose(event.getFormat());
@@ -294,8 +308,7 @@ public class BendingListener implements Listener {
 
 		// Tools.verbose(Tools.getBendingAbility(player));
 
-		// Abilities[] sourceabilities = { Abilities.OctopusForm,
-		// Abilities.Surge };
+		Abilities[] sourceabilities = { Abilities.OctopusForm, Abilities.Surge };
 
 		AirScooter.check(player);
 
@@ -305,10 +318,10 @@ public class BendingListener implements Listener {
 
 		if (Tools.canBend(player, ability)) {
 
-			// if (!Arrays.asList(sourceabilities).contains(ability)) {
-			// if (!Cooldowns.canUseAbility(player, ability))
-			// return;
-			// }
+			if (!Arrays.asList(sourceabilities).contains(ability)) {
+				if (!Cooldowns.canUseAbility(player, ability))
+					return;
+			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigManager.useWeapon.get("Air")) {
@@ -364,6 +377,10 @@ public class BendingListener implements Listener {
 
 				if (ability == Abilities.Tremorsense) {
 					new Tremorsense(player);
+				}
+
+				if (ability == Abilities.EarthArmor) {
+					new EarthArmor(player);
 				}
 
 				if (ability == Abilities.EarthArmor) {
@@ -467,15 +484,12 @@ public class BendingListener implements Listener {
 				new HighJump(player);
 			}
 
-			if (!Tools.isWeapon(player.getItemInHand().getType())) {
+			if (ability == Abilities.RapidPunch) {
+				new RapidPunch(player);
+			}
 
-				if (ability == Abilities.RapidPunch) {
-					new RapidPunch(player);
-				}
-
-				if (ability == Abilities.Paralyze) {
-					// new Paralyze(player);
-				}
+			if (ability == Abilities.Paralyze) {
+				// new Paralyze(player);
 			}
 
 		}
@@ -492,10 +506,10 @@ public class BendingListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		// Abilities[] sourceabilities = { Abilities.AirBlast,
-		// Abilities.AirSuction, Abilities.EarthBlast,
-		// Abilities.WaterManipulation, Abilities.Surge,
-		// Abilities.IceSpike };
+		Abilities[] sourceabilities = { Abilities.AirBlast,
+				Abilities.AirSuction, Abilities.EarthBlast,
+				Abilities.WaterManipulation, Abilities.Surge,
+				Abilities.IceSpike };
 
 		AirScooter.check(player);
 
@@ -505,10 +519,10 @@ public class BendingListener implements Listener {
 
 		if (!player.isSneaking() && Tools.canBend(player, ability)) {
 
-			// if (!Arrays.asList(sourceabilities).contains(ability)) {
-			// if (!Cooldowns.canUseAbility(player, ability))
-			// return;
-			// }
+			if (!Arrays.asList(sourceabilities).contains(ability)) {
+				if (!Cooldowns.canUseAbility(player, ability))
+					return;
+			}
 
 			if (ability == Abilities.AirShield) {
 				new AirShield(player);
@@ -544,10 +558,6 @@ public class BendingListener implements Listener {
 
 			if (ability == Abilities.Shockwave) {
 				new Shockwave(player);
-			}
-
-			if (ability == Abilities.Tremorsense) {
-				BendingPlayer.getBendingPlayer(player).toggleTremorsense();
 			}
 
 			if (ability == Abilities.Collapse) {
@@ -896,11 +906,6 @@ public class BendingListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		EarthBlast blast = EarthBlast.getBlastFromSource(block);
-		if (blast != null) {
-			blast.cancel();
-		}
-
 		if (FreezeMelt.frozenblocks.containsKey(block)) {
 			FreezeMelt.thaw(block);
 			event.setCancelled(true);
@@ -921,8 +926,6 @@ public class BendingListener implements Listener {
 		} else if (Tools.movedearth.containsKey(block)) {
 			// Tools.removeEarthbendedBlockIndex(block);
 			Tools.removeRevertIndex(block);
-		} else if (TempBlock.isTempBlock(block)) {
-			TempBlock.revertBlock(block, Material.AIR);
 		}
 	}
 
@@ -980,11 +983,6 @@ public class BendingListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
 		for (Block block : event.blockList()) {
-			EarthBlast blast = EarthBlast.getBlastFromSource(block);
-
-			if (blast != null) {
-				blast.cancel();
-			}
 			if (FreezeMelt.frozenblocks.containsKey(block)) {
 				FreezeMelt.thaw(block);
 			}

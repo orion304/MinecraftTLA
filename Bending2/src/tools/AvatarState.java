@@ -11,7 +11,7 @@ public class AvatarState {
 
 	public static ConcurrentHashMap<Player, AvatarState> instances = new ConcurrentHashMap<Player, AvatarState>();
 
-	private static final double factor = 5;
+	private static final double factor = ConfigManager.Factor;
 
 	Player player;
 
@@ -48,13 +48,13 @@ public class AvatarState {
 	private void addPotionEffects() {
 		int duration = 70;
 		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
-				duration, 3));
+				duration, ConfigManager.Regeneration - 1));
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
-				duration, 2));
+				duration, ConfigManager.Speed - 1));
 		player.addPotionEffect(new PotionEffect(
-				PotionEffectType.DAMAGE_RESISTANCE, duration, 2));
+				PotionEffectType.DAMAGE_RESISTANCE, duration, ConfigManager.Resistance - 1));
 		player.addPotionEffect(new PotionEffect(
-				PotionEffectType.FIRE_RESISTANCE, duration, 2));
+				PotionEffectType.FIRE_RESISTANCE, duration, ConfigManager.FireResistance - 1));
 	}
 
 	public static boolean isAvatarState(Player player) {

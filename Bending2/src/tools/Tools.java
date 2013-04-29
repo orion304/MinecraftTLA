@@ -29,6 +29,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.craftbukkit.v1_5_R2.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
@@ -110,24 +111,24 @@ public class Tools {
 	private static final Map<String, ChatColor> colors;
 
 	private static Abilities[] harmlessAbilities = { Abilities.AirScooter,
-			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
-			Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
+		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+		Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
 
 	private static Abilities[] localAbilities = { Abilities.AirScooter,
-			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
-			Abilities.Illumination, Abilities.Tremorsense,
-			Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
-			Abilities.Paralyze, Abilities.RapidPunch };
+		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+		Abilities.Illumination, Abilities.Tremorsense,
+		Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
+		Abilities.Paralyze, Abilities.RapidPunch };
 
 	public static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11, 30,
-			31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
+		31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
 
 	public static Integer[] nonOpaque = { 0, 6, 8, 9, 10, 11, 27, 28, 30, 31,
-			32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
-			78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
+		32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
+		78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
 
 	private static Integer[] plantIds = { 6, 18, 31, 32, 37, 38, 39, 40, 59,
-			81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
+		81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
 
 	public static final long timeinterval = ConfigManager.globalCooldown;
 
@@ -328,7 +329,7 @@ public class Tools {
 							if (lentity.getEyeLocation().getBlockX() == affectedblock
 									.getX()
 									&& lentity.getEyeLocation().getBlockZ() == affectedblock
-											.getZ())
+									.getZ())
 								if (!(entity instanceof FallingBlock))
 									entity.setVelocity(norm.clone().multiply(
 											.75));
@@ -336,7 +337,7 @@ public class Tools {
 							if (entity.getLocation().getBlockX() == affectedblock
 									.getX()
 									&& entity.getLocation().getBlockZ() == affectedblock
-											.getZ())
+									.getZ())
 								if (!(entity instanceof FallingBlock))
 									entity.setVelocity(norm.clone().multiply(
 											.75));
@@ -689,7 +690,7 @@ public class Tools {
 			j = (double) i;
 			if (!isEarthbendable(player,
 					location.clone().add(direction.clone().multiply(j))
-							.getBlock())) {
+					.getBlock())) {
 				return i;
 			}
 		}
@@ -877,12 +878,11 @@ public class Tools {
 		return false;
 	}
 
-	// public static void updatePhysics(Block block) {
-	// Tools.verbose(Bending.plugin.getServer().getBukkitVersion());
-	// // CraftWorld world = (CraftWorld) block.getWorld();
-	// // world.getHandle().applyPhysics(block.getX(), block.getY(),
-	// // block.getZ(), block.getTypeId());
-	// }
+	public static void updatePhysics(Block block) {
+		CraftWorld world = (CraftWorld) block.getWorld();
+		world.getHandle().applyPhysics(block.getX(), block.getY(),
+				block.getZ(), block.getTypeId());
+	}
 
 	public static Entity getTargettedEntity(Player player, double range) {
 		return getTargettedEntity(player, range, new ArrayList<Entity>());
@@ -900,13 +900,13 @@ public class Tools {
 			if (entity.getLocation().distance(origin) < longestr
 					&& getDistanceFromLine(direction, origin,
 							entity.getLocation()) < 2
-					&& (entity instanceof LivingEntity)
-					&& entity.getEntityId() != player.getEntityId()
-					&& entity.getLocation().distance(
-							origin.clone().add(direction)) < entity
-							.getLocation().distance(
-									origin.clone().add(
-											direction.clone().multiply(-1)))) {
+							&& (entity instanceof LivingEntity)
+							&& entity.getEntityId() != player.getEntityId()
+							&& entity.getLocation().distance(
+									origin.clone().add(direction)) < entity
+									.getLocation().distance(
+											origin.clone().add(
+													direction.clone().multiply(-1)))) {
 				target = entity;
 				longestr = entity.getLocation().distance(origin);
 			}
@@ -927,8 +927,8 @@ public class Tools {
 
 			((LivingEntity) entity).damage(damage, player);
 			((LivingEntity) entity)
-					.setLastDamageCause(new EntityDamageByEntityEvent(player,
-							entity, DamageCause.CUSTOM, damage));
+			.setLastDamageCause(new EntityDamageByEntityEvent(player,
+					entity, DamageCause.CUSTOM, damage));
 		}
 	}
 
@@ -1117,7 +1117,7 @@ public class Tools {
 		if (hasPermission(player, ability)
 				&& (!isLocalAbility(ability) || !isRegionProtectedFromBuild(
 						player, Abilities.AirBlast, player.getLocation()))
-				&& !toggledBending(player))
+						&& !toggledBending(player))
 			return true;
 
 		if (allowharmless && Tools.isHarmlessAbility(ability)
@@ -1252,10 +1252,10 @@ public class Tools {
 						if (!wg.getGlobalRegionManager().hasBypass(player,
 								location.getWorld())
 								&& !wg.getGlobalRegionManager()
-										.get(location.getWorld())
-										.getApplicableRegions(location)
-										.allows(DefaultFlag.LIGHTER,
-												wg.wrapPlayer(player)))
+								.get(location.getWorld())
+								.getApplicableRegions(location)
+								.allows(DefaultFlag.LIGHTER,
+										wg.wrapPlayer(player)))
 							return true;
 					}
 
@@ -1711,22 +1711,6 @@ public class Tools {
 		removeSpouts(location, 1.5, sourceplayer);
 	}
 
-	public static Block getEarthSourceBlock(Player player, double range) {
-		Location location = player.getEyeLocation();
-		Vector vector = location.getDirection().clone().normalize();
-		for (double i = 0; i <= range; i++) {
-			Block block = location.clone().add(vector.clone().multiply(i))
-					.getBlock();
-			if (isRegionProtectedFromBuild(player, Abilities.RaiseEarth,
-					location))
-				continue;
-			if (isEarthbendable(player, block)) {
-				return block;
-			}
-		}
-		return null;
-	}
-
 	public static Block getWaterSourceBlock(Player player, double range,
 			boolean plantbending) {
 		// byte full = 0x0;
@@ -1746,7 +1730,7 @@ public class Tools {
 					byte full = 0x0;
 					if (tb.state.getRawData() != full
 							&& (tb.state.getType() != Material.WATER || tb.state
-									.getType() != Material.STATIONARY_WATER)) {
+							.getType() != Material.STATIONARY_WATER)) {
 						continue;
 					}
 				}
@@ -1946,6 +1930,10 @@ public class Tools {
 		tmpMap.put("k", ChatColor.MAGIC);
 
 		colors = Collections.unmodifiableMap(tmpMap);
+	}
+
+	public static String colorize(String message) {
+		return message.replaceAll("(?i)&([a-fk-or0-9])", "\u00A7$1");
 	}
 
 }

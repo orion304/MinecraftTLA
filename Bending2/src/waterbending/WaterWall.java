@@ -12,7 +12,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
-import tools.BendingPlayer;
 import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
@@ -53,8 +52,6 @@ public class WaterWall {
 	public WaterWall(Player player) {
 		this.player = player;
 
-		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
-
 		if (Wave.instances.containsKey(player.getEntityId())) {
 			Wave wave = Wave.instances.get(player.getEntityId());
 			if (!wave.progressing) {
@@ -87,9 +84,6 @@ public class WaterWall {
 			time = System.currentTimeMillis();
 		}
 
-		if (bPlayer.isOnCooldown(Abilities.Surge))
-			return;
-
 		if (!instances.containsKey(player.getEntityId())
 				&& WaterReturn.hasWaterBottle(player)) {
 
@@ -105,11 +99,6 @@ public class WaterWall {
 				Wave wave = new Wave(player);
 				wave.canhitself = false;
 				wave.moveWater();
-				if (!wave.progressing) {
-					block.setType(Material.AIR);
-					wave.returnWater();
-					wave.cancel();
-				}
 			}
 
 		}
@@ -465,17 +454,11 @@ public class WaterWall {
 	}
 
 	public static void form(Player player) {
-		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
-
 		if (!instances.containsKey(player.getEntityId())) {
 			if (!Wave.instances.containsKey(player.getEntityId())
 					&& Tools.getWaterSourceBlock(player,
 							(int) Wave.defaultrange, Tools.canPlantbend(player)) == null
 					&& WaterReturn.hasWaterBottle(player)) {
-
-				if (bPlayer.isOnCooldown(Abilities.Surge))
-					return;
-
 				Location eyeloc = player.getEyeLocation();
 				Block block = eyeloc.add(eyeloc.getDirection().normalize())
 						.getBlock();
@@ -487,15 +470,9 @@ public class WaterWall {
 					block.setData(full);
 					WaterWall wall = new WaterWall(player);
 					wall.moveWater();
-					if (!wall.progressing) {
-						block.setType(Material.AIR);
-						wall.returnWater();
-						wall.cancel();
-					}
 					return;
 				}
 			}
-
 			new Wave(player);
 			return;
 		} else {
