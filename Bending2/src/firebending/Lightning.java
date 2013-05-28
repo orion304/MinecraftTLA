@@ -20,7 +20,8 @@ public class Lightning {
 
 	public static int defaultdistance = ConfigManager.lightningrange;
 	private static long defaultwarmup = ConfigManager.lightningwarmup;
-	private static double misschance = 0; // ConfigManager.lightningmisschance;
+	private static double misschance = ConfigManager.lightningmisschance;
+	private static double threshold = 0.1;
 	private static double blockdistance = 4;
 
 	private int maxdamage = 6;
@@ -74,7 +75,11 @@ public class Lightning {
 					&& player.getLocation().distance(targetlocation) > target
 							.getLocation().distance(player.getLocation())) {
 				targetlocation = target.getLocation();
+				if (target.getVelocity().length() < threshold)
+					misschance = 0;
 			}
+		} else {
+			misschance = 0;
 		}
 
 		if (targetlocation.getBlock().getType() == Material.AIR)
