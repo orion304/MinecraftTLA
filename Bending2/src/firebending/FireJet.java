@@ -7,6 +7,7 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
@@ -95,8 +96,12 @@ public class FireJet {
 				timefactor = 1 - ((double) (System.currentTimeMillis() - time))
 						/ (2.0 * duration);
 			}
-			player.setVelocity(player.getEyeLocation().getDirection().clone()
-					.normalize().multiply(factor * timefactor));
+			Vector velocity = player.getEyeLocation().getDirection().clone()
+					.normalize().multiply(factor * timefactor);
+			// Vector velocity = player.getVelocity().clone();
+			// velocity.add(player.getEyeLocation().getDirection().clone()
+			// .normalize().multiply(factor * timefactor));
+			player.setVelocity(velocity);
 			player.setFallDistance(0);
 		}
 	}

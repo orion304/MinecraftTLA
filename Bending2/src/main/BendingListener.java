@@ -25,6 +25,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -633,7 +635,8 @@ public class BendingListener implements Listener {
 		}
 
 		if (!player.isSprinting()
-				&& Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
+				&& Tools.isBender(player.getName(), BendingType.ChiBlocker)
+				&& Tools.canBendPassive(player, BendingType.ChiBlocker)) {
 			new Speed(player);
 		}
 	}
@@ -699,11 +702,13 @@ public class BendingListener implements Listener {
 
 			if (!event.isCancelled()
 					&& Tools.isBender(player.getName(), BendingType.ChiBlocker)
-					&& event.getCause() == DamageCause.FALL) {
+					&& event.getCause() == DamageCause.FALL
+					&& Tools.canBendPassive(player, BendingType.ChiBlocker)) {
 				event.setDamage((int) ((double) event.getDamage() * (ConfigManager.falldamagereduction / 100.)));
 			}
 
-			if (Tools.isBender(player.getName(), BendingType.Fire)
+			if (Tools.canBendPassive(player, BendingType.Fire)
+					&& Tools.isBender(player.getName(), BendingType.Fire)
 					&& (event.getCause() == DamageCause.FIRE || event
 							.getCause() == DamageCause.FIRE_TICK)) {
 				event.setCancelled(!Extinguish.canBurn(player));
@@ -748,7 +753,41 @@ public class BendingListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockIgnite(BlockIgniteEvent event) {
+		if (event.getCause() == IgniteCause.LIGHTNING) {
+			if (Lightning.isNearbyChannel(event.getBlock().getLocation())) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageByEntityEvent event) {
+
+		Entity source = event.getDamager();
+		Entity entity = event.getEntity();
+		Fireball fireball = Fireball.getFireball(source);
+		Lightning lightning = Lightning.getLightning(source);
+
+		if (fireball != null) {
+			event.setCancelled(true);
+			fireball.dealDamage(entity);
+			return;
+		}
+
+		if (event.getCause() == DamageCause.LIGHTNING) {
+			if (Lightning.isNearbyChannel(source.getLocation())) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		if (lightning != null) {
+			event.setCancelled(true);
+			lightning.dealDamage(entity);
+			return;
+		}
 
 		if (Paralyze.isParalyzed(event.getDamager())) {
 			event.setCancelled(true);
@@ -763,7 +802,9 @@ public class BendingListener implements Listener {
 				&& event.getEntity() instanceof Player) {
 			Player sourceplayer = (Player) event.getDamager();
 			Player targetplayer = (Player) event.getEntity();
-			if (Tools.isBender(sourceplayer.getName(), BendingType.ChiBlocker)
+			if (Tools.canBendPassive(sourceplayer, BendingType.ChiBlocker)
+					&& Tools.isBender(sourceplayer.getName(),
+							BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.ENTITY_ATTACK
 					&& event.getDamage() == 1
 					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigManager.useWeapon
@@ -776,6 +817,8 @@ public class BendingListener implements Listener {
 					|| event.getCause() == DamageCause.ENTITY_EXPLOSION || event
 					.getCause() == DamageCause.PROJECTILE)
 					&& Tools.isBender(((Player) event.getEntity()).getName(),
+							BendingType.ChiBlocker)
+					&& Tools.canBendPassive((Player) event.getEntity(),
 							BendingType.ChiBlocker)) {
 				double rand = Math.random();
 				// Tools.verbose(rand + " " + (ConfigManager.dodgechance) /

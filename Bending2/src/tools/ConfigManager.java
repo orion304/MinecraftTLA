@@ -51,7 +51,7 @@ public class ConfigManager {
 	public static double airBlastSpeed = 25;
 	public static double airBlastRange = 20;
 	public static double airBlastRadius = 2;
-	public static double airBlastPush = 1.8;
+	public static double airBlastPush = 3.5;
 
 	// AirBubble
 	public static int airBubbleRadius = 7;
@@ -72,7 +72,7 @@ public class ConfigManager {
 	public static double airSuctionSpeed = 25;
 	public static double airSuctionRange = 20;
 	public static double airSuctionRadius = 2;
-	public static double airSuctionPush = 1;
+	public static double airSuctionPush = 3.5;
 
 	// AirSwipe
 	public static int airdmg = 2;

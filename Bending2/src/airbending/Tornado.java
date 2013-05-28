@@ -129,7 +129,17 @@ public class Tornado {
 									.getDirection().clone().normalize();
 							vx = direction.getX();
 							vz = direction.getZ();
-							vy = .6;
+							Location playerloc = player.getLocation();
+							double py = playerloc.getY();
+							double oy = origin.getY();
+							double dy = py - oy;
+							if (dy >= height * .95) {
+								vy = 0;
+							} else if (dy >= height * .85) {
+								vy = 6.0 * (.95 - dy / height);
+							} else {
+								vy = .6;
+							}
 						}
 
 						Vector velocity = entity.getVelocity();

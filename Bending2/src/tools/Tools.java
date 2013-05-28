@@ -194,6 +194,29 @@ public class Tools {
 
 	}
 
+	public static boolean isObstructed(Location location1, Location location2) {
+		Vector loc1 = location1.toVector();
+		Vector loc2 = location2.toVector();
+
+		Vector direction = loc2.subtract(loc1);
+		direction.normalize();
+
+		Location loc;
+
+		double max = location1.distance(location2);
+
+		for (double i = 0; i <= max; i++) {
+			loc = location1.clone().add(direction.clone().multiply(i));
+			Material type = loc.getBlock().getType();
+			if (type != Material.AIR
+					&& !Arrays.asList(transparentEarthbending).contains(
+							type.getId()))
+				return true;
+		}
+
+		return false;
+	}
+
 	public static Location getTargetedLocation(Player player, int range) {
 		return getTargetedLocation(player, range, 0);
 	}
@@ -1712,6 +1735,10 @@ public class Tools {
 	}
 
 	public static Block getEarthSourceBlock(Player player, double range) {
+		Block testblock = player.getTargetBlock(getTransparentEarthbending(),
+				(int) range);
+		if (Tools.isEarthbendable(player, testblock))
+			return testblock;
 		Location location = player.getEyeLocation();
 		Vector vector = location.getDirection().clone().normalize();
 		for (double i = 0; i <= range; i++) {

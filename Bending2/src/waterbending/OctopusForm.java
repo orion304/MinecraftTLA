@@ -129,8 +129,10 @@ public class OctopusForm {
 			if (Tools.isRegionProtectedFromBuild(player, Abilities.OctopusForm,
 					entity.getLocation()))
 				continue;
-			if (Torrent.canThaw(entity.getLocation().getBlock())
-					|| Wave.canThaw(entity.getLocation().getBlock()))
+			// if (Torrent.canThaw(entity.getLocation().getBlock())
+			// || Wave.canThaw(entity.getLocation().getBlock()))
+			// continue;
+			if (Tools.isObstructed(location, entity.getLocation()))
 				continue;
 			entity.setVelocity(Tools
 					.getDirection(player.getLocation(), location).normalize()

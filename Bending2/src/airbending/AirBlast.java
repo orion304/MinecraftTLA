@@ -29,13 +29,13 @@ public class AirBlast {
 
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
-	static final double maxspeed = 1;
 
 	public static double speed = ConfigManager.airBlastSpeed;
 	public static double defaultrange = ConfigManager.airBlastRange;
 	public static double affectingradius = ConfigManager.airBlastRadius;
 	public static double defaultpushfactor = ConfigManager.airBlastPush;
 	private static double originselectrange = 10;
+	static final double maxspeed = 1. / defaultpushfactor;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
 
@@ -51,6 +51,9 @@ public class AirBlast {
 	private int ticks = 0;
 
 	private ArrayList<Block> affectedlevers = new ArrayList<Block>();
+	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
+
+	private AirBurst source = null;
 
 	// private long time;
 
@@ -99,10 +102,12 @@ public class AirBlast {
 	}
 
 	public AirBlast(Location location, Vector direction, Player player,
-			double factorpush) {
+			double factorpush, AirBurst burst) {
 		if (location.getBlock().isLiquid()) {
 			return;
 		}
+
+		source = burst;
 
 		this.player = player;
 		origin = location.clone();
@@ -214,6 +219,13 @@ public class AirBlast {
 
 		for (Entity entity : Tools.getEntitiesAroundPoint(location,
 				affectingradius)) {
+			// if (source == null) {
+			// if (affectedentities.contains(entity))
+			// continue;
+			// } else {
+			// if (source.isAffectedEntity(entity))
+			// continue;
+			// }
 			affect(entity);
 		}
 
@@ -228,36 +240,61 @@ public class AirBlast {
 	}
 
 	private void affect(Entity entity) {
+		// if (source == null)
+		// affectedentities.add(entity);
+		// else
+		// source.addAffectedEntity(entity);
 		if (entity.getEntityId() != player.getEntityId() || otherorigin) {
 			Vector velocity = entity.getVelocity();
-			double mag = Math.abs(velocity.getY());
+			// double mag = Math.abs(velocity.getY());
 			double max = maxspeed;
+			double factor = pushfactor;
 			if (AvatarState.isAvatarState(player)) {
 				max = AvatarState.getValue(maxspeed);
-				velocity = velocity.clone().add(
-						direction.clone().multiply(
-								AvatarState.getValue(pushfactor)));
-				double newmag = Math.abs(velocity.getY());
-				if (newmag > mag) {
-					if (mag > max) {
-						velocity = velocity.clone().multiply(mag / newmag);
-					} else if (newmag > max) {
-						velocity = velocity.clone().multiply(max / newmag);
-					}
-				}
-			} else {
-				velocity = velocity.clone().add(
-						direction.clone().multiply(pushfactor));
-				double newmag = Math.abs(velocity.getY());
-				if (newmag > mag) {
-					if (mag > max) {
-						velocity = velocity.clone().multiply(mag / newmag);
-					} else if (newmag > max) {
-						velocity = velocity.clone().multiply(max / newmag);
-					}
-				}
+				factor = AvatarState.getValue(factor);
 			}
-			velocity.multiply(1 - location.distance(origin) / (2 * range));
+
+			Vector push = direction.clone();
+			if (Math.abs(push.getY()) > max
+					&& entity.getEntityId() != player.getEntityId()) {
+				if (push.getY() < 0)
+					push.setY(-max);
+				else
+					push.setY(max);
+			}
+
+			factor *= 1 - location.distance(origin) / (2 * range);
+
+			double comp = velocity.dot(push.clone().normalize());
+			if (comp > factor) {
+				velocity.multiply(.5);
+				velocity.add(push
+						.clone()
+						.normalize()
+						.multiply(
+								velocity.clone().dot(push.clone().normalize())));
+			} else if (comp + factor * .5 > factor) {
+				velocity.add(push.clone().multiply(factor - comp));
+			} else {
+				velocity.add(push.clone().multiply(factor * .5));
+			}
+
+			// velocity =
+			// velocity.clone().add(direction.clone().multiply(factor));
+			// double newmag = Math.abs(velocity.getY());
+			// if (newmag > mag) {
+			// if (mag > max) {
+			// velocity = velocity.clone().multiply(mag / newmag);
+			// } else if (newmag > max) {
+			// velocity = velocity.clone().multiply(max / newmag);
+			// }
+			// }
+			//
+			// velocity.multiply(1 - location.distance(origin) / (2 * range));
+			//
+			// if (entity instanceof Player)
+			// velocity.multiply(2);
+
 			entity.setVelocity(velocity);
 			entity.setFallDistance(0);
 			if (entity.getFireTicks() > 0)

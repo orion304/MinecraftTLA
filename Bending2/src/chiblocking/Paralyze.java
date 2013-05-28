@@ -22,7 +22,8 @@ public class Paralyze {
 
 	public Paralyze(Player sourceplayer, Entity targetentity) {
 		if (Tools.isBender(sourceplayer.getName(), BendingType.ChiBlocker)
-				&& Tools.getBendingAbility(sourceplayer) == Abilities.Paralyze) {
+				&& Tools.getBendingAbility(sourceplayer) == Abilities.Paralyze
+				&& Tools.canBend(sourceplayer, Abilities.Paralyze)) {
 			if (cooldowns.containsKey(targetentity)) {
 				if (System.currentTimeMillis() < cooldowns.get(targetentity)
 						+ cooldown) {

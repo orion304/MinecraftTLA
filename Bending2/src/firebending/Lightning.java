@@ -1,11 +1,13 @@
 package firebending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -18,12 +20,19 @@ public class Lightning {
 
 	public static int defaultdistance = ConfigManager.lightningrange;
 	private static long defaultwarmup = ConfigManager.lightningwarmup;
-	private static double misschance = ConfigManager.lightningmisschance;
+	private static double misschance = 0; // ConfigManager.lightningmisschance;
+	private static double blockdistance = 4;
+
+	private int maxdamage = 6;
+	private double strikeradius = 4;
 
 	private Player player;
 	private long starttime;
 	private boolean charged = false;
+	private LightningStrike strike = null;
 	public static ConcurrentHashMap<Player, Lightning> instances = new ConcurrentHashMap<Player, Lightning>();
+	private static ConcurrentHashMap<Entity, Lightning> strikes = new ConcurrentHashMap<Entity, Lightning>();
+	private ArrayList<Entity> hitentities = new ArrayList<Entity>();
 
 	public Lightning(Player player) {
 		if (instances.containsKey(player)) {
@@ -35,11 +44,21 @@ public class Lightning {
 
 	}
 
+	public static Lightning getLightning(Entity entity) {
+		if (strikes.containsKey(entity))
+			return strikes.get(entity);
+		return null;
+	}
+
 	private void strike() {
 		Location targetlocation = getTargetLocation();
+		if (AvatarState.isAvatarState(player))
+			maxdamage = AvatarState.getValue(maxdamage);
 		if (!Tools.isRegionProtectedFromBuild(player, Abilities.Lightning,
-				targetlocation))
-			player.getWorld().strikeLightning(targetlocation);
+				targetlocation)) {
+			strike = player.getWorld().strikeLightning(targetlocation);
+			strikes.put(strike, this);
+		}
 		instances.remove(player);
 	}
 
@@ -77,6 +96,11 @@ public class Lightning {
 	}
 
 	private void progress() {
+		if (player.isDead() || !player.isOnline()) {
+			instances.remove(player);
+			return;
+		}
+
 		int distance = (int) Tools.firebendingDayAugment(defaultdistance,
 				player.getWorld());
 		long warmup = (int) ((double) defaultwarmup / ConfigManager.dayFactor);
@@ -100,6 +124,40 @@ public class Lightning {
 				instances.remove(player);
 			}
 		}
+	}
+
+	public void dealDamage(Entity entity) {
+		if (strike == null) {
+			// Tools.verbose("Null strike");
+			return;
+		}
+		// if (Tools.isObstructed(strike.getLocation(), entity.getLocation())) {
+		// Tools.verbose("Is Obstructed");
+		// return 0;
+		// }
+		if (hitentities.contains(entity)) {
+			// Tools.verbose("Already hit");
+			return;
+		}
+		double distance = entity.getLocation().distance(strike.getLocation());
+		if (distance > strikeradius)
+			return;
+		double damage = maxdamage - (distance / strikeradius) * .5;
+		hitentities.add(entity);
+		Tools.damageEntity(player, entity, (int) damage);
+	}
+
+	public static boolean isNearbyChannel(Location location) {
+		boolean value = false;
+		for (Player player : instances.keySet()) {
+			if (!player.getWorld().equals(location.getWorld()))
+				continue;
+			if (player.getLocation().distance(location) <= blockdistance) {
+				value = true;
+				instances.get(player).starttime = 0;
+			}
+		}
+		return value;
 	}
 
 	public static void progressAll() {

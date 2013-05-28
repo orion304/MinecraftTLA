@@ -1,9 +1,11 @@
 package airbending;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -17,7 +19,7 @@ public class AirBurst {
 	private static ConcurrentHashMap<Player, AirBurst> instances = new ConcurrentHashMap<Player, AirBurst>();
 
 	private static double threshold = 10;
-	private static double pushfactor = 2. / 3.;
+	private static double pushfactor = 1.5;
 	private static double deltheta = 10;
 	private static double delphi = 10;
 
@@ -25,6 +27,8 @@ public class AirBurst {
 	private long starttime;
 	private long chargetime = 1750;
 	private boolean charged = false;
+
+	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
 
 	public AirBurst(Player player) {
 		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(
@@ -38,6 +42,10 @@ public class AirBurst {
 			chargetime = 0;
 		this.player = player;
 		instances.put(player, this);
+	}
+
+	public AirBurst() {
+
 	}
 
 	public static void coneBurst(Player player) {
@@ -65,7 +73,7 @@ public class AirBurst {
 						// Tools.verbose(direction.angle(vector));
 						// Tools.verbose(direction);
 						new AirBlast(location, direction.normalize(), player,
-								pushfactor);
+								pushfactor, this);
 					}
 				}
 			}
@@ -89,7 +97,7 @@ public class AirBurst {
 					z = r * Math.cos(rtheta);
 					Vector direction = new Vector(x, z, y);
 					new AirBlast(location, direction.normalize(), player,
-							pushfactor);
+							pushfactor, this);
 				}
 			}
 		}
@@ -117,9 +125,17 @@ public class AirBurst {
 				z = r * Math.cos(rtheta);
 				Vector direction = new Vector(x, z, y);
 				new AirBlast(location, direction.normalize(), player,
-						pushfactor);
+						pushfactor, new AirBurst());
 			}
 		}
+	}
+
+	void addAffectedEntity(Entity entity) {
+		affectedentities.add(entity);
+	}
+
+	boolean isAffectedEntity(Entity entity) {
+		return affectedentities.contains(entity);
 	}
 
 	private void progress() {

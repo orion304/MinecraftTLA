@@ -20,6 +20,7 @@ import tools.Tools;
 public class Fireball {
 
 	public static ConcurrentHashMap<Integer, Fireball> instances = new ConcurrentHashMap<Integer, Fireball>();
+	private static ConcurrentHashMap<Entity, Fireball> explosions = new ConcurrentHashMap<Entity, Fireball>();
 
 	private static long defaultchargetime = 2000;
 	private static long interval = 25;
@@ -29,6 +30,9 @@ public class Fireball {
 
 	private int id;
 	private double range = 20;
+	private int maxdamage = 4;
+	private double explosionradius = 6;
+	private double innerradius = 3;
 	private Player player;
 	private Location origin;
 	private Location location;
@@ -38,6 +42,7 @@ public class Fireball {
 	private long chargetime = defaultchargetime;
 	private boolean charged = false;
 	private boolean launched = false;
+	private TNTPrimed explosion = null;
 
 	public Fireball(Player player) {
 		this.player = player;
@@ -46,8 +51,10 @@ public class Fireball {
 		if (Tools.isDay(player.getWorld())) {
 			chargetime = (long) (chargetime / ConfigManager.dayFactor);
 		}
-		if (AvatarState.isAvatarState(player))
+		if (AvatarState.isAvatarState(player)) {
 			chargetime = 0;
+			maxdamage = AvatarState.getValue(maxdamage);
+		}
 		range = Tools.firebendingDayAugment(range, player.getWorld());
 		if (!player.getEyeLocation().getBlock().isLiquid()) {
 			id = ID;
@@ -121,6 +128,34 @@ public class Fireball {
 
 	}
 
+	public static Fireball getFireball(Entity entity) {
+		if (explosions.containsKey(entity))
+			return explosions.get(entity);
+		return null;
+	}
+
+	public void dealDamage(Entity entity) {
+		if (explosion == null)
+			return;
+		// if (Tools.isObstructed(explosion.getLocation(),
+		// entity.getLocation())) {
+		// return 0;
+		// }
+		double distance = entity.getLocation()
+				.distance(explosion.getLocation());
+		if (distance > explosionradius)
+			return;
+		if (distance < innerradius) {
+			Tools.damageEntity(player, entity, maxdamage);
+			return;
+		}
+		double slope = -(maxdamage * .5) / (explosionradius - innerradius);
+
+		double damage = slope * (distance - innerradius) + maxdamage;
+		// Tools.verbose(damage);
+		Tools.damageEntity(player, entity, (int) damage);
+	}
+
 	private void fireball() {
 		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
 			block.getWorld().playEffect(block.getLocation(),
@@ -161,9 +196,25 @@ public class Fireball {
 			}
 		}
 		if (explode) {
-			Entity tnt = player.getWorld().spawn(location, TNTPrimed.class);
-			((TNTPrimed) tnt).setFuseTicks(0);
-			((TNTPrimed) tnt).setYield(2);
+			explosion = player.getWorld().spawn(location, TNTPrimed.class);
+			explosion.setFuseTicks(0);
+			float yield = 1;
+			switch (player.getWorld().getDifficulty()) {
+			case PEACEFUL:
+				yield *= 2.;
+				break;
+			case EASY:
+				yield *= 2.;
+				break;
+			case NORMAL:
+				yield *= 1.;
+				break;
+			case HARD:
+				yield *= 3. / 4.;
+				break;
+			}
+			explosion.setYield(yield);
+			explosions.put(explosion, this);
 		}
 		// location.getWorld().createExplosion(location, 1);
 
@@ -225,7 +276,7 @@ public class Fireball {
 			if (location.getWorld() == fireblastlocation.getWorld()
 					&& !source.equals(fireball.player)) {
 				if (location.distance(fireblastlocation) <= radius) {
-					instances.remove(id);
+					fireball.explode();
 					broke = true;
 				}
 			}
