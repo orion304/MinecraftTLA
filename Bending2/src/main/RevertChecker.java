@@ -1,6 +1,8 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -85,11 +87,14 @@ public class RevertChecker implements Runnable {
 				// Tools.verbose("Future called, t=" +
 				// System.currentTimeMillis());
 
-				for (Block block : Tools.movedearth.keySet()) {
+				Map<Block, Information> earth = new HashMap<Block, Information>();
+				earth.putAll(Tools.movedearth);
+
+				for (Block block : earth.keySet()) {
 					if (revertQueue.containsKey(block))
 						continue;
 					boolean remove = true;
-					Information info = Tools.movedearth.get(block);
+					Information info = earth.get(block);
 					if (time < info.getTime() + ConfigManager.revertchecktime
 							|| (chunks.contains(block.getChunk()) && safeRevert)) {
 						remove = false;
@@ -99,11 +104,14 @@ public class RevertChecker implements Runnable {
 					}
 				}
 
-				for (Integer i : Tools.tempair.keySet()) {
+				Map<Integer, Information> air = new HashMap<Integer, Information>();
+				air.putAll(Tools.tempair);
+
+				for (Integer i : air.keySet()) {
 					if (airRevertQueue.containsKey(i))
 						continue;
 					boolean remove = true;
-					Information info = Tools.tempair.get(i);
+					Information info = air.get(i);
 					Block block = info.getBlock();
 					if (time < info.getTime() + ConfigManager.revertchecktime
 							|| (chunks.contains(block.getChunk()) && safeRevert)) {

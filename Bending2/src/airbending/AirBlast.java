@@ -244,7 +244,9 @@ public class AirBlast {
 		// affectedentities.add(entity);
 		// else
 		// source.addAffectedEntity(entity);
-		if (entity.getEntityId() != player.getEntityId() || otherorigin) {
+		boolean isUser = entity.getEntityId() == player.getEntityId();
+
+		if (!isUser || otherorigin) {
 			Vector velocity = entity.getVelocity();
 			// double mag = Math.abs(velocity.getY());
 			double max = maxspeed;
@@ -255,8 +257,7 @@ public class AirBlast {
 			}
 
 			Vector push = direction.clone();
-			if (Math.abs(push.getY()) > max
-					&& entity.getEntityId() != player.getEntityId()) {
+			if (Math.abs(push.getY()) > max && !isUser) {
 				if (push.getY() < 0)
 					push.setY(-max);
 				else
@@ -264,6 +265,12 @@ public class AirBlast {
 			}
 
 			factor *= 1 - location.distance(origin) / (2 * range);
+
+			if (isUser
+					&& Tools.isSolid(player.getLocation().add(0, -.5, 0)
+							.getBlock())) {
+				factor *= .5;
+			}
 
 			double comp = velocity.dot(push.clone().normalize());
 			if (comp > factor) {

@@ -807,6 +807,8 @@ public class BendingListener implements Listener {
 							BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.ENTITY_ATTACK
 					&& event.getDamage() == 1
+					&& sourceplayer.getLocation().distance(
+							targetplayer.getLocation()) <= ConfigManager.rapidPunchDistance
 					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigManager.useWeapon
 							.get("ChiBlocker"))) {
 				Tools.blockChi(targetplayer, System.currentTimeMillis());
