@@ -47,7 +47,7 @@ public class Wave {
 	private Location targetdestination = null;
 	private Vector targetdirection = null;
 	private ConcurrentHashMap<Block, Block> wave = new ConcurrentHashMap<Block, Block>();
-	private ConcurrentHashMap<Block, Block> frozenblocks = new ConcurrentHashMap<Block, Block>();
+	private ConcurrentHashMap<Block, TempBlock> frozenblocks = new ConcurrentHashMap<Block, TempBlock>();
 	private double radius = 1;
 	private long time;
 	private double maxradius = defaultmaxradius;
@@ -376,7 +376,10 @@ public class Wave {
 				block.getLocation()))
 			return;
 		if (!TempBlock.isTempBlock(block)) {
-			new TempBlock(block, Material.WATER, full);
+			TempBlock.makeNewTempBlock(block, Material.WATER, full);// new
+																	// TempBlock(block,
+																	// Material.WATER,
+																	// full);
 			// new TempBlock(block, Material.ICE, (byte) 0);
 			wave.put(block, block);
 		}
@@ -447,17 +450,26 @@ public class Wave {
 			if (block.getType() == Material.AIR
 					|| block.getType() == Material.SNOW) {
 				// block.setType(Material.ICE);
-				new TempBlock(block, Material.ICE, (byte) 0);
-				frozenblocks.put(block, block);
-			}
-			if (Tools.isWater(block)) {
+				TempBlock tblock = TempBlock.makeNewTempBlock(block,
+						Material.ICE, (byte) 0);// new
+				// TempBlock(block,
+				// Material.ICE,
+				// (byte)
+				// 0);
+				frozenblocks.put(block, tblock);
+			} else if (Tools.isWater(block)) {
 				FreezeMelt.freeze(player, block);
-			}
-			if (Tools.isPlant(block) && block.getType() != Material.LEAVES) {
+			} else if (Tools.isPlant(block)
+					&& block.getType() != Material.LEAVES) {
 				block.breakNaturally();
 				// block.setType(Material.ICE);
-				new TempBlock(block, Material.ICE, (byte) 0);
-				frozenblocks.put(block, block);
+				TempBlock tblock = TempBlock.makeNewTempBlock(block,
+						Material.ICE, (byte) 0);// new
+				// TempBlock(block,
+				// Material.ICE,
+				// (byte)
+				// 0);
+				frozenblocks.put(block, tblock);
 			}
 		}
 	}
@@ -469,21 +481,22 @@ public class Wave {
 			// // block.setData((byte) 0x7);
 			// block.setType(Material.AIR);
 			// }
-			TempBlock.revertBlock(block, Material.AIR);
+			frozenblocks.get(block).revertBlock();
 			frozenblocks.remove(block);
 		}
 	}
 
 	public static void thaw(Block block) {
 		for (int id : instances.keySet()) {
-			if (instances.get(id).frozenblocks.containsKey(block)) {
+			Wave wave = instances.get(id);
+			if (wave.frozenblocks.containsKey(block)) {
 				// if (block.getType() == Material.ICE) {
 				// // block.setType(Material.WATER);
 				// // block.setData((byte) 0x7);
 				// block.setType(Material.AIR);
 				// }
-				TempBlock.revertBlock(block, Material.AIR);
-				instances.get(id).frozenblocks.remove(block);
+				wave.frozenblocks.get(block).revertBlock();
+				wave.frozenblocks.remove(block);
 			}
 		}
 	}

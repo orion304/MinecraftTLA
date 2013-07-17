@@ -84,8 +84,11 @@ public class Torrent {
 		List<Block> ice = Tools.getBlocksAroundPoint(location, layer);
 		for (Block block : ice) {
 			if (Tools.isTransparentToEarthbending(player, block)
-					&& block.getType() != Material.ICE) {
-				TempBlock tblock = new TempBlock(block, Material.ICE, (byte) 0);
+					&& block.getType() != Material.ICE
+					&& !TempBlock.isTempBlock(block)) {
+				TempBlock tblock = TempBlock.makeNewTempBlock(block,
+						Material.ICE, (byte) 0);// new TempBlock(block,
+												// Material.ICE, (byte) 0);
 				frozenblocks.put(tblock, player);
 			}
 		}
@@ -132,7 +135,9 @@ public class Torrent {
 					} else if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
 						sourceblock.setType(Material.AIR);
 					}
-					source = new TempBlock(sourceblock, Material.WATER, full);
+					source = TempBlock.makeNewTempBlock(sourceblock,
+							Material.WATER, full);// new TempBlock(sourceblock,
+													// Material.WATER, full);
 					location = sourceblock.getLocation();
 				} else {
 					Tools.playFocusWaterEffect(sourceblock);
@@ -185,14 +190,18 @@ public class Torrent {
 					if (!location.getBlock().equals(
 							source.getLocation().getBlock())) {
 						source.revertBlock();
+						source = null;
 						Block block = location.getBlock();
 						if (!Tools.isTransparentToEarthbending(player, block)
 								|| block.isLiquid()) {
 							remove();
 							return;
 						}
-						source = new TempBlock(location.getBlock(),
-								Material.WATER, full);
+						source = TempBlock.makeNewTempBlock(block,
+								Material.WATER, full);// new
+														// TempBlock(location.getBlock(),
+														// Material.WATER,
+														// full);
 					}
 				}
 			}
@@ -273,8 +282,11 @@ public class Torrent {
 								Abilities.Torrent, blockloc)) {
 					if (Tools.isTransparentToEarthbending(player, block)
 							&& !block.isLiquid()) {
-						launchblocks.add(new TempBlock(block, Material.WATER,
-								full));
+						launchblocks.add(TempBlock.makeNewTempBlock(block,
+								Material.WATER, full));// new
+														// TempBlock(block,
+														// Material.WATER,
+														// full));
 						doneblocks.add(block);
 					} else if (!Tools
 							.isTransparentToEarthbending(player, block))
@@ -352,7 +364,9 @@ public class Torrent {
 				return true;
 			}
 			if (b.getLocation().distance(targetloc) > 1) {
-				newblocks.add(new TempBlock(b, Material.WATER, full));
+				newblocks.add(TempBlock.makeNewTempBlock(b, Material.WATER,
+						full));// new TempBlock(b,
+								// Material.WATER, full));
 			} else {
 				if (layer < maxlayer) {
 					if (layer == 0)
@@ -419,10 +433,12 @@ public class Torrent {
 			Block block = blockloc.getBlock();
 			if (!doneblocks.contains(block)
 					&& !Tools.isRegionProtectedFromBuild(player,
-							Abilities.Tornado, blockloc)) {
+							Abilities.Torrent, blockloc)) {
 				if (Tools.isTransparentToEarthbending(player, block)
 						&& !block.isLiquid()) {
-					blocks.add(new TempBlock(block, Material.WATER, full));
+					blocks.add(TempBlock.makeNewTempBlock(block,
+							Material.WATER, full));// new TempBlock(block,
+													// Material.WATER, full));
 					doneblocks.add(block);
 					for (Entity entity : entities) {
 						if (entity.getWorld() != blockloc.getWorld())
@@ -572,11 +588,16 @@ public class Torrent {
 	}
 
 	public static void thaw(Block block) {
-		if (TempBlock.isTempBlock(block)) {
-			TempBlock tblock = TempBlock.get(block);
+		ArrayList<TempBlock> blocks = TempBlock.get(block);
+		for (TempBlock tblock : blocks) {
 			if (frozenblocks.containsKey(tblock))
 				thaw(tblock);
 		}
+		// if (TempBlock.isTempBlock(block)) {
+		// TempBlock tblock = TempBlock.get(block);
+		// if (frozenblocks.containsKey(tblock))
+		// thaw(tblock);
+		// }
 	}
 
 	public static void thaw(TempBlock block) {
@@ -585,11 +606,18 @@ public class Torrent {
 	}
 
 	public static boolean canThaw(Block block) {
-		if (TempBlock.isTempBlock(block)) {
-			TempBlock tblock = TempBlock.get(block);
-			return !frozenblocks.containsKey(tblock);
+		ArrayList<TempBlock> blocks = TempBlock.get(block);
+		for (TempBlock tblock : blocks) {
+			if (frozenblocks.containsKey(tblock))
+				return false;
 		}
 		return true;
+		//
+		// if (TempBlock.isTempBlock(block)) {
+		// TempBlock tblock = TempBlock.get(block);
+		// return !frozenblocks.containsKey(tblock);
+		// }
+		// return true;
 	}
 
 	public static void removeAll() {

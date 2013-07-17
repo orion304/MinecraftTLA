@@ -1768,15 +1768,15 @@ public class Tools {
 				continue;
 			if (isWaterbendable(block, player)
 					&& (!isPlant(block) || plantbending)) {
-				if (TempBlock.isTempBlock(block)) {
-					TempBlock tb = TempBlock.get(block);
-					byte full = 0x0;
-					if (tb.state.getRawData() != full
-							&& (tb.state.getType() != Material.WATER || tb.state
-									.getType() != Material.STATIONARY_WATER)) {
-						continue;
-					}
-				}
+				// if (TempBlock.isTempBlock(block)) {
+				// TempBlock tb = TempBlock.get(block);
+				// byte full = 0x0;
+				// if (tb.state.getRawData() != full
+				// && (tb.state.getType() != Material.WATER || tb.state
+				// .getType() != Material.STATIONARY_WATER)) {
+				// continue;
+				// }
+				// }
 				return block;
 			}
 			// } else if ((block.getType() == Material.WATER || block.getType()

@@ -327,15 +327,20 @@ public class WaterManipulation {
 				}
 
 				if (trail2 != null) {
-					if (trail2.getBlock().equals(block))
+					if (trail2.getBlock().equals(block)) {
 						trail2.revertBlock();
+						trail2 = null;
+					}
 				}
 
 				if (trail != null) {
 					if (trail.getBlock().equals(block)) {
 						trail.revertBlock();
-						if (trail2 != null)
+						trail = null;
+						if (trail2 != null) {
 							trail2.revertBlock();
+							trail2 = null;
+						}
 					}
 				}
 
@@ -390,13 +395,17 @@ public class WaterManipulation {
 				// block.setType(Material.GLASS);
 				// }
 
-				if (trail2 != null)
+				if (trail2 != null) {
 					trail2.revertBlock();
+					trail2 = null;
+				}
 				if (trail != null) {
 					trail2 = trail;
 					trail2.setType(Material.WATER, (byte) 2);
 				}
-				trail = new TempBlock(sourceblock, Material.WATER, (byte) 1);
+				trail = TempBlock.makeNewTempBlock(sourceblock, Material.WATER,
+						(byte) 1);// new TempBlock(sourceblock, Material.WATER,
+									// (byte) 1);
 				sourceblock = block;
 
 				if (location.distance(targetdestination) <= 1
@@ -450,10 +459,14 @@ public class WaterManipulation {
 	}
 
 	private void finalRemoveWater(Block block) {
-		if (trail != null)
+		if (trail != null) {
 			trail.revertBlock();
-		if (trail2 != null)
+			trail = null;
+		}
+		if (trail2 != null) {
 			trail2.revertBlock();
+			trail = null;
+		}
 		if (displacing) {
 			removeWater(block);
 			return;

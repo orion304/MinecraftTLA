@@ -81,7 +81,7 @@ public class ConfigManager {
 	public static double airSwipeSpeed = 25;
 	public static double airSwipeRadius = 2;
 	public static double airSwipePush = 1;
-	public static long airSwipeCooldown = 1000;
+	public static long airSwipeCooldown = 1500;
 
 	// Tornado
 	public static double tornadoRadius = 10;

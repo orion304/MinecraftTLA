@@ -112,10 +112,14 @@ public class TorrentBurst {
 			tempBlock.revertBlock();
 		}
 
+		blocks.clear();
+
 		affectedentities.clear();
 
 		ArrayList<Entity> indexlist = new ArrayList<Entity>();
 		indexlist.addAll(Tools.getEntitiesAroundPoint(origin, radius + 2));
+
+		ArrayList<Block> torrentblocks = new ArrayList<Block>();
 
 		if (indexlist.contains(player))
 			indexlist.remove(player);
@@ -130,11 +134,15 @@ public class TorrentBurst {
 				double dz = Math.sin(theta) * radius;
 				Location location = origin.clone().add(dx, dy, dz);
 				Block block = location.getBlock();
+				if (torrentblocks.contains(block))
+					continue;
 				if (Tools.isTransparentToEarthbending(player,
 						Abilities.Torrent, block)) {
-					TempBlock tempBlock = new TempBlock(block, Material.WATER,
-							full);
+					TempBlock tempBlock = TempBlock.makeNewTempBlock(block,
+							Material.WATER, full);// new TempBlock(block,
+													// Material.WATER, full);
 					blocks.add(tempBlock);
+					torrentblocks.add(block);
 				} else {
 					angles.remove(index);
 					continue;

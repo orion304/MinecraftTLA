@@ -188,7 +188,10 @@ public class IceSpike2 {
 			sourceblock.setType(Material.AIR);
 		}
 
-		source = new TempBlock(sourceblock, Material.ICE, data);
+		source = TempBlock.makeNewTempBlock(sourceblock, Material.ICE, data);// new
+																				// TempBlock(sourceblock,
+																				// Material.ICE,
+																				// data);
 	}
 
 	public static void progressAll() {
@@ -258,6 +261,7 @@ public class IceSpike2 {
 				return;
 
 			source.revertBlock();
+			source = null;
 
 			if (Tools.isTransparentToEarthbending(player, block)
 					&& !block.isLiquid()) {
@@ -291,7 +295,11 @@ public class IceSpike2 {
 			}
 
 			sourceblock = block;
-			source = new TempBlock(sourceblock, Material.ICE, data);
+			source = TempBlock
+					.makeNewTempBlock(sourceblock, Material.ICE, data);// new
+																		// TempBlock(sourceblock,
+																		// Material.ICE,
+																		// data);
 
 		} else if (prepared) {
 			Tools.playFocusWaterEffect(sourceblock);
@@ -407,7 +415,8 @@ public class IceSpike2 {
 
 	private void cancel() {
 		if (progressing) {
-			source.revertBlock();
+			if (source != null)
+				source.revertBlock();
 			progressing = false;
 		}
 

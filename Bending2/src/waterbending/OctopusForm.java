@@ -103,7 +103,10 @@ public class OctopusForm {
 		} else if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
 			sourceblock.setType(Material.AIR);
 		}
-		source = new TempBlock(sourceblock, Material.WATER, full);
+		source = TempBlock.makeNewTempBlock(sourceblock, Material.WATER, full);// new
+																				// TempBlock(sourceblock,
+																				// Material.WATER,
+																				// full);
 	}
 
 	private void attack() {
@@ -179,10 +182,14 @@ public class OctopusForm {
 			} else if (settingup) {
 				if (sourceblock.getY() < location.getBlockY()) {
 					source.revertBlock();
+					source = null;
 					Block newblock = sourceblock.getRelative(BlockFace.UP);
 					sourcelocation = newblock.getLocation();
 					if (!Tools.isSolid(newblock)) {
-						source = new TempBlock(newblock, Material.WATER, full);
+						source = TempBlock.makeNewTempBlock(newblock,
+								Material.WATER, full);// new TempBlock(newblock,
+														// Material.WATER,
+														// full);
 						sourceblock = newblock;
 					} else {
 						remove();
@@ -190,10 +197,14 @@ public class OctopusForm {
 					}
 				} else if (sourceblock.getY() > location.getBlockY()) {
 					source.revertBlock();
+					source = null;
 					Block newblock = sourceblock.getRelative(BlockFace.DOWN);
 					sourcelocation = newblock.getLocation();
 					if (!Tools.isSolid(newblock)) {
-						source = new TempBlock(newblock, Material.WATER, full);
+						source = TempBlock.makeNewTempBlock(newblock,
+								Material.WATER, full);// new TempBlock(newblock,
+														// Material.WATER,
+														// full);
 						sourceblock = newblock;
 					} else {
 						remove();
@@ -206,15 +217,20 @@ public class OctopusForm {
 					Block newblock = sourcelocation.getBlock();
 					if (!newblock.equals(sourceblock)) {
 						source.revertBlock();
+						source = null;
 						if (!Tools.isSolid(newblock)) {
-							source = new TempBlock(newblock, Material.WATER,
-									full);
+							source = TempBlock.makeNewTempBlock(newblock,
+									Material.WATER, full);// new
+															// TempBlock(newblock,
+															// Material.WATER,
+															// full);
 							sourceblock = newblock;
 						}
 					}
 				} else {
 					incrementStep();
 					source.revertBlock();
+					source = null;
 					Vector vector = new Vector(1, 0, 0);
 					startangle = vector.angle(Tools.getDirection(
 							sourceblock.getLocation(), location));
@@ -245,13 +261,19 @@ public class OctopusForm {
 	private void formOctopus() {
 		Location location = player.getLocation();
 		newblocks.clear();
+
+		ArrayList<Block> doneblocks = new ArrayList<Block>();
+
 		for (double theta = startangle; theta < startangle + angle; theta += 10) {
 			double rtheta = Math.toRadians(theta);
 			Block block = location
 					.clone()
 					.add(new Vector(radius * Math.cos(rtheta), 0, radius
 							* Math.sin(rtheta))).getBlock();
-			addWater(block);
+			if (!doneblocks.contains(block)) {
+				addWater(block);
+				doneblocks.add(block);
+			}
 		}
 
 		double tentacleangle = (new Vector(1, 0, 0)).angle(player
@@ -336,17 +358,21 @@ public class OctopusForm {
 		if (Tools.isRegionProtectedFromBuild(player, Abilities.OctopusForm,
 				block.getLocation()))
 			return;
-		if (TempBlock.isTempBlock(block)) {
-			TempBlock tblock = TempBlock.get(block);
-			if (!newblocks.contains(tblock)) {
-				if (!blocks.contains(tblock))
-					tblock.setType(Material.WATER, full);
-				newblocks.add(tblock);
-			}
-		} else if (Tools.isWaterbendable(block, player)
+		// if (TempBlock.isTempBlock(block)) {
+		// TempBlock tblock = TempBlock.get(block);
+		// if (!newblocks.contains(tblock)) {
+		// if (!blocks.contains(tblock))
+		// tblock.setType(Material.WATER, full);
+		// newblocks.add(tblock);
+		// }
+		// } else
+		//
+		if (Tools.isWaterbendable(block, player)
 				|| block.getType() == Material.FIRE
 				|| block.getType() == Material.AIR) {
-			newblocks.add(new TempBlock(block, Material.WATER, full));
+			newblocks.add(TempBlock.makeNewTempBlock(block, Material.WATER,
+					full));// new TempBlock(block,
+							// Material.WATER, full));
 		}
 	}
 
@@ -416,6 +442,7 @@ public class OctopusForm {
 		if (source != null) {
 			source.revertBlock();
 			new WaterReturn(player, source.getLocation().getBlock());
+			source = null;
 		} else {
 			Location location = player.getLocation();
 			double rtheta = Math.toRadians(startangle);

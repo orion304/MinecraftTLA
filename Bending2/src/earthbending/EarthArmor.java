@@ -103,13 +103,35 @@ public class EarthArmor {
 			newlegsblock = legsblocklocation.getBlock();
 		}
 
-		if ((!Tools.isEarthbendable(player, newlegsblock)
-				&& !newlegsblock.isLiquid() && newlegsblock.getType() != Material.AIR)
-				|| (!Tools.isEarthbendable(player, newheadblock)
-						&& !newheadblock.isLiquid() && newheadblock.getType() != Material.AIR)) {
+		if (Tools.isTransparentToEarthbending(player, newheadblock)
+				&& !newheadblock.isLiquid()) {
+			Tools.breakBlock(newheadblock);
+		} else if (!Tools.isEarthbendable(player, newheadblock)
+				&& !newheadblock.isLiquid()
+				&& newheadblock.getType() != Material.AIR) {
 			cancel();
 			return false;
 		}
+
+		if (Tools.isTransparentToEarthbending(player, newlegsblock)
+				&& !newlegsblock.isLiquid()) {
+			Tools.breakBlock(newlegsblock);
+		} else if (!Tools.isEarthbendable(player, newlegsblock)
+				&& !newlegsblock.isLiquid()
+				&& newlegsblock.getType() != Material.AIR) {
+			cancel();
+			return false;
+		}
+
+		// if ((!Tools.isEarthbendable(player, newlegsblock)
+		// && !newlegsblock.isLiquid() && newlegsblock.getType() !=
+		// Material.AIR)
+		// || (!Tools.isEarthbendable(player, newheadblock)
+		// && !newheadblock.isLiquid() && newheadblock.getType() !=
+		// Material.AIR)) {
+		// cancel();
+		// return false;
+		// }
 
 		if (headblock.getLocation().distance(player.getEyeLocation()) > range
 				|| legsblock.getLocation().distance(player.getLocation()) > range) {
@@ -118,13 +140,15 @@ public class EarthArmor {
 		}
 
 		if (!newheadblock.equals(headblock)) {
-			new TempBlock(newheadblock, headtype, headdata);
+			// new TempBlock(newheadblock, headtype, headdata);
+			TempBlock.makeNewTempBlock(newheadblock, headtype, headdata);
 			if (TempBlock.isTempBlock(headblock))
 				TempBlock.revertBlock(headblock, Material.AIR);
 		}
 
 		if (!newlegsblock.equals(legsblock)) {
-			new TempBlock(newlegsblock, legstype, legsdata);
+			// new TempBlock(newlegsblock, legstype, legsdata);
+			TempBlock.makeNewTempBlock(newlegsblock, legstype, legsdata);
 			if (TempBlock.isTempBlock(legsblock))
 				TempBlock.revertBlock(legsblock, Material.AIR);
 		}

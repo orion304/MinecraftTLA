@@ -544,6 +544,10 @@ public class BendingListener implements Listener {
 				new EarthBlast(player);
 			}
 
+			if (ability == Abilities.EarthGrab) {
+				EarthGrab.EarthGrabSelf(player);
+			}
+
 			if (ability == Abilities.Shockwave) {
 				new Shockwave(player);
 			}

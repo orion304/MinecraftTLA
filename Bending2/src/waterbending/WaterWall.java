@@ -132,7 +132,11 @@ public class WaterWall {
 		frozen = true;
 		for (Block block : wallblocks.keySet()) {
 			if (wallblocks.get(block) == player) {
-				new TempBlock(block, Material.ICE, (byte) 0);
+				TempBlock.makeNewTempBlock(block, Material.ICE, (byte) 0);// new
+																			// TempBlock(block,
+																			// Material.ICE,
+																			// (byte)
+																			// 0);
 			}
 		}
 	}
@@ -141,7 +145,10 @@ public class WaterWall {
 		frozen = false;
 		for (Block block : wallblocks.keySet()) {
 			if (wallblocks.get(block) == player) {
-				new TempBlock(block, Material.WATER, full);
+				TempBlock.makeNewTempBlock(block, Material.WATER, full);// new
+																		// TempBlock(block,
+																		// Material.WATER,
+																		// full);
 			}
 		}
 	}
@@ -372,9 +379,16 @@ public class WaterWall {
 
 	private void addWallBlock(Block block) {
 		if (frozen) {
-			new TempBlock(block, Material.ICE, (byte) 0);
+			TempBlock.makeNewTempBlock(block, Material.ICE, (byte) 0);// new
+																		// TempBlock(block,
+																		// Material.ICE,
+																		// (byte)
+																		// 0);
 		} else {
-			new TempBlock(block, Material.WATER, full);
+			TempBlock.makeNewTempBlock(block, Material.WATER, full);// new
+																	// TempBlock(block,
+																	// Material.WATER,
+																	// full);
 		}
 	}
 
@@ -440,7 +454,10 @@ public class WaterWall {
 			return;
 
 		if (!TempBlock.isTempBlock(block)) {
-			new TempBlock(block, Material.WATER, full);
+			TempBlock.makeNewTempBlock(block, Material.WATER, full);// new
+																	// TempBlock(block,
+																	// Material.WATER,
+																	// full);
 			// new TempBlock(block, Material.ICE, (byte) 0);
 			affectedblocks.put(block, block);
 		}
