@@ -138,9 +138,8 @@ public class TorrentBurst {
 					continue;
 				if (Tools.isTransparentToEarthbending(player,
 						Abilities.Torrent, block)) {
-					TempBlock tempBlock = TempBlock.makeNewTempBlock(block,
-							Material.WATER, full);// new TempBlock(block,
-													// Material.WATER, full);
+					TempBlock tempBlock = new TempBlock(block, Material.WATER,
+							full);
 					blocks.add(tempBlock);
 					torrentblocks.add(block);
 				} else {

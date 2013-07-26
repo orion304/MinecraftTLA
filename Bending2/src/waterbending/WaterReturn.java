@@ -40,8 +40,7 @@ public class WaterReturn {
 				&& Tools.canBend(player, Abilities.WaterManipulation)) {
 			if (Tools.isTransparentToEarthbending(player, block)
 					&& !block.isLiquid())
-				this.block = TempBlock.makeNewTempBlock(block, Material.WATER,
-						full);// new TempBlock(block, Material.WATER, full);
+				this.block = new TempBlock(block, Material.WATER, full);
 		}
 		// if (ID >= Integer.MAX_VALUE) {
 		// ID = Integer.MIN_VALUE;
@@ -104,10 +103,7 @@ public class WaterReturn {
 		if (Tools.isTransparentToEarthbending(player, newblock)
 				&& !newblock.isLiquid()) {
 			block.revertBlock();
-			block = TempBlock.makeNewTempBlock(newblock, Material.WATER, full);// new
-																				// TempBlock(newblock,
-																				// Material.WATER,
-																				// full);
+			block = new TempBlock(newblock, Material.WATER, full);
 		} else {
 			remove();
 			return;

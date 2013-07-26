@@ -140,15 +140,13 @@ public class EarthArmor {
 		}
 
 		if (!newheadblock.equals(headblock)) {
-			// new TempBlock(newheadblock, headtype, headdata);
-			TempBlock.makeNewTempBlock(newheadblock, headtype, headdata);
+			new TempBlock(newheadblock, headtype, headdata);
 			if (TempBlock.isTempBlock(headblock))
 				TempBlock.revertBlock(headblock, Material.AIR);
 		}
 
 		if (!newlegsblock.equals(legsblock)) {
-			// new TempBlock(newlegsblock, legstype, legsdata);
-			TempBlock.makeNewTempBlock(newlegsblock, legstype, legsdata);
+			new TempBlock(newlegsblock, legstype, legsdata);
 			if (TempBlock.isTempBlock(legsblock))
 				TempBlock.revertBlock(legsblock, Material.AIR);
 		}

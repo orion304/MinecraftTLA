@@ -99,7 +99,6 @@ public class WaterWall {
 			if (Tools.isTransparentToEarthbending(player, block)
 					&& Tools.isTransparentToEarthbending(player,
 							eyeloc.getBlock())) {
-				WaterReturn.emptyWaterBottle(player);
 				block.setType(Material.WATER);
 				block.setData(full);
 				Wave wave = new Wave(player);
@@ -107,8 +106,9 @@ public class WaterWall {
 				wave.moveWater();
 				if (!wave.progressing) {
 					block.setType(Material.AIR);
-					wave.returnWater();
 					wave.cancel();
+				} else {
+					WaterReturn.emptyWaterBottle(player);
 				}
 			}
 
@@ -132,11 +132,7 @@ public class WaterWall {
 		frozen = true;
 		for (Block block : wallblocks.keySet()) {
 			if (wallblocks.get(block) == player) {
-				TempBlock.makeNewTempBlock(block, Material.ICE, (byte) 0);// new
-																			// TempBlock(block,
-																			// Material.ICE,
-																			// (byte)
-																			// 0);
+				new TempBlock(block, Material.ICE, (byte) 0);
 			}
 		}
 	}
@@ -145,10 +141,7 @@ public class WaterWall {
 		frozen = false;
 		for (Block block : wallblocks.keySet()) {
 			if (wallblocks.get(block) == player) {
-				TempBlock.makeNewTempBlock(block, Material.WATER, full);// new
-																		// TempBlock(block,
-																		// Material.WATER,
-																		// full);
+				new TempBlock(block, Material.WATER, full);
 			}
 		}
 	}
@@ -379,16 +372,9 @@ public class WaterWall {
 
 	private void addWallBlock(Block block) {
 		if (frozen) {
-			TempBlock.makeNewTempBlock(block, Material.ICE, (byte) 0);// new
-																		// TempBlock(block,
-																		// Material.ICE,
-																		// (byte)
-																		// 0);
+			new TempBlock(block, Material.ICE, (byte) 0);
 		} else {
-			TempBlock.makeNewTempBlock(block, Material.WATER, full);// new
-																	// TempBlock(block,
-																	// Material.WATER,
-																	// full);
+			new TempBlock(block, Material.WATER, full);
 		}
 	}
 
@@ -454,10 +440,7 @@ public class WaterWall {
 			return;
 
 		if (!TempBlock.isTempBlock(block)) {
-			TempBlock.makeNewTempBlock(block, Material.WATER, full);// new
-																	// TempBlock(block,
-																	// Material.WATER,
-																	// full);
+			new TempBlock(block, Material.WATER, full);
 			// new TempBlock(block, Material.ICE, (byte) 0);
 			affectedblocks.put(block, block);
 		}
@@ -499,15 +482,15 @@ public class WaterWall {
 				if (Tools.isTransparentToEarthbending(player, block)
 						&& Tools.isTransparentToEarthbending(player,
 								eyeloc.getBlock())) {
-					WaterReturn.emptyWaterBottle(player);
 					block.setType(Material.WATER);
 					block.setData(full);
 					WaterWall wall = new WaterWall(player);
 					wall.moveWater();
 					if (!wall.progressing) {
 						block.setType(Material.AIR);
-						wall.returnWater();
 						wall.cancel();
+					} else {
+						WaterReturn.emptyWaterBottle(player);
 					}
 					return;
 				}

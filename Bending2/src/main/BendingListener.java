@@ -1104,10 +1104,12 @@ public class BendingListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityExploeEvent(EntityExplodeEvent event) {
+	public void onEntityExplodeEvent(EntityExplodeEvent event) {
 		Entity entity = event.getEntity();
-		if (Paralyze.isParalyzed(entity) || Bloodbending.isBloodbended(entity))
-			event.setCancelled(true);
+		if (entity != null)
+			if (Paralyze.isParalyzed(entity)
+					|| Bloodbending.isBloodbended(entity))
+				event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

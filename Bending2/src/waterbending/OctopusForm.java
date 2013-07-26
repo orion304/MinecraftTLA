@@ -86,11 +86,15 @@ public class OctopusForm {
 			if (Tools.isTransparentToEarthbending(player, block)
 					&& Tools.isTransparentToEarthbending(player,
 							eyeloc.getBlock())) {
-				WaterReturn.emptyWaterBottle(player);
 				block.setType(Material.WATER);
 				block.setData(full);
 				OctopusForm form = new OctopusForm(player);
 				form.form();
+				if (form.formed || form.forming || form.settingup) {
+					WaterReturn.emptyWaterBottle(player);
+				} else {
+					block.setType(Material.AIR);
+				}
 			}
 		}
 	}
@@ -103,10 +107,7 @@ public class OctopusForm {
 		} else if (!Tools.adjacentToThreeOrMoreSources(sourceblock)) {
 			sourceblock.setType(Material.AIR);
 		}
-		source = TempBlock.makeNewTempBlock(sourceblock, Material.WATER, full);// new
-																				// TempBlock(sourceblock,
-																				// Material.WATER,
-																				// full);
+		source = new TempBlock(sourceblock, Material.WATER, full);
 	}
 
 	private void attack() {
@@ -186,10 +187,7 @@ public class OctopusForm {
 					Block newblock = sourceblock.getRelative(BlockFace.UP);
 					sourcelocation = newblock.getLocation();
 					if (!Tools.isSolid(newblock)) {
-						source = TempBlock.makeNewTempBlock(newblock,
-								Material.WATER, full);// new TempBlock(newblock,
-														// Material.WATER,
-														// full);
+						source = new TempBlock(newblock, Material.WATER, full);
 						sourceblock = newblock;
 					} else {
 						remove();
@@ -201,10 +199,7 @@ public class OctopusForm {
 					Block newblock = sourceblock.getRelative(BlockFace.DOWN);
 					sourcelocation = newblock.getLocation();
 					if (!Tools.isSolid(newblock)) {
-						source = TempBlock.makeNewTempBlock(newblock,
-								Material.WATER, full);// new TempBlock(newblock,
-														// Material.WATER,
-														// full);
+						source = new TempBlock(newblock, Material.WATER, full);
 						sourceblock = newblock;
 					} else {
 						remove();
@@ -219,11 +214,8 @@ public class OctopusForm {
 						source.revertBlock();
 						source = null;
 						if (!Tools.isSolid(newblock)) {
-							source = TempBlock.makeNewTempBlock(newblock,
-									Material.WATER, full);// new
-															// TempBlock(newblock,
-															// Material.WATER,
-															// full);
+							source = new TempBlock(newblock, Material.WATER,
+									full);
 							sourceblock = newblock;
 						}
 					}
@@ -358,21 +350,17 @@ public class OctopusForm {
 		if (Tools.isRegionProtectedFromBuild(player, Abilities.OctopusForm,
 				block.getLocation()))
 			return;
-		// if (TempBlock.isTempBlock(block)) {
-		// TempBlock tblock = TempBlock.get(block);
-		// if (!newblocks.contains(tblock)) {
-		// if (!blocks.contains(tblock))
-		// tblock.setType(Material.WATER, full);
-		// newblocks.add(tblock);
-		// }
-		// } else
-		//
-		if (Tools.isWaterbendable(block, player)
+		if (TempBlock.isTempBlock(block)) {
+			TempBlock tblock = TempBlock.get(block);
+			if (!newblocks.contains(tblock)) {
+				if (!blocks.contains(tblock))
+					tblock.setType(Material.WATER, full);
+				newblocks.add(tblock);
+			}
+		} else if (Tools.isWaterbendable(block, player)
 				|| block.getType() == Material.FIRE
 				|| block.getType() == Material.AIR) {
-			newblocks.add(TempBlock.makeNewTempBlock(block, Material.WATER,
-					full));// new TempBlock(block,
-							// Material.WATER, full));
+			newblocks.add(new TempBlock(block, Material.WATER, full));
 		}
 	}
 

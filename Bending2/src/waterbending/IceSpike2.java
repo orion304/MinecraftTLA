@@ -144,11 +144,16 @@ public class IceSpike2 {
 				if (destination.distance(block.getLocation()) < 1)
 					return;
 
-				WaterReturn.emptyWaterBottle(player);
 				block.setType(Material.WATER);
 				block.setData((byte) 0x0);
 				IceSpike2 ice = new IceSpike2(player);
 				ice.throwIce();
+
+				if (ice.progressing) {
+					WaterReturn.emptyWaterBottle(player);
+				} else {
+					block.setType(Material.AIR);
+				}
 
 			}
 		}
@@ -188,10 +193,7 @@ public class IceSpike2 {
 			sourceblock.setType(Material.AIR);
 		}
 
-		source = TempBlock.makeNewTempBlock(sourceblock, Material.ICE, data);// new
-																				// TempBlock(sourceblock,
-																				// Material.ICE,
-																				// data);
+		source = new TempBlock(sourceblock, Material.ICE, data);
 	}
 
 	public static void progressAll() {
@@ -295,11 +297,7 @@ public class IceSpike2 {
 			}
 
 			sourceblock = block;
-			source = TempBlock
-					.makeNewTempBlock(sourceblock, Material.ICE, data);// new
-																		// TempBlock(sourceblock,
-																		// Material.ICE,
-																		// data);
+			source = new TempBlock(sourceblock, Material.ICE, data);
 
 		} else if (prepared) {
 			Tools.playFocusWaterEffect(sourceblock);
@@ -318,14 +316,15 @@ public class IceSpike2 {
 						70, mod);
 				new TempPotionEffect(entity, effect);
 				bPlayer.slow(slowCooldown);
+				entity.damage(damage, player);
 			}
 		} else {
 			PotionEffect effect = new PotionEffect(PotionEffectType.SLOW, 70,
 					mod);
 			new TempPotionEffect(entity, effect);
+			entity.damage(damage, player);
 		}
 
-		entity.damage(damage, player);
 	}
 
 	private static void redirect(Player player) {

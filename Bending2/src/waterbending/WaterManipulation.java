@@ -403,9 +403,7 @@ public class WaterManipulation {
 					trail2 = trail;
 					trail2.setType(Material.WATER, (byte) 2);
 				}
-				trail = TempBlock.makeNewTempBlock(sourceblock, Material.WATER,
-						(byte) 1);// new TempBlock(sourceblock, Material.WATER,
-									// (byte) 1);
+				trail = new TempBlock(sourceblock, Material.WATER, (byte) 1);
 				sourceblock = block;
 
 				if (location.distance(targetdestination) <= 1
@@ -511,12 +509,16 @@ public class WaterManipulation {
 								eyeloc.getBlock())) {
 
 					if (getTargetLocation(player).distance(block.getLocation()) > 1) {
-						WaterReturn.emptyWaterBottle(player);
 						block.setType(Material.WATER);
 						block.setData(full);
 						WaterManipulation watermanip = new WaterManipulation(
 								player);
 						watermanip.moveWater();
+						if (!watermanip.progressing) {
+							block.setType(Material.AIR);
+						} else {
+							WaterReturn.emptyWaterBottle(player);
+						}
 					}
 				}
 			}
