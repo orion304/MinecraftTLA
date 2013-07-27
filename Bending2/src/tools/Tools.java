@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
-import main.BendingManager;
 import main.BendingPlayers;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
@@ -937,7 +936,7 @@ public class Tools {
 		return target;
 	}
 
-	public static void damageEntity(Player player, Entity entity, int damage) {
+	public static void damageEntity(Player player, Entity entity, double damage) {
 		if (entity instanceof LivingEntity) {
 			if (AvatarState.isAvatarState(player)) {
 				damage = AvatarState.getValue(damage);
@@ -1094,7 +1093,8 @@ public class Tools {
 
 		RapidPunch.instance.clear();
 
-		BendingManager.removeFlyers();
+		// BendingManager.removeFlyers();
+		Flight.removeAll();
 		WaterReturn.removeAll();
 		TempBlock.removeAll();
 		removeAllEarthbendedBlocks();

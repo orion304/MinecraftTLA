@@ -34,7 +34,7 @@ public class OctopusForm {
 	private double startangle;
 	private double angle;
 	private double y = 0;
-	private int animstep = 1;
+	private int animstep = 1, step = 1, inc = 3;
 	private double dta = 45;
 	private ArrayList<TempBlock> blocks = new ArrayList<TempBlock>();
 	private ArrayList<TempBlock> newblocks = new ArrayList<TempBlock>();
@@ -240,7 +240,9 @@ public class OctopusForm {
 					incrementStep();
 				}
 			} else if (formed) {
-				animstep += 1;
+				step += 1;
+				if (step % inc == 0)
+					animstep += 1;
 				if (animstep > 8)
 					animstep = 1;
 				formOctopus();
@@ -268,8 +270,11 @@ public class OctopusForm {
 			}
 		}
 
-		double tentacleangle = (new Vector(1, 0, 0)).angle(player
-				.getEyeLocation().getDirection()) + dta / 2;
+		Vector eyedir = player.getEyeLocation().getDirection();
+		eyedir.setY(0);
+
+		double tentacleangle = Math.toDegrees((new Vector(1, 0, 0))
+				.angle(eyedir)) + dta / 2;
 
 		int astep = animstep;
 		for (double tangle = tentacleangle; tangle < tentacleangle + 360; tangle += dta) {
@@ -300,11 +305,12 @@ public class OctopusForm {
 		if (!blocks.contains(TempBlock.get(base.getBlock())))
 			return;
 
-		Vector direction = Tools.getDirection(player.getLocation(), base)
-				.normalize();
+		Vector direction = Tools.getDirection(player.getLocation(), base);
+		direction.setY(0);
+		direction.normalize();
 
 		if (animationstep > 8) {
-			animationstep = animationstep - 8 * animationstep % 8;
+			animationstep = animationstep % 8;
 		}
 
 		if (y >= 1) {

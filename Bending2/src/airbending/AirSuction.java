@@ -15,6 +15,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 import waterbending.WaterSpout;
 
@@ -248,6 +249,10 @@ public class AirSuction {
 				}
 				entity.setVelocity(velocity);
 				entity.setFallDistance(0);
+				if (entity.getEntityId() != player.getEntityId()
+						&& entity instanceof Player) {
+					new Flight((Player) entity, player);
+				}
 				if (entity.getFireTicks() > 0)
 					entity.getWorld().playEffect(entity.getLocation(),
 							Effect.EXTINGUISH, 0);

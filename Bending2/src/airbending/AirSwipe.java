@@ -19,6 +19,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 import waterbending.WaterManipulation;
 import earthbending.EarthBlast;
@@ -256,6 +257,10 @@ public class AirSwipe {
 					if (damage != 0)
 						Tools.damageEntity(player, entity, damage);
 					affectedentities.add(entity);
+				}
+
+				if (entity instanceof Player) {
+					new Flight((Player) entity, player);
 				}
 
 				if (elements.containsKey(direction)) {

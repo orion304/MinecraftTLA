@@ -12,6 +12,7 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 
 public class Tornado {
@@ -149,6 +150,10 @@ public class Tornado {
 						velocity.multiply(timefactor);
 						entity.setVelocity(velocity);
 						entity.setFallDistance(0);
+
+						if (entity instanceof Player) {
+							new Flight((Player) entity);
+						}
 					}
 				}
 			}

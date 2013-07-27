@@ -13,6 +13,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 
 public class FireJet {
@@ -59,6 +60,7 @@ public class FireJet {
 			block.setType(Material.FIRE);
 			this.player = player;
 			// canfly = player.getAllowFlight();
+			new Flight(player);
 			player.setAllowFlight(true);
 			time = System.currentTimeMillis();
 			// timers.put(player, time);

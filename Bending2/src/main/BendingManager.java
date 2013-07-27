@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldType;
@@ -17,6 +16,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.TempPotionEffect;
 import tools.Tools;
 import waterbending.Bloodbending;
@@ -115,7 +115,8 @@ public class BendingManager implements Runnable {
 			// manageMessages();
 			TempPotionEffect.progressAll();
 			AvatarState.manageAvatarStates();
-			handleFlying();
+			// handleFlying();
+			Flight.handle();
 			handleDayNight();
 
 			if (verbose
@@ -301,67 +302,67 @@ public class BendingManager implements Runnable {
 
 	}
 
-	private void handleFlying() {
-
-		ArrayList<Player> players = new ArrayList<Player>();
-		ArrayList<Player> newflyingplayers = new ArrayList<Player>();
-		ArrayList<Player> avatarstateplayers = new ArrayList<Player>();
-		ArrayList<Player> airscooterplayers = new ArrayList<Player>();
-		ArrayList<Player> waterspoutplayers = new ArrayList<Player>();
-		ArrayList<Player> airspoutplayers = new ArrayList<Player>();
-
-		players.addAll(Tornado.getPlayers());
-		players.addAll(Speed.getPlayers());
-		players.addAll(FireJet.getPlayers());
-		players.addAll(Catapult.getPlayers());
-		avatarstateplayers = AvatarState.getPlayers();
-		airscooterplayers = AirScooter.getPlayers();
-		waterspoutplayers = WaterSpout.getPlayers();
-		airspoutplayers = AirSpout.getPlayers();
-		// players.addAll(avatarstateplayers);
-
-		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			if (avatarstateplayers.contains(player)
-					|| airscooterplayers.contains(player)
-					|| waterspoutplayers.contains(player)
-					|| airspoutplayers.contains(player)) {
-				continue;
-			}
-			if (Bloodbending.isBloodbended(player)) {
-				player.setAllowFlight(true);
-				player.setFlying(false);
-				continue;
-			}
-			if (flyingplayers.contains(player) && players.contains(player)) {
-				player.setAllowFlight(true);
-				if (player.getGameMode() != GameMode.CREATIVE)
-					player.setFlying(false);
-				newflyingplayers.add(player);
-			} else if (players.contains(player)
-					&& !flyingplayers.contains(player)) {
-				newflyingplayers.add(player);
-				if (player.getGameMode() != GameMode.CREATIVE)
-					player.setFlying(false);
-			} else if (flyingplayers.contains(player)
-					&& !players.contains(player)) {
-				player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
-				if (player.getGameMode() != GameMode.CREATIVE)
-					player.setFlying(false);
-			} else {
-				player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
-				if (player.getGameMode() != GameMode.CREATIVE)
-					player.setFlying(false);
-			}
-		}
-		flyingplayers.clear();
-		flyingplayers.addAll(newflyingplayers);
-	}
-
-	public static void removeFlyers() {
-		for (Player player : flyingplayers) {
-			player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
-		}
-	}
+	// private void handleFlying() {
+	//
+	// ArrayList<Player> players = new ArrayList<Player>();
+	// ArrayList<Player> newflyingplayers = new ArrayList<Player>();
+	// ArrayList<Player> avatarstateplayers = new ArrayList<Player>();
+	// ArrayList<Player> airscooterplayers = new ArrayList<Player>();
+	// ArrayList<Player> waterspoutplayers = new ArrayList<Player>();
+	// ArrayList<Player> airspoutplayers = new ArrayList<Player>();
+	//
+	// players.addAll(Tornado.getPlayers());
+	// players.addAll(Speed.getPlayers());
+	// players.addAll(FireJet.getPlayers());
+	// players.addAll(Catapult.getPlayers());
+	// avatarstateplayers = AvatarState.getPlayers();
+	// airscooterplayers = AirScooter.getPlayers();
+	// waterspoutplayers = WaterSpout.getPlayers();
+	// airspoutplayers = AirSpout.getPlayers();
+	// // players.addAll(avatarstateplayers);
+	//
+	// for (Player player : plugin.getServer().getOnlinePlayers()) {
+	// if (avatarstateplayers.contains(player)
+	// || airscooterplayers.contains(player)
+	// || waterspoutplayers.contains(player)
+	// || airspoutplayers.contains(player)) {
+	// continue;
+	// }
+	// if (Bloodbending.isBloodbended(player)) {
+	// player.setAllowFlight(true);
+	// player.setFlying(false);
+	// continue;
+	// }
+	// if (flyingplayers.contains(player) && players.contains(player)) {
+	// player.setAllowFlight(true);
+	// if (player.getGameMode() != GameMode.CREATIVE)
+	// player.setFlying(false);
+	// newflyingplayers.add(player);
+	// } else if (players.contains(player)
+	// && !flyingplayers.contains(player)) {
+	// newflyingplayers.add(player);
+	// if (player.getGameMode() != GameMode.CREATIVE)
+	// player.setFlying(false);
+	// } else if (flyingplayers.contains(player)
+	// && !players.contains(player)) {
+	// player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+	// if (player.getGameMode() != GameMode.CREATIVE)
+	// player.setFlying(false);
+	// } else {
+	// player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+	// if (player.getGameMode() != GameMode.CREATIVE)
+	// player.setFlying(false);
+	// }
+	// }
+	// flyingplayers.clear();
+	// flyingplayers.addAll(newflyingplayers);
+	// }
+	//
+	// public static void removeFlyers() {
+	// for (Player player : flyingplayers) {
+	// player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+	// }
+	// }
 
 	private void handleDayNight() {
 

@@ -64,6 +64,7 @@ import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.BendingType;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.TempBlock;
 import tools.Tools;
 import waterbending.Bloodbending;
@@ -709,6 +710,14 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.ChiBlocker)) {
 				event.setDamage((int) ((double) event.getDamage() * (ConfigManager.falldamagereduction / 100.)));
+			}
+
+			if (!event.isCancelled() && event.getCause() == DamageCause.FALL) {
+				Player source = Flight.getLaunchedBy(player);
+				if (source != null) {
+					event.setCancelled(true);
+					Tools.damageEntity(source, player, event.getDamage());
+				}
 			}
 
 			if (Tools.canBendPassive(player, BendingType.Fire)

@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 
 public class Catapult {
@@ -89,6 +90,19 @@ public class Catapult {
 
 	}
 
+	public Catapult(Player player, Catapult source) {
+		flying = true;
+		this.player = player;
+		moving = false;
+		location = source.location.clone();
+		starttime = source.starttime;
+		direction = source.direction.clone();
+		distance = source.distance;
+		time = source.time;
+		instances.put(player.getEntityId(), this);
+		fly();
+	}
+
 	public boolean progress() {
 		if (player.isDead() || !player.isOnline()) {
 			remove();
@@ -162,41 +176,39 @@ public class Catapult {
 
 		if (catapult) {
 			if (location.distance(origin) < .5) {
-				// if (loc.distance(origin) < .5) {
+				boolean remove = false;
 				for (Entity entity : Tools.getEntitiesAroundPoint(origin, 2)) {
 					if (entity instanceof Player) {
-						((Player) entity).setAllowFlight(true);
-						if (entity.getEntityId() == player.getEntityId())
-							flying = true;
+						Player target = (Player) entity;
+						boolean equal = target.getEntityId() == player
+								.getEntityId();
+						if (equal) {
+							remove();
+							remove = true;
+						}
+						if (equal || target.isSneaking()) {
+							new Flight(target);
+							target.setAllowFlight(true);
+							new Catapult(target, this);
+						}
 					}
 					entity.setVelocity(direction.clone().multiply(
 							push * distance / length));
+
 				}
-				// Tools.moveEarth(location, direction, distance);
-				// location = location.clone().add(direction);
-				return false;
+				return remove;
 			}
 		} else {
 			if (location.distance(origin) <= length - distance) {
-				// if (loc.distance(origin) <= length - distance) {
 				for (Entity entity : Tools.getEntitiesAroundPoint(location, 2)) {
-					if (entity instanceof Player) {
-						((Player) entity).setAllowFlight(true);
-						if (entity.getEntityId() == player.getEntityId())
-							flying = true;
-					}
 					entity.setVelocity(direction.clone().multiply(
 							push * distance / length));
 				}
-				// Tools.moveEarth(location, direction, distance);
-				// location = location.clone().add(direction);
 				return false;
 			}
 		}
 		Tools.moveEarth(player, location.clone().subtract(direction),
 				direction, distance, false);
-		// Tools.moveEarth(location, direction, distance);
-		// location = location.clone().add(direction);
 		return true;
 	}
 

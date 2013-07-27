@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.TempBlock;
 import tools.Tools;
 
@@ -42,6 +43,7 @@ public class WaterSpout {
 			return;
 		}
 		this.player = player;
+		new Flight(player);
 		player.setAllowFlight(true);
 		instances.put(player, this);
 		spout(player);

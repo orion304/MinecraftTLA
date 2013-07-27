@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
 import tools.BendingType;
+import tools.Flight;
 import tools.TempPotionEffect;
 import tools.Tools;
 
@@ -25,6 +26,7 @@ public class Speed {
 		this.player = player;
 		id = player.getEntityId();
 		// canfly = player.getAllowFlight();
+		new Flight(player);
 		player.setAllowFlight(true);
 		instances.put(id, this);
 	}

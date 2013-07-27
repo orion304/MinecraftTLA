@@ -17,6 +17,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 
 public class AirBlast {
@@ -304,6 +305,9 @@ public class AirBlast {
 
 			entity.setVelocity(velocity);
 			entity.setFallDistance(0);
+			if (!isUser && entity instanceof Player) {
+				new Flight((Player) entity, player);
+			}
 			if (entity.getFireTicks() > 0)
 				entity.getWorld().playEffect(entity.getLocation(),
 						Effect.EXTINGUISH, 0);

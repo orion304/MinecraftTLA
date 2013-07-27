@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 
 public class AirScooter {
@@ -48,6 +49,7 @@ public class AirScooter {
 		this.player = player;
 		// wasflying = player.isFlying();
 		// canfly = player.getAllowFlight();
+		new Flight(player);
 		player.setAllowFlight(true);
 		player.setFlying(true);
 		player.setSprinting(false);

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.ConfigManager;
+import tools.Flight;
 import tools.Tools;
 
 public class AirSpout {
@@ -38,6 +39,7 @@ public class AirSpout {
 		}
 		this.player = player;
 		time = System.currentTimeMillis();
+		new Flight(player);
 		instances.put(player, this);
 		bPlayer.cooldown(Abilities.AirSpout);
 		spout();

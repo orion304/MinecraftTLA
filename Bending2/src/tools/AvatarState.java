@@ -22,6 +22,7 @@ public class AvatarState {
 		if (instances.containsKey(player)) {
 			instances.remove(player);
 		} else {
+			new Flight(player);
 			instances.put(player, this);
 		}
 	}
