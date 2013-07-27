@@ -180,19 +180,15 @@ public class AirBlast {
 				// Lever lever = (Lever) (state.getData());
 				// lever.setPowered(!lever.isPowered());
 				// state.setData(lever);
-				// state.update(true);
+				// state.update(true, true);
 				//
 				// Block relative = block.getRelative(((Attachable) block
 				// .getState().getData()).getFacing(), -1);
-				// Tools.updatePhysics(relative);
-
-				// BlockFace[] faces = { BlockFace.DOWN, BlockFace.UP,
-				// BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST,
-				// BlockFace.SOUTH };
+				// relative.getState().update(true, true);
 				//
-				// for (BlockFace face : faces) {
-				// block.getRelative(face).getState().update(true);
-				// }
+				// for (Block block2 : Tools.getBlocksAroundPoint(
+				// relative.getLocation(), 2))
+				// block2.getState().update(true, true);
 
 				affectedlevers.add(block);
 			}

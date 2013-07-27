@@ -153,8 +153,6 @@ public class AirScooter {
 	}
 
 	private void remove() {
-		player.setAllowFlight(false);
-		player.setFlying(false);
 		instances.remove(player);
 	}
 

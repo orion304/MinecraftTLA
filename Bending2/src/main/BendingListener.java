@@ -664,10 +664,8 @@ public class BendingListener implements Listener {
 			if (Tools.isBender(player.getName(), BendingType.Air)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Air)) {
-				if (!BendingManager.flyingplayers.contains(player)) {
-					player.setAllowFlight(true);
-					BendingManager.flyingplayers.add(player);
-				}
+				new Flight(player);
+				player.setAllowFlight(true);
 				AirBurst.fallBurst(player);
 				player.setFallDistance(0);
 				event.setDamage(0);
@@ -679,10 +677,8 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Water)) {
 				if (WaterPassive.softenLanding(player)) {
-					if (!BendingManager.flyingplayers.contains(player)) {
-						player.setAllowFlight(true);
-						BendingManager.flyingplayers.add(player);
-					}
+					new Flight(player);
+					player.setAllowFlight(true);
 					player.setFallDistance(0);
 					event.setDamage(0);
 					event.setCancelled(true);
@@ -694,10 +690,8 @@ public class BendingListener implements Listener {
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.Earth)) {
 				if (EarthPassive.softenLanding(player)) {
-					if (!BendingManager.flyingplayers.contains(player)) {
-						player.setAllowFlight(true);
-						BendingManager.flyingplayers.add(player);
-					}
+					new Flight(player);
+					player.setAllowFlight(true);
 					player.setFallDistance(0);
 					event.setDamage(0);
 					event.setCancelled(true);

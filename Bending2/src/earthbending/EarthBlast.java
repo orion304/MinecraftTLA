@@ -151,7 +151,7 @@ public class EarthBlast {
 					// Tools.removeEarthbendedBlockIndex(sourceblock);
 				}
 				Entity target = Tools.getTargettedEntity(player, range);
-				Tools.verbose(target);
+				// Tools.verbose(target);
 				if (target == null) {
 					destination = player.getTargetBlock(
 							Tools.getTransparentEarthbending(), (int) range)

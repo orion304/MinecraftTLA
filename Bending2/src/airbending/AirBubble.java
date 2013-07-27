@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -54,23 +53,6 @@ public class AirBubble {
 			radius = defaultAirRadius;
 		Location location = player.getLocation();
 
-		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
-			if (Tools.isRegionProtectedFromBuild(player, Abilities.AirBubble,
-					block.getLocation()))
-				continue;
-			if (block.getType() == Material.STATIONARY_WATER
-					|| block.getType() == Material.WATER) {
-				if (WaterManipulation.canBubbleWater(block)) {
-					// if (block.getData() == full)
-					waterorigins.put(block, block.getState());
-					// waterorigins.put(block, block.getData());
-
-					block.setType(Material.AIR);
-				}
-			}
-
-		}
-
 		for (Block block : waterorigins.keySet()) {
 			if (block.getWorld() != location.getWorld()) {
 				if (block.getType() == Material.AIR || Tools.isWater(block))
@@ -94,6 +76,26 @@ public class AirBubble {
 				waterorigins.remove(block);
 			}
 		}
+
+		for (Block block : Tools.getBlocksAroundPoint(location, radius)) {
+			if (waterorigins.containsKey(block))
+				continue;
+			if (Tools.isRegionProtectedFromBuild(player, Abilities.AirBubble,
+					block.getLocation()))
+				continue;
+			if (block.getType() == Material.STATIONARY_WATER
+					|| block.getType() == Material.WATER) {
+				if (WaterManipulation.canBubbleWater(block)) {
+					// if (block.getData() == full)
+					waterorigins.put(block, block.getState());
+					// waterorigins.put(block, block.getData());
+
+					block.setType(Material.AIR);
+				}
+			}
+
+		}
+
 	}
 
 	public boolean progress() {
@@ -120,13 +122,12 @@ public class AirBubble {
 	}
 
 	public static void handleBubbles(Server server) {
-		for (World world : server.getWorlds()) {
-			for (Player player : world.getPlayers()) {
-				if ((Tools.getBendingAbility(player) == Abilities.AirBubble || Tools
-						.getBendingAbility(player) == Abilities.WaterBubble)
-						&& !instances.containsKey(player.getEntityId())) {
-					new AirBubble(player);
-				}
+
+		for (Player player : server.getOnlinePlayers()) {
+			if ((Tools.getBendingAbility(player) == Abilities.AirBubble || Tools
+					.getBendingAbility(player) == Abilities.WaterBubble)
+					&& !instances.containsKey(player.getEntityId())) {
+				new AirBubble(player);
 			}
 		}
 

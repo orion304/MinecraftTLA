@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Effect;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -89,7 +88,7 @@ public class AirSpout {
 	}
 
 	private void removeFlight() {
-		player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
+		// player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
 		// flight speed too
 	}
 
