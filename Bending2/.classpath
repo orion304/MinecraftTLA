@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/Factions.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/LogBlock.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/GriefPrevention.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jonathan/Documents/Minecraft Server/mcore.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

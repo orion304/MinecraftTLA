@@ -36,6 +36,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.Vector;
 
 import waterbending.Bloodbending;
@@ -62,7 +63,8 @@ import airbending.Tornado;
 import chiblocking.Paralyze;
 import chiblocking.RapidPunch;
 
-import com.massivecraft.factions.listeners.FactionsBlockListener;
+import com.massivecraft.factions.listeners.FactionsListenerMain;
+import com.massivecraft.mcore.ps.PS;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -1254,11 +1256,14 @@ public class Tools {
 		// event.setCancelled(true);
 		// }
 
-		Plugin wgp = Bukkit.getPluginManager().getPlugin("WorldGuard");
-		Plugin psp = Bukkit.getPluginManager().getPlugin("PreciousStone");
-		Plugin fcp = Bukkit.getPluginManager().getPlugin("Factions");
-		Plugin twnp = Bukkit.getPluginManager().getPlugin("Towny");
-		Plugin gpp = Bukkit.getPluginManager().getPlugin("GriefPrevention");
+		PluginManager pm = Bukkit.getPluginManager();
+
+		Plugin wgp = pm.getPlugin("WorldGuard");
+		Plugin psp = pm.getPlugin("PreciousStone");
+		Plugin fcp = pm.getPlugin("Factions");
+		Plugin twnp = pm.getPlugin("Towny");
+		Plugin gpp = pm.getPlugin("GriefPrevention");
+		Plugin mcore = pm.getPlugin("mcore");
 
 		for (Location location : new Location[] { loc, player.getLocation() }) {
 
@@ -1320,7 +1325,7 @@ public class Tools {
 					return true;
 			}
 
-			if (fcp != null && respectFactions) {
+			if (fcp != null && mcore != null && respectFactions) {
 				if (ignite.contains(ability)) {
 
 				}
@@ -1329,10 +1334,15 @@ public class Tools {
 
 				}
 
-				if (!FactionsBlockListener.playerCanBuildDestroyBlock(player,
-						location, "build", true)) {
+				if (!FactionsListenerMain.canPlayerBuildAt(player,
+						PS.valueOf(loc.getBlock()), false)) {
 					return true;
 				}
+
+				// if (!FactionsBlockListener.playerCanBuildDestroyBlock(player,
+				// location, "build", true)) {
+				// return true;
+				// }
 			}
 
 			if (twnp != null && respectTowny) {
