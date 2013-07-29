@@ -88,6 +88,8 @@ public class AirSpout {
 	}
 
 	private void removeFlight() {
+		player.setAllowFlight(false);
+		player.setFlying(false);
 		// player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
 		// flight speed too
 	}
