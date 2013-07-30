@@ -106,6 +106,11 @@ public class Lightning {
 			return;
 		}
 
+		if (Tools.getBendingAbility(player) != Abilities.Lightning) {
+			instances.remove(player);
+			return;
+		}
+
 		int distance = (int) Tools.firebendingDayAugment(defaultdistance,
 				player.getWorld());
 		long warmup = (int) ((double) defaultwarmup / ConfigManager.dayFactor);

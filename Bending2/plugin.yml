@@ -72,13 +72,13 @@ permissions:
       bending.earth.Tremorsense: true
       bending.earth.EarthArmor: true
       bending.earth.Shockwave: true
-  bending.chiblocking.*:
+  bending.chiblocker.*:
     description: Allows all chiblocking abilities.
     children:
-      bending.chiblocking: true
-      bending.chiblocking.RapidPunch: true
-      bending.chiblocking.HighJump: true
-      bending.chiblocking.Paralyze: true
+      bending.chiblocker: true
+      bending.chiblocker.RapidPunch: true
+      bending.chiblocker.HighJump: true
+      bending.chiblocker.Paralyze: true
   bending.*:
     description: Allows all bending.
     children:
@@ -86,7 +86,7 @@ permissions:
       bending.water.*: true
       bending.fire.*: true
       bending.air.*: true
-      bending.chiblocking.*: true
+      bending.chiblocker.*: true
       
   bending.admin:
     description: Allows all commands.
@@ -274,13 +274,13 @@ permissions:
     default: true
     
 # CHIBLOCKING PERMISSIONS
-  bending.chiblocking:
+  bending.chiblocker:
     description: Allows being a Chiblocker.
     default: true
-  bending.chiblocking.RapidPunch:
+  bending.chiblocker.RapidPunch:
     description: Allows the use of RapidPunch
     default: true
-  bending.chiblocking.HighJump:
+  bending.chiblocker.HighJump:
     description: Allows the use of HighJump
     default: true
   bending.chiblocker.FastPunch:
