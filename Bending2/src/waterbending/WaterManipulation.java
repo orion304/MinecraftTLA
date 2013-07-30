@@ -33,6 +33,7 @@ public class WaterManipulation {
 	// private static final byte half = 0x4;
 
 	static double range = ConfigManager.waterManipulationRange;
+	private static double pushfactor = ConfigManager.fireBlastPush;
 	private static int defaultdamage = ConfigManager.waterdmg;
 	private static double speed = ConfigManager.waterManipulationSpeed;
 	private static final double deflectrange = 3;
@@ -368,8 +369,11 @@ public class WaterManipulation {
 							// if (testblock.equals(block1)
 							// || testblock.equals(block2)) {
 
-							entity.setVelocity(entity.getVelocity().clone()
-									.add(direction));
+							Location location = player.getEyeLocation();
+					 		Vector vector = location.getDirection();
+					 		entity.setVelocity(vector.normalize().multiply(pushfactor));
+//							entity.setVelocity(entity.getVelocity().clone()
+//									.add(direction));
 							if (AvatarState.isAvatarState(player))
 								damage = AvatarState.getValue(damage);
 							Tools.damageEntity(player, entity, (int) Tools
