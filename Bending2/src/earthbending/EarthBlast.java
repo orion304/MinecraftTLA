@@ -33,7 +33,7 @@ public class EarthBlast {
 	private static final double deflectrange = 3;
 
 	private static boolean revert = ConfigManager.earthBlastRevert;
-	private static double pushfactor = ConfigManager.fireBlastPush;
+	private static double pushfactor = ConfigManager.EarthBlastPush;
 	// private static double speed = 1.5;
 
 	private static long interval = (long) (1000. / speed);
