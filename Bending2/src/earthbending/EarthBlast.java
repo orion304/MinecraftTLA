@@ -33,6 +33,7 @@ public class EarthBlast {
 	private static final double deflectrange = 3;
 
 	private static boolean revert = ConfigManager.earthBlastRevert;
+	private static double pushfactor = ConfigManager.EarthBlastPush;
 	// private static double speed = 1.5;
 
 	private static long interval = (long) (1000. / speed);
@@ -376,10 +377,14 @@ public class EarthBlast {
 						//
 						// if (testblock.equals(block1)
 						// || testblock.equals(block2)) {
-						entity.setVelocity(entity.getVelocity().clone()
-								.add(direction));
+//						entity.setVelocity(entity.getVelocity().clone()
+//								.add(direction));
+						Location location = player.getEyeLocation();
+				 		Vector vector = location.getDirection();
+				 		entity.setVelocity(vector.normalize().multiply(pushfactor));
 						Tools.damageEntity(player, entity, damage);
 						progressing = false;
+						
 						// }
 					}
 				}
