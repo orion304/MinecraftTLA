@@ -3,6 +3,7 @@ package waterbending;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -35,8 +36,8 @@ public class HealingWaters {
 		if (inWater(player)) {
 			if (player.isSneaking()) {
 				Entity entity = Tools.getTargettedEntity(player, range);
-				if (entity instanceof Player && inWater(entity)) {
-					giveHP((Player) entity);
+				if (entity instanceof LivingEntity && inWater(entity)) {
+					giveHPToEntity((LivingEntity) entity);
 				}
 			} else {
 				giveHP(player);
@@ -44,6 +45,12 @@ public class HealingWaters {
 		}
 	}
 
+	private static void giveHPToEntity(LivingEntity le) {
+		if (!le.isDead() && le.getHealth() < le.getMaxHealth()) {
+			applyHealingToEntity(le);
+		}
+	}
+	
 	private static void giveHP(Player player) {
 		if (!player.isDead() && player.getHealth() < 20) {
 			// int hp = player.getHealth();
@@ -54,6 +61,8 @@ public class HealingWaters {
 			applyHealing(player);
 		}
 	}
+	
+	
 
 	private static boolean inWater(Entity entity) {
 		Block block = entity.getLocation().getBlock();
@@ -71,6 +80,10 @@ public class HealingWaters {
 				player.getLocation()))
 			player.addPotionEffect(new PotionEffect(
 					PotionEffectType.REGENERATION, 70, 1));
+	}
+	
+	private static void applyHealingToEntity(LivingEntity le) {
+		le.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 70, 1));
 	}
 
 	public static String getDescription() {

@@ -18,6 +18,8 @@ public class ConfigManager {
 	public static boolean colors = true;
 	public static boolean compatibility = false;
 
+	public static String chat = "<name>: <message>";
+
 	public static Map<String, String> prefixes = new HashMap<String, String>();
 	public static Map<String, String> color = new HashMap<String, String>();
 	public static List<String> earthbendable = new ArrayList<String>();
@@ -131,6 +133,7 @@ public class ConfigManager {
 	public static double earthBlastRange = 20;
 	public static double earthBlastSpeed = 35;
 	public static boolean earthBlastRevert = true;
+	public static double EarthBlastPush = .3;
 
 	// EarthColumn
 	public static int earthColumnHeight = 6;
@@ -255,6 +258,7 @@ public class ConfigManager {
 	public static int waterdmg = 3;
 	public static double waterManipulationRange = 20;
 	public static double waterManipulationSpeed = 35;
+	public static double WaterManipulationPush = .3;
 
 	// WaterSpout
 	public static int waterSpoutHeight = 15;
@@ -286,6 +290,8 @@ public class ConfigManager {
 		enabled = config.getBoolean("Chat.Enabled", enabled);
 		colors = config.getBoolean("Chat.Colors", colors);
 		compatibility = config.getBoolean("Chat.Compatibility", compatibility);
+
+		chat = config.getString("Chat.Format", chat);
 
 		// Prefix
 		prefixes.put("Air", config.getString("Chat.Prefix.Air", "[Airbender] "));
@@ -481,6 +487,7 @@ public class ConfigManager {
 				earthBlastSpeed);
 		earthBlastRevert = config.getBoolean(
 				"Properties.Earth.EarthBlast.Revert", earthBlastRevert);
+		EarthBlastPush = config.getDouble("Properties.Earth.EarthBlast.Push", EarthBlastPush);
 
 		// EarthColumn
 		earthColumnHeight = config.getInt(
@@ -663,6 +670,8 @@ public class ConfigManager {
 		waterManipulationSpeed = config.getDouble(
 				"Properties.Water.WaterManipulation.Speed",
 				waterManipulationSpeed);
+		WaterManipulationPush = config.getDouble("Properties.Water.WaterManipulation.Push",
+				WaterManipulationPush);
 
 		// WaterSpout
 		waterSpoutHeight = config.getInt("Properties.Water.WaterSpout.Height",
@@ -724,6 +733,7 @@ public class ConfigManager {
 		config.set("Chat.Enabled", enabled);
 		config.set("Chat.Colors", colors);
 		config.set("Chat.Compatibility", compatibility);
+		config.set("Chat.Format", chat);
 		// Prefix
 		config.set("Chat.Prefix.Air", prefixes.get("Air"));
 		config.set("Chat.Prefix.Fire", prefixes.get("Fire"));
@@ -825,6 +835,7 @@ public class ConfigManager {
 		config.set("Properties.Earth.EarthBlast.Range", earthBlastRange);
 		config.set("Properties.Earth.EarthBlast.Speed", earthBlastSpeed);
 		config.set("Properties.Earth.EarthBlast.Revert", earthBlastRevert);
+		config.set("Properties.Earth.EarthBlast.Push", EarthBlastPush);
 		// EarthColumn
 		config.set("Properties.Earth.EarthColumn.Height", earthColumnHeight);
 		// EarthGrab
@@ -923,6 +934,7 @@ public class ConfigManager {
 				waterManipulationRange);
 		config.set("Properties.Water.WaterManipulation.Speed",
 				waterManipulationSpeed);
+		config.set("Properties.Water.WaterManipulation.Push", WaterManipulationPush);
 		// WaterSpout
 		config.set("Properties.Water.WaterSpout.Height", waterSpoutHeight);
 		// WaterWall

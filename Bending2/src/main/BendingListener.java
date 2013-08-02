@@ -270,16 +270,16 @@ public class BendingListener implements Listener {
 							.getColor(ConfigManager.getColor("ChiBlocker"));
 				}
 			}
-
-			try {
-				event.setFormat("<" + color + player.getDisplayName()
-						+ ChatColor.WHITE + "> " + event.getMessage());
-				// event.setFormat(format);
-				// // event.setMessage(message + "Test");
-				// Tools.verbose(event.getFormat());
-			} catch (UnknownFormatConversionException e) {
-				e.printStackTrace();
-			}
+			String format = ConfigManager.chat;
+			format = format.replace("<message>", "%2$s");
+			format = format.replace("<name>", color + player.getDisplayName() + ChatColor.RESET);
+//			String format2 = format.replace("<name>", color + player.getDisplayName()).replace("<message>", ChatColor.WHITE + event.getMessage());
+			event.setFormat(format);
+			//				event.setFormat("<" + color + player.getDisplayName()
+			//						+ ChatColor.WHITE + "> " + event.getMessage());
+			// event.setFormat(format);
+			// // event.setMessage(message + "Test");
+			// Tools.verbose(event.getFormat());
 		}
 	}
 
