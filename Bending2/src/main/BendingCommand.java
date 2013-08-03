@@ -631,7 +631,7 @@ public class BendingCommand {
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
-				if (!hasHelpPermission(player, "bending.chiblocking")) {
+				if (!hasHelpPermission(player, "bending.chiblocker")) {
 					Tools.sendMessage(player, "General.no_perms_chiblocking");
 					return;
 				}
@@ -1737,7 +1737,7 @@ public class BendingCommand {
 					Tools.sendMessage(player, "General.you_already_chi");
 					return;
 				}
-				if (!hasHelpPermission(player, "bending.chiblocking")) {
+				if (!hasHelpPermission(player, "bending.chiblocker")) {
 					Tools.sendMessage(player, "General.no_perms_chi");
 					return;
 				}
@@ -1906,7 +1906,7 @@ public class BendingCommand {
 											"General.they_already_chi"));
 					return;
 				}
-				if (!hasHelpPermission(targetplayer, "bending.chiblocking")) {
+				if (!hasHelpPermission(targetplayer, "bending.chiblocker")) {
 					Tools.sendMessage(player, "General.no_perms_chi");
 					return;
 				}
