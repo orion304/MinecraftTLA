@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
-import tools.ConfigManager;
+//import tools.ConfigManager;
 import tools.Flight;
 import tools.TempPotionEffect;
 import tools.Tools;
@@ -388,7 +388,7 @@ public class BendingManager implements Runnable {
 							&& player
 									.hasPermission("bending.message.daymessage")) {
 						ChatColor color = ChatColor.WHITE;
-						color = Tools.getColor(ConfigManager.getColor("Fire"));
+						color = Tools.getColor(ConfigValues.FireColor);
 						player.sendMessage(color
 								+ "You feel the strength of the rising sun empowering your firebending.");
 					}
@@ -402,7 +402,7 @@ public class BendingManager implements Runnable {
 							&& player
 									.hasPermission("bending.message.daymessage")) {
 						ChatColor color = ChatColor.WHITE;
-						color = Tools.getColor(ConfigManager.getColor("Fire"));
+						color = Tools.getColor(ConfigValues.FireColor);
 						player.sendMessage(color
 								+ "You feel the empowering of your firebending subside as the sun sets.");
 					}
@@ -416,7 +416,7 @@ public class BendingManager implements Runnable {
 							&& player
 									.hasPermission("bending.message.nightmessage")) {
 						ChatColor color = ChatColor.WHITE;
-						color = Tools.getColor(ConfigManager.getColor("Water"));
+						color = Tools.getColor(ConfigValues.WaterColor);
 						player.sendMessage(color
 								+ "You feel the strength of the rising moon empowering your waterbending.");
 					}
@@ -430,7 +430,7 @@ public class BendingManager implements Runnable {
 							&& player
 									.hasPermission("bending.message.nightmessage")) {
 						ChatColor color = ChatColor.WHITE;
-						color = Tools.getColor(ConfigManager.getColor("Water"));
+						color = Tools.getColor(ConfigValues.WaterColor);
 						player.sendMessage(color
 								+ "You feel the empowering of your waterbending subside as the moon sets.");
 					}

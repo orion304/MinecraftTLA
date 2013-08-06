@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
 import main.BendingPlayers;
+import main.ConfigValues;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
@@ -28,6 +29,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
@@ -101,6 +103,8 @@ import firebending.Illumination;
 import firebending.Lightning;
 import firebending.WallOfFire;
 
+import main.Bending;
+
 public class Tools {
 
 	public static BendingPlayers config;
@@ -111,26 +115,26 @@ public class Tools {
 	private static final Map<String, ChatColor> colors;
 
 	private static Abilities[] harmlessAbilities = { Abilities.AirScooter,
-			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
-			Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
+		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+		Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
 
 	private static Abilities[] localAbilities = { Abilities.AirScooter,
-			Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
-			Abilities.Illumination, Abilities.Tremorsense,
-			Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
-			Abilities.Paralyze, Abilities.RapidPunch };
+		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
+		Abilities.Illumination, Abilities.Tremorsense,
+		Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
+		Abilities.Paralyze, Abilities.RapidPunch };
 
 	public static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11, 30,
-			31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
+		31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
 
 	public static Integer[] nonOpaque = { 0, 6, 8, 9, 10, 11, 27, 28, 30, 31,
-			32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
-			78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
+		32, 37, 38, 39, 40, 50, 51, 55, 59, 66, 68, 69, 70, 72, 75, 76, 77,
+		78, 83, 90, 93, 94, 104, 105, 106, 111, 115, 119, 127, 131, 132 };
 
 	private static Integer[] plantIds = { 6, 18, 31, 32, 37, 38, 39, 40, 59,
-			81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
+		81, 83, 86, 99, 100, 103, 104, 105, 106, 111 };
 
-	public static final long timeinterval = ConfigManager.globalCooldown;
+	public static final long timeinterval = ConfigValues.GlobalCooldown;
 
 	public static ConcurrentHashMap<Block, Information> movedearth = new ConcurrentHashMap<Block, Information>();
 	// public static ConcurrentHashMap<Block, Block> tempearthblocks = new
@@ -352,7 +356,7 @@ public class Tools {
 							if (lentity.getEyeLocation().getBlockX() == affectedblock
 									.getX()
 									&& lentity.getEyeLocation().getBlockZ() == affectedblock
-											.getZ())
+									.getZ())
 								if (!(entity instanceof FallingBlock))
 									entity.setVelocity(norm.clone().multiply(
 											.75));
@@ -360,7 +364,7 @@ public class Tools {
 							if (entity.getLocation().getBlockX() == affectedblock
 									.getX()
 									&& entity.getLocation().getBlockZ() == affectedblock
-											.getZ())
+									.getZ())
 								if (!(entity instanceof FallingBlock))
 									entity.setVelocity(norm.clone().multiply(
 											.75));
@@ -713,7 +717,7 @@ public class Tools {
 			j = (double) i;
 			if (!isEarthbendable(player,
 					location.clone().add(direction.clone().multiply(j))
-							.getBlock())) {
+					.getBlock())) {
 				return i;
 			}
 		}
@@ -748,7 +752,7 @@ public class Tools {
 		// || (material == Material.SANDSTONE)) {
 		// return true;
 		// }
-		for (String s : ConfigManager.earthbendable) {
+		for (String s : ConfigValues.EarthBendable) {
 
 			if (material == Material.getMaterial(s)) {
 
@@ -924,13 +928,13 @@ public class Tools {
 			if (entity.getLocation().distance(origin) < longestr
 					&& getDistanceFromLine(direction, origin,
 							entity.getLocation()) < 2
-					&& (entity instanceof LivingEntity)
-					&& entity.getEntityId() != player.getEntityId()
-					&& entity.getLocation().distance(
-							origin.clone().add(direction)) < entity
-							.getLocation().distance(
-									origin.clone().add(
-											direction.clone().multiply(-1)))) {
+							&& (entity instanceof LivingEntity)
+							&& entity.getEntityId() != player.getEntityId()
+							&& entity.getLocation().distance(
+									origin.clone().add(direction)) < entity
+									.getLocation().distance(
+											origin.clone().add(
+													direction.clone().multiply(-1)))) {
 				target = entity;
 				longestr = entity.getLocation().distance(origin);
 			}
@@ -951,8 +955,8 @@ public class Tools {
 
 			((LivingEntity) entity).damage(damage, player);
 			((LivingEntity) entity)
-					.setLastDamageCause(new EntityDamageByEntityEvent(player,
-							entity, DamageCause.CUSTOM, damage));
+			.setLastDamageCause(new EntityDamageByEntityEvent(player,
+					entity, DamageCause.CUSTOM, damage));
 		}
 	}
 
@@ -1142,7 +1146,7 @@ public class Tools {
 		if (hasPermission(player, ability)
 				&& (!isLocalAbility(ability) || !isRegionProtectedFromBuild(
 						player, Abilities.AirBlast, player.getLocation()))
-				&& !toggledBending(player))
+						&& !toggledBending(player))
 			return true;
 
 		if (allowharmless && Tools.isHarmlessAbility(ability)
@@ -1280,10 +1284,10 @@ public class Tools {
 						if (!wg.getGlobalRegionManager().hasBypass(player,
 								location.getWorld())
 								&& !wg.getGlobalRegionManager()
-										.get(location.getWorld())
-										.getApplicableRegions(location)
-										.allows(DefaultFlag.LIGHTER,
-												wg.wrapPlayer(player)))
+								.get(location.getWorld())
+								.getApplicableRegions(location)
+								.allows(DefaultFlag.LIGHTER,
+										wg.wrapPlayer(player)))
 							return true;
 					}
 
@@ -1628,27 +1632,27 @@ public class Tools {
 
 	public static double firebendingDayAugment(double value, World world) {
 		if (isDay(world)) {
-			return ConfigManager.dayFactor * value;
+			return ConfigValues.FireDayPowerFactor * value;
 		}
 		return value;
 	}
 
 	public static double getFirebendingDayAugment(World world) {
 		if (isDay(world))
-			return ConfigManager.dayFactor;
+			return ConfigValues.FireDayPowerFactor;
 		return 1;
 	}
 
 	public static double waterbendingNightAugment(double value, World world) {
 		if (isNight(world)) {
-			return ConfigManager.nightFactor * value;
+			return ConfigValues.WaterNightPowerFactor * value;
 		}
 		return value;
 	}
 
 	public static double getWaterbendingNightAugment(World world) {
 		if (isNight(world))
-			return ConfigManager.nightFactor;
+			return ConfigValues.WaterNightPowerFactor;
 		return 1;
 	}
 
@@ -1683,7 +1687,7 @@ public class Tools {
 			return true;
 		if (blockedchis.containsKey(player)) {
 			long time = System.currentTimeMillis();
-			if (time > blockedchis.get(player) + ConfigManager.chiblockduration
+			if (time > blockedchis.get(player) + ConfigValues.ChiBlockDuration
 					|| AvatarState.isAvatarState(player)) {
 				blockedchis.remove(player);
 				return false;
@@ -1783,7 +1787,7 @@ public class Tools {
 					byte full = 0x0;
 					if (tb.state.getRawData() != full
 							&& (tb.state.getType() != Material.WATER || tb.state
-									.getType() != Material.STATIONARY_WATER)) {
+							.getType() != Material.STATIONARY_WATER)) {
 						continue;
 					}
 				}
@@ -1984,5 +1988,505 @@ public class Tools {
 
 		colors = Collections.unmodifiableMap(tmpMap);
 	}
+	
+	public static void configCheck() {
+		Plugin bending = Bukkit.getPluginManager().getPlugin("Bending");
+		FileConfiguration config = bending.getConfig();
+		bending.getConfig().addDefault("Chat.enabled", true);
+		bending.getConfig().addDefault("Chat.colors", true);
+		bending.getConfig().addDefault("Chat.Compatibility", false);
+		bending.getConfig().addDefault("Chat.Format", "<name>: <message>");
+		bending.getConfig().addDefault("Chat.Prefix.Avatar", "[Avatar] ");
+		bending.getConfig().addDefault("Chat.Prefix.Air", "[Airbender] ");
+		bending.getConfig().addDefault("Chat.Prefix.Water", "[Waterbender] ");
+		bending.getConfig().addDefault("Chat.Prefix.Earth", "[Earthbender] ");
+		bending.getConfig().addDefault("Chat.Prefix.Fire", "[Firebender] ");
+		bending.getConfig().addDefault("Chat.Prefix.Chi", "[Chiblocker] ");
+		bending.getConfig().addDefault("Chat.Color.Avatar", "DARK_PURPLE");
+		bending.getConfig().addDefault("Chat.Color.Air", "GRAY");
+		bending.getConfig().addDefault("Chat.Color.Water", "AQUA");
+		bending.getConfig().addDefault("Chat.Color.Earth", "GREEN");
+		bending.getConfig().addDefault("Chat.Color.Fire", "RED");
+		bending.getConfig().addDefault("Chat.Color.Chi", "GOLD");
+		
+		//Options
+		bending.getConfig().addDefault("Options.Bend-To-Item", false);
+		bending.getConfig().addDefault("Options.Use-TagAPI", true);
+		bending.getConfig().addDefault("Options.SeaLevel", 62);
+		
+		//Abilities
+		bending.getConfig().addDefault("Abilities.GlobalCooldown", 500);
+		
+		//Air
+		//Settings
+		bending.getConfig().addDefault("Abilities.Air.Settings.BendWithWeapons", false);
+		//AirBlast
+		bending.getConfig().addDefault("Abilities.Air.AirBlast.Speed", 25.0);
+		bending.getConfig().addDefault("Abilities.Air.AirBlast.Range", 25.0);
+		bending.getConfig().addDefault("Abilities.Air.AirBlast.Radius", 2.0);
+		bending.getConfig().addDefault("Abilities.Air.AirBlast.Push", 3.5);
+		
+		//AirBubble
+		bending.getConfig().addDefault("Abilities.Air.AirBubble.Radius", 6);
+		
+		//AirBurst
+		
+		//AirScooter
+		bending.getConfig().addDefault("Abilities.Air.AirScooter.Speed", .0675);
+		bending.getConfig().addDefault("Abilities.Air.AirScooter.Radius", 1);
+		
+		//AirShield
+		bending.getConfig().addDefault("Abilities.Air.AirShield.Radius", 7.0);
+		
+		//AirSpout
+		bending.getConfig().addDefault("Abilities.Air.AirSpout.Height", 20.0);
+		
+		//AirSuction
+		bending.getConfig().addDefault("Abilities.Air.AirSuction.Speed", 25.0);
+		bending.getConfig().addDefault("Abilities.Air.AirSuction.Range", 20.0);
+		bending.getConfig().addDefault("Abilities.Air.AirSuction.Radius", 2.0);
+		bending.getConfig().addDefault("Abilities.Air.AirSuction.Push", 3.5);
+
+		//AirSwipe
+		bending.getConfig().addDefault("Abilities.Air.AirSwipe.Damage", 2);
+		bending.getConfig().addDefault("Abilities.Air.AirSwipe.Radius", 2.0);
+		bending.getConfig().addDefault("Abilities.Air.AirSwipe.Push", 1.0);
+		bending.getConfig().addDefault("Abilities.Air.AirSwipe.Range", 16.0);
+		bending.getConfig().addDefault("Abilities.Air.AirSwipe.ArcSize", 20);
+		bending.getConfig().addDefault("Abilities.Air.AirSwipe.Speed", 25.0);
+		bending.getConfig().addDefault("Abilities.Air.AirSwipe.Cooldown", 1500);
+		
+		//Passive
+		bending.getConfig().addDefault("Abilities.Air.Passive.Factor", 0.3);
+		
+		//Tornado
+		bending.getConfig().addDefault("Abilities.Air.Tornado.Radius", 10.0);
+		bending.getConfig().addDefault("Abilities.Air.Tornado.Height", 25.0);
+		bending.getConfig().addDefault("Abilities.Air.Tornado.Range", 25.0);
+		bending.getConfig().addDefault("Abilities.Air.Tornado.MobPush", 1.0);
+		bending.getConfig().addDefault("Abilities.Air.Tornado.PlayerPush", 1.0);
+
+		//Water
+		//Settings
+		bending.getConfig().addDefault("Abilities.Water.Settings.NightPowerFactor", 1.5);
+		config.addDefault("Abilities.Water.Settings.BendWithWeapons", true);
+		
+		//Bloodbending
+		bending.getConfig().addDefault("Abilities.Water.Bloodbending.ThrowFactor", 2.0);
+		bending.getConfig().addDefault("Abilities.Water.Bloodbending.Range", 2.0);
+		
+		//FastSwimming
+		bending.getConfig().addDefault("Abilities.Water.FastSwimming.Factor", 0.7);
+
+		//PhaseChange
+		bending.getConfig().addDefault("Abilities.Water.PhaseChange.Range", 20);
+		bending.getConfig().addDefault("Abilities.Water.PhaseChange.Radius", 5);
+		
+		//HealingWaters
+		bending.getConfig().addDefault("Abilities.Water.HealingWaters.Radius", 5.0);
+		bending.getConfig().addDefault("Abilities.Water.HealingWaters.Interval", 750);
+		
+		//IceSpike
+		bending.getConfig().addDefault("Abilities.Water.IceSpike.Height", 6);
+		bending.getConfig().addDefault("Abilities.Water.IceSpike.Range", 20);
+		bending.getConfig().addDefault("Abilities.Water.IceSpike.Cooldown", 2000);
+		bending.getConfig().addDefault("Abilities.Water.IceSpike.Damage", 2);
+		bending.getConfig().addDefault("Abilities.Water.IceSpike.ThrowingMult", 1.0);
+
+		//OctopusForm
+		bending.getConfig().addDefault("Abilities.Water.OctopusForm.Range", 10);
+		bending.getConfig().addDefault("Abilities.Water.OctopusForm.Radius", 3);
+		bending.getConfig().addDefault("Abilities.Water.OctopusForm.Interval", 50);
+		bending.getConfig().addDefault("Abilities.Water.OctopusForm.Damage", 3);
+		
+		//Plantbending
+		bending.getConfig().addDefault("Abilities.Water.Plantbending.RegrowthTime", 180000);
+		
+		//Surge
+		bending.getConfig().addDefault("Abilities.Water.Surge.Wave.Radius", 3.0);
+		bending.getConfig().addDefault("Abilities.Water.Surge.Wave.HorizontalPush", 1.0);
+		bending.getConfig().addDefault("Abilities.Water.Surge.Wave.VerticalPush", 0.2);
+		bending.getConfig().addDefault("Abilities.Water.Surge.Wall.Range", 5.0);
+		bending.getConfig().addDefault("Abilities.Water.Surge.Wall.Radius", 2.0);
+
+		//Torrent
+		bending.getConfig().addDefault("Abilities.Water.Torrent.Range", 25);
+		bending.getConfig().addDefault("Abilities.Water.Torrent.Radius", 3);
+		bending.getConfig().addDefault("Abilities.Water.Torrent.Damage", 2);
+		bending.getConfig().addDefault("Abilities.Water.Torrent.DeflectDamage", 1);
+		bending.getConfig().addDefault("Abilities.Water.Torrent.Factor", 1);
+		
+		//WaterManipulation
+		bending.getConfig().addDefault("Abilities.Water.WaterManipulation.Range", 20.0);
+		bending.getConfig().addDefault("Abilities.Water.WaterManipulation.Push", 0.3);
+		bending.getConfig().addDefault("Abilities.Water.WaterManipulation.Damage", 4);
+		bending.getConfig().addDefault("Abilities.Water.WaterManipulation.Speed", 35.0);
+
+		//WaterSpout
+		bending.getConfig().addDefault("Abilities.Water.WaterSpout.Height", 15);
+		
+		//WaterBubble
+		bending.getConfig().addDefault("Abilities.Water.WaterBubble", 7);
+
+		//Earth
+		//Settings
+		config.addDefault("Abilities.Earth.Settings.BendWithWeapons", true);
+		bending.getConfig().addDefault("Abilities.Earth.Settings.ReverseEarthbending", true);
+		bending.getConfig().addDefault("Abilities.Earth.Settings.ReverseEarthbendingCheckTime", 300000);
+		List<String> earthbendable = new ArrayList<String>();
+		earthbendable.add("STONE");
+		earthbendable.add("CLAY");
+		earthbendable.add("COAL_ORE");
+		earthbendable.add("DIAMOND_ORE");
+		earthbendable.add("DIRT");
+		earthbendable.add("GOLD_ORE");
+		earthbendable.add("EMERALD_ORE");
+		earthbendable.add("GRASS");
+		earthbendable.add("GRAVEL");
+		earthbendable.add("IRON_ORE");
+		earthbendable.add("LAPIS_ORE");
+		earthbendable.add("REDSTONE_ORE");
+		earthbendable.add("SAND");
+		earthbendable.add("SANDSTONE");
+		earthbendable.add("GLOWING_REDSTONE_ORE");
+		earthbendable.add("MYCEL");
+		bending.getConfig().addDefault("Abilities.Earth.Settings.EarthBendable", earthbendable);
+		
+		//Catapult
+		bending.getConfig().addDefault("Abilities.Earth.Catapult.Length", 7);
+		bending.getConfig().addDefault("Abilities.Earth.Catapult.Speed", 12.0);
+		bending.getConfig().addDefault("Abilities.Earth.Catapult.Push", 5.0);
+		
+		//Collapse
+		bending.getConfig().addDefault("Abilities.Earth.Collapse.Range", 20);
+		bending.getConfig().addDefault("Abilities.Earth.Collapse.Radius", 7.0);
+		
+		//EarthArmor
+		bending.getConfig().addDefault("Abilities.Earth.EarthArmor.Duration", 10000);
+		bending.getConfig().addDefault("Abilities.Earth.EarthArmor.Strength", 2);
+		bending.getConfig().addDefault("Abilities.Earth.EarthArmor.Cooldown", 17500);
+
+		//EarthBlast
+		bending.getConfig().addDefault("Abilities.Earth.EarthBlast.HitSelf", false);
+		bending.getConfig().addDefault("Abilities.Earth.EarthBlast.Range", 20.0);
+		bending.getConfig().addDefault("Abilities.Earth.EarthBlast.PrepareRange", 7.0);
+		bending.getConfig().addDefault("Abilities.Earth.EarthBlast.Revert", true);
+		bending.getConfig().addDefault("Abilities.Earth.EarthBlast.Damage", 4);
+		bending.getConfig().addDefault("Abilities.Earth.EarthBlast.Speed", 35.0);
+		bending.getConfig().addDefault("Abilities.Earth.EarthBlast.Push", 0.3);
+
+		//EarthGrab
+		config.addDefault("Abilities.Earth.EarthGrab.Range", 15.0);
+		
+		//EarthTunnel
+		config.addDefault("Abilities.Earth.EarthTunnel.Radius", 0.25);
+		config.addDefault("Abilities.Earth.EarthTunnel.Maxradius", 1);
+		config.addDefault("Abilities.Earth.EarthTunnel.Range", 10.0);
+		config.addDefault("Abilities.Earth.EarthTunnel.Revert", true);
+		config.addDefault("Abilities.Earth.EarthTunnel.Interval", 30);
+		
+		//Passive
+		config.addDefault("Abilities.Earth.Passive.WaitBeforeRevert", 3000);
+		
+		//RaiseEarth
+		config.addDefault("Abilities.Earth.RaiseEarth.Height", 6);
+		config.addDefault("Abilities.Earth.RaiseEarth.Range", 15);
+		config.addDefault("Abilities.Earth.RaiseEarth.Width", 6);
+		
+		config.addDefault("Abilities.Earth.Tremorsense.MaxDepth", 10);
+		config.addDefault("Abilities.Earth.Tremorsense.Radius", 5);
+		config.addDefault("Abilities.Earth.Tremorsense.LightThreshold", 7);
+		config.addDefault("Abilities.Earth.Tremorsense.Cooldown", 1000);
+
+		//Fire
+		//Settings
+		config.addDefault("Abilities.Fire.Settings.BendWithWeapons", true);
+		config.addDefault("Abilities.Fire.Settings.DissippateTime", 400);
+		config.addDefault("Abilities.Fire.Settings.DayPowerFactor", 1.5);
+		
+		//Blaze
+		config.addDefault("Abilities.Fire.Blaze.Size", 20);
+		config.addDefault("Abilities.Fire.Blaze.Range", 9);
+		
+		//HeatControl
+		config.addDefault("Abilities.Fire.HeatControl.Range", 15);
+		config.addDefault("Abilities.Fire.HeatControl.Radius", 15);
+		
+		//FireBlast
+		config.addDefault("Abilities.Fire.FireBlast.Radius", 2.0);
+		config.addDefault("Abilities.Fire.FireBlast.Speed", 15.0);
+		config.addDefault("Abilities.Fire.FireBlast.Push", 0.3);
+		config.addDefault("Abilities.Fire.FireBlast.Dissipates", false);
+		config.addDefault("Abilities.Fire.FireBlast.Damage", 2);
+		config.addDefault("Abilities.Fire.FireBlast.Range", 15.0);
+		config.addDefault("Abilities.Fire.FireBlast.Cooldown", 1500);
+
+		//FireBurst
+		
+		//FireJet
+		config.addDefault("Abilities.Fire.FireJet.Speed", 0.7);
+		config.addDefault("Abilities.Fire.FireJet.Duration", 1500);
+		config.addDefault("Abilities.Fire.FireJet.Cooldown", 6000);
+		
+		//FireShield
+		config.addDefault("Abilities.Fire.FireShield.Radius", 3);
+		config.addDefault("Abilities.Fire.FireShield.Ignites", true);
+		
+		//Illumination
+		config.addDefault("Abilities.Fire.Illumination.Range", 5);
+		
+		//Lightning
+		config.addDefault("Abilities.Fire.Lightning.Range", 15);
+		config.addDefault("Abilities.Fire.Lightning.Warmup", 3500);
+		config.addDefault("Abilities.Fire.Lightning.MissChance", 10.0);
+		
+		//WallOfFire
+		config.addDefault("Abilities.Fire.WallOfFire.Range", 4);
+		config.addDefault("Abilities.Fire.WallOfFire.Height", 4);
+		config.addDefault("Abilities.Fire.WallOfFire.Width", 4);
+		config.addDefault("Abilities.Fire.WallOfFire.Duration", 5000);
+		config.addDefault("Abilities.Fire.WallOfFire.Damage", 2);
+		config.addDefault("Abilities.Fire.WallOfFire.Cooldown", 7500);
+		config.addDefault("Abilities.Fire.WallOfFire.Interval", 500);
+
+		//Chi
+		//Settings
+		config.addDefault("Abilities.Chi.Settings.BendWithWeapons", false);
+		config.addDefault("Abilities.Chi.Settings.ChiBlockDuration", 2500);
+		config.addDefault("Abilities.Chi.Settings.DodgeChange", 25.0);
+		config.addDefault("Abilities.Chi.Settings.PunchDamage", 3.0);
+		config.addDefault("Abilities.Chi.Settings.FallDamageReduction", 50.0);
+		
+		//HighJump
+		config.addDefault("Abilities.Chi.HighJump.Height", 1);
+		config.addDefault("Abilities.Chi.HighJump.Cooldown", 10000);
+
+		//Paralyze
+		config.addDefault("Abilities.Chi.Paralyze.Cooldown", 15000);
+		config.addDefault("Abilities.Chi.Paralyze.Duration", 2000);
+		
+		//RapidPunch
+		config.addDefault("Abilities.Chi.RapidPunch.Damage", 1);
+		config.addDefault("Abilities.Chi.RapidPunch.Distance", 1);
+		config.addDefault("Abilities.Chi.RapidPunch.Punches", 4);
+		config.addDefault("Abilities.Chi.RapidPunch.Cooldown", 15000);
+
+		config.options().copyDefaults(true);
+		bending.saveConfig();
+		
+		ConfigValues.ChatEnabled = config.getBoolean("Chat.enabled");
+		ConfigValues.ChatColorsEnabled = config.getBoolean("Chat.colors");
+		ConfigValues.ChatCompatibility = config.getBoolean("Chat.Compatibility");
+		ConfigValues.ChatFormat = config.getString("Chat.Format");
+		ConfigValues.AvatarPrefix = config.getString("Chat.Prefix.Avatar");
+		ConfigValues.AirPrefix = config.getString("Chat.Prefix.Air");
+		ConfigValues.WaterPrefix = config.getString("Chat.Prefix.Water");
+		ConfigValues.EarthPrefix = config.getString("Chat.Prefix.Earth");
+		ConfigValues.FirePrefix = config.getString("Chat.Prefix.Fire");
+		ConfigValues.ChiPrefix = config.getString("Chat.Prefix.Chi");
+		ConfigValues.AvatarColor = config.getString("Chat.Color.Avatar");
+		ConfigValues.AirColor = config.getString("Chat.Color.Air");
+		ConfigValues.WaterColor = config.getString("Chat.Color.Water");
+		ConfigValues.EarthColor = config.getString("Chat.Color.Earth");
+		ConfigValues.FireColor = config.getString("Chat.Color.Fire");
+		ConfigValues.ChiColor = config.getString("Chat.Color.Chi");
+
+		ConfigValues.BendToItem = config.getBoolean("Options.Bend-To-Item");
+		ConfigValues.UseTagAPI = config.getBoolean("Options.Use-TagAPI");
+		ConfigValues.SeaLevel = config.getInt("Options.SeaLevel");
+		
+		ConfigValues.GlobalCooldown = config.getInt("Abilities.GlobalCooldown");
+		
+		ConfigValues.AirBendWithWeapons = config.getBoolean("Abilities.Air.Settings.BendWithWeapons");
+		
+		ConfigValues.AirBlastSpeed = config.getInt("Abilities.Air.AirBlast.Speed");
+		ConfigValues.AirBlastRange = config.getDouble("Abilities.Air.AirBlast.Range");
+		ConfigValues.AirBlastRadius = config.getDouble("Abilities.Air.AirBlast.Radius");
+		ConfigValues.AirBlastPush = config.getDouble("Abilities.Air.AirBlast.Push");
+		
+		ConfigValues.AirBubbleRadius = config.getInt("Abilities.Air.AirBubble.Radius");
+
+		//TODO AIRBURST
+		
+		ConfigValues.AirScooterSpeed = config.getDouble("Abilities.Air.AirScooter.Speed");
+		ConfigValues.AirScooterRadius = config.getInt("Abilities.Air.AirScooter.Radius");
+		
+		ConfigValues.AirShieldRadius = config.getDouble("Abilities.Air.AirShield.Radius");
+	
+		ConfigValues.AirSpoutHeight = config.getDouble("Abilities.Air.AirSpout.Height");
+		
+		ConfigValues.AirSuctionSpeed = config.getDouble("Abilities.Air.AirSuction.Speed");
+		ConfigValues.AirSuctionRange = config.getDouble("Abilities.Air.AirSuction.Range");
+		ConfigValues.AirSuctionRadius = config.getDouble("Abilities.Air.AirSuction.Radius");
+		ConfigValues.AirSuctionPush = config.getDouble("Abilities.Air.AirSuction.Push");
+		
+		ConfigValues.AirSwipeDamage = config.getInt("Abilities.Air.AirSwipe.Damage");
+		ConfigValues.AirSwipeRadius = config.getDouble("Abilities.Air.AirSwipe.Radius");
+		ConfigValues.AirSwipePush = config.getDouble("Abilities.Air.AirSwipe.Push");
+		ConfigValues.AirSwipeRange = config.getDouble("Abilities.Air.AirSwipe.Range");
+		ConfigValues.AirSwipeArcSize = config.getInt("Abilities.Air.AirSwipe.ArcSize");
+		ConfigValues.AirSwipeSpeed = config.getDouble("Abilities.Air.AirSwipe.Speed");
+		ConfigValues.AirSwipeCooldown = config.getInt("Abilities.Air.AirSwipe.Cooldown");
+		
+		ConfigValues.AirPassiveFactor = config.getDouble("Abilities.Air.Passive.Factor");
+		
+		ConfigValues.TornadoRadius = config.getDouble("Abilities.Air.Tornado.Radius");
+		ConfigValues.TornadoHeight = config.getDouble("Abilities.Air.Tornado.Height");
+		ConfigValues.TornadoRange = config.getDouble("Abilities.Air.Tornado.Range");
+		ConfigValues.TornadoMobPush = config.getDouble("Abilities.Air.Tornado.MobPush");
+		ConfigValues.TornadoPlayerPush = config.getDouble("Abilities.Air.Tornado.PlayerPush");
+
+		ConfigValues.WaterBendWithWeapons = config.getBoolean("Abilities.Water.Settings.BendWithWeapons");
+		ConfigValues.WaterNightPowerFactor = config.getDouble("Abilities.Water.Settings.NightPowerFactor");
+		
+		ConfigValues.BloodbendingThrowFactor = config.getDouble("Abilities.Water.Bloodbending.ThrowFactor");
+		ConfigValues.BloodbendingRange = config.getInt("Abilities.Water.Bloodbending.Range");
+		
+		ConfigValues.FastSwimmingFactor = config.getDouble("Abilities.Water.FastSwimming.Factor");
+		
+		ConfigValues.PhaseChangeRadius = config.getInt("Abilities.Water.PhaseChange.Radius");
+		ConfigValues.PhaseChangeRange = config.getInt("Abilities.Water.PhaseChange.Range");
+
+		ConfigValues.HealingWatersInterval = config.getInt("Abilities.Water.HealingWaters.Interval");
+		ConfigValues.HealingWatersRadius = config.getDouble("Abilities.Water.HealingWaters.Radius");
+		
+		ConfigValues.IceSpikeHeight = config.getInt("Abilities.Water.IceSpike.Height");
+		ConfigValues.IceSpikeRange = config.getInt("Abilities.Water.IceSpike.Range");
+		ConfigValues.IceSpikeCooldown = config.getInt("Abilities.Water.IceSpike.Cooldown");
+		ConfigValues.IceSpikeThrowingMult = config.getInt("Abilities.Water.IceSpike.ThrowingMult");
+		ConfigValues.IceSpikeDamage = config.getInt("Abilities.Water.IceSpike.Damage");
+		
+		ConfigValues.OctopusFormRange = config.getInt("Abilities.Water.OctopusForm.Range");
+		ConfigValues.OctopusFormRadius = config.getInt("Abilities.Water.OctopusForm.Radius");
+		ConfigValues.OctopusFormInterval = config.getInt("Abilities.Water.OctopusForm.Interval");
+		ConfigValues.OctopusFormDamage = config.getInt("Abilities.Water.OctopusForm.Damage");
+		
+		ConfigValues.PlantbendingRegrowthTime = config.getInt("Abilities.Water.Plantbending.RegrowthTime");
+		
+		ConfigValues.SurgeWallRange = config.getDouble("Abilities.Water.Surge.Wall.Range");
+		ConfigValues.SurgeWallRadius = config.getDouble("Abilities.Water.Surge.Wall.Radius");
+		ConfigValues.SurgeWaveRadius = config.getDouble("Abilities.Water.Surge.Wave.Radius");
+		ConfigValues.SurgeWaveHorizontalPush = config.getDouble("Abilities.Water.Surge.Wave.HorizontalPush");
+		ConfigValues.SurgeWaveVerticalPush = config.getDouble("Abilities.Water.Surge.Wave.VerticalPush");
+		
+		ConfigValues.TorrentRange = config.getInt("Abilities.Water.Torrent.Range");
+		ConfigValues.TorrentRadius = config.getInt("Abilities.Water.Torrent.Radius");
+		ConfigValues.TorrentDamage = config.getInt("Abilities.Water.Torrent.Damage");
+		ConfigValues.TorrentDeflectDamage = config.getInt("Abilities.Water.Torrent.DeflectDamage");
+		ConfigValues.TorrentFactor = config.getInt("Abilities.Water.Torrent.Factor");
+			    
+		ConfigValues.WaterManipulationRange = config.getDouble("Abilities.Water.WaterManipulation.Range");
+		ConfigValues.WaterManipulationPush = config.getDouble("Abilities.Water.WaterManipulation.Push");
+		ConfigValues.WaterManipulationDamage = config.getInt("Abilities.Water.WaterManipulation.Damage");
+		ConfigValues.WaterManipulationSpeed = config.getDouble("Abilities.Water.WaterManipulation.Speed");
+		
+		ConfigValues.WaterSpoutHeight = config.getInt("Abilities.Water.WaterSpout.Height");
+		
+		ConfigValues.WaterBubbleRadius = config.getInt("Abilities.Water.WaterBubble.Radius");
+		
+		ConfigValues.EarthBendWithWeapons = config.getBoolean("Abilities.Earth.Settings.BendWithWeapons");
+		ConfigValues.ReverseEarthbending = config.getBoolean("Abilities.Earth.Settings.ReverseEarthbending");
+		ConfigValues.ReverseEarthbendingCheckTime = config.getInt("Abilities.Earth.Settings.ReverseEarthbendingCheckTime");
+		ConfigValues.EarthBendable = config.getStringList("Abilities.Earth.Settings.EarthBendable");
+
+		ConfigValues.CatapultLength = config.getInt("Abilities.Earth.Catapult.Length");
+		ConfigValues.CatapultSpeed = config.getDouble("Abilities.Earth.Catapult.Speed");
+		ConfigValues.CatapultPush = config.getDouble("Abilities.Earth.Catapult.Push");
+		
+		ConfigValues.CollapseRadius = config.getDouble("Abilities.Earth.Collapse.Radius");
+		ConfigValues.CollapseRange = config.getInt("Abilities.Earth.Collapse.Range");
+
+		ConfigValues.EarthArmorCooldown = config.getInt("Abilities.Earth.EarthArmor.Cooldown");
+		ConfigValues.EarthArmorDuration = config.getInt("Abilities.Earth.EarthArmor.Duration");
+		ConfigValues.EarthArmorStrength = config.getInt("Abilities.Earth.EarthArmor.Strength");
+		
+		ConfigValues.EarthBlastHitSelf = config.getBoolean("Abilities.Earth.EarthBlast.HitSelf");
+		ConfigValues.EarthBlastRange = config.getInt("Abilities.Earth.EarthBlast.Range");
+		ConfigValues.EarthBlastPrepareRange = config.getInt("Abilities.Earth.EarthBlast.PrepareRange");
+		ConfigValues.EarthBlastRevert = config.getBoolean("Abilities.Earth.EarthBlast.Revert");
+		ConfigValues.EarthBlastDamage = config.getInt("Abilities.Earth.EarthBlast.Damage");
+		ConfigValues.EarthBlastSpeed = config.getDouble("Abilities.Earth.EarthBlast.Speed");
+		ConfigValues.EarthBlastPush = config.getDouble("Abilities.Earth.EarthBlast.Push");
+		
+		ConfigValues.EarthGrabRange = config.getDouble("Abilities.Earth.EarthGrab.Range");
+		
+		ConfigValues.EarthTunnelRadius = config.getDouble("Abilities.Earth.EarthTunnel.Radius");
+		ConfigValues.EarthTunnelMaxRadius = config.getInt("Abilities.Earth.EarthTunnel.MaxRadius");
+		ConfigValues.EarthTunnelRange = config.getDouble("Abilities.Earth.EarthTunnel.Range");
+		ConfigValues.EarthTunnelRevert = config.getBoolean("Abilities.Earth.EarthTunnel.Revert");
+		ConfigValues.EarthTunnelInterval = config.getInt("Abilities.Earth.EarthTunnel.Interval");
+		
+		ConfigValues.EarthPassiveWaitBeforeRevert = config.getInt("Abilities.Earth.Passive.WaitBeforeRevert");
+		
+		ConfigValues.RaiseEarthHeight = config.getInt("Abilities.Earth.RaiseEarth.Height");
+		ConfigValues.RaiseEarthRange = config.getInt("Abilities.Earth.RaiseEarth.Range");
+		ConfigValues.RaiseEarthWidth  = config.getInt("Abilities.Earth.RaiseEarth.Width");
+		
+		ConfigValues.TremorsenseMaxDepth = config.getInt("Abilities.Earth.Tremorsense.MaxDepth");
+		ConfigValues.TremorsenseRadius = config.getInt("Abilities.Earth.Tremorsense.Radius");
+		ConfigValues.TremorsenseLightThreshold = config.getInt("Abilities.Earth.Tremorsense.LightThreshold");
+		ConfigValues.TremorsenseCooldown = config.getInt("Abilities.Earth.Tremorsense.Cooldown");
+
+		ConfigValues.FireBendWithWeapons = config.getBoolean("Abilities.Fire.Settings.BendWithWeapons");
+		ConfigValues.FireDissipateTime = config.getInt("Abilities.Fire.Settings.DissipateTime");
+		ConfigValues.FireDayPowerFactor = config.getDouble("Abilities.Fire.Settings.DayPowerFactor");
+		
+		ConfigValues.BlazeSize = config.getInt("Abilities.Fire.Blaze.Size");
+		ConfigValues.BlazeRange = config.getInt("Abilities.Fire.Blaze.Range");
+		
+		ConfigValues.HeatControlRange = config.getInt("Abilities.Fire.HeatControl.Range");
+		ConfigValues.HeatControlRadius = config.getInt("Abilities.Fire.HeatControl.Radius");
+
+		ConfigValues.FireBlastRadius = config.getDouble("Abilities.Fire.FireBlast.Radius");
+		ConfigValues.FireBlastSpeed = config.getDouble("Abilities.Fire.FireBlast.Speed");
+		ConfigValues.FireBlastPush = config.getDouble("Abilities.Fire.FireBlast.Push");
+		ConfigValues.FireBlastDissipates = config.getBoolean("Abilities.Fire.FireBlast.Dissipates");
+		ConfigValues.FireBlastDamage = config.getInt("Abilities.Fire.FireBlast.Damage");
+		ConfigValues.FireBlastRange = config.getInt("Abilities.Fire.FireBlast.Range");
+		ConfigValues.FireBlastCooldown = config.getInt("Abilities.Fire.FireBlast.Cooldown");
+	
+		//FireBurst TODO
+		
+		ConfigValues.FireJetSpeed = config.getDouble("Abilities.Fire.FireJet.Speed");
+		ConfigValues.FireJetDuration = config.getInt("Abilities.Fire.FireJet.Duration");
+		ConfigValues.FireJetCooldown = config.getInt("Abilities.Fire.FireJet.Cooldown");
+		
+		ConfigValues.FireShieldRadius = config.getInt("Abilities.Fire.FireShield.Radius");
+		ConfigValues.FireShieldIgnites = config.getBoolean("Abilities.Fire.FireShield.Ignites");
+
+		ConfigValues.IlluminationRange = config.getInt("Abilities.Fire.Illumination.Range");
+		
+		ConfigValues.LightningRange = config.getInt("Abilities.Fire.Lightning.Range");
+		ConfigValues.LightningWarmup = config.getInt("Abilities.Fire.Lightning.Warmup");
+		ConfigValues.LightningMissChance = config.getInt("Abilities.Fire.Lightning.MissChance");
+			   
+		ConfigValues.WallOfFireRange = config.getInt("Abilities.Fire.WallOfFire.Range");
+		ConfigValues.WallOfFireHeight = config.getInt("Abilities.Fire.WallOfFire.Height");
+		ConfigValues.WallOfFireWidth = config.getInt("Abilities.Fire.WallOfFire.Width");
+		ConfigValues.WallOfFireDuration = config.getInt("Abilities.Fire.WallOfFire.Duration");
+		ConfigValues.WallOfFireDamage = config.getInt("Abilities.Fire.WallOfFire.Damage");
+		ConfigValues.WallOfFireCooldown = config.getInt("Abilities.Fire.WallOfFire.Cooldown");
+		ConfigValues.WallOfFireInterval = config.getInt("Abilities.Fire.WallOfFire.Interval");
+			    
+		ConfigValues.ChiBendWithWeapons = config.getBoolean("Abilities.Chi.Settings.BendWithWeapons");
+		ConfigValues.ChiBlockDuration = config.getInt("Abilities.Chi.Settings.ChiBlockDuration");
+		ConfigValues.ChiDodgeChance = config.getDouble("Abilities.Chi.Settings.DodgeChance");
+		ConfigValues.ChiPunchDamage = config.getDouble("Abilities.Chi.Settings.PunchDamage");
+		ConfigValues.ChiFallDamageReduction = config.getDouble("Abilities.Chi.Settings.FallDamageReduction");
+		
+		ConfigValues.HighJumpHeight = config.getInt("Abilities.Chi.HighJump.Height");
+		ConfigValues.HighJumpCooldown = config.getInt("Abilities.Chi.HighJump.Cooldown");
+		
+		ConfigValues.ParalyzeCooldown = config.getInt("Abilities.Chi.Paralyze.Cooldown");
+		ConfigValues.ParalyzeDuration = config.getInt("Abilities.Chi.Paralyze.Duration");
+		
+		ConfigValues.RapidPunchDamage = config.getInt("Abilities.Chi.RapidPunch.Damage");
+		ConfigValues.RapidPunchDistance = config.getInt("Abilities.Chi.RapidPunch.Distance");
+		ConfigValues.RapidPunchPunches = config.getInt("Abilities.Chi.RapidPunch.Punches");
+		ConfigValues.RapidPunchCooldown = config.getInt("Abilities.Chi.RapidPunch.Cooldown");
+
+	}
+	
+	
 
 }

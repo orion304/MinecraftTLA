@@ -13,7 +13,7 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import tools.ConfigManager;
+//import tools.ConfigManager;
 import tools.Information;
 import tools.Tools;
 
@@ -29,7 +29,7 @@ public class RevertChecker implements Runnable {
 
 	private Bending plugin;
 
-	private static final boolean safeRevert = ConfigManager.safeRevert;
+	private static final boolean safeRevert = true;
 
 	private long time;
 
@@ -64,7 +64,7 @@ public class RevertChecker implements Runnable {
 	public void run() {
 		time = System.currentTimeMillis();
 
-		if (ConfigManager.reverseearthbending) {
+		if (ConfigValues.ReverseEarthbending) {
 
 			// ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 			// Player[] players = plugin.getServer().getOnlinePlayers();
@@ -74,7 +74,6 @@ public class RevertChecker implements Runnable {
 			// if (!chunks.contains(chunk))
 			// chunks.add(chunk);
 			// }
-
 			try {
 				// Tools.verbose("Calling future at t="
 				// + System.currentTimeMillis());
@@ -95,7 +94,7 @@ public class RevertChecker implements Runnable {
 						continue;
 					boolean remove = true;
 					Information info = earth.get(block);
-					if (time < info.getTime() + ConfigManager.revertchecktime
+					if (time < info.getTime() + ConfigValues.ReverseEarthbendingCheckTime
 							|| (chunks.contains(block.getChunk()) && safeRevert)) {
 						remove = false;
 					}
@@ -113,7 +112,7 @@ public class RevertChecker implements Runnable {
 					boolean remove = true;
 					Information info = air.get(i);
 					Block block = info.getBlock();
-					if (time < info.getTime() + ConfigManager.revertchecktime
+					if (time < info.getTime() + ConfigValues.ReverseEarthbendingCheckTime
 							|| (chunks.contains(block.getChunk()) && safeRevert)) {
 						remove = false;
 					}

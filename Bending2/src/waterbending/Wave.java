@@ -3,6 +3,8 @@ package waterbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,9 +33,9 @@ public class Wave {
 
 	private static final byte full = 0x0;
 	// private static final byte half = 0x4;
-	private static final double defaultmaxradius = ConfigManager.waveRadius;
-	private static final double defaultfactor = ConfigManager.waveHorizontalPush;
-	private static final double upfactor = ConfigManager.waveVerticalPush;
+	private static final double defaultmaxradius = ConfigValues.SurgeWaveRadius;
+	private static final double defaultfactor = ConfigValues.SurgeWaveHorizontalPush;
+	private static final double upfactor = ConfigValues.SurgeWaveVerticalPush;
 	private static final double maxfreezeradius = 7;
 
 	static double defaultrange = 20;

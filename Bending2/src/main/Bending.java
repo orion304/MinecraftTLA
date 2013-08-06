@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.BendingType;
-import tools.ConfigManager;
+//import tools.ConfigManager;
 import tools.Tools;
 import de.diddiz.LogBlock.Consumer;
 import de.diddiz.LogBlock.LogBlock;
@@ -47,7 +47,7 @@ public class Bending extends JavaPlugin {
 
 	// public BendingPlayers config = new BendingPlayers(getDataFolder(),
 	// getResource("bendingPlayers.yml"));
-	public static ConfigManager configManager = new ConfigManager();
+//	public static ConfigManager configManager = new ConfigManager();
 	public static Language language = new Language();
 	public BendingPlayers config;
 	public Tools tools;
@@ -77,7 +77,8 @@ public class Bending extends JavaPlugin {
 		ConfigurationSerialization.registerClass(BendingPlayer.class,
 				"BendingPlayer");
 
-		configManager.load(new File(getDataFolder(), "config.yml"));
+		Tools.configCheck();
+//		configManager.load(new File(getDataFolder(), "config.yml"));
 		language.load(new File(getDataFolder(), "language.yml"));
 
 		Plugin lb = getServer().getPluginManager().getPlugin("LogBlock");
@@ -105,7 +106,7 @@ public class Bending extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(listener, this);
 
 		if (Bukkit.getPluginManager().getPlugin("TagAPI") != null
-				&& ConfigManager.useTagAPI) {
+				&& ConfigValues.UseTagAPI) {
 			getServer().getPluginManager().registerEvents(Taglistener, this);
 		}
 

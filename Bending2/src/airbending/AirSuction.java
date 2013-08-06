@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
+import main.ConfigValues;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -14,7 +15,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 import waterbending.WaterSpout;
@@ -31,10 +31,10 @@ public class AirSuction {
 	private static final int maxticks = AirBlast.maxticks;
 	static final double maxspeed = AirBlast.maxspeed;
 
-	private static double speed = ConfigManager.airSuctionSpeed;
-	private static double range = ConfigManager.airSuctionRange;
-	private static double affectingradius = ConfigManager.airSuctionRadius;
-	private static double pushfactor = ConfigManager.airSuctionPush;
+	private static double speed = ConfigValues.AirSuctionSpeed;
+	private static double range = ConfigValues.AirSuctionRange;
+	private static double affectingradius = ConfigValues.AirSuctionRadius;
+	private static double pushfactor = ConfigValues.AirSuctionPush;
 	private static double originselectrange = 10;
 	// private static long interval = AirBlast.interval;
 

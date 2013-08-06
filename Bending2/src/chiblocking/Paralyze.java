@@ -2,6 +2,8 @@ package chiblocking;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,8 +19,8 @@ public class Paralyze {
 	private static ConcurrentHashMap<Entity, Long> entities = new ConcurrentHashMap<Entity, Long>();
 	private static ConcurrentHashMap<Entity, Long> cooldowns = new ConcurrentHashMap<Entity, Long>();
 
-	private static final long cooldown = ConfigManager.paralyzeCooldown;
-	private static final long duration = ConfigManager.paralyzeDuration;
+	private static final long cooldown = ConfigValues.ParalyzeCooldown;
+	private static final long duration = ConfigValues.ParalyzeDuration;
 
 	public Paralyze(Player sourceplayer, Entity targetentity) {
 		if (Tools.isBender(sourceplayer.getName(), BendingType.ChiBlocker)

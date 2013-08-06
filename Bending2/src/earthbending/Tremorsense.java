@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -11,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class Tremorsense {
@@ -20,9 +21,9 @@ public class Tremorsense {
 	public static ConcurrentHashMap<Block, Player> blocks = new ConcurrentHashMap<Block, Player>();
 
 	// private static final long cooldown = ConfigManager.tremorsenseCooldown;
-	private static final int maxdepth = ConfigManager.tremorsenseMaxDepth;
-	private static final int radius = ConfigManager.tremorsenseRadius;
-	private static final byte lightthreshold = ConfigManager.tremorsenseLightThreshold;
+	private static final int maxdepth = ConfigValues.TremorsenseMaxDepth;
+	private static final int radius = ConfigValues.TremorsenseRadius;
+	private static final byte lightthreshold = (byte) ConfigValues.TremorsenseLightThreshold;
 
 	private Player player;
 	private Block block;

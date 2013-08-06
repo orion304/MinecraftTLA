@@ -3,6 +3,8 @@ package firebending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,15 +14,14 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 
 public class FireJet {
 
 	public static ConcurrentHashMap<Player, FireJet> instances = new ConcurrentHashMap<Player, FireJet>();
-	private static final double defaultfactor = ConfigManager.fireJetSpeed;
-	private static final long defaultduration = ConfigManager.fireJetDuration;
+	private static final double defaultfactor = ConfigValues.FireJetSpeed;
+	private static final long defaultduration = ConfigValues.FireJetDuration;
 	// private static final long cooldown = ConfigManager.fireJetCooldown;
 
 	// private static ConcurrentHashMap<Player, Long> timers = new

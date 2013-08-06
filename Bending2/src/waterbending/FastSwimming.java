@@ -2,6 +2,8 @@ package waterbending;
 
 import java.util.Arrays;
 
+import main.ConfigValues;
+
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -17,7 +19,7 @@ public class FastSwimming {
 	// Location>();
 	// private static Map<Player, Long> timers = new HashMap<Player, Long>();
 	// private static long interval = ConfigManager.fastSwimmingInterval;
-	private static double factor = ConfigManager.fastSwimmingFactor;
+	private static double factor = ConfigValues.FastSwimmingFactor;
 
 	private static final Abilities[] shiftabilities = {
 			Abilities.WaterManipulation, Abilities.Surge,

@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -15,7 +17,7 @@ public class EarthPassive {
 
 	public static ConcurrentHashMap<Block, Long> sandblocks = new ConcurrentHashMap<Block, Long>();
 	public static ConcurrentHashMap<Block, Material> sandidentities = new ConcurrentHashMap<Block, Material>();
-	private static final long duration = ConfigManager.earthPassive;
+	private static final long duration = ConfigValues.EarthPassiveWaitBeforeRevert;
 
 	public static boolean softenLanding(Player player) {
 		Block block = player.getLocation().getBlock()

@@ -1,5 +1,7 @@
 package waterbending;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +20,7 @@ public class Melt {
 	private static final int defaultrange = FreezeMelt.defaultrange;
 	private static final int defaultradius = FreezeMelt.defaultradius;
 	private static final int defaultevaporateradius = 3;
-	private static final int seaLevel = ConfigManager.seaLevel;
+	private static final int seaLevel = ConfigValues.SeaLevel;
 
 	private static final byte full = 0x0;
 

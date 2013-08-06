@@ -3,6 +3,8 @@ package firebending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,14 +15,13 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.AvatarState;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class Lightning {
 
-	public static int defaultdistance = ConfigManager.lightningrange;
-	private static long defaultwarmup = ConfigManager.lightningwarmup;
-	private static double misschance = ConfigManager.lightningmisschance;
+	public static int defaultdistance = ConfigValues.LightningRange;
+	private static long defaultwarmup = ConfigValues.LightningWarmup;
+	private static double misschance = ConfigValues.LightningMissChance;
 	private static double threshold = 0.1;
 	private static double blockdistance = 4;
 
@@ -113,7 +114,7 @@ public class Lightning {
 
 		int distance = (int) Tools.firebendingDayAugment(defaultdistance,
 				player.getWorld());
-		long warmup = (int) ((double) defaultwarmup / ConfigManager.dayFactor);
+		long warmup = (int) ((double) defaultwarmup / ConfigValues.FireDayPowerFactor);
 		if (AvatarState.isAvatarState(player))
 			warmup = 0;
 		if (System.currentTimeMillis() > starttime + warmup)

@@ -3,6 +3,8 @@ package firebending;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -12,7 +14,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class FireBurst {
@@ -34,7 +35,7 @@ public class FireBurst {
 			return;
 		starttime = System.currentTimeMillis();
 		if (Tools.isDay(player.getWorld())) {
-			chargetime /= ConfigManager.dayFactor;
+			chargetime /= ConfigValues.FireDayPowerFactor;
 		}
 		if (AvatarState.isAvatarState(player))
 			chargetime = 0;

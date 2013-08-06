@@ -3,6 +3,8 @@ package waterbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -24,10 +26,10 @@ public class Bloodbending {
 
 	ConcurrentHashMap<Entity, Location> targetentities = new ConcurrentHashMap<Entity, Location>();
 
-	private static final double factor = ConfigManager.bloodbendingThrowFactor;
+	private static final double factor = ConfigValues.BloodbendingThrowFactor;
 
 	private Player player;
-	private int range = ConfigManager.bloodbendingRange;
+	private int range = ConfigValues.BloodbendingRange;
 
 	public Bloodbending(Player player) {
 		if (instances.containsKey(player)) {

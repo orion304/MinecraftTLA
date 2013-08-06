@@ -3,6 +3,8 @@ package waterbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,8 +32,8 @@ public class WaterWall {
 	private static final byte full = 0x0;
 	// private static final byte half = 0x4;
 
-	private static double range = ConfigManager.waterWallRange;
-	private static final double defaultradius = ConfigManager.waterWallRadius;
+	private static double range = ConfigValues.SurgeWallRange;
+	private static final double defaultradius = ConfigValues.SurgeWallRadius;
 	// private static double speed = 1.5;
 
 	Player player;

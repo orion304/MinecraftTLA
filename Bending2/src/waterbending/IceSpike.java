@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,7 +30,7 @@ public class IceSpike {
 	public static ConcurrentHashMap<Integer, IceSpike> instances = new ConcurrentHashMap<Integer, IceSpike>();
 	public ConcurrentHashMap<Player, Long> removeTimers = new ConcurrentHashMap<Player, Long>();
 	public static Map<Player, Long> cooldowns = new HashMap<Player, Long>();
-	public static final int standardheight = ConfigManager.earthColumnHeight;
+	public static final int standardheight = ConfigValues.IceSpikeHeight;
 	public static long removeTimer = 500;
 
 	private static ConcurrentHashMap<Block, Block> alreadydoneblocks = new ConcurrentHashMap<Block, Block>();
@@ -36,8 +38,8 @@ public class IceSpike {
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static double range = ConfigManager.icespikerange;
-	private long cooldown = ConfigManager.icespikecooldown;
+	private static double range = ConfigValues.IceSpikeRange;
+	private long cooldown = ConfigValues.IceSpikeCooldown;
 	private static double speed = 25;
 	private static final Vector direction = new Vector(0, 1, 0);
 
@@ -48,11 +50,11 @@ public class IceSpike {
 	private Block block;
 	private Player player;
 	private int progress = 0;
-	private int damage = ConfigManager.icespikedamage;
+	private int damage = ConfigValues.IceSpikeDamage;
 	int id;
 	private long time;
 	int height = 2;
-	private Vector thrown = new Vector(0, ConfigManager.icespikethrowingmult, 0);
+	private Vector thrown = new Vector(0, ConfigValues.IceSpikeThrowingMult, 0);
 	private ConcurrentHashMap<Block, Block> affectedblocks = new ConcurrentHashMap<Block, Block>();
 	private List<LivingEntity> damaged = new ArrayList<LivingEntity>();
 

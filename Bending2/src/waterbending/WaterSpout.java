@@ -3,6 +3,8 @@ package waterbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -24,7 +26,7 @@ public class WaterSpout {
 	public static ConcurrentHashMap<Block, Block> newaffectedblocks = new ConcurrentHashMap<Block, Block>();
 	public static ConcurrentHashMap<Block, Block> baseblocks = new ConcurrentHashMap<Block, Block>();
 
-	private static final int defaultheight = ConfigManager.waterSpoutHeight;
+	private static final int defaultheight = ConfigValues.WaterSpoutHeight;
 
 	// private static final double threshold = .05;
 	// private static final byte half = 0x4;
@@ -150,7 +152,7 @@ public class WaterSpout {
 		if (Tools.isNight(player.getWorld()))
 			height = (int) Tools.waterbendingNightAugment((double) height,
 					player.getWorld());
-		int maxheight = (int) ((double) defaultheight * ConfigManager.nightFactor) + 5;
+		int maxheight = (int) ((double) defaultheight * ConfigValues.WaterNightPowerFactor) + 5;
 		Block blocki;
 		for (int i = 0; i < maxheight; i++) {
 			blocki = location.clone().add(0, -i, 0).getBlock();

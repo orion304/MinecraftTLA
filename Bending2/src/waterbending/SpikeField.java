@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import main.ConfigValues;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,15 +21,15 @@ import tools.Tools;
 
 public class SpikeField {
 
-	private static int radius = ConfigManager.icespikearearadius;
+	private static int radius = 6;
 	public static int numofspikes = ((radius * 2) * (radius * 2)) / 16;
-	private static long cooldown = ConfigManager.icespikeareacooldown;
+	private static long cooldown = ConfigValues.IceSpikeCooldown;
 	public static Map<Player, Long> cooldowns = new HashMap<Player, Long>();
 
 	Random ran = new Random();
-	private int damage = ConfigManager.icespikeareadamage;
+	private int damage = ConfigValues.IceSpikeDamage;
 	private Vector thrown = new Vector(0,
-			ConfigManager.icespikeareathrowingmult, 0);
+			ConfigValues.IceSpikeThrowingMult, 0);
 
 	public SpikeField(Player p) {
 		if (cooldowns.containsKey(p))

@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,16 +16,15 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.TempBlock;
 import tools.TempPotionEffect;
 import tools.Tools;
 
 public class EarthArmor {
 
-	private static long duration = ConfigManager.eartharmorduration;
-	private static int strength = ConfigManager.eartharmorstrength;
-	private static long cooldown = ConfigManager.eartharmorcooldown;
+	private static long duration = ConfigValues.EarthArmorDuration;
+	private static int strength = ConfigValues.EarthArmorStrength;
+	private static long cooldown = ConfigValues.EarthArmorCooldown;
 	private static int range = 7;
 
 	private Player player;
@@ -65,7 +66,7 @@ public class EarthArmor {
 			oldlegsblock = legsblock;
 			if (!moveBlocks())
 				return;
-			if (ConfigManager.reverseearthbending) {
+			if (ConfigValues.ReverseEarthbending) {
 				Tools.addTempAirBlock(oldheadblock);
 				Tools.addTempAirBlock(oldlegsblock);
 			} else {
@@ -158,7 +159,7 @@ public class EarthArmor {
 	}
 
 	private void cancel() {
-		if (ConfigManager.reverseearthbending) {
+		if (ConfigValues.ReverseEarthbending) {
 			if (TempBlock.isTempBlock(headblock))
 				TempBlock.revertBlock(headblock, Material.AIR);
 			if (TempBlock.isTempBlock(legsblock))

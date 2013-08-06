@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
 import main.BendingPlayers;
+import main.ConfigValues;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -34,7 +35,7 @@ public class BendingPlayer implements CustomSerializable {
 
 	private Map<Abilities, Long> cooldowns = new HashMap<Abilities, Long>();
 
-	private boolean bendToItem = ConfigManager.bendToItem;
+	private boolean bendToItem = ConfigValues.BendToItem;
 
 	private long paralyzeTime = 0;
 	private long slowTime = 0;
@@ -114,25 +115,25 @@ public class BendingPlayer implements CustomSerializable {
 					cd = 1000;
 					break;
 				case AirSwipe:
-					cd = ConfigManager.airSwipeCooldown;
+					cd = ConfigValues.AirSwipeCooldown;
 					break;
 				case HighJump:
-					cd = ConfigManager.highJumpCooldown;
+					cd = ConfigValues.HighJumpCooldown;
 					break;
 				case RapidPunch:
-					cd = ConfigManager.rapidPunchCooldown;
+					cd = ConfigValues.RapidPunchCooldown;
 					break;
 				case Tremorsense:
-					cd = ConfigManager.tremorsenseCooldown;
+					cd = ConfigValues.TremorsenseCooldown;
 					break;
 				case FireBlast:
-					cd = ConfigManager.fireBlastCooldown;
+					cd = ConfigValues.FireBlastCooldown;
 					break;
 				case FireJet:
-					cd = ConfigManager.fireJetCooldown;
+					cd = ConfigValues.FireJetCooldown;
 					break;
 				case IceSpike:
-					cd = ConfigManager.icespikecooldown;
+					cd = ConfigValues.IceSpikeCooldown;
 					break;
 				}
 				abilityCooldowns.put(ability, cd);
@@ -358,7 +359,7 @@ public class BendingPlayer implements CustomSerializable {
 		string += ", ";
 		string += "Language=" + language;
 		string += ", ";
-		if (ConfigManager.bendToItem) {
+		if (ConfigValues.BendToItem) {
 			string += "Binds=" + itemAbilities;
 		} else {
 			string += "Binds=" + slotAbilities;

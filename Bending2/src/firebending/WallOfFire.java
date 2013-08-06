@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,7 +18,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class WallOfFire {
@@ -25,15 +26,15 @@ public class WallOfFire {
 
 	private static double maxangle = 50;
 
-	private static int range = ConfigManager.wallOfFireRange;
-	private int height = ConfigManager.wallOfFireHeight;
-	private int width = ConfigManager.wallOfFireWidth;
-	private long duration = ConfigManager.wallOfFireDuration;
-	private int damage = ConfigManager.wallOfFireDamage;
+	private static int range = ConfigValues.WallOfFireRange;
+	private int height = ConfigValues.WallOfFireHeight;
+	private int width = ConfigValues.WallOfFireWidth;
+	private long duration = ConfigValues.WallOfFireDuration;
+	private int damage = ConfigValues.WallOfFireDamage;
 	private static long interval = 250;
-	private static long cooldown = ConfigManager.wallOfFireCooldown;
+	private static long cooldown = ConfigValues.WallOfFireCooldown;
 	public static ConcurrentHashMap<Player, WallOfFire> instances = new ConcurrentHashMap<Player, WallOfFire>();
-	private static long damageinterval = ConfigManager.wallOfFireInterval;
+	private static long damageinterval = ConfigValues.WallOfFireInterval;
 
 	private Location origin;
 	private long time, starttime;

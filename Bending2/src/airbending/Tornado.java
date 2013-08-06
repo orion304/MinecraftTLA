@@ -3,6 +3,8 @@ package airbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 
@@ -19,12 +20,12 @@ public class Tornado {
 
 	public static ConcurrentHashMap<Integer, Tornado> instances = new ConcurrentHashMap<Integer, Tornado>();
 
-	private static double maxradius = ConfigManager.tornadoRadius;
-	private static double maxheight = ConfigManager.tornadoHeight;
-	private static double range = ConfigManager.tornadoRange;
+	private static double maxradius = ConfigValues.TornadoRadius;
+	private static double maxheight = ConfigValues.TornadoHeight;
+	private static double range = ConfigValues.TornadoRange;
 	private static int numberOfStreams = (int) (.3 * (double) maxheight);
-	private static double NPCpushfactor = ConfigManager.tornadoMobPush;
-	private static double PCpushfactor = ConfigManager.tornadoPlayerPush;
+	private static double NPCpushfactor = ConfigValues.TornadoMobPush;
+	private static double PCpushfactor = ConfigValues.TornadoPlayerPush;
 	// private static double speed = .75;
 
 	private double height = 2;

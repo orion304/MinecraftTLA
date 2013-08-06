@@ -1,18 +1,19 @@
 package chiblocking;
 
+import main.ConfigValues;
+
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class HighJump {
 
-	private int jumpheight = ConfigManager.jumpheight;
-	private long cooldown = ConfigManager.highJumpCooldown;
+	private int jumpheight = ConfigValues.HighJumpHeight;
+	private long cooldown = ConfigValues.HighJumpCooldown;
 
 	// private Map<String, Long> cooldowns = new HashMap<String, Long>();
 

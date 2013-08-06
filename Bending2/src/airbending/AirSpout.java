@@ -3,6 +3,8 @@ package airbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -11,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 
@@ -19,7 +20,7 @@ public class AirSpout {
 
 	private static ConcurrentHashMap<Player, AirSpout> instances = new ConcurrentHashMap<Player, AirSpout>();
 
-	private static final double height = ConfigManager.airSpoutHeight;
+	private static final double height = ConfigValues.AirSpoutHeight;
 	private static final long interval = 100;
 
 	private Player player;

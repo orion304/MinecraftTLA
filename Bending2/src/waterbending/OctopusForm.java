@@ -3,6 +3,8 @@ package waterbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,11 +22,11 @@ public class OctopusForm {
 
 	static ConcurrentHashMap<Player, OctopusForm> instances = new ConcurrentHashMap<Player, OctopusForm>();
 
-	private static int range = 10;
-	static double radius = 3;
+	private static int range = ConfigValues.OctopusFormRange;
+	static double radius = ConfigValues.OctopusFormRadius;
 	private static final byte full = 0x0;
-	private static long interval = 50;
-	private static int damage = 3;
+	private static long interval = ConfigValues.OctopusFormInterval;
+	private static int damage = ConfigValues.OctopusFormDamage;
 
 	private Player player;
 	private Block sourceblock;

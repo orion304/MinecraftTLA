@@ -1,5 +1,7 @@
 package firebending;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -7,7 +9,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 
 public class RingOfFire {
 
@@ -15,7 +16,7 @@ public class RingOfFire {
 	// ConcurrentHashMap<Player, Long>();
 	// static final long soonesttime = Tools.timeinterval;
 
-	static final int defaultrange = ConfigManager.ringOfFireRange;
+	static final int defaultrange = ConfigValues.BlazeRange;
 
 	public RingOfFire(Player player) {
 		// if (timers.containsKey(player)) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -12,7 +14,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 
@@ -23,9 +24,9 @@ public class Catapult {
 	// ConcurrentHashMap<Player, Long>();
 	// static final long soonesttime = Tools.timeinterval;
 
-	private static int length = ConfigManager.catapultLength;
-	private static double speed = ConfigManager.catapultSpeed;
-	private static double push = ConfigManager.catapultPush;
+	private static int length = ConfigValues.CatapultLength;
+	private static double speed = ConfigValues.CatapultSpeed;
+	private static double push = ConfigValues.CatapultPush;
 
 	private static long interval = (long) (1000. / speed);
 	// private static long interval = 1500;

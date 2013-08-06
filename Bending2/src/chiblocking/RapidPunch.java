@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,10 +17,10 @@ import tools.Tools;
 
 public class RapidPunch {
 
-	private static int damage = ConfigManager.rapidPunchDamage;
-	private int distance = ConfigManager.rapidPunchDistance;
+	private static int damage = ConfigValues.RapidPunchDistance;
+	private int distance = ConfigValues.RapidPunchDistance;
 	// private long cooldown = ConfigManager.rapidPunchCooldown;
-	private static int punches = ConfigManager.rapidPunchPunches;
+	private static int punches = ConfigValues.RapidPunchPunches;
 
 	// private static Map<String, Long> cooldowns = new HashMap<String, Long>();
 	public static ConcurrentHashMap<Player, RapidPunch> instance = new ConcurrentHashMap<Player, RapidPunch>();

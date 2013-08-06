@@ -1,5 +1,7 @@
 package waterbending;
 
+import main.ConfigValues;
+
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -15,8 +17,8 @@ import tools.Tools;
 
 public class HealingWaters {
 
-	private static final double range = ConfigManager.healingWatersRadius;
-	private static final long interval = ConfigManager.healingWatersInterval;
+	private static final double range = ConfigValues.HealingWatersRadius;
+	private static final long interval = ConfigValues.HealingWatersInterval;
 
 	private static long time = 0;
 

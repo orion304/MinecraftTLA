@@ -2,6 +2,8 @@ package airbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -11,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.BendingType;
-import tools.ConfigManager;
 import tools.Tools;
 import waterbending.WaterManipulation;
 
@@ -19,8 +20,8 @@ public class AirBubble {
 
 	public static ConcurrentHashMap<Integer, AirBubble> instances = new ConcurrentHashMap<Integer, AirBubble>();
 
-	private static double defaultAirRadius = ConfigManager.airBubbleRadius;
-	private static double defaultWaterRadius = ConfigManager.waterBubbleRadius;
+	private static double defaultAirRadius = ConfigValues.AirBubbleRadius;
+	private static double defaultWaterRadius = ConfigValues.WaterBubbleRadius;
 	// private static byte full = AirBlast.full;
 
 	// private static final byte full = 0x0;
