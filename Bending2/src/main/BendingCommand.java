@@ -13,6 +13,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import customevents.PlayerBindAbilityEvent;
+import customevents.PlayerChooseBendingEvent;
+
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.BendingType;
@@ -587,6 +590,7 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Air);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Air);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Air));
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -601,6 +605,7 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Fire);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Fire);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Fire));
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -615,6 +620,7 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Earth);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Earth);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Earth));
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -629,6 +635,7 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Water);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Water);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Water));
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
@@ -644,6 +651,7 @@ public class BendingCommand {
 				// BendingType.ChiBlocker);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.ChiBlocker);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.ChiBlocker));
 				return;
 			}
 			printChooseUsage(player);
@@ -685,6 +693,7 @@ public class BendingCommand {
 				// BendingType.Air);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Air);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Air));
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -709,6 +718,7 @@ public class BendingCommand {
 				// BendingType.Fire);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Fire);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Fire));
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -733,6 +743,7 @@ public class BendingCommand {
 				// BendingType.Earth);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Earth);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Earth));
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -757,6 +768,7 @@ public class BendingCommand {
 				// BendingType.Water);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Water);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Water));
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
@@ -781,6 +793,7 @@ public class BendingCommand {
 				// BendingType.ChiBlocker);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.ChiBlocker);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.ChiBlocker));
 				return;
 			}
 			printChooseUsage(player);
@@ -2138,7 +2151,6 @@ public class BendingCommand {
 
 		ChatColor color = ChatColor.WHITE;
 		ChatColor white = ChatColor.WHITE;
-
 		if (Abilities.isWaterbending(ability)) {
 			if (!Tools.isBender(player.getName(), BendingType.Water)) {
 				ChatColor color2 = ChatColor.WHITE;
@@ -2154,12 +2166,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
@@ -2178,12 +2192,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
@@ -2202,12 +2218,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, null));
 			}
 			return;
 		}
@@ -2226,12 +2244,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
@@ -2250,12 +2270,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
@@ -2271,12 +2293,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 

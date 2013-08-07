@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UnknownFormatConversionException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -183,8 +181,8 @@ public class BendingListener implements Listener {
 				&& (dc.contains("Armors." + player.getName() + ".Boots")
 						&& dc.contains("Armors." + player.getName()
 								+ ".Leggings")
-						&& dc.contains("Armors." + player.getName() + ".Chest") && dc
-							.contains("Armors." + player.getName() + ".Helm"))) {
+								&& dc.contains("Armors." + player.getName() + ".Chest") && dc
+								.contains("Armors." + player.getName() + ".Helm"))) {
 			ItemStack boots = new ItemStack(Material.matchMaterial(dc
 					.getString("Armors." + player.getName() + ".Boots").split(
 							":")[0]));
@@ -273,7 +271,7 @@ public class BendingListener implements Listener {
 			String format = ConfigValues.ChatFormat;
 			format = format.replace("<message>", "%2$s");
 			format = format.replace("<name>", color + player.getDisplayName() + ChatColor.RESET);
-//			String format2 = format.replace("<name>", color + player.getDisplayName()).replace("<message>", ChatColor.WHITE + event.getMessage());
+			//			String format2 = format.replace("<name>", color + player.getDisplayName()).replace("<message>", ChatColor.WHITE + event.getMessage());
 			event.setFormat(format);
 			//				event.setFormat("<" + color + player.getDisplayName()
 			//						+ ChatColor.WHITE + "> " + event.getMessage());
@@ -717,13 +715,13 @@ public class BendingListener implements Listener {
 			if (Tools.canBendPassive(player, BendingType.Fire)
 					&& Tools.isBender(player.getName(), BendingType.Fire)
 					&& (event.getCause() == DamageCause.FIRE || event
-							.getCause() == DamageCause.FIRE_TICK)) {
+					.getCause() == DamageCause.FIRE_TICK)) {
 				event.setCancelled(!Extinguish.canBurn(player));
 			}
 
 			if (Tools.isBender(player.getName(), BendingType.Earth)
 					&& (event.getCause() == DamageCause.SUFFOCATION && TempBlock
-							.isTempBlock(player.getEyeLocation().getBlock()))) {
+					.isTempBlock(player.getEyeLocation().getBlock()))) {
 				event.setDamage(0);
 				event.setCancelled(true);
 			}
@@ -812,11 +810,11 @@ public class BendingListener implements Listener {
 			if (Tools.canBendPassive(sourceplayer, BendingType.ChiBlocker)
 					&& Tools.isBender(sourceplayer.getName(),
 							BendingType.ChiBlocker)
-					&& event.getCause() == DamageCause.ENTITY_ATTACK
-					&& event.getDamage() == 1
-					&& sourceplayer.getLocation().distance(
-							targetplayer.getLocation()) <= ConfigValues.RapidPunchDistance
-					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigValues.ChiBendWithWeapons)) {
+							&& event.getCause() == DamageCause.ENTITY_ATTACK
+							&& event.getDamage() == 1
+							&& sourceplayer.getLocation().distance(
+									targetplayer.getLocation()) <= ConfigValues.RapidPunchDistance
+									&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigValues.ChiBendWithWeapons)) {
 				Tools.blockChi(targetplayer, System.currentTimeMillis());
 			}
 		}
@@ -826,17 +824,17 @@ public class BendingListener implements Listener {
 					.getCause() == DamageCause.PROJECTILE)
 					&& Tools.isBender(((Player) event.getEntity()).getName(),
 							BendingType.ChiBlocker)
-					&& Tools.canBendPassive((Player) event.getEntity(),
-							BendingType.ChiBlocker)) {
+							&& Tools.canBendPassive((Player) event.getEntity(),
+									BendingType.ChiBlocker)) {
 				double rand = Math.random();
 				// Tools.verbose(rand + " " + (ConfigManager.dodgechance) /
 				// 100.);
 				if (rand <= ConfigValues.ChiDodgeChance / 100.
 						&& !Paralyze.isParalyzed(event.getEntity())) {
 					event.getEntity()
-							.getWorld()
-							.playEffect(event.getEntity().getLocation(),
-									Effect.SMOKE, 1);
+					.getWorld()
+					.playEffect(event.getEntity().getLocation(),
+							Effect.SMOKE, 1);
 					dodged = true;
 					event.setCancelled(true);
 				}
