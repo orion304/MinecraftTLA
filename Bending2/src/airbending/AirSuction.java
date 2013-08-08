@@ -1,6 +1,6 @@
 package airbending;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
@@ -49,7 +49,7 @@ public class AirSuction {
 
 	private double speedfactor;
 
-	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
+//	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
 
 	public AirSuction(Player player) {
 		// if (timers.containsKey(player)) {

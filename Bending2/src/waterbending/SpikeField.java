@@ -16,7 +16,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import tools.ConfigManager;
 import tools.Tools;
 
 public class SpikeField {

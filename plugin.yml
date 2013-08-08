@@ -354,7 +354,7 @@ permissions:
 
   bending.avatar:
     description: Give the avatar prefix.
-    default: op
+    default: false
   bending.command.import:
     default: op
     

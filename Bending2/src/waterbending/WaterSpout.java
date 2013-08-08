@@ -14,7 +14,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.TempBlock;
 import tools.Tools;

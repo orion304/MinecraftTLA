@@ -13,7 +13,7 @@ import tools.Tools;
 public class HighJump {
 
 	private int jumpheight = ConfigValues.HighJumpHeight;
-	private long cooldown = ConfigValues.HighJumpCooldown;
+//	private long cooldown = ConfigValues.HighJumpCooldown;
 
 	// private Map<String, Long> cooldowns = new HashMap<String, Long>();
 

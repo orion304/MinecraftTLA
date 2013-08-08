@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingType;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class Paralyze {

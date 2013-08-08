@@ -7,7 +7,6 @@ import main.ConfigValues;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import tools.ConfigManager;
 import tools.Tools;
 
 public class Plantbending {

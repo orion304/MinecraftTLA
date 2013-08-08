@@ -52,14 +52,15 @@ public class AirBlast {
 	private int ticks = 0;
 
 	private ArrayList<Block> affectedlevers = new ArrayList<Block>();
-	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
+//	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
 
+	@SuppressWarnings("unused")
 	private AirBurst source = null;
 
 	// private long time;
 
 	public AirBlast(Player player) {
-		// if (timers.containsKey(player)) {
+		// if (timers.contSainsKey(player)) {
 		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
 		// return;
 		// }

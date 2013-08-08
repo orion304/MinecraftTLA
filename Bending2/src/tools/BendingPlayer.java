@@ -103,6 +103,7 @@ public class BendingPlayer implements CustomSerializable {
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public static void initializeCooldowns() {
 		if (abilityCooldowns.isEmpty()) {
 			for (Abilities ability : Abilities.values()) {

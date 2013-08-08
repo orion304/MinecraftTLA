@@ -16,7 +16,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
-import tools.ConfigManager;
 import tools.TempPotionEffect;
 import tools.Tools;
 

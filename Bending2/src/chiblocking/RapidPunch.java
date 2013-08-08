@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class RapidPunch {

@@ -1,18 +1,14 @@
 package main;
 
-import java.io.File;
-
-import org.bukkit.plugin.Plugin;
-
 public class StorageManager {
 
-	private File dataFolder;
+//	private File dataFolder;
 	public BendingPlayers config;
 	public static Boolean useMySQL;
 	public static Boolean useFlatFile;
 	public MySQL MySql;
 
-	private Plugin tapi;
+//	private Plugin tapi;
 
 	// private InputStream defConfigStream;
 

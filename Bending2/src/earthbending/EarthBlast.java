@@ -16,7 +16,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 import waterbending.WaterManipulation;
 import firebending.FireBlast;

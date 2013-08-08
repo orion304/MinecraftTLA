@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthTunnel {

@@ -103,8 +103,6 @@ import firebending.Illumination;
 import firebending.Lightning;
 import firebending.WallOfFire;
 
-import main.Bending;
-
 public class Tools {
 
 	public static BendingPlayers config;
@@ -1890,6 +1888,7 @@ public class Tools {
 	// }
 	// }
 
+	@SuppressWarnings("incomplete-switch")
 	public static int getIntCardinalDirection(Vector vector) {
 		BlockFace face = getCardinalDirection(vector);
 

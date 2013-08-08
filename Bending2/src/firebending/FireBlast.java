@@ -156,7 +156,7 @@ public class FireBlast {
 		// }
 		// }
 		if (Tools.isSolid(block) || block.isLiquid()) {
-			if (block.getType() == Material.FURNACE && canPowerFurnace) {
+			if (block.getType() == Material.BURNING_FURNACE && canPowerFurnace) {
 				// BlockState state = block.getState();
 				// Furnace furnace = (Furnace) state;
 				// FurnaceInventory inv = furnace.getInventory();

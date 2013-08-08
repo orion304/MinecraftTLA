@@ -10,7 +10,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthPassive {

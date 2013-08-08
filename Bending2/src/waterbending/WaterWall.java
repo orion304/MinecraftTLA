@@ -15,7 +15,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
 import firebending.FireBlast;

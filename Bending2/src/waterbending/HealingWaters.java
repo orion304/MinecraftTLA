@@ -11,7 +11,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
-import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
 
