@@ -2030,6 +2030,8 @@ public class Tools {
 		bending.getConfig().addDefault("Abilities.Air.AirBubble.Radius", 6);
 		
 		//AirBurst
+		bending.getConfig().addDefault("Abilities.Air.AirBurst.PushFactor", 1.5);
+		bending.getConfig().addDefault("Abilities.Air.AirBurst.ChargeTime", 1750);
 		
 		//AirScooter
 		bending.getConfig().addDefault("Abilities.Air.AirScooter.Speed", .0675);
@@ -2193,6 +2195,10 @@ public class Tools {
 		config.addDefault("Abilities.Earth.RaiseEarth.Range", 15);
 		config.addDefault("Abilities.Earth.RaiseEarth.Width", 6);
 		
+		//Shockwave
+		config.addDefault("Abilities.Earth.Shockwave.ChargeTime", 2500);
+		
+		//Tremorsense
 		config.addDefault("Abilities.Earth.Tremorsense.MaxDepth", 10);
 		config.addDefault("Abilities.Earth.Tremorsense.Radius", 5);
 		config.addDefault("Abilities.Earth.Tremorsense.LightThreshold", 7);
@@ -2222,6 +2228,8 @@ public class Tools {
 		config.addDefault("Abilities.Fire.FireBlast.Cooldown", 1500);
 
 		//FireBurst
+		config.addDefault("Abilities.Fire.FireBurst.Damage", 3);
+		config.addDefault("Abilities.Fire.FireBurst.ChargeTime", 2500);
 		
 		//FireJet
 		config.addDefault("Abilities.Fire.FireJet.Speed", 0.7);
@@ -2306,7 +2314,8 @@ public class Tools {
 		
 		ConfigValues.AirBubbleRadius = config.getInt("Abilities.Air.AirBubble.Radius");
 
-		//TODO AIRBURST
+		ConfigValues.AirBurstPushFactor = config.getDouble("Abilities.Air.AirBurst.PushFactor");
+		ConfigValues.AirBurstChargeTime = config.getInt("Abilities.Air.AirBurst.ChargeTime");
 		
 		ConfigValues.AirScooterSpeed = config.getDouble("Abilities.Air.AirScooter.Speed");
 		ConfigValues.AirScooterRadius = config.getInt("Abilities.Air.AirScooter.Radius");
@@ -2422,6 +2431,7 @@ public class Tools {
 		ConfigValues.RaiseEarthRange = config.getInt("Abilities.Earth.RaiseEarth.Range");
 		ConfigValues.RaiseEarthWidth  = config.getInt("Abilities.Earth.RaiseEarth.Width");
 		
+		ConfigValues.ShockwaveChargeTime = config.getInt("Abilities.Earth.Shockwave.ChargeTime");
 		ConfigValues.TremorsenseMaxDepth = config.getInt("Abilities.Earth.Tremorsense.MaxDepth");
 		ConfigValues.TremorsenseRadius = config.getInt("Abilities.Earth.Tremorsense.Radius");
 		ConfigValues.TremorsenseLightThreshold = config.getInt("Abilities.Earth.Tremorsense.LightThreshold");
@@ -2445,7 +2455,8 @@ public class Tools {
 		ConfigValues.FireBlastRange = config.getInt("Abilities.Fire.FireBlast.Range");
 		ConfigValues.FireBlastCooldown = config.getInt("Abilities.Fire.FireBlast.Cooldown");
 	
-		//FireBurst TODO
+		ConfigValues.FireBurstChargeTime = config.getInt("Abilities.Fire.FireBurst.ChargeTime");
+		ConfigValues.FireBurstDamage = config.getInt("Abilities.Fire.FireBurst.Damage");
 		
 		ConfigValues.FireJetSpeed = config.getDouble("Abilities.Fire.FireJet.Speed");
 		ConfigValues.FireJetDuration = config.getInt("Abilities.Fire.FireJet.Duration");

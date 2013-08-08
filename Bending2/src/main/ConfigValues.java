@@ -43,6 +43,8 @@ public class ConfigValues {
 	public static int AirBubbleRadius;
 	
 	//AirBurst
+	public static double AirBurstPushFactor;
+	public static int AirBurstChargeTime;
 	
 	//AirScooter
 	public static double AirScooterSpeed;
@@ -189,6 +191,9 @@ public class ConfigValues {
 	public static int RaiseEarthRange;
 	public static int RaiseEarthWidth;
 	
+	//Shockwave
+	public static int ShockwaveChargeTime;
+	
 	//Tremorsense
 	public static int TremorsenseMaxDepth;
 	public static int TremorsenseRadius;
@@ -219,6 +224,8 @@ public class ConfigValues {
 	public static int FireBlastCooldown;
 	
 	//FireBurst
+	public static int FireBurstDamage;
+	public static int FireBurstChargeTime;
 	
 	//FireJet
 	public static double FireJetSpeed;

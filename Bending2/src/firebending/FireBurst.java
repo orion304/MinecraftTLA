@@ -21,8 +21,8 @@ public class FireBurst {
 
 	private Player player;
 	private long starttime;
-	private int damage = 3;
-	private long chargetime = 2500;
+	private int damage = ConfigValues.FireBurstDamage;
+	private long chargetime = ConfigValues.FireBurstChargeTime;
 	private double deltheta = 10;
 	private double delphi = 10;
 	private boolean charged = false;
