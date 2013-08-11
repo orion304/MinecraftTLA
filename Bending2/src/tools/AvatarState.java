@@ -3,6 +3,8 @@ package tools;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -11,7 +13,16 @@ public class AvatarState {
 
 	public static ConcurrentHashMap<Player, AvatarState> instances = new ConcurrentHashMap<Player, AvatarState>();
 
-	private static final double factor = 5;
+	private static final double factor = ConfigValues.AvatarStatePowerFactor;
+	private static final boolean regeneration = ConfigValues.AvatarStateRegenerationEnabled;
+	private static final boolean speed = ConfigValues.AvatarStateSpeedEnabled;
+	private static final boolean damageresistance = ConfigValues.AvatarStateResistanceEnabled;
+	private static final boolean fireresistance = ConfigValues.AvatarStateFireResistanceEnabled;
+	
+	private static final int regenpower = ConfigValues.AvatarStateRegenerationPower - 1;
+	private static final int speedpower = ConfigValues.AvatarStateSpeedPower - 1;
+	private static final int resistancepower = ConfigValues.AvatarStateResistancePower - 1;
+	private static final int fireresistancepower = ConfigValues.AvatarStateFireResistancePower - 1;
 
 	Player player;
 
@@ -48,14 +59,22 @@ public class AvatarState {
 
 	private void addPotionEffects() {
 		int duration = 70;
-		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
-				duration, 3));
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
-				duration, 2));
-		player.addPotionEffect(new PotionEffect(
-				PotionEffectType.DAMAGE_RESISTANCE, duration, 2));
-		player.addPotionEffect(new PotionEffect(
-				PotionEffectType.FIRE_RESISTANCE, duration, 2));
+		if (regeneration) {
+			player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
+					duration, regenpower));
+		}
+		if (speed) {
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+					duration, speedpower));
+		}
+		if (damageresistance) {
+			player.addPotionEffect(new PotionEffect(
+					PotionEffectType.DAMAGE_RESISTANCE, duration, resistancepower));
+		}
+		if (fireresistance) {
+			player.addPotionEffect(new PotionEffect(
+					PotionEffectType.FIRE_RESISTANCE, duration, fireresistancepower));
+		}
 	}
 
 	public static boolean isAvatarState(Player player) {

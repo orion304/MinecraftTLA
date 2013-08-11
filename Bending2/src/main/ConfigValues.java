@@ -30,6 +30,16 @@ public class ConfigValues {
 	// Abilities
 	public static int GlobalCooldown;
 	
+	//AvatarState
+	public static int AvatarStatePowerFactor;
+	public static boolean AvatarStateRegenerationEnabled;
+	public static int AvatarStateRegenerationPower;
+	public static boolean AvatarStateResistanceEnabled;
+	public static int AvatarStateResistancePower;
+	public static boolean AvatarStateFireResistanceEnabled;
+	public static int AvatarStateFireResistancePower;
+	public static boolean AvatarStateSpeedEnabled;
+	public static int AvatarStateSpeedPower;
 	//Air
 	//Settings
 	public static boolean AirBendWithWeapons;

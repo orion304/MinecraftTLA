@@ -2016,6 +2016,17 @@ public class Tools {
 		//Abilities
 		bending.getConfig().addDefault("Abilities.GlobalCooldown", 500);
 		
+		//AvatarState
+		config.addDefault("Abilities.AvatarState.PowerFactor", 5);
+		config.addDefault("Abilities.AvatarState.Regeneration.Enabled", true);
+		config.addDefault("Abilities.AvatarState.Regeneration.Power", 3);
+		config.addDefault("Abilities.AvatarState.Resistance.Enabled", true);
+		config.addDefault("Abilities.AvatarState.Resistance.Power", 3);
+		config.addDefault("Abilities.AvatarState.FireResistance.Enabled", true);
+		config.addDefault("Abilities.AvatarState.FireResistance.Power", 3);
+		config.addDefault("Abilities.AvatarState.Speed.Enabled", true);
+		config.addDefault("Abilities.AvatarState.Speed.Power", 3);
+		
 		//Air
 		//Settings
 		bending.getConfig().addDefault("Abilities.Air.Settings.BendWithWeapons", false);
@@ -2304,6 +2315,16 @@ public class Tools {
 		
 		ConfigValues.GlobalCooldown = config.getInt("Abilities.GlobalCooldown");
 		
+		ConfigValues.AvatarStatePowerFactor = config.getInt("Abilities.AvatarState.PowerFactor");
+		ConfigValues.AvatarStateRegenerationEnabled = config.getBoolean("Abilities.AvatarState.Regeneration.Enabled");
+		ConfigValues.AvatarStateRegenerationPower = config.getInt("Abilities.AvatarState.Regeneration.Power");
+		ConfigValues.AvatarStateResistanceEnabled = config.getBoolean("Abilities.AvatarState.Resistance.Enabled");
+		ConfigValues.AvatarStateResistancePower = config.getInt("Abilities.AvatarState.Resistance.Power");
+		ConfigValues.AvatarStateFireResistanceEnabled = config.getBoolean("Abilities.AvatarState.FireResistance.Enabled");
+		ConfigValues.AvatarStateFireResistancePower = config.getInt("Abilities.AvatarState.FireResistance.Power");
+		ConfigValues.AvatarStateSpeedEnabled = config.getBoolean("Abilities.AvatarState.Speed.Enabled");
+		ConfigValues.AvatarStateSpeedPower = config.getInt("Abilities.AvatarState.Speed.Power");
+
 		ConfigValues.AirBendWithWeapons = config.getBoolean("Abilities.Air.Settings.BendWithWeapons");
 		
 		ConfigValues.AirBlastSpeed = config.getInt("Abilities.Air.AirBlast.Speed");
