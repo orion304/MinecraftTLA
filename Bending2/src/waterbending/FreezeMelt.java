@@ -72,7 +72,6 @@ public class FreezeMelt {
 			return;
 		byte data = block.getData();
 		block.setType(Material.ICE);
-		block.setType(Material.ICE);
 		frozenblocks.put(block, data);
 	}
 
