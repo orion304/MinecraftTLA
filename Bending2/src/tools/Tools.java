@@ -2045,7 +2045,7 @@ public class Tools {
 		bending.getConfig().addDefault("Abilities.Air.AirBurst.ChargeTime", 1750);
 		
 		//AirScooter
-		bending.getConfig().addDefault("Abilities.Air.AirScooter.Speed", .0675);
+		bending.getConfig().addDefault("Abilities.Air.AirScooter.Speed", .675);
 		bending.getConfig().addDefault("Abilities.Air.AirScooter.Radius", 1);
 		
 		//AirShield
