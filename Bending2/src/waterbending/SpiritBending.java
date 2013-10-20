@@ -3,12 +3,15 @@ package waterbending;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Spider;
 import org.bukkit.entity.Wolf;
 import tools.Abilities;
 import tools.Tools;
@@ -17,7 +20,7 @@ public class SpiritBending {
 
 	private static ConcurrentHashMap<Player, SpiritBending> instances = new ConcurrentHashMap<Player, SpiritBending>();
 
-	private static final long effecttime = 2000;
+	private static final long effecttime = ConfigValues.SpiritBendingTime;
 	private static final EntityType[] applicable = { EntityType.ENDERMAN,
 		EntityType.PIG_ZOMBIE, EntityType.WOLF};
 	int range = 5;
@@ -91,6 +94,11 @@ public class SpiritBending {
 					return true;
 				}
 			}
+			if (target.getType() == EntityType.SPIDER) {
+				if (((Spider) target).getTarget() != null) {
+					return true;
+				}
+			}
 			return false;
 		}
 		return false;
@@ -117,6 +125,10 @@ public class SpiritBending {
 			Enderman ender = (Enderman) target;
 			ender.setTarget(null);
 		}
+		if (target.getType() == EntityType.SPIDER) {
+			Spider spider = (Spider) target;
+			spider.setTarget(null);
+		}
 
 	}
 	
@@ -132,7 +144,7 @@ public class SpiritBending {
 	
 	public static String getDescription() {
 		return "This is a utility ability available to waterbenders that allows the bender to calm target mobs. "
-				+ "To use, hold sneak (Default: Shift) while targeting an angry mob (Wolf / Pig Zombie / Enderman). "
+				+ "To use, hold sneak (Default: Shift) while targeting an angry mob (Wolf / Pig Zombie / Enderman / Spider). "
 				+ "If you hold sneak long enough, you will calm the mob.";
 	}
 

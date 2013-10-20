@@ -2140,6 +2140,9 @@ public class Tools {
 		
 		//WaterBubble
 		bending.getConfig().addDefault("Abilities.Water.WaterBubble", 7);
+		
+		// Spirit Bending
+		bending.getConfig().addDefault("Abilities.Water.SpiritBending.Time", 2000);
 
 		//Earth
 		//Settings
@@ -2413,6 +2416,7 @@ public class Tools {
 		ConfigValues.WaterSpoutHeight = config.getInt("Abilities.Water.WaterSpout.Height");
 		
 		ConfigValues.WaterBubbleRadius = config.getInt("Abilities.Water.WaterBubble.Radius");
+		ConfigValues.SpiritBendingTime = config.getInt("Abilities.Water.SpiritBending.Time");
 		
 		ConfigValues.EarthBendWithWeapons = config.getBoolean("Abilities.Earth.Settings.BendWithWeapons");
 		ConfigValues.ReverseEarthbending = config.getBoolean("Abilities.Earth.Settings.ReverseEarthbending");

@@ -141,6 +141,8 @@ public class ConfigValues {
 	public static int TorrentDeflectDamage;
 	public static int TorrentFactor;
 	
+	public static int SpiritBendingTime;
+	
 	//WaterManipulation
 	public static double WaterManipulationRange;
 	public static double WaterManipulationPush;
