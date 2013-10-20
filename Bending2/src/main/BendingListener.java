@@ -70,6 +70,7 @@ import waterbending.FreezeMelt;
 import waterbending.IceSpike2;
 import waterbending.Melt;
 import waterbending.OctopusForm;
+import waterbending.SpiritBending;
 import waterbending.Torrent;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -559,6 +560,9 @@ public class BendingListener implements Listener {
 				new Collapse(player);
 			}
 
+			if (ability == Abilities.SpiritBending) {
+				new SpiritBending(player);
+			}
 			if (ability == Abilities.WaterManipulation) {
 				new WaterManipulation(player);
 			}

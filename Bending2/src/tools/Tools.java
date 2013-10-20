@@ -114,7 +114,7 @@ public class Tools {
 
 	private static Abilities[] harmlessAbilities = { Abilities.AirScooter,
 		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,
-		Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout };
+		Abilities.Illumination, Abilities.Tremorsense, Abilities.WaterSpout, Abilities.SpiritBending};
 
 	private static Abilities[] localAbilities = { Abilities.AirScooter,
 		Abilities.AirSpout, Abilities.HealingWaters, Abilities.HighJump,

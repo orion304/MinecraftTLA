@@ -27,6 +27,7 @@ import waterbending.IceSpike;
 import waterbending.IceSpike2;
 import waterbending.OctopusForm;
 import waterbending.Plantbending;
+import waterbending.SpiritBending;
 import waterbending.Torrent;
 import waterbending.TorrentBurst;
 import waterbending.WaterManipulation;
@@ -299,6 +300,8 @@ public class BendingManager implements Runnable {
 		Plantbending.regrow();
 
 		WaterReturn.progressAll();
+		
+		SpiritBending.progressAll();
 
 	}
 

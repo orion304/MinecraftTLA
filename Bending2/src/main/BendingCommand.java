@@ -1060,6 +1060,9 @@ public class BendingCommand {
 						Tools.sendMessage(player, cc, element
 								+ ".WaterManipulation");
 						break;
+					case SpiritBending:
+						Tools.sendMessage(player, cc, element + ".SpiritBending");
+						break;
 					case WaterSpout:
 						Tools.sendMessage(player, cc, element + ".WaterSpout");
 						break;

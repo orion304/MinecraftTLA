@@ -18,6 +18,7 @@ import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
 import waterbending.OctopusForm;
+import waterbending.SpiritBending;
 import waterbending.Torrent;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
@@ -94,7 +95,7 @@ public class Language {
 				"Illumination", "Lightning", "WallOfFire", "Bloodbending",
 				"PhaseChange", "HealingWaters", "IceSpike", "OctopusForm",
 				"WaterBubble", "WaterManipulation", "WaterSpout", "Surge",
-				"Torrent", "AvatarState" };
+				"Torrent", "SpiritBending", "AvatarState" };
 
 		defaultdescriptions.put("AirBlast", AirBlast.getDescription());
 		defaultdescriptions.put("AirBubble", AirBubble.getDescription());
@@ -142,6 +143,7 @@ public class Language {
 		defaultdescriptions.put("WaterSpout", WaterSpout.getDescription());
 		defaultdescriptions.put("Surge", WaterWall.getDescription());
 		defaultdescriptions.put("Torrent", Torrent.getDescription());
+		defaultdescriptions.put("SpiritBending", SpiritBending.getDescription());
 		defaultdescriptions.put("WaterChoose", StorageManager.on_water_choose);
 		defaultdescriptions.put("AvatarState", AvatarState.getDescription());
 

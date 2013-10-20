@@ -11,7 +11,7 @@ public enum Abilities {
 
 	HeatControl, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, FireBurst, FireShield,
 
-	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, OctopusForm, Torrent,
+	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, OctopusForm, Torrent, SpiritBending,
 
 	HighJump, RapidPunch, Paralyze,
 
@@ -30,7 +30,7 @@ public enum Abilities {
 	}
 
 	private enum WaterbendingAbilities {
-		WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, IceSpike, WaterSpout, Torrent, OctopusForm;
+		WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, IceSpike, WaterSpout, Torrent, OctopusForm, SpiritBending;
 	}
 
 	private enum ChiBlockingAbilities {
