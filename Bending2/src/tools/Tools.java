@@ -2139,7 +2139,7 @@ public class Tools {
 		bending.getConfig().addDefault("Abilities.Water.WaterSpout.Height", 15);
 		
 		//WaterBubble
-		bending.getConfig().addDefault("Abilities.Water.WaterBubble", 7);
+		bending.getConfig().addDefault("Abilities.Water.WaterBubble.Radius", 7);
 		
 		// Spirit Bending
 		bending.getConfig().addDefault("Abilities.Water.SpiritBending.Time", 2000);

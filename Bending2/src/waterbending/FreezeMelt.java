@@ -19,7 +19,7 @@ public class FreezeMelt {
 
 	public static ConcurrentHashMap<Block, Byte> frozenblocks = new ConcurrentHashMap<Block, Byte>();
 
-	public static final int defaultrange = ConfigValues.PhaseChangeRadius;
+	public static final int defaultrange = ConfigValues.PhaseChangeRange;
 	public static final int defaultradius = ConfigValues.PhaseChangeRadius;
 
 	public FreezeMelt(Player player) {
