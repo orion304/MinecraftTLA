@@ -2221,7 +2221,7 @@ public class Tools {
 		//Fire
 		//Settings
 		config.addDefault("Abilities.Fire.Settings.BendWithWeapons", true);
-		config.addDefault("Abilities.Fire.Settings.DissippateTime", 400);
+		config.addDefault("Abilities.Fire.Settings.DissipateTime", 400);
 		config.addDefault("Abilities.Fire.Settings.DayPowerFactor", 1.5);
 		
 		//Blaze
