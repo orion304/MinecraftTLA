@@ -3,8 +3,6 @@ package firebending;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
-import main.ConfigValues;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
+import main.ConfigValues;
 import tools.Tools;
 import waterbending.Plantbending;
 

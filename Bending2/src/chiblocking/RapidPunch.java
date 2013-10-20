@@ -16,7 +16,7 @@ import tools.Tools;
 
 public class RapidPunch {
 
-	private static int damage = ConfigValues.RapidPunchDistance;
+	private static int damage = ConfigValues.RapidPunchDamage;
 	private int distance = ConfigValues.RapidPunchDistance;
 	// private long cooldown = ConfigManager.rapidPunchCooldown;
 	private static int punches = ConfigValues.RapidPunchPunches;
@@ -60,7 +60,7 @@ public class RapidPunch {
 			if (target instanceof Player)
 				Tools.blockChi((Player) target, System.currentTimeMillis());
 			lt.setNoDamageTicks(0);
-			// Tools.verbose("PUNCHIN MOFO");
+//			 Tools.verbose("PUNCHIN MOFO");
 		}
 		// cooldowns.put(p.getName(), System.currentTimeMillis());
 		BendingPlayer.getBendingPlayer(p).cooldown(Abilities.RapidPunch);
