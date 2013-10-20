@@ -2289,7 +2289,7 @@ public class Tools {
 		
 		//RapidPunch
 		config.addDefault("Abilities.Chi.RapidPunch.Damage", 1);
-		config.addDefault("Abilities.Chi.RapidPunch.Distance", 1);
+		config.addDefault("Abilities.Chi.RapidPunch.Distance", 4);
 		config.addDefault("Abilities.Chi.RapidPunch.Punches", 4);
 		config.addDefault("Abilities.Chi.RapidPunch.Cooldown", 15000);
 
