@@ -206,6 +206,8 @@ public class ConfigValues {
 	
 	//Shockwave
 	public static int ShockwaveChargeTime;
+	public static double ShockwaveDamage;
+	public static int ShockwaveRadius;
 	
 	//Tremorsense
 	public static int TremorsenseMaxDepth;

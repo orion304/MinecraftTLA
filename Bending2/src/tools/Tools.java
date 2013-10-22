@@ -2219,6 +2219,8 @@ public class Tools {
 
 		//Shockwave
 		config.addDefault("Abilities.Earth.Shockwave.ChargeTime", 2500);
+		config.addDefault("Abilities.Earth.Shockwave.Damage", 5);
+		config.addDefault("Abilities.Earth.Shockwave.Radius", 15);
 
 		//Tremorsense
 		config.addDefault("Abilities.Earth.Tremorsense.MaxDepth", 10);
@@ -2466,6 +2468,9 @@ public class Tools {
 		ConfigValues.RaiseEarthWidth  = config.getInt("Abilities.Earth.RaiseEarth.Width");
 
 		ConfigValues.ShockwaveChargeTime = config.getInt("Abilities.Earth.Shockwave.ChargeTime");
+		ConfigValues.ShockwaveDamage = config.getDouble("Abilities.Earth.Shockwave.Damage");
+		ConfigValues.ShockwaveRadius = config.getInt("Abilities.Earth.Shockwave.Radius");
+		
 		ConfigValues.TremorsenseMaxDepth = config.getInt("Abilities.Earth.Tremorsense.MaxDepth");
 		ConfigValues.TremorsenseRadius = config.getInt("Abilities.Earth.Tremorsense.Radius");
 		ConfigValues.TremorsenseLightThreshold = config.getInt("Abilities.Earth.Tremorsense.LightThreshold");
