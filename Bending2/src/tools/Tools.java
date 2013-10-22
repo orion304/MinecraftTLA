@@ -953,17 +953,17 @@ public class Tools {
 			// Bending.plugin.getServer().getPluginManager().callEvent(event);
 			// verbose(event.isCancelled());
 
-			if (ConfigValues.PierceArmor) { // We are going to deal a set amount of damage regardless of whether or not the entity is wearing armor.
-				((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
-				((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
-				((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, damage));
-			} else {
+//			if (ConfigValues.PierceArmor) { // We are going to deal a set amount of damage regardless of whether or not the entity is wearing armor.
+//				((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
+//				((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
+//				((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, damage));
+//			} else {
 				((LivingEntity) entity).damage(damage, player);
 				((LivingEntity) entity)
 				.setLastDamageCause(new EntityDamageByEntityEvent(player,
 						entity, DamageCause.CUSTOM, damage));
 			}
-		}
+//		}
 	}
 
 	public static Vector rotateVectorAroundVector(Vector axis, Vector rotator,
