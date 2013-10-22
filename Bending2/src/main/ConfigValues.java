@@ -28,6 +28,7 @@ public class ConfigValues {
 	public static int SeaLevel;
 	
 	// Abilities
+	public static boolean PierceArmor;
 	public static int GlobalCooldown;
 	
 	//AvatarState
