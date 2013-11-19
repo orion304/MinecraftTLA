@@ -942,6 +942,16 @@ public class Tools {
 		return target;
 	}
 
+	public static void damageEntityWithShockwave(Player player, Entity entity, double damage) {
+		if (entity instanceof LivingEntity) {
+			if (AvatarState.isAvatarState(player)) {
+				damage = AvatarState.getValue(damage);
+			}
+
+			((LivingEntity) entity).damage(damage, player);
+			((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
+		}
+	}
 	public static void damageEntity(Player player, Entity entity, double damage) {
 		if (entity instanceof LivingEntity) {
 			if (AvatarState.isAvatarState(player)) {
@@ -953,17 +963,45 @@ public class Tools {
 			// Bending.plugin.getServer().getPluginManager().callEvent(event);
 			// verbose(event.isCancelled());
 
-//			if (ConfigValues.PierceArmor) { // We are going to deal a set amount of damage regardless of whether or not the entity is wearing armor.
-//				((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
-//				((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
-//				((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, damage));
-//			} else {
+			if (ConfigValues.PierceArmor) { // We are going to deal a set amount of damage regardless of whether or not the entity is wearing armor.
+				if (entity instanceof Player) {
+					// This block does damage if they are a player with armor.
+					if (((Player) entity).getInventory().getArmorContents() != null) {
+						((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
+						if (((LivingEntity) entity).getHealth() < damage) {
+							((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
+						} else {
+							((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
+						}
+						((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
+						return;
+					}
+					// This block does damage if they are a player with no armor.
+					((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
+					if (((LivingEntity) entity).getHealth() < damage) {
+						((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
+					} else {
+						((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
+					}
+					((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
+				// This block does damage if they are not a player.
+				} else {
+					((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
+					if (((LivingEntity) entity).getHealth() < damage) {
+						((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
+					} else {
+						((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
+					}
+					((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
+				}
+			} else {
+				// This block does damage if PierceArmor is off
 				((LivingEntity) entity).damage(damage, player);
 				((LivingEntity) entity)
 				.setLastDamageCause(new EntityDamageByEntityEvent(player,
-						entity, DamageCause.CUSTOM, damage));
-			}
-//		}
+						entity, DamageCause.CUSTOM, (double) damage));
+			}	
+		}
 	}
 
 	public static Vector rotateVectorAroundVector(Vector axis, Vector rotator,
@@ -2470,7 +2508,7 @@ public class Tools {
 		ConfigValues.ShockwaveChargeTime = config.getInt("Abilities.Earth.Shockwave.ChargeTime");
 		ConfigValues.ShockwaveDamage = config.getDouble("Abilities.Earth.Shockwave.Damage");
 		ConfigValues.ShockwaveRadius = config.getInt("Abilities.Earth.Shockwave.Radius");
-		
+
 		ConfigValues.TremorsenseMaxDepth = config.getInt("Abilities.Earth.Tremorsense.MaxDepth");
 		ConfigValues.TremorsenseRadius = config.getInt("Abilities.Earth.Tremorsense.Radius");
 		ConfigValues.TremorsenseLightThreshold = config.getInt("Abilities.Earth.Tremorsense.LightThreshold");
