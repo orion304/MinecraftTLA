@@ -122,6 +122,26 @@ public class Tools {
 		Abilities.Illumination, Abilities.Tremorsense,
 		Abilities.WaterSpout, Abilities.AvatarState, Abilities.FireJet,
 		Abilities.Paralyze, Abilities.RapidPunch };
+	
+	private static Abilities[] gpAbilities = { Abilities.AirBlast,
+		Abilities.AirBubble, Abilities.AirBurst, Abilities.AirScooter,
+		Abilities.AirShield, Abilities.AirSpout, Abilities.AirSuction,
+		Abilities.AirSwipe, Abilities.Tornado,
+		
+		Abilities.Bloodbending, Abilities.HealingWaters, Abilities.IceSpike,
+		Abilities.OctopusForm, Abilities.PhaseChange, Abilities.SpiritBending,
+		Abilities.Surge, Abilities.Torrent, Abilities.WaterBubble, 
+		Abilities.WaterManipulation, Abilities.WaterSpout,
+		
+		Abilities.Catapult, Abilities.EarthArmor, Abilities.EarthBlast,
+		Abilities.Shockwave, Abilities.Tremorsense,
+		
+		Abilities.Blaze, Abilities.FireBlast, Abilities.FireBurst, Abilities.FireJet,
+		Abilities.FireShield, Abilities.Illumination, Abilities.Lightning,
+		Abilities.WallOfFire,
+		
+		Abilities.HighJump, Abilities.Paralyze, Abilities.RapidPunch	
+	};
 
 	public static Integer[] transparentEarthbending = { 0, 6, 8, 9, 10, 11, 30,
 		31, 32, 37, 38, 39, 40, 50, 51, 59, 78, 83, 106 };
@@ -1214,6 +1234,10 @@ public class Tools {
 	public static boolean isHarmlessAbility(Abilities ability) {
 		return Arrays.asList(harmlessAbilities).contains(ability);
 	}
+	
+	public static boolean isAllowedInGPClaim(Abilities ability) {
+		return Arrays.asList(gpAbilities).contains(ability);
+	}
 
 	public static boolean isLocalAbility(Abilities ability) {
 		return Arrays.asList(localAbilities).contains(ability);
@@ -1464,6 +1488,7 @@ public class Tools {
 
 				if (reason != null)
 					return true;
+				if (isAllowedInGPClaim(ability)) return true;
 			}
 		}
 
