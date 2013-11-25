@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import main.Bending;
 import main.BendingPlayers;
 import main.ConfigValues;
+import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
@@ -134,7 +135,7 @@ public class Tools {
 		Abilities.WaterManipulation, Abilities.WaterSpout,
 		
 		Abilities.Catapult, Abilities.EarthArmor, Abilities.EarthBlast,
-		Abilities.Shockwave, Abilities.Tremorsense,
+		Abilities.RaiseEarth, Abilities.Shockwave, Abilities.Tremorsense,
 		
 		Abilities.Blaze, Abilities.FireBlast, Abilities.FireBurst, Abilities.FireJet,
 		Abilities.FireShield, Abilities.Illumination, Abilities.Lightning,
@@ -1475,8 +1476,14 @@ public class Tools {
 			}
 
 			if (gpp != null && respectGriefPrevention) {
-				String reason = GriefPrevention.instance.allowBuild(player,
-						location);
+				Claim claim = GriefPrevention.instance.dataStore.getClaimAt(location, true, null);
+				
+				if (claim != null) { // There is a claim present
+					String reason = claim.allowBuild(player);
+					if (reason == null) return false; // They have permission to build there.
+					if (isAllowedInGPClaim(ability)) return false; // They can use an allowed ability, regardless of trust
+					if (reason != null) return true; // They are not trusted in the claim.
+				}
 
 				if (ignite.contains(ability)) {
 
@@ -1485,10 +1492,6 @@ public class Tools {
 				if (explode.contains(ability)) {
 
 				}
-
-				if (reason != null)
-					return true;
-				if (isAllowedInGPClaim(ability)) return true;
 			}
 		}
 
@@ -1774,10 +1777,7 @@ public class Tools {
 		BlockFace[] faces = { BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH,
 				BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH };
 		boolean adjacent = false;
-		for (BlockFace face : faces) {
-			if (FreezeMelt.frozenblocks.containsKey((block.getRelative(face))))
-				adjacent = true;
-		}
+		for (BlockFace face : faces) { }
 		return adjacent;
 	}
 
