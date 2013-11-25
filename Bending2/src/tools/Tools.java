@@ -986,10 +986,12 @@ public class Tools {
 
 			if (ConfigValues.PierceArmor) { // We are going to deal a set amount of damage regardless of whether or not the entity is wearing armor.
 				if (entity instanceof Player) {
-					// This block does damage if they are a player with armor.
+					// This block does damage if they are a player with armor, otherwise we'll apply damage like normal.
 					if (((Player) entity).getInventory().getArmorContents() != null) {
 						((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
 						if (((LivingEntity) entity).getHealth() < damage) {
+							System.out.println("Test");
+							((LivingEntity) entity).damage(1, player);
 							((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
 						} else {
 							((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
@@ -997,20 +999,25 @@ public class Tools {
 						((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
 						return;
 					}
-					// This block does damage if they are a player with no armor.
-					((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
-					if (((LivingEntity) entity).getHealth() < damage) {
-						((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
-					} else {
-						((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
-					}
-					((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
+//					// This block does damage if they are a player with no armor.
+//					((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
+//					if (((LivingEntity) entity).getHealth() < damage) {
+//						((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
+//						((LivingEntity) entity).damage(0, player);
+//					} else {
+//						((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
+//						((LivingEntity) entity).damage(0, player);
+//					}
+//					((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
 				// This block does damage if they are not a player.
 				} else {
 					((LivingEntity) entity).playEffect(EntityEffect.HURT); // Play Hurt Effect
-					if (((LivingEntity) entity).getHealth() < damage) {
-						((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
+					if (((LivingEntity) entity).getHealth() <= damage) {
+						((LivingEntity) entity).damage(((LivingEntity) entity).getHealth(), player);
+//						((LivingEntity) entity).setHealth(0); // This block of code makes sure we don't go into negatives.
+//						((LivingEntity) entity).damage(0, player);
 					} else {
+						((LivingEntity) entity).damage(0, player);
 						((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage); // Deals Damage
 					}
 					((LivingEntity) entity).setLastDamageCause(new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, (double) damage));
