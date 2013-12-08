@@ -1236,7 +1236,7 @@ public class BendingListener implements Listener {
 			}
 			event.getDrops().clear();
 			event.getDrops().addAll(newdrops);
-			EarthArmor.removeEffect(event.getEntity());
+//			EarthArmor.removeEffect(event.getEntity());
 		}
 	}
 }

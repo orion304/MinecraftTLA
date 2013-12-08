@@ -208,7 +208,11 @@ public class EarthArmor {
 			return;
 		EarthArmor eartharmor = instances.get(player);
 
-		if (player.isDead() || !player.isOnline()) {
+		if (player.isDead()) {
+			eartharmor.cancel();
+			return;
+		}
+		if (!player.isOnline()) {
 			eartharmor.cancel();
 			eartharmor.removeEffect();
 			return;
