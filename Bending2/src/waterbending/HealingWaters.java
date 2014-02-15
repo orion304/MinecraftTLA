@@ -4,6 +4,7 @@ import main.ConfigValues;
 
 import org.bukkit.Server;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -47,13 +48,15 @@ public class HealingWaters {
 	}
 
 	private static void giveHPToEntity(LivingEntity le) {
-		if (!le.isDead() && le.getHealth() < le.getMaxHealth()) {
+		Damageable d = (Damageable) le;
+		if (!le.isDead() && d.getHealth() < d.getMaxHealth()) {
 			applyHealingToEntity(le);
 		}
 	}
 	
 	private static void giveHP(Player player) {
-		if (!player.isDead() && player.getHealth() < 20) {
+		Damageable d = (Damageable) player;
+		if (!player.isDead() && d.getHealth() < 20) {
 			// int hp = player.getHealth();
 			// if (hp < 20) {
 			// hp++;

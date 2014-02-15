@@ -38,7 +38,7 @@ public class FireBurst {
 			chargetime /= ConfigValues.FireDayPowerFactor;
 		}
 		if (AvatarState.isAvatarState(player))
-			chargetime = 0;
+			chargetime = chargetime /= ConfigValues.FireDayPowerFactor;
 		this.player = player;
 		instances.put(player, this);
 	}

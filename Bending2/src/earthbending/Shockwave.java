@@ -31,7 +31,7 @@ public class Shockwave {
 			return;
 		starttime = System.currentTimeMillis();
 		if (AvatarState.isAvatarState(player))
-			chargetime = 0;
+			chargetime = chargetime/3;
 		this.player = player;
 		instances.put(player, this);
 

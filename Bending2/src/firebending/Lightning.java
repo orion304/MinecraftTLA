@@ -116,7 +116,7 @@ public class Lightning {
 				player.getWorld());
 		long warmup = (int) ((double) defaultwarmup / ConfigValues.FireDayPowerFactor);
 		if (AvatarState.isAvatarState(player))
-			warmup = 0;
+			warmup = warmup/3;
 		if (System.currentTimeMillis() > starttime + warmup)
 			charged = true;
 
