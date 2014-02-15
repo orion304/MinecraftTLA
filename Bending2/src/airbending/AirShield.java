@@ -139,7 +139,7 @@ public class AirShield {
 			return false;
 		}
 		if (((Tools.getBendingAbility(player) != Abilities.AirShield) || (!player
-				.isSneaking())) && !AvatarState.isAvatarState(player)) {
+				.isSneaking()))) {// && !AvatarState.isAvatarState(player)) {
 			instances.remove(player.getEntityId());
 			return false;
 		}

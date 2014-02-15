@@ -93,12 +93,14 @@ public class FireJet {
 			player.getWorld().playEffect(player.getLocation(),
 					Effect.MOBSPAWNER_FLAMES, 1);
 			double timefactor;
-			if (AvatarState.isAvatarState(player)) {
-				timefactor = 1;
-			} else {
-				timefactor = 1 - ((double) (System.currentTimeMillis() - time))
-						/ (2.0 * duration);
-			}
+			timefactor = 1 - ((double) (System.currentTimeMillis() - time))
+					/ (2.0 * duration);
+//			if (AvatarState.isAvatarState(player)) {
+//				timefactor = 1;
+//			} else {
+//				timefactor = 1 - ((double) (System.currentTimeMillis() - time))
+//						/ (2.0 * duration);
+//			}
 			Vector velocity = player.getEyeLocation().getDirection().clone()
 					.normalize().multiply(factor * timefactor);
 			// Vector velocity = player.getVelocity().clone();
