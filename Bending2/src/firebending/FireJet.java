@@ -85,8 +85,8 @@ public class FireJet {
 			return;
 		}
 		if ((Tools.isWater(player.getLocation().getBlock()) || System
-				.currentTimeMillis() > time + duration)
-				&& !AvatarState.isAvatarState(player)) {
+				.currentTimeMillis() > time + duration)) {
+				//&& !AvatarState.isAvatarState(player)) {
 			// player.setAllowFlight(canfly);
 			instances.remove(player);
 		} else {
