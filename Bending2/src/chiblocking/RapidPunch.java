@@ -11,6 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.Tools;
 
@@ -58,6 +59,9 @@ public class RapidPunch {
 			LivingEntity lt = (LivingEntity) target;
 			Tools.damageEntity(p, target, damage);
 			if (target instanceof Player)
+				if (AvatarState.isAvatarState((Player) target)) {
+					new AvatarState((Player) target);
+				}
 				Tools.blockChi((Player) target, System.currentTimeMillis());
 			lt.setNoDamageTicks(0);
 //			 Tools.verbose("PUNCHIN MOFO");
