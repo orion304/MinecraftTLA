@@ -43,7 +43,7 @@ public class WallOfFire {
 	private List<Block> blocks = new ArrayList<Block>();
 
 	public WallOfFire(Player player) {
-		if (instances.containsKey(player) && !AvatarState.isAvatarState(player)) {
+		if (instances.containsKey(player)) { //&& !AvatarState.isAvatarState(player)) {
 			return;
 		}
 

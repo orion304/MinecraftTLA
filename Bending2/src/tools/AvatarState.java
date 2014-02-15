@@ -18,7 +18,7 @@ public class AvatarState {
 	private static final boolean speed = ConfigValues.AvatarStateSpeedEnabled;
 	private static final boolean damageresistance = ConfigValues.AvatarStateResistanceEnabled;
 	private static final boolean fireresistance = ConfigValues.AvatarStateFireResistanceEnabled;
-	
+
 	private static final int regenpower = ConfigValues.AvatarStateRegenerationPower - 1;
 	private static final int speedpower = ConfigValues.AvatarStateSpeedPower - 1;
 	private static final int resistancepower = ConfigValues.AvatarStateResistancePower - 1;
@@ -26,16 +26,26 @@ public class AvatarState {
 
 	Player player;
 
+	private long time;
+	private static final long interval = 480000;
+
 	// boolean canfly = false;
 
 	public AvatarState(Player player) {
 		this.player = player;
+		time = System.currentTimeMillis();
 		if (instances.containsKey(player)) {
 			instances.remove(player);
-		} else {
-			new Flight(player);
-			instances.put(player, this);
+			player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 0));
+			return;
 		}
+		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(Abilities.AvatarState)) {
+			return;
+		}
+		new Flight(player);
+		instances.put(player, this);
+		BendingPlayer.getBendingPlayer(player).cooldown(Abilities.AvatarState);
+
 	}
 
 	public static void manageAvatarStates() {
@@ -52,6 +62,9 @@ public class AvatarState {
 		if (!Tools.canBend(player, Abilities.AvatarState)) {
 			instances.remove(player);
 			return false;
+		}
+		if (System.currentTimeMillis() - time >= interval) {
+			new AvatarState(player);
 		}
 		addPotionEffects();
 		return true;

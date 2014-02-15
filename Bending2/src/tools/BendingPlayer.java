@@ -109,6 +109,9 @@ public class BendingPlayer implements CustomSerializable {
 			for (Abilities ability : Abilities.values()) {
 				long cd = 0;
 				switch (ability) {
+				case AvatarState:
+					cd = 7200000;
+					break;
 				case WaterManipulation:
 					cd = 1000;
 					break;
@@ -147,8 +150,8 @@ public class BendingPlayer implements CustomSerializable {
 	}
 
 	public boolean isOnCooldown(Abilities ability) {
-		if (ability == Abilities.AvatarState)
-			return false;
+//		if (ability == Abilities.AvatarState)
+//			return false;
 		if (isOnGlobalCooldown()) {
 			return true;
 		}
