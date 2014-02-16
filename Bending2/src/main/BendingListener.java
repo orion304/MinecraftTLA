@@ -1217,6 +1217,9 @@ public class BendingListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) {
+		if (AvatarState.isAvatarState(event.getEntity())) {
+			new AvatarState(event.getEntity());
+		}
 		if (EarthArmor.instances.containsKey(event.getEntity())) {
 			List<ItemStack> drops = event.getDrops();
 			List<ItemStack> newdrops = new ArrayList<ItemStack>();
