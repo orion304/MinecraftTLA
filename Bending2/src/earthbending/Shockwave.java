@@ -30,8 +30,8 @@ public class Shockwave {
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();
-		if (AvatarState.isAvatarState(player))
-			chargetime = chargetime/3;
+//		if (AvatarState.isAvatarState(player))
+//			chargetime = chargetime/3;
 		this.player = player;
 		instances.put(player, this);
 
