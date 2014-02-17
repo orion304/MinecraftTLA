@@ -53,7 +53,7 @@ public class Fireball {
 			chargetime = (long) (chargetime / ConfigValues.FireDayPowerFactor);
 		}
 		if (AvatarState.isAvatarState(player)) {
-			chargetime = 0;
+//			chargetime = 0;
 			maxdamage = AvatarState.getValue(maxdamage);
 		}
 		range = Tools.firebendingDayAugment(range, player.getWorld());

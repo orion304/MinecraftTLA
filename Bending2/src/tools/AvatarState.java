@@ -8,6 +8,7 @@ import main.ConfigValues;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.kitteh.tag.TagAPI;
 
 public class AvatarState {
 
@@ -37,6 +38,7 @@ public class AvatarState {
 		if (instances.containsKey(player)) {
 			instances.remove(player);
 			player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 0));
+			TagAPI.refreshPlayer(player);
 			return;
 		}
 		if (BendingPlayer.getBendingPlayer(player).isOnCooldown(Abilities.AvatarState)) {
@@ -44,6 +46,7 @@ public class AvatarState {
 		}
 		new Flight(player);
 		instances.put(player, this);
+		TagAPI.refreshPlayer(player);
 		BendingPlayer.getBendingPlayer(player).cooldown(Abilities.AvatarState);
 
 	}
