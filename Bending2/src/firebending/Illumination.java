@@ -2,6 +2,8 @@ package firebending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
@@ -10,7 +12,6 @@ import org.bukkit.entity.Player;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class Illumination {
@@ -18,7 +19,7 @@ public class Illumination {
 	public static ConcurrentHashMap<Player, Illumination> instances = new ConcurrentHashMap<Player, Illumination>();
 	public static ConcurrentHashMap<Block, Player> blocks = new ConcurrentHashMap<Block, Player>();
 
-	private static final int range = ConfigManager.illuminationRange;
+	private static final int range = ConfigValues.IlluminationRange;
 
 	private Player player;
 	private Block block;

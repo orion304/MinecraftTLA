@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,13 +11,12 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthColumn {
 
 	public static ConcurrentHashMap<Integer, EarthColumn> instances = new ConcurrentHashMap<Integer, EarthColumn>();
-	public static final int standardheight = ConfigManager.earthColumnHeight;
+	public static final int standardheight = ConfigValues.RaiseEarthHeight;
 
 	private static ConcurrentHashMap<Block, Block> alreadydoneblocks = new ConcurrentHashMap<Block, Block>();
 	private static ConcurrentHashMap<Block, Integer> baseblocks = new ConcurrentHashMap<Block, Integer>();

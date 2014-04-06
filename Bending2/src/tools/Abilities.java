@@ -5,20 +5,20 @@ import java.util.Arrays;
 
 public enum Abilities {
 
-	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirSpout, AirBurst,
+	AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirSpout, AirBurst, AirGlide,
 
 	Catapult, RaiseEarth, EarthGrab, EarthTunnel, EarthBlast, Collapse, Tremorsense, EarthArmor, Shockwave,
 
 	HeatControl, Blaze, FireJet, Illumination, WallOfFire, FireBlast, Lightning, FireBurst, FireShield,
 
-	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, OctopusForm, Torrent,
+	WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, WaterSpout, IceSpike, OctopusForm, Torrent, SpiritBending,
 
 	HighJump, RapidPunch, Paralyze,
 
 	AvatarState;
 
 	private enum AirbendingAbilities {
-		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirBurst, AirSpout;
+		AirBlast, AirBubble, AirShield, AirSuction, AirSwipe, Tornado, AirScooter, AirBurst, AirSpout, AirGlide;
 	}
 
 	private enum EarthbendingAbilities {
@@ -30,7 +30,7 @@ public enum Abilities {
 	}
 
 	private enum WaterbendingAbilities {
-		WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, IceSpike, WaterSpout, Torrent, OctopusForm;
+		WaterBubble, PhaseChange, HealingWaters, WaterManipulation, Surge, Bloodbending, IceSpike, WaterSpout, Torrent, OctopusForm, SpiritBending;
 	}
 
 	private enum ChiBlockingAbilities {

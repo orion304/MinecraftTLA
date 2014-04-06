@@ -18,6 +18,7 @@ import waterbending.FreezeMelt;
 import waterbending.HealingWaters;
 import waterbending.IceSpike;
 import waterbending.OctopusForm;
+import waterbending.SpiritBending;
 import waterbending.Torrent;
 import waterbending.WaterManipulation;
 import waterbending.WaterSpout;
@@ -25,6 +26,7 @@ import waterbending.WaterWall;
 import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirBurst;
+import airbending.AirGlide;
 import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSpout;
@@ -86,7 +88,7 @@ public class Language {
 
 		String[] indexlist = new String[] { "AirBlast", "AirBubble",
 				"AirBurst", "AirScooter", "AirShield", "AirSpout",
-				"AirSuction", "AirSwipe", "Tornado", "HighJump", "Paralyze",
+				"AirSuction", "AirSwipe", "Tornado", "AirGlide", "HighJump", "Paralyze",
 				"RapidPunch", "Catapult", "Collapse", "EarthArmor",
 				"EarthBlast", "RaiseEarth", "EarthGrab", "EarthTunnel",
 				"Shockwave", "Tremorsense", "Blaze", "HeatControl",
@@ -94,7 +96,7 @@ public class Language {
 				"Illumination", "Lightning", "WallOfFire", "Bloodbending",
 				"PhaseChange", "HealingWaters", "IceSpike", "OctopusForm",
 				"WaterBubble", "WaterManipulation", "WaterSpout", "Surge",
-				"Torrent", "AvatarState" };
+				"Torrent", "SpiritBending", "AvatarState" };
 
 		defaultdescriptions.put("AirBlast", AirBlast.getDescription());
 		defaultdescriptions.put("AirBubble", AirBubble.getDescription());
@@ -105,6 +107,7 @@ public class Language {
 		defaultdescriptions.put("AirSuction", AirSuction.getDescription());
 		defaultdescriptions.put("AirSwipe", AirSwipe.getDescription());
 		defaultdescriptions.put("Tornado", Tornado.getDescription());
+		defaultdescriptions.put("AirGlide", AirGlide.getDescription());
 		defaultdescriptions.put("AirChoose", StorageManager.on_air_choose);
 		defaultdescriptions.put("HighJump", HighJump.getDescription());
 		defaultdescriptions.put("Paralyze", Paralyze.getDescription());
@@ -142,6 +145,7 @@ public class Language {
 		defaultdescriptions.put("WaterSpout", WaterSpout.getDescription());
 		defaultdescriptions.put("Surge", WaterWall.getDescription());
 		defaultdescriptions.put("Torrent", Torrent.getDescription());
+		defaultdescriptions.put("SpiritBending", SpiritBending.getDescription());
 		defaultdescriptions.put("WaterChoose", StorageManager.on_water_choose);
 		defaultdescriptions.put("AvatarState", AvatarState.getDescription());
 

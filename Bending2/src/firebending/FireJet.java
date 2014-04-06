@@ -3,6 +3,8 @@ package firebending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,15 +14,14 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 
 public class FireJet {
 
 	public static ConcurrentHashMap<Player, FireJet> instances = new ConcurrentHashMap<Player, FireJet>();
-	private static final double defaultfactor = ConfigManager.fireJetSpeed;
-	private static final long defaultduration = ConfigManager.fireJetDuration;
+	private static final double defaultfactor = ConfigValues.FireJetSpeed;
+	private static final long defaultduration = ConfigValues.FireJetDuration;
 	// private static final long cooldown = ConfigManager.fireJetCooldown;
 
 	// private static ConcurrentHashMap<Player, Long> timers = new
@@ -84,20 +85,22 @@ public class FireJet {
 			return;
 		}
 		if ((Tools.isWater(player.getLocation().getBlock()) || System
-				.currentTimeMillis() > time + duration)
-				&& !AvatarState.isAvatarState(player)) {
+				.currentTimeMillis() > time + duration)) {
+				//&& !AvatarState.isAvatarState(player)) {
 			// player.setAllowFlight(canfly);
 			instances.remove(player);
 		} else {
 			player.getWorld().playEffect(player.getLocation(),
 					Effect.MOBSPAWNER_FLAMES, 1);
 			double timefactor;
-			if (AvatarState.isAvatarState(player)) {
-				timefactor = 1;
-			} else {
-				timefactor = 1 - ((double) (System.currentTimeMillis() - time))
-						/ (2.0 * duration);
-			}
+			timefactor = 1 - ((double) (System.currentTimeMillis() - time))
+					/ (2.0 * duration);
+//			if (AvatarState.isAvatarState(player)) {
+//				timefactor = 1;
+//			} else {
+//				timefactor = 1 - ((double) (System.currentTimeMillis() - time))
+//						/ (2.0 * duration);
+//			}
 			Vector velocity = player.getEyeLocation().getDirection().clone()
 					.normalize().multiply(factor * timefactor);
 			// Vector velocity = player.getVelocity().clone();

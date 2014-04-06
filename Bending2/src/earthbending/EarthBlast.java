@@ -3,6 +3,8 @@ package earthbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,7 +16,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 import waterbending.WaterManipulation;
 import firebending.FireBlast;
@@ -25,15 +26,15 @@ public class EarthBlast {
 	// private static ConcurrentHashMap<Player, EarthBlast> prepared = new
 	// ConcurrentHashMap<Player, EarthBlast>();
 
-	private static boolean hitself = ConfigManager.earthBlastHitSelf;
-	private static double preparerange = ConfigManager.earthBlastPrepareRange;
-	private static double range = ConfigManager.earthBlastRange;
-	private static int damage = ConfigManager.earthdmg;
-	private static double speed = ConfigManager.earthBlastSpeed;
+	private static boolean hitself = ConfigValues.EarthBlastHitSelf;
+	private static double preparerange = ConfigValues.EarthBlastPrepareRange;
+	private static double range = ConfigValues.EarthBlastRange;
+	private static int damage = ConfigValues.EarthBlastDamage;
+	private static double speed = ConfigValues.EarthBlastSpeed;
 	private static final double deflectrange = 3;
 
-	private static boolean revert = ConfigManager.earthBlastRevert;
-	private static double pushfactor = ConfigManager.EarthBlastPush;
+	private static boolean revert = ConfigValues.EarthBlastRevert;
+	private static double pushfactor = ConfigValues.EarthBlastPush;
 	// private static double speed = 1.5;
 
 	private static long interval = (long) (1000. / speed);

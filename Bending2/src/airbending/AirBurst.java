@@ -3,6 +3,8 @@ package airbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -19,13 +21,13 @@ public class AirBurst {
 	private static ConcurrentHashMap<Player, AirBurst> instances = new ConcurrentHashMap<Player, AirBurst>();
 
 	private static double threshold = 10;
-	private static double pushfactor = 1.5;
+	private static double pushfactor = ConfigValues.AirBurstPushFactor;
 	private static double deltheta = 10;
 	private static double delphi = 10;
 
 	private Player player;
 	private long starttime;
-	private long chargetime = 1750;
+	private long chargetime = ConfigValues.AirBurstChargeTime;
 	private boolean charged = false;
 
 	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
@@ -39,7 +41,7 @@ public class AirBurst {
 			return;
 		starttime = System.currentTimeMillis();
 		if (AvatarState.isAvatarState(player))
-			chargetime = 0;
+			chargetime = chargetime/3;
 		this.player = player;
 		instances.put(player, this);
 	}

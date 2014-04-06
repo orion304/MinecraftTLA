@@ -6,16 +6,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import customevents.PlayerBindAbilityEvent;
+import customevents.PlayerChooseBendingEvent;
+
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.BendingType;
-import tools.ConfigManager;
+//import tools.ConfigManager;
 import tools.Tools;
 
 public class BendingCommand {
@@ -285,7 +289,8 @@ public class BendingCommand {
 			return;
 		}
 
-		boolean bindmode = ConfigManager.bendToItem;
+//		boolean bindmode = ConfigManager.bendToItem;
+		boolean bindmode = ConfigValues.BendToItem;
 		String mode;
 
 		if (args.length > 2) {
@@ -421,16 +426,21 @@ public class BendingCommand {
 				}
 				ChatColor color = ChatColor.WHITE;
 				if (Tools.isBender(p.getName(), BendingType.Air))
-					color = Tools.getColor(ConfigManager.getColor("Air"));
+//					color = Tools.getColor(ConfigManager.getColor("Air"));
+					color = Tools.getColor(ConfigValues.AirColor);
 				if (Tools.isBender(p.getName(), BendingType.Water))
-					color = Tools.getColor(ConfigManager.getColor("Water"));
+//					color = Tools.getColor(ConfigManager.getColor("Water"));
+					color = Tools.getColor(ConfigValues.WaterColor);
 				if (Tools.isBender(p.getName(), BendingType.Fire))
-					color = Tools.getColor(ConfigManager.getColor("Fire"));
+//					color = Tools.getColor(ConfigManager.getColor("Fire"));
+					color = Tools.getColor(ConfigValues.FireColor);
 				if (Tools.isBender(p.getName(), BendingType.Earth))
-					color = Tools.getColor(ConfigManager.getColor("Earth"));
+//					color = Tools.getColor(ConfigManager.getColor("Earth"));
+					color = Tools.getColor(ConfigValues.EarthColor);
 				if (Tools.isBender(p.getName(), BendingType.ChiBlocker))
-					color = Tools
-							.getColor(ConfigManager.getColor("ChiBlocker"));
+//					color = Tools
+//							.getColor(ConfigManager.getColor("ChiBlocker"));
+					color = Tools.getColor(ConfigValues.ChiColor);
 				sendMessage(player, color + p.getName());
 			}
 		} else if (args.length == 2) {
@@ -458,30 +468,25 @@ public class BendingCommand {
 						if (Tools.isBender(p.getName(), BendingType.Air))
 							sendMessage(
 									player,
-									Tools.getColor(ConfigManager
-											.getColor("Air")) + "-Airbending");
+									Tools.getColor(ConfigValues.AirColor) + "-Airbending");
 						if (Tools.isBender(p.getName(), BendingType.Water))
 							sendMessage(
 									player,
-									Tools.getColor(ConfigManager
-											.getColor("Water"))
+									Tools.getColor(ConfigValues.WaterColor)
 											+ "-Waterbending");
 						if (Tools.isBender(p.getName(), BendingType.Fire))
 							sendMessage(
 									player,
-									Tools.getColor(ConfigManager
-											.getColor("Fire")) + "-Firebending");
+									Tools.getColor(ConfigValues.FireColor) + "-Firebending");
 						if (Tools.isBender(p.getName(), BendingType.Earth))
 							sendMessage(
 									player,
-									Tools.getColor(ConfigManager
-											.getColor("Earth"))
+									Tools.getColor(ConfigValues.EarthColor)
 											+ "-Earthbending");
 						if (Tools.isBender(p.getName(), BendingType.ChiBlocker))
 							sendMessage(
 									player,
-									Tools.getColor(ConfigManager
-											.getColor("ChiBlocker"))
+									Tools.getColor(ConfigValues.ChiColor)
 											+ "-Chiblocking");
 					}
 				}
@@ -492,25 +497,24 @@ public class BendingCommand {
 				} else {
 					if (Tools.isBender(p.getName(), BendingType.Air))
 						sendMessage(player,
-								Tools.getColor(ConfigManager.getColor("Air"))
+								Tools.getColor(ConfigValues.AirColor)
 										+ "-Airbending");
 					if (Tools.isBender(p.getName(), BendingType.Water))
 						sendMessage(player,
-								Tools.getColor(ConfigManager.getColor("Water"))
+								Tools.getColor(ConfigValues.WaterColor)
 										+ "-Waterbending");
 					if (Tools.isBender(p.getName(), BendingType.Fire))
 						sendMessage(player,
-								Tools.getColor(ConfigManager.getColor("Fire"))
+								Tools.getColor(ConfigValues.FireColor)
 										+ "-Firebending");
 					if (Tools.isBender(p.getName(), BendingType.Earth))
 						sendMessage(player,
-								Tools.getColor(ConfigManager.getColor("Earth"))
+								Tools.getColor(ConfigValues.EarthColor)
 										+ "-Earthbending");
 					if (Tools.isBender(p.getName(), BendingType.ChiBlocker))
 						sendMessage(
 								player,
-								Tools.getColor(ConfigManager
-										.getColor("ChiBlocker"))
+								Tools.getColor(ConfigValues.ChiColor)
 										+ "-Chiblocking");
 				}
 			}
@@ -586,6 +590,7 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Air);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Air);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Air));
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -600,6 +605,7 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Fire);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Fire);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Fire));
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -614,6 +620,7 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Earth);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Earth);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Earth));
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -628,10 +635,11 @@ public class BendingCommand {
 				// PlayerStorageWriter.setBending(player, BendingType.Water);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.Water);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.Water));
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
-				if (!hasHelpPermission(player, "bending.chiblocking")) {
+				if (!hasHelpPermission(player, "bending.chiblocker")) {
 					Tools.sendMessage(player, "General.no_perms_chiblocking");
 					return;
 				}
@@ -643,6 +651,7 @@ public class BendingCommand {
 				// BendingType.ChiBlocker);
 				BendingPlayer.getBendingPlayer(player).setBender(
 						BendingType.ChiBlocker);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, player, BendingType.ChiBlocker));
 				return;
 			}
 			printChooseUsage(player);
@@ -684,6 +693,7 @@ public class BendingCommand {
 				// BendingType.Air);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Air);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Air));
 				return;
 			}
 			if (Arrays.asList(firebendingAliases).contains(choice)) {
@@ -708,6 +718,7 @@ public class BendingCommand {
 				// BendingType.Fire);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Fire);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Fire));
 				return;
 			}
 			if (Arrays.asList(earthbendingAliases).contains(choice)) {
@@ -732,6 +743,7 @@ public class BendingCommand {
 				// BendingType.Earth);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Earth);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Earth));
 				return;
 			}
 			if (Arrays.asList(waterbendingAliases).contains(choice)) {
@@ -756,6 +768,7 @@ public class BendingCommand {
 				// BendingType.Water);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.Water);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.Water));
 				return;
 			}
 			if (Arrays.asList(chiblockingAliases).contains(choice)) {
@@ -780,6 +793,7 @@ public class BendingCommand {
 				// BendingType.ChiBlocker);
 				BendingPlayer.getBendingPlayer(targetplayer).setBender(
 						BendingType.ChiBlocker);
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerChooseBendingEvent(player, targetplayer, BendingType.ChiBlocker));
 				return;
 			}
 			printChooseUsage(player);
@@ -927,23 +941,23 @@ public class BendingCommand {
 				ChatColor cc = ChatColor.GOLD;
 				String element = "Other";
 				if (Abilities.isAirbending(Abilities.getAbility(args[1]))) {
-					cc = Tools.getColor(ConfigManager.color.get("Air"));
+					cc = Tools.getColor(ConfigValues.AirColor);
 					element = "Air";
 				}
 				if (Abilities.isFirebending(Abilities.getAbility(args[1]))) {
-					cc = Tools.getColor(ConfigManager.color.get("Fire"));
+					cc = Tools.getColor(ConfigValues.FireColor);
 					element = "Fire";
 				}
 				if (Abilities.isEarthbending(Abilities.getAbility(args[1]))) {
-					cc = Tools.getColor(ConfigManager.color.get("Earth"));
+					cc = Tools.getColor(ConfigValues.EarthColor);
 					element = "Earth";
 				}
 				if (Abilities.isWaterbending(Abilities.getAbility(args[1]))) {
-					cc = Tools.getColor(ConfigManager.color.get("Water"));
+					cc = Tools.getColor(ConfigValues.WaterColor);
 					element = "Water";
 				}
 				if (Abilities.isChiBlocking(Abilities.getAbility(args[1]))) {
-					cc = Tools.getColor(ConfigManager.color.get("ChiBlocker"));
+					cc = Tools.getColor(ConfigValues.ChiColor);
 					element = "Chiblocker";
 				}
 				if (Tools.hasPermission(player, Abilities.getAbility(args[1]))) {
@@ -977,6 +991,9 @@ public class BendingCommand {
 						break;
 					case AirScooter:
 						Tools.sendMessage(player, cc, element + ".AirScooter");
+						break;
+					case AirGlide:
+						Tools.sendMessage(player, cc, element + ".AirGlide");
 						break;
 					case Shockwave:
 						Tools.sendMessage(player, cc, element + ".Shockwave");
@@ -1045,6 +1062,9 @@ public class BendingCommand {
 					case WaterManipulation:
 						Tools.sendMessage(player, cc, element
 								+ ".WaterManipulation");
+						break;
+					case SpiritBending:
+						Tools.sendMessage(player, cc, element + ".SpiritBending");
 						break;
 					case WaterSpout:
 						Tools.sendMessage(player, cc, element + ".WaterSpout");
@@ -1373,7 +1393,9 @@ public class BendingCommand {
 	private void reload(Player player, String[] args) {
 		if (!hasPermission(player, "bending.admin.reload"))
 			return;
-		Bending.configManager.load(new File(dataFolder, "config.yml"));
+		Bukkit.getPluginManager().getPlugin("Bending").reloadConfig();
+		Tools.configCheck();
+//		Bending.configManager.load(new File(dataFolder, "config.yml"));
 		Bending.language.load(new File(dataFolder, "language.yml"));
 		// config.initialize(dataFolder);
 		server.getScheduler().runTaskAsynchronously(Bending.plugin,
@@ -1425,20 +1447,15 @@ public class BendingCommand {
 						none = false;
 						ChatColor color = ChatColor.WHITE;
 						if (Abilities.isAirbending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Air"));
+							color = Tools.getColor(ConfigValues.AirColor);
 						} else if (Abilities.isChiBlocking(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("ChiBlocker"));
+							color = Tools.getColor(ConfigValues.ChiColor);
 						} else if (Abilities.isEarthbending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Earth"));
+							color = Tools.getColor(ConfigValues.EarthColor);
 						} else if (Abilities.isFirebending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Fire"));
+							color = Tools.getColor(ConfigValues.FireColor);
 						} else if (Abilities.isWaterbending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Water"));
+							color = Tools.getColor(ConfigValues.WaterColor);
 						}
 						String ability = a.name();
 						sendMessage(player,
@@ -1455,20 +1472,15 @@ public class BendingCommand {
 						none = false;
 						ChatColor color = ChatColor.WHITE;
 						if (Abilities.isAirbending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Air"));
+							color = Tools.getColor(ConfigValues.AirColor);
 						} else if (Abilities.isChiBlocking(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("ChiBlocker"));
+							color = Tools.getColor(ConfigValues.ChiColor);
 						} else if (Abilities.isEarthbending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Earth"));
+							color = Tools.getColor(ConfigValues.EarthColor);
 						} else if (Abilities.isFirebending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Fire"));
+							color = Tools.getColor(ConfigValues.FireColor);
 						} else if (Abilities.isWaterbending(a)) {
-							color = Tools.getColor(ConfigManager
-									.getColor("Water"));
+							color = Tools.getColor(ConfigValues.WaterColor);
 						}
 						String ability = a.name();
 						sendMessage(player, mat.name().replaceAll("_", " ")
@@ -1486,19 +1498,19 @@ public class BendingCommand {
 			ChatColor color = ChatColor.WHITE;
 			if (Arrays.asList(airbendingAliases).contains(choice)) {
 				abilitylist = airbendingabilities;
-				color = Tools.getColor(ConfigManager.getColor("Air"));
+				color = Tools.getColor(ConfigValues.AirColor);
 			} else if (Arrays.asList(waterbendingAliases).contains(choice)) {
 				abilitylist = waterbendingabilities;
-				color = Tools.getColor(ConfigManager.getColor("Water"));
+				color = Tools.getColor(ConfigValues.WaterColor);
 			} else if (Arrays.asList(earthbendingAliases).contains(choice)) {
 				abilitylist = earthbendingabilities;
-				color = Tools.getColor(ConfigManager.getColor("Earth"));
+				color = Tools.getColor(ConfigValues.EarthColor);
 			} else if (Arrays.asList(firebendingAliases).contains(choice)) {
 				abilitylist = firebendingabilities;
-				color = Tools.getColor(ConfigManager.getColor("Fire"));
+				color = Tools.getColor(ConfigValues.FireColor);
 			} else if (Arrays.asList(chiblockingAliases).contains(choice)) {
 				abilitylist = chiblockingabilities;
-				color = Tools.getColor(ConfigManager.getColor("ChiBlocker"));
+				color = Tools.getColor(ConfigValues.ChiColor);
 			}
 
 			if (abilitylist != null) {
@@ -1737,7 +1749,7 @@ public class BendingCommand {
 					Tools.sendMessage(player, "General.you_already_chi");
 					return;
 				}
-				if (!hasHelpPermission(player, "bending.chiblocking")) {
+				if (!hasHelpPermission(player, "bending.chiblocker")) {
 					Tools.sendMessage(player, "General.no_perms_chi");
 					return;
 				}
@@ -1906,7 +1918,7 @@ public class BendingCommand {
 											"General.they_already_chi"));
 					return;
 				}
-				if (!hasHelpPermission(targetplayer, "bending.chiblocking")) {
+				if (!hasHelpPermission(targetplayer, "bending.chiblocker")) {
 					Tools.sendMessage(player, "General.no_perms_chi");
 					return;
 				}
@@ -2145,15 +2157,14 @@ public class BendingCommand {
 
 		ChatColor color = ChatColor.WHITE;
 		ChatColor white = ChatColor.WHITE;
-
 		if (Abilities.isWaterbending(ability)) {
 			if (!Tools.isBender(player.getName(), BendingType.Water)) {
 				ChatColor color2 = ChatColor.WHITE;
-				color2 = Tools.getColor(ConfigManager.getColor("Water"));
+				color2 = Tools.getColor(ConfigValues.WaterColor);
 				Tools.sendMessage(player, color2, "General.not_water");
 				return;
 			}
-			color = Tools.getColor(ConfigManager.getColor("Water"));
+			color = Tools.getColor(ConfigValues.WaterColor);
 			if (!item) {
 				// config.setAbility(player, ability, slot);
 				// PlayerStorageWriter.bindSlot(player, slot, ability);
@@ -2161,23 +2172,25 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
 		if (Abilities.isAirbending(ability)) {
 			if (!Tools.isBender(player.getName(), BendingType.Air)) {
 				ChatColor color2 = ChatColor.WHITE;
-				color2 = Tools.getColor(ConfigManager.getColor("Air"));
+				color2 = Tools.getColor(ConfigValues.AirColor);
 				Tools.sendMessage(player, color2, "General.not_air");
 				return;
 			}
-			color = Tools.getColor(ConfigManager.getColor("Air"));
+			color = Tools.getColor(ConfigValues.AirColor);
 			if (!item) {
 				// config.setAbility(player, ability, slot);
 				// PlayerStorageWriter.bindSlot(player, slot, ability);
@@ -2185,23 +2198,25 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
 		if (Abilities.isEarthbending(ability)) {
 			if (!Tools.isBender(player.getName(), BendingType.Earth)) {
 				ChatColor color2 = ChatColor.WHITE;
-				color2 = Tools.getColor(ConfigManager.getColor("Earth"));
+				color2 = Tools.getColor(ConfigValues.EarthColor);
 				Tools.sendMessage(player, color2, "General.not_earth");
 				return;
 			}
-			color = Tools.getColor(ConfigManager.getColor("Earth"));
+			color = Tools.getColor(ConfigValues.EarthColor);
 			if (!item) {
 				// config.setAbility(player, ability, slot);
 				// PlayerStorageWriter.bindSlot(player, slot, ability);
@@ -2209,23 +2224,25 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, null));
 			}
 			return;
 		}
 		if (Abilities.isChiBlocking(ability)) {
 			if (!Tools.isBender(player.getName(), BendingType.ChiBlocker)) {
 				ChatColor color2 = ChatColor.WHITE;
-				color2 = Tools.getColor(ConfigManager.getColor("ChiBlocker"));
+				color2 = Tools.getColor(ConfigValues.ChiColor);
 				Tools.sendMessage(player, color2, "General.not_chi");
 				return;
 			}
-			color = Tools.getColor(ConfigManager.getColor("ChiBlocker"));
+			color = Tools.getColor(ConfigValues.ChiColor);
 			if (!item) {
 				// config.setAbility(player, ability, slot);
 				// PlayerStorageWriter.bindSlot(player, slot, ability);
@@ -2233,23 +2250,25 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
 		if (Abilities.isFirebending(ability)) {
 			if (!Tools.isBender(player.getName(), BendingType.Fire)) {
 				ChatColor color2 = ChatColor.WHITE;
-				color2 = Tools.getColor(ConfigManager.getColor("Fire"));
+				color2 = Tools.getColor(ConfigValues.FireColor);
 				Tools.sendMessage(player, color2, "General.not_fire");
 				return;
 			}
-			color = Tools.getColor(ConfigManager.getColor("Fire"));
+			color = Tools.getColor(ConfigValues.FireColor);
 			if (!item) {
 				// config.setAbility(player, ability, slot);
 				// PlayerStorageWriter.bindSlot(player, slot, ability);
@@ -2257,12 +2276,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 		}
@@ -2278,12 +2299,14 @@ public class BendingCommand {
 						.setAbility(slot, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to slot " + (slot + 1));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), slot + 1, null));
 			} else {
 				// config.setAbility(player, ability, mat);
 				// PlayerStorageWriter.bindItem(player, mat, ability);
 				BendingPlayer.getBendingPlayer(player).setAbility(mat, ability);
 				sendMessage(player, color + ability.name() + white
 						+ " bound to " + mat.name().replaceAll("_", " "));
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerBindAbilityEvent(player, ability.name(), 0, mat.name()));
 			}
 			return;
 

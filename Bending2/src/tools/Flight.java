@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import waterbending.Bloodbending;
 import waterbending.WaterSpout;
+import airbending.AirGlide;
 import airbending.AirScooter;
 import airbending.AirSpout;
 import airbending.Speed;
@@ -77,8 +78,10 @@ public class Flight {
 		ArrayList<Player> airscooterplayers = new ArrayList<Player>();
 		ArrayList<Player> waterspoutplayers = new ArrayList<Player>();
 		ArrayList<Player> airspoutplayers = new ArrayList<Player>();
+		ArrayList<Player> airglideplayers = new ArrayList<Player>();
 
 		players.addAll(Tornado.getPlayers());
+//		players.addAll(AirGlide.getPlayers());
 		players.addAll(Speed.getPlayers());
 		players.addAll(FireJet.getPlayers());
 		players.addAll(Catapult.getPlayers());
@@ -86,6 +89,7 @@ public class Flight {
 		airscooterplayers = AirScooter.getPlayers();
 		waterspoutplayers = WaterSpout.getPlayers();
 		airspoutplayers = AirSpout.getPlayers();
+		airglideplayers = AirGlide.getPlayers();
 
 		for (Player player : instances.keySet()) {
 			Flight flight = instances.get(player);

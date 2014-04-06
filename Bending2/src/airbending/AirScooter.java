@@ -3,6 +3,8 @@ package airbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -13,7 +15,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 
@@ -21,9 +22,9 @@ public class AirScooter {
 
 	public static ConcurrentHashMap<Player, AirScooter> instances = new ConcurrentHashMap<Player, AirScooter>();
 
-	private static final double speed = ConfigManager.airScooterSpeed;
+	private static final double speed = ConfigValues.AirScooterSpeed;
 	private static final long interval = 100;
-	private static final double scooterradius = 1;
+	private static final double scooterradius = ConfigValues.AirScooterRadius;
 
 	private Player player;
 	private Block floorblock;

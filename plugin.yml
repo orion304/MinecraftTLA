@@ -27,6 +27,7 @@ permissions:
       bending.air.AirSpout: true
       bending.air.AirBurst: true
       bending.air.AirScooter: true
+      bending.air.AirGlide: true
   bending.fire.*:
     description: Allows all fire bending.
     children:
@@ -58,6 +59,7 @@ permissions:
       bending.water.IceSpike: true
       bending.water.Torrent: true
       bending.water.OctopusForm: true
+      bending.water.SpiritBending: true
   bending.earth.*:
     description: Allows all earth bending.
     children:
@@ -161,6 +163,9 @@ permissions:
   bending.air.AirBurst:
     description: Allows the use of AirBurst.
     default: true
+  bending.air.AirGlide:
+    description: Allows the use of AirGlide.
+    default: true
     
 # FIREBENDING PERMISSIONS
   bending.fire:
@@ -236,6 +241,9 @@ permissions:
     default: true
   bending.water.IceSpike:
     description: Allows the use of IceSpike
+    default: true
+  bending.water.SpiritBending:
+    description: Allows the use of SpiritBending
     default: true
     
 # EARTHBENDING PERMISSIONS
@@ -354,7 +362,7 @@ permissions:
 
   bending.avatar:
     description: Give the avatar prefix.
-    default: op
+    default: false
   bending.command.import:
     default: op
     

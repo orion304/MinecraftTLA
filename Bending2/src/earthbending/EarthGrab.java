@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.ArrayList;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -11,12 +13,11 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthGrab {
 
-	private static double range = ConfigManager.earthGrabRange;
+	private static double range = ConfigValues.EarthGrabRange;
 
 	public EarthGrab(Player player) {
 		// Tools.verbose("initiating");

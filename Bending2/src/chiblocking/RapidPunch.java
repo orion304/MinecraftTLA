@@ -4,21 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import tools.Abilities;
+import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class RapidPunch {
 
-	private static int damage = ConfigManager.rapidPunchDamage;
-	private int distance = ConfigManager.rapidPunchDistance;
+	private static int damage = ConfigValues.RapidPunchDamage;
+	private int distance = ConfigValues.RapidPunchDistance;
 	// private long cooldown = ConfigManager.rapidPunchCooldown;
-	private static int punches = ConfigManager.rapidPunchPunches;
+	private static int punches = ConfigValues.RapidPunchPunches;
 
 	// private static Map<String, Long> cooldowns = new HashMap<String, Long>();
 	public static ConcurrentHashMap<Player, RapidPunch> instance = new ConcurrentHashMap<Player, RapidPunch>();
@@ -57,9 +59,12 @@ public class RapidPunch {
 			LivingEntity lt = (LivingEntity) target;
 			Tools.damageEntity(p, target, damage);
 			if (target instanceof Player)
+				if (AvatarState.isAvatarState((Player) target)) {
+					new AvatarState((Player) target);
+				}
 				Tools.blockChi((Player) target, System.currentTimeMillis());
 			lt.setNoDamageTicks(0);
-			// Tools.verbose("PUNCHIN MOFO");
+//			 Tools.verbose("PUNCHIN MOFO");
 		}
 		// cooldowns.put(p.getName(), System.currentTimeMillis());
 		BendingPlayer.getBendingPlayer(p).cooldown(Abilities.RapidPunch);

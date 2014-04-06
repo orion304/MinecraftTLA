@@ -92,6 +92,7 @@ public class Cook {
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	private Material getCooked(Material material) {
 		Material cooked = Material.AIR;
 		switch (material) {

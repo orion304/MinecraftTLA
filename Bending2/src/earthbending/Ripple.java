@@ -3,6 +3,8 @@ package earthbending;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,8 +21,8 @@ public class Ripple {
 	private static ConcurrentHashMap<Integer, Ripple> instances = new ConcurrentHashMap<Integer, Ripple>();
 	private static ConcurrentHashMap<Integer[], Block> blocks = new ConcurrentHashMap<Integer[], Block>();
 
-	static final double radius = 15;
-	private static final int damage = 5;
+	static final double radius = ConfigValues.ShockwaveRadius;
+	private static final int damage = (int) ConfigValues.ShockwaveDamage;
 
 	private static int ID = Integer.MIN_VALUE;
 

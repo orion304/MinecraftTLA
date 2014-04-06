@@ -1,7 +1,10 @@
 package waterbending;
 
+import main.ConfigValues;
+
 import org.bukkit.Server;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -9,14 +12,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import tools.Abilities;
-import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
 
 public class HealingWaters {
 
-	private static final double range = ConfigManager.healingWatersRadius;
-	private static final long interval = ConfigManager.healingWatersInterval;
+	private static final double range = ConfigValues.HealingWatersRadius;
+	private static final long interval = ConfigValues.HealingWatersInterval;
 
 	private static long time = 0;
 
@@ -46,13 +48,15 @@ public class HealingWaters {
 	}
 
 	private static void giveHPToEntity(LivingEntity le) {
-		if (!le.isDead() && le.getHealth() < le.getMaxHealth()) {
+		Damageable d = (Damageable) le;
+		if (!le.isDead() && d.getHealth() < d.getMaxHealth()) {
 			applyHealingToEntity(le);
 		}
 	}
 	
 	private static void giveHP(Player player) {
-		if (!player.isDead() && player.getHealth() < 20) {
+		Damageable d = (Damageable) player;
+		if (!player.isDead() && d.getHealth() < 20) {
 			// int hp = player.getHealth();
 			// if (hp < 20) {
 			// hp++;

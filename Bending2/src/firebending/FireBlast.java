@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
+import main.ConfigValues;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -19,7 +20,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 import waterbending.Plantbending;
 import waterbending.WaterManipulation;
@@ -35,11 +35,11 @@ public class FireBlast {
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
 
-	private static double speed = ConfigManager.fireBlastSpeed;
+	private static double speed = ConfigValues.FireBlastSpeed;
 	public static double affectingradius = 2;
-	private static double pushfactor = ConfigManager.fireBlastPush;
+	private static double pushfactor = ConfigValues.FireBlastPush;
 	private static boolean canPowerFurnace = true;
-	static boolean dissipate = ConfigManager.fireBlastDissipate;
+	static boolean dissipate = ConfigValues.FireBlastDissipates;
 	// public static long interval = 2000;
 	public static byte full = 0x0;
 
@@ -51,8 +51,8 @@ public class FireBlast {
 	private int id;
 	private double speedfactor;
 	private int ticks = 0;
-	private int damage = ConfigManager.fireBlastDamage;
-	double range = ConfigManager.fireBlastRange;
+	private int damage = ConfigValues.FireBlastDamage;
+	double range = ConfigValues.FireBlastRange;
 
 	// private ArrayList<Block> affectedlevers = new ArrayList<Block>();
 
@@ -156,7 +156,7 @@ public class FireBlast {
 		// }
 		// }
 		if (Tools.isSolid(block) || block.isLiquid()) {
-			if (block.getType() == Material.FURNACE && canPowerFurnace) {
+			if (block.getType() == Material.BURNING_FURNACE && canPowerFurnace) {
 				// BlockState state = block.getState();
 				// Furnace furnace = (Furnace) state;
 				// FurnaceInventory inv = furnace.getInventory();

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
+import main.ConfigValues;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -16,7 +17,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 
@@ -31,10 +31,10 @@ public class AirBlast {
 	private static int ID = Integer.MIN_VALUE;
 	static final int maxticks = 10000;
 
-	public static double speed = ConfigManager.airBlastSpeed;
-	public static double defaultrange = ConfigManager.airBlastRange;
-	public static double affectingradius = ConfigManager.airBlastRadius;
-	public static double defaultpushfactor = ConfigManager.airBlastPush;
+	public static double speed = ConfigValues.AirBlastSpeed;
+	public static double defaultrange = ConfigValues.AirBlastRange;
+	public static double affectingradius = ConfigValues.AirBlastRadius;
+	public static double defaultpushfactor = ConfigValues.AirBlastPush;
 	private static double originselectrange = 10;
 	static final double maxspeed = 1. / defaultpushfactor;
 	// public static long interval = 2000;
@@ -52,14 +52,15 @@ public class AirBlast {
 	private int ticks = 0;
 
 	private ArrayList<Block> affectedlevers = new ArrayList<Block>();
-	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
+//	private ArrayList<Entity> affectedentities = new ArrayList<Entity>();
 
+	@SuppressWarnings("unused")
 	private AirBurst source = null;
 
 	// private long time;
 
 	public AirBlast(Player player) {
-		// if (timers.containsKey(player)) {
+		// if (timers.contSainsKey(player)) {
 		// if (System.currentTimeMillis() < timers.get(player) + soonesttime) {
 		// return;
 		// }

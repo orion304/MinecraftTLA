@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -12,7 +14,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
-import tools.ConfigManager;
 import tools.Tools;
 import firebending.FireBlast;
 
@@ -20,7 +21,7 @@ public class AirShield {
 
 	public static ConcurrentHashMap<Integer, AirShield> instances = new ConcurrentHashMap<Integer, AirShield>();
 
-	private static double maxradius = ConfigManager.airShieldRadius;
+	private static double maxradius = ConfigValues.AirShieldRadius;
 	private static int numberOfStreams = (int) (.75 * (double) maxradius);
 
 	private double radius = 2;
@@ -138,7 +139,7 @@ public class AirShield {
 			return false;
 		}
 		if (((Tools.getBendingAbility(player) != Abilities.AirShield) || (!player
-				.isSneaking())) && !AvatarState.isAvatarState(player)) {
+				.isSneaking()))) {// && !AvatarState.isAvatarState(player)) {
 			instances.remove(player.getEntityId());
 			return false;
 		}

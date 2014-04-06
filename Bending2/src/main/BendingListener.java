@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UnknownFormatConversionException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -63,7 +61,7 @@ import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
 import tools.BendingType;
-import tools.ConfigManager;
+//import tools.ConfigManager;
 import tools.Flight;
 import tools.TempBlock;
 import tools.Tools;
@@ -72,6 +70,7 @@ import waterbending.FreezeMelt;
 import waterbending.IceSpike2;
 import waterbending.Melt;
 import waterbending.OctopusForm;
+import waterbending.SpiritBending;
 import waterbending.Torrent;
 import waterbending.WaterManipulation;
 import waterbending.WaterPassive;
@@ -81,6 +80,7 @@ import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirBurst;
+import airbending.AirGlide;
 import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSpout;
@@ -131,45 +131,45 @@ public class BendingListener implements Listener {
 		Player player = event.getPlayer();
 		BendingPlayer.getBendingPlayer(player);
 		String append = "";
-		if ((player.hasPermission("bending.avatar")) && ConfigManager.enabled) {
-			append = ConfigManager.getPrefix("Avatar");
+		if ((player.hasPermission("bending.avatar")) && ConfigValues.ChatEnabled) {
+			append = ConfigValues.AvatarPrefix;
 		} else if ((Tools.isBender(player.getName(), BendingType.Air))
-				&& (ConfigManager.enabled)) {
-			append = ConfigManager.getPrefix("Air");
+				&& (ConfigValues.ChatEnabled)) {
+			append = ConfigValues.AirPrefix;
 		} else if ((Tools.isBender(player.getName(), BendingType.Earth))
-				&& (ConfigManager.enabled)) {
-			append = ConfigManager.getPrefix("Earth");
+				&& (ConfigValues.ChatEnabled)) {
+			append = ConfigValues.EarthPrefix;
 		} else if ((Tools.isBender(player.getName(), BendingType.Fire))
-				&& (ConfigManager.enabled)) {
-			append = ConfigManager.getPrefix("Fire");
+				&& (ConfigValues.ChatEnabled)) {
+			append = ConfigValues.FirePrefix;
 		} else if ((Tools.isBender(player.getName(), BendingType.Water))
-				&& (ConfigManager.enabled)) {
-			append = ConfigManager.getPrefix("Water");
+				&& (ConfigValues.ChatEnabled)) {
+			append = ConfigValues.WaterPrefix;
 		} else if ((Tools.isBender(player.getName(), BendingType.ChiBlocker))
-				&& (ConfigManager.enabled)) {
-			append = ConfigManager.getPrefix("ChiBlocker");
+				&& (ConfigValues.ChatEnabled)) {
+			append = ConfigValues.ChiPrefix;
 		}
 
-		if (!(ConfigManager.compatibility) && (ConfigManager.enabled))
+		if (!(ConfigValues.ChatCompatibility) && (ConfigValues.ChatEnabled))
 			player.setDisplayName(append + player.getName());
 
-		if ((ConfigManager.compatibility) && (ConfigManager.enabled)) {
+		if ((ConfigValues.ChatCompatibility) && (ConfigValues.ChatEnabled)) {
 			ChatColor color = ChatColor.WHITE;
-			if (ConfigManager.colors) {
+			if (ConfigValues.ChatColorsEnabled) {
 				if (player.hasPermission("bending.avatar")) {
-					color = Tools.getColor(ConfigManager.getColor("Avatar"));
+					color = Tools.getColor(ConfigValues.AvatarColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Air)) {
-					color = Tools.getColor(ConfigManager.getColor("Air"));
+					color = Tools.getColor(ConfigValues.AirColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Earth)) {
-					color = Tools.getColor(ConfigManager.getColor("Earth"));
+					color = Tools.getColor(ConfigValues.EarthColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Fire)) {
-					color = Tools.getColor(ConfigManager.getColor("Fire"));
+					color = Tools.getColor(ConfigValues.FireColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Water)) {
-					color = Tools.getColor(ConfigManager.getColor("Water"));
+					color = Tools.getColor(ConfigValues.WaterColor);
 				} else if (Tools.isBender(player.getName(),
 						BendingType.ChiBlocker)) {
 					color = Tools
-							.getColor(ConfigManager.getColor("ChiBlocker"));
+							.getColor(ConfigValues.ChiColor);
 				}
 			}
 			player.setDisplayName("<" + color + append + player.getName()
@@ -183,8 +183,8 @@ public class BendingListener implements Listener {
 				&& (dc.contains("Armors." + player.getName() + ".Boots")
 						&& dc.contains("Armors." + player.getName()
 								+ ".Leggings")
-						&& dc.contains("Armors." + player.getName() + ".Chest") && dc
-							.contains("Armors." + player.getName() + ".Helm"))) {
+								&& dc.contains("Armors." + player.getName() + ".Chest") && dc
+								.contains("Armors." + player.getName() + ".Helm"))) {
 			ItemStack boots = new ItemStack(Material.matchMaterial(dc
 					.getString("Armors." + player.getName() + ".Boots").split(
 							":")[0]));
@@ -246,34 +246,34 @@ public class BendingListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		if (!(ConfigManager.enabled))
+		if (!(ConfigValues.ChatEnabled))
 			return;
-		if (!(ConfigManager.compatibility)) {
+		if (!(ConfigValues.ChatCompatibility)) {
 
 			Player player = event.getPlayer();
 			ChatColor color = ChatColor.WHITE;
 
-			if (ConfigManager.colors) {
+			if (ConfigValues.ChatColorsEnabled) {
 				if (player.hasPermission("bending.avatar")) {
-					color = Tools.getColor(ConfigManager.getColor("Avatar"));
+					color = Tools.getColor(ConfigValues.AvatarColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Air)) {
-					color = Tools.getColor(ConfigManager.getColor("Air"));
+					color = Tools.getColor(ConfigValues.AirColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Earth)) {
-					color = Tools.getColor(ConfigManager.getColor("Earth"));
+					color = Tools.getColor(ConfigValues.EarthColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Fire)) {
-					color = Tools.getColor(ConfigManager.getColor("Fire"));
+					color = Tools.getColor(ConfigValues.FireColor);
 				} else if (Tools.isBender(player.getName(), BendingType.Water)) {
-					color = Tools.getColor(ConfigManager.getColor("Water"));
+					color = Tools.getColor(ConfigValues.WaterColor);
 				} else if (Tools.isBender(player.getName(),
 						BendingType.ChiBlocker)) {
 					color = Tools
-							.getColor(ConfigManager.getColor("ChiBlocker"));
+							.getColor(ConfigValues.ChiColor);
 				}
 			}
-			String format = ConfigManager.chat;
+			String format = ConfigValues.ChatFormat;
 			format = format.replace("<message>", "%2$s");
 			format = format.replace("<name>", color + player.getDisplayName() + ChatColor.RESET);
-//			String format2 = format.replace("<name>", color + player.getDisplayName()).replace("<message>", ChatColor.WHITE + event.getMessage());
+			//			String format2 = format.replace("<name>", color + player.getDisplayName()).replace("<message>", ChatColor.WHITE + event.getMessage());
 			event.setFormat(format);
 			//				event.setFormat("<" + color + player.getDisplayName()
 			//						+ ChatColor.WHITE + "> " + event.getMessage());
@@ -312,9 +312,13 @@ public class BendingListener implements Listener {
 			// if (!Cooldowns.canUseAbility(player, ability))
 			// return;
 			// }
+			
+			if (ability == Abilities.AirGlide) {
+				new AirGlide(player);
+			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
-					|| ConfigManager.useWeapon.get("Air")) {
+					|| ConfigValues.AirBendWithWeapons) {
 
 				if (ability == Abilities.AirBlast) {
 					new AirBlast(player);
@@ -343,7 +347,7 @@ public class BendingListener implements Listener {
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
-					|| ConfigManager.useWeapon.get("Earth")) {
+					|| ConfigValues.EarthBendWithWeapons) {
 
 				if (ability == Abilities.Catapult) {
 					new Catapult(player);
@@ -380,7 +384,7 @@ public class BendingListener implements Listener {
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
-					|| ConfigManager.useWeapon.get("Fire")) {
+					|| ConfigValues.FireBendWithWeapons) {
 
 				if (ability == Abilities.FireBlast) {
 					new FireBlast(player);
@@ -417,7 +421,7 @@ public class BendingListener implements Listener {
 			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
-					|| ConfigManager.useWeapon.get("Water")) {
+					|| ConfigValues.WaterBendWithWeapons) {
 
 				if (ability == Abilities.WaterManipulation) {
 					WaterManipulation.moveWater(player);
@@ -518,7 +522,7 @@ public class BendingListener implements Listener {
 			}
 
 			if (!(Tools.isWeapon(player.getItemInHand().getType()))
-					|| ConfigManager.useWeapon.get("Air")) {
+					|| ConfigValues.AirBendWithWeapons) {
 
 				if (ability == Abilities.AirBlast) {
 					AirBlast.setOrigin(player);
@@ -561,6 +565,9 @@ public class BendingListener implements Listener {
 				new Collapse(player);
 			}
 
+			if (ability == Abilities.SpiritBending) {
+				new SpiritBending(player);
+			}
 			if (ability == Abilities.WaterManipulation) {
 				new WaterManipulation(player);
 			}
@@ -703,7 +710,7 @@ public class BendingListener implements Listener {
 					&& Tools.isBender(player.getName(), BendingType.ChiBlocker)
 					&& event.getCause() == DamageCause.FALL
 					&& Tools.canBendPassive(player, BendingType.ChiBlocker)) {
-				event.setDamage((int) ((double) event.getDamage() * (ConfigManager.falldamagereduction / 100.)));
+				event.setDamage((int) ((double) event.getDamage() * (ConfigValues.ChiFallDamageReduction / 100.)));
 			}
 
 			if (!event.isCancelled() && event.getCause() == DamageCause.FALL) {
@@ -717,13 +724,13 @@ public class BendingListener implements Listener {
 			if (Tools.canBendPassive(player, BendingType.Fire)
 					&& Tools.isBender(player.getName(), BendingType.Fire)
 					&& (event.getCause() == DamageCause.FIRE || event
-							.getCause() == DamageCause.FIRE_TICK)) {
+					.getCause() == DamageCause.FIRE_TICK)) {
 				event.setCancelled(!Extinguish.canBurn(player));
 			}
 
 			if (Tools.isBender(player.getName(), BendingType.Earth)
 					&& (event.getCause() == DamageCause.SUFFOCATION && TempBlock
-							.isTempBlock(player.getEyeLocation().getBlock()))) {
+					.isTempBlock(player.getEyeLocation().getBlock()))) {
 				event.setDamage(0);
 				event.setCancelled(true);
 			}
@@ -812,12 +819,11 @@ public class BendingListener implements Listener {
 			if (Tools.canBendPassive(sourceplayer, BendingType.ChiBlocker)
 					&& Tools.isBender(sourceplayer.getName(),
 							BendingType.ChiBlocker)
-					&& event.getCause() == DamageCause.ENTITY_ATTACK
-					&& event.getDamage() == 1
-					&& sourceplayer.getLocation().distance(
-							targetplayer.getLocation()) <= ConfigManager.rapidPunchDistance
-					&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigManager.useWeapon
-							.get("ChiBlocker"))) {
+							&& event.getCause() == DamageCause.ENTITY_ATTACK
+							&& event.getDamage() == 1
+							&& sourceplayer.getLocation().distance(
+									targetplayer.getLocation()) <= ConfigValues.RapidPunchDistance
+									&& (!Tools.isWeapon(sourceplayer.getItemInHand().getType()) || ConfigValues.ChiBendWithWeapons)) {
 				Tools.blockChi(targetplayer, System.currentTimeMillis());
 			}
 		}
@@ -827,17 +833,17 @@ public class BendingListener implements Listener {
 					.getCause() == DamageCause.PROJECTILE)
 					&& Tools.isBender(((Player) event.getEntity()).getName(),
 							BendingType.ChiBlocker)
-					&& Tools.canBendPassive((Player) event.getEntity(),
-							BendingType.ChiBlocker)) {
+							&& Tools.canBendPassive((Player) event.getEntity(),
+									BendingType.ChiBlocker)) {
 				double rand = Math.random();
 				// Tools.verbose(rand + " " + (ConfigManager.dodgechance) /
 				// 100.);
-				if (rand <= ConfigManager.dodgechance / 100.
+				if (rand <= ConfigValues.ChiDodgeChance / 100.
 						&& !Paralyze.isParalyzed(event.getEntity())) {
 					event.getEntity()
-							.getWorld()
-							.playEffect(event.getEntity().getLocation(),
-									Effect.SMOKE, 1);
+					.getWorld()
+					.playEffect(event.getEntity().getLocation(),
+							Effect.SMOKE, 1);
 					dodged = true;
 					event.setCancelled(true);
 				}
@@ -1216,6 +1222,9 @@ public class BendingListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) {
+		if (AvatarState.isAvatarState(event.getEntity())) {
+			new AvatarState(event.getEntity());
+		}
 		if (EarthArmor.instances.containsKey(event.getEntity())) {
 			List<ItemStack> drops = event.getDrops();
 			List<ItemStack> newdrops = new ArrayList<ItemStack>();
@@ -1235,7 +1244,7 @@ public class BendingListener implements Listener {
 			}
 			event.getDrops().clear();
 			event.getDrops().addAll(newdrops);
-			EarthArmor.removeEffect(event.getEntity());
+//			EarthArmor.removeEffect(event.getEntity());
 		}
 	}
 }

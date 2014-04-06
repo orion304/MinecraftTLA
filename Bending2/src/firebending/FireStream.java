@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tools.Abilities;
-import tools.ConfigManager;
+import main.ConfigValues;
 import tools.Tools;
 import waterbending.Plantbending;
 
@@ -30,11 +30,11 @@ public class FireStream {
 	public static int tickdamage = 2;
 
 	private static int ID = Integer.MIN_VALUE;
-	private static double speed = ConfigManager.fireStreamSpeed;
+	private static double speed = ConfigValues.FireBlastSpeed;
 	// private static double defaultrange = ConfigManager.fireStreamRange;
 	private static long interval = (long) (1000. / speed);
 
-	private static long dissipateAfter = ConfigManager.dissipateAfter;
+	private static long dissipateAfter = ConfigValues.FireDissipateTime;
 
 	private Player player;
 	private Location origin;

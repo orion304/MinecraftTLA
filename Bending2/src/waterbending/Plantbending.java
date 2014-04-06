@@ -2,15 +2,16 @@ package waterbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import tools.ConfigManager;
 import tools.Tools;
 
 public class Plantbending {
 
-	private static final long regrowtime = ConfigManager.plantbendingRegrowTime;
+	private static final long regrowtime = ConfigValues.PlantbendingRegrowthTime;
 	private static ConcurrentHashMap<Integer, Plantbending> instances = new ConcurrentHashMap<Integer, Plantbending>();
 
 	private static int ID = Integer.MIN_VALUE;

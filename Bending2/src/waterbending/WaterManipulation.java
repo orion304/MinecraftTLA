@@ -3,6 +3,8 @@ package waterbending;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,7 +17,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
 import earthbending.EarthBlast;
@@ -32,10 +33,10 @@ public class WaterManipulation {
 	private static final byte full = 0x0;
 	// private static final byte half = 0x4;
 
-	static double range = ConfigManager.waterManipulationRange;
-	private static double pushfactor = ConfigManager.WaterManipulationPush;
-	private static int defaultdamage = ConfigManager.waterdmg;
-	private static double speed = ConfigManager.waterManipulationSpeed;
+	static double range = ConfigValues.WaterManipulationRange;
+	private static double pushfactor = ConfigValues.WaterManipulationPush;
+	private static int defaultdamage = ConfigValues.WaterManipulationDamage;
+	private static double speed = ConfigValues.WaterManipulationSpeed;
 	private static final double deflectrange = 3;
 	// private static double speed = 1.5;
 

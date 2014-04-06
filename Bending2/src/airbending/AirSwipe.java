@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 import main.Bending;
+import main.ConfigValues;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -18,7 +19,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Flight;
 import tools.Tools;
 import waterbending.WaterManipulation;
@@ -35,13 +35,13 @@ public class AirSwipe {
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static int defaultdamage = ConfigManager.airdmg;
-	private static double affectingradius = ConfigManager.airSwipeRadius;
-	private static double defaultpushfactor = ConfigManager.airSwipePush;
-	private static double range = ConfigManager.airSwipeRange;
-	private static int arc = ConfigManager.airSwipeArc;
+	private static double defaultdamage = ConfigValues.AirSwipeDamage;
+	private static double affectingradius = ConfigValues.AirSwipeRadius;
+	private static double defaultpushfactor = ConfigValues.AirSwipePush;
+	private static double range = ConfigValues.AirSwipeRange;
+	private static int arc = ConfigValues.AirSwipeArcSize;
 	private static int stepsize = 4;
-	private static double speed = ConfigManager.airSwipeSpeed;
+	private static double speed = ConfigValues.AirSwipeSpeed;
 	private static byte full = AirBlast.full;
 	private static long maxchargetime = 3000;
 	private static double maxfactor = 3;
@@ -49,13 +49,13 @@ public class AirSwipe {
 	private double speedfactor;
 
 	private static Integer[] breakables = { 6, 31, 32, 37, 38, 39, 40, 59, 81,
-			83, 106 };
+			83, 106, 175 };
 
 	private Location origin;
 	private Player player;
 	private boolean charging = false;
 	private long time;
-	private int damage = defaultdamage;
+	private double damage = defaultdamage;
 	private double pushfactor = defaultpushfactor;
 	private int id;
 	private ConcurrentHashMap<Vector, Location> elements = new ConcurrentHashMap<Vector, Location>();

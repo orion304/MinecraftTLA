@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,7 +18,7 @@ public class Shockwave {
 	private static ConcurrentHashMap<Player, Shockwave> instances = new ConcurrentHashMap<Player, Shockwave>();
 
 	private static final double angle = Math.toRadians(40);
-	private static final long defaultchargetime = 2500;
+	private static final long defaultchargetime = ConfigValues.ShockwaveChargeTime;
 	private static final double threshold = 10;
 
 	private Player player;
@@ -28,8 +30,8 @@ public class Shockwave {
 		if (instances.containsKey(player))
 			return;
 		starttime = System.currentTimeMillis();
-		if (AvatarState.isAvatarState(player))
-			chargetime = 0;
+//		if (AvatarState.isAvatarState(player))
+//			chargetime = chargetime/3;
 		this.player = player;
 		instances.put(player, this);
 

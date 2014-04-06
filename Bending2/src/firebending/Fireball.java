@@ -2,6 +2,8 @@ package firebending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,7 +16,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.AvatarState;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class Fireball {
@@ -49,10 +50,10 @@ public class Fireball {
 		time = System.currentTimeMillis();
 		starttime = time;
 		if (Tools.isDay(player.getWorld())) {
-			chargetime = (long) (chargetime / ConfigManager.dayFactor);
+			chargetime = (long) (chargetime / ConfigValues.FireDayPowerFactor);
 		}
 		if (AvatarState.isAvatarState(player)) {
-			chargetime = 0;
+//			chargetime = 0;
 			maxdamage = AvatarState.getValue(maxdamage);
 		}
 		range = Tools.firebendingDayAugment(range, player.getWorld());

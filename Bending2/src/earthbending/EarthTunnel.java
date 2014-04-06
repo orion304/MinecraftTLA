@@ -2,26 +2,27 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import tools.ConfigManager;
 import tools.Tools;
 
 public class EarthTunnel {
 
 	public static ConcurrentHashMap<Player, EarthTunnel> instances = new ConcurrentHashMap<Player, EarthTunnel>();
 
-	private static final double maxradius = ConfigManager.earthTunnelMaxRadius;
-	private static final double range = ConfigManager.earthTunnelRange;
-	private static final double radiusinc = ConfigManager.earthTunnelRadius;
+	private static final double maxradius = ConfigValues.EarthTunnelMaxRadius;
+	private static final double range = ConfigValues.EarthTunnelRange;
+	private static final double radiusinc = ConfigValues.EarthTunnelRadius;
 	// private static final double speed = 10;
 
-	private static boolean revert = ConfigManager.earthTunnelRevert;
+	private static boolean revert = ConfigValues.EarthTunnelRevert;
 
-	private static final long interval = ConfigManager.earthTunnelInterval;
+	private static final long interval = ConfigValues.EarthTunnelInterval;
 
 	private Player player;
 	private Block block;

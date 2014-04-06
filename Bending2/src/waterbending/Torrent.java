@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,13 +26,13 @@ public class Torrent {
 	private static ConcurrentHashMap<TempBlock, Player> frozenblocks = new ConcurrentHashMap<TempBlock, Player>();
 
 	static long interval = 30;
-	private static int defaultrange = 20;
+	private static int defaultrange = ConfigValues.TorrentRange;
 	private static int selectrange = 10;
-	private static double radius = 3;
-	static double range = 25;
-	private static int damage = 2;
-	private static int deflectdamage = 1;
-	private static double factor = 1;
+	private static double radius = ConfigValues.TorrentRadius;
+	static double range = ConfigValues.TorrentRange;
+	private static int damage = ConfigValues.TorrentDamage;
+	private static int deflectdamage = ConfigValues.TorrentDeflectDamage;
+	private static double factor = ConfigValues.TorrentFactor;
 	private static int maxlayer = 3;
 	private static double ylimit = 0.2;
 

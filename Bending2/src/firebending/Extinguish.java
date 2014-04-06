@@ -1,5 +1,7 @@
 package firebending;
 
+import main.ConfigValues;
+
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -8,14 +10,13 @@ import org.bukkit.entity.Player;
 import tools.Abilities;
 import tools.BendingPlayer;
 import tools.BendingType;
-import tools.ConfigManager;
 import tools.Tools;
 import airbending.AirBlast;
 
 public class Extinguish {
 
-	private static double defaultrange = ConfigManager.extinguishRange;
-	private static double defaultradius = ConfigManager.extinguishRadius;
+	private static double defaultrange = ConfigValues.HeatControlRange;
+	private static double defaultradius = ConfigValues.HeatControlRadius;
 	private static byte full = AirBlast.full;
 
 	public Extinguish(Player player) {

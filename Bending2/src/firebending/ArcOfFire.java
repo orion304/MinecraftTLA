@@ -1,5 +1,7 @@
 package firebending;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -7,7 +9,6 @@ import org.bukkit.util.Vector;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class ArcOfFire {
@@ -16,8 +17,8 @@ public class ArcOfFire {
 	// ConcurrentHashMap<Player, Long>();
 	// static final long soonesttime = Tools.timeinterval;
 
-	private static int defaultarc = ConfigManager.arcOfFireArc;
-	private static int defaultrange = ConfigManager.arcOfFireRange;
+	private static int defaultarc = ConfigValues.BlazeSize;
+	private static int defaultrange = ConfigValues.BlazeRange;
 	private static int stepsize = 2;
 
 	public ArcOfFire(Player player) {

@@ -2,6 +2,8 @@ package earthbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,7 +11,6 @@ import org.bukkit.util.Vector;
 
 import tools.Abilities;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.Tools;
 
 public class CompactColumn {
@@ -20,9 +21,9 @@ public class CompactColumn {
 
 	private static int ID = Integer.MIN_VALUE;
 
-	private static double range = ConfigManager.compactColumnRange;
+	private static double range = ConfigValues.CollapseRange;
 	private static int height = EarthColumn.standardheight;
-	private static double speed = ConfigManager.compactColumnSpeed;
+	private static double speed = ConfigValues.CollapseRadius;
 	private static final Vector direction = new Vector(0, -1, 0);
 
 	private static long interval = (long) (1000. / speed);

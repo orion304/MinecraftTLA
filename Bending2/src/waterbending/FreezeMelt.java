@@ -2,6 +2,8 @@ package waterbending;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.ConfigValues;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,7 +12,6 @@ import org.bukkit.entity.Player;
 import tools.Abilities;
 import tools.AvatarState;
 import tools.BendingPlayer;
-import tools.ConfigManager;
 import tools.TempBlock;
 import tools.Tools;
 
@@ -18,8 +19,8 @@ public class FreezeMelt {
 
 	public static ConcurrentHashMap<Block, Byte> frozenblocks = new ConcurrentHashMap<Block, Byte>();
 
-	public static final int defaultrange = ConfigManager.freezeMeltRange;
-	public static final int defaultradius = ConfigManager.freezeMeltRadius;
+	public static final int defaultrange = ConfigValues.PhaseChangeRange;
+	public static final int defaultradius = ConfigValues.PhaseChangeRadius;
 
 	public FreezeMelt(Player player) {
 		BendingPlayer bPlayer = BendingPlayer.getBendingPlayer(player);
