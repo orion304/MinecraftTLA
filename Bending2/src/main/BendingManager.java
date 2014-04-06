@@ -39,6 +39,7 @@ import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirBurst;
+import airbending.AirGlide;
 import airbending.AirPassive;
 import airbending.AirScooter;
 import airbending.AirShield;
@@ -164,6 +165,8 @@ public class BendingManager implements Runnable {
 		AirScooter.progressAll();
 
 		AirSpout.spoutAll();
+		
+		AirGlide.progressAll();
 	}
 
 	private void manageEarthbending() {

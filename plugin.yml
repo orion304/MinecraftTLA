@@ -27,6 +27,7 @@ permissions:
       bending.air.AirSpout: true
       bending.air.AirBurst: true
       bending.air.AirScooter: true
+      bending.air.AirGlide: true
   bending.fire.*:
     description: Allows all fire bending.
     children:
@@ -161,6 +162,9 @@ permissions:
     default: true
   bending.air.AirBurst:
     description: Allows the use of AirBurst.
+    default: true
+  bending.air.AirGlide:
+    description: Allows the use of AirGlide.
     default: true
     
 # FIREBENDING PERMISSIONS

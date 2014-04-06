@@ -80,6 +80,7 @@ import waterbending.Wave;
 import airbending.AirBlast;
 import airbending.AirBubble;
 import airbending.AirBurst;
+import airbending.AirGlide;
 import airbending.AirScooter;
 import airbending.AirShield;
 import airbending.AirSpout;
@@ -311,6 +312,10 @@ public class BendingListener implements Listener {
 			// if (!Cooldowns.canUseAbility(player, ability))
 			// return;
 			// }
+			
+			if (ability == Abilities.AirGlide) {
+				new AirGlide(player);
+			}
 
 			if (!Tools.isWeapon(player.getItemInHand().getType())
 					|| ConfigValues.AirBendWithWeapons) {

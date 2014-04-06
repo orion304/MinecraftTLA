@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/Factions.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/LocalServer/Spigot.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/Bending Plugins/TagAPI.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Shawn/Documents/LocalServer/plugins/BendingPlus.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

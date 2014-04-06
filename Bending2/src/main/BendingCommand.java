@@ -992,6 +992,9 @@ public class BendingCommand {
 					case AirScooter:
 						Tools.sendMessage(player, cc, element + ".AirScooter");
 						break;
+					case AirGlide:
+						Tools.sendMessage(player, cc, element + ".AirGlide");
+						break;
 					case Shockwave:
 						Tools.sendMessage(player, cc, element + ".Shockwave");
 						break;
